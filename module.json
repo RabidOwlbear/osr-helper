@@ -8,7 +8,7 @@
   "compatibleCoreVersion": "0.8.8",
   "styles": [],
   "esmodules": [],
-  "scripts": ["./scripts/init.js", "./scripts/util.js", "./scripts/tick.js"],
+  "scripts": ["./scripts/init.js", "./scripts/util.js", "./scripts/light.js", "./scripts/turn.js"],
   "packs": [
     {
       "name": "OSE-helper-macros",
