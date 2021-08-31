@@ -126,15 +126,7 @@ async function lightOn(actorId, type) {
 
 async function lightOff(actorId) {
   //loop through active game scenes
-  for (let scene of game.scenes.contents) {
-    //loop through tokens contaioned in scene
-    scene.data.tokens.contents.forEach(async (t) => {
-      //if token actorId == actorId set light settings to off
-      if (t.actor.id == actorId) {
-        await t.update({ brightLight: 0, dimLight: 0 });
-      }
-    });
-  }
+  updateTokens(actorId, 0, 0);
 }
 
 async function updateTokens(actorId, bl, dl) {
