@@ -19,7 +19,7 @@ Hooks.once('init', async function () {
     },
     config: false
   });
-  game.settings.register('OSE-helper', 'lightData', {
+  game.settings.register('OSE-helper', 'timeData', {
     name: 'timeData',
     // hint: 'Name Of Journal Entry To Use For Time Keeping',
     scope: 'world',
