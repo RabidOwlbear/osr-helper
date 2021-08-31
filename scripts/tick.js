@@ -143,7 +143,7 @@ async function updateTokens(actorId, bl, dl) {
     //loop through tokens contaioned in scene
     scene.data.tokens.contents.forEach(async (t) => {
       //if token actorId == actorId set light settings to off
-      if (t.actor.id == actorId) {
+      if (t?.actor?.id == actorId) {
         await t.update({ brightLight: bl, dimLight: dl });
       }
     });
