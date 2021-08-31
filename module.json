@@ -8,5 +8,18 @@
   "compatibleCoreVersion": "0.8.8",
   "styles": [],
   "esmodules": [],
-  "scripts": ["./scripts/init.js", "./scripts/util.js", "./scripts/tick.js"]
+  "scripts": ["./scripts/init.js", "./scripts/util.js", "./scripts/tick.js"],
+  "packs": [
+    {
+      "name": "OSE-helper-macros",
+      "label": "OSE-helper Macros",
+      "path": "packs/macros.db",
+      "entity": "Macro",
+      "module": "OSE-helper"
+    }
+  ],
+  "url": "https://github.com/RabidOwlbear/OSE-helper",
+  "manifest": "https://github.com/RabidOwlbear/OSE-helper/raw/master/module.json",
+  "download": "https://github.com/RabidOwlbear/OSE-helper/archive/refs/heads/master.zip",
+  "readme": "REAMDE.md"
 }
