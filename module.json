@@ -3,7 +3,7 @@
   "title": "OSE Helper Module",
   "description": "A collection of helpers for OSE",
   "author": "Grim",
-  "version": "0.0.05",
+  "version": "0.0.07",
   "minimumCoreVersion": "0.8.6",
   "compatibleCoreVersion": "0.8.8",
   "styles": [],
@@ -16,6 +16,13 @@
       "path": "packs/macros.db",
       "entity": "Macro",
       "module": "OSE-helper"
+    }
+  ],
+  "dependencies": [
+    {
+      "name": "dice-so-nice",
+      "manifest": "https://gitlab.com/riccisi/foundryvtt-dice-so-nice/-/raw/master/module/module.json",
+      "type": "module"
     }
   ],
   "url": "https://github.com/RabidOwlbear/OSE-helper",
