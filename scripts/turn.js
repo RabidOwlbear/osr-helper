@@ -226,3 +226,51 @@ async function oseShowTurnCount() {
   chatData.content = `<h1>Turn Count</h1><br><p>Session Count: ${data.session}</p><p> Total Count: ${data.total}</p><p>Turns Since Last Rest: ${style}${data.rest}</span></p>`;
   ChatMessage.create(chatData);
 }
+
+async function oseLightTurnRemaining(name) {
+  const lightData = game.settings.get('OSE-helper', 'lightData');
+  const actorId = game.actors.getName(name).id;
+  if (lightData.actors[actorId].lightLit) {
+    let chatData = {
+      content: '',
+      whisper: [game.user._id]
+    };
+    let type, turnsLeft;
+    for (let lightType in lightData.actors[actorId]) {
+      if (lightData.actors[actorId]?.[lightType]?.isOn) {
+        type = lightType;
+        turnsLeft = lightData.actors[actorId][lightType].duration / 10;
+      }
+    }
+
+    if (type == 'torch') {
+      let color = `green`;
+      if (turnsLeft <= 3) {
+        color = 'orangered';
+      }
+      if (turnsLeft <= 1) {
+        color = 'red';
+      }
+      const turn = turnsLeft == 1 ? 'turn' : 'turns';
+      chatData.content = `<h3>Torch Turns Left</h3><p style="color: ${color}">The torch has ${turnsLeft} ${turn} remaining</p>`;
+
+      ChatMessage.create(chatData);
+      return;
+    }
+    if (type == 'lantern') {
+      let color = `green`;
+      if (turnsLeft <= 6) {
+        color = 'orangered';
+      }
+      if (turnsLeft <= 3) {
+        color = 'red';
+      }
+      const turn = turnsLeft == 1 ? 'turn' : 'turns';
+      chatData.content = `<h3>Torch Turns Left</h3><p style="color: ${color}">The torch has ${turnsLeft} ${turn} remaining</p>`;
+
+      ChatMessage.create(chatData);
+      return;
+    }
+  }
+  ui.notifications.error('No Light Lit!');
+}

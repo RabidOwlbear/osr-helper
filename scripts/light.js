@@ -30,21 +30,27 @@ async function lightOn(actorId, type) {
     }
     return;
   }
+  if (data.actors?.[actorId]?.lightLit) {
+    if (data.actors?.[actorId]?.[type]?.isOn) {
+      console.log('light is on');
+      //set isOn to false
+      data.actors[actorId].lightLit = false;
+      data.actors[actorId][type].isOn = false;
 
-  console.log(data, data.actors?.[actorId]?.[type]?.isOn);
-  //if datr contains an actorid with a light of this type that is on
-  if (data.actors?.[actorId]?.[type]?.isOn) {
-    console.log('light is on');
-    //set isOn to false
-    data.actors[actorId][type].isOn = false;
-
-    //run lightOff function with actorId
-    game.settings.set('OSE-helper', 'lightData', data);
-    lightOff(actorId);
+      //run lightOff function with actorId
+      game.settings.set('OSE-helper', 'lightData', data);
+      lightOff(actorId);
+      return;
+    }
+    ui.notifications.error('Light Already Lit!');
     return;
   }
+
+  console.log(data, data.actors?.[actorId]?.[type]?.isOn);
+
   if (data.actors?.[actorId]?.[type]?.isOn == false) {
     //if data contains actorId.type.isOn = false set isOn to true
+    data.actors[actorId].lightLit = true;
     data.actors[actorId][type].isOn = true;
     game.settings.set('OSE-helper', 'lightData', data);
     updateTokens(actorId, 10, 30);
@@ -54,6 +60,7 @@ async function lightOn(actorId, type) {
     //if no actorId found, creat actor id and light type
     console.log('no actor or type found');
     data.actors[actorId] = {
+      lightLit: true,
       [type]: {
         isOn: true,
         duration: oseLight[type].duration
@@ -65,6 +72,7 @@ async function lightOn(actorId, type) {
     return;
   }
   if (!data.actors[actorId][type]) {
+    data.actors[actorId].lightLit = true;
     data.actors[actorId][type] = {
       isOn: true,
       duration: oseLight[type].duration
