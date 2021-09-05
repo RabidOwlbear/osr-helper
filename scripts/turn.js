@@ -1,165 +1,189 @@
-game.Gametime.advanceClock(600);
-const jName = 'Turn Count';
-const rTableName = 'Wandering Monster Table: Level 2';
-const table = game.tables.entities.find((t) => t.name === rTableName);
-const theRoll = await new Roll('1d6').roll();
-const rollTarget = 2;
-const skip = 2;
-
-const data = game.settings.get('OSE-helper', 'turnData');
-
-// async function setFlags(jEntry, scope, arr) {
-//   for (let obj of arr) {
-//     await jEntry.setFlag(scope, obj.key, obj.val);
-//   }
-//   return console.log('_____Flags Set_____');
-// }
-// function flagObj(a = 0, b = 0, c = 0, d = 0) {
-//   return [
-//     {
-//       key: 'count',
-//       val: a
-//     },
-//     {
-//       key: 'tCount',
-//       val: b
-//     },
-//     {
-//       key: 'sCount',
-//       val: c
-//     },
-//     {
-//       key: 'skC',
-//       val: d
-//     }
-//   ];
-// }
-// async function countJournalInit(journalName) {
-//   let entry = game.journal.entities.find((j) => j.name === journalName);
-//   if (!entry) {
-//     entry = await JournalEntry.create({
-//       content: ``,
-//       name: `Turn Count`
-//     });
-
-//     await setFlags(entry, 'world', flagObj());
-
-//     ui.notifications.notify('Journal entry "Turn Count" created.');
-//     entry = game.journal.entities.find((j) => j.name === journalName);
-//   }
-//   return Promise.resolve(entry);
-// }
-async function updateFlags(jEntry) {
-  //assign flag value to variables
-
-  let rc = jEntry.getFlag('world', 'count');
-  let sc = jEntry.getFlag('world', 'sCount');
-  let tc = jEntry.getFlag('world', 'tCount');
-  let skC = jEntry.getFlag('world', 'skC');
-  //increment turn count
-  rc++;
-  sc++;
-  tc++;
-  skC++;
-  //update flags
-  await setFlags(jEntry, 'world', flagObj(rc, tc, sc, skC));
-
-  console.log(`final sCount:${jEntry.getFlag('world', 'sCount')}\n final tCount: ${jEntry.getFlag('world', 'tCount')}`);
-  restMsg(rc);
-  return Promise.resolve(jEntry);
+//game.Gametime.advanceClock(600);
+const oseTime = {};
+//increments game-worldtime by input amount
+async function oseTimePlus(amt, inc, turn = false) {
+  const increments = {
+    minute: 60,
+    hour: 3600,
+    turn: 600
+  };
+  if (turn) {
+    await incrementTurnData();
+  }
+  game.time.advance(amt * increments[inc]);
 }
-function incrementTurnData() {
-  const data = game.settings.get('OSE-helper', 'turnData');
-  data.procCount++;
-  rest++;
-  session++;
-  total++;
-}
-async function rollFunc(count) {
-  const jEntry = game.journal.entities.find((j) => j.name === jName);
-  console.log('rolled', count, jEntry);
-  let gm = game.users.contents.filter((u) => u.data.role == 4).map((u) => u.id);
-  if (count >= skip) {
-    await jEntry.setFlag('world', 'skC', 0);
-    if (theRoll.result > rollTarget) {
-      let content = {
-        flavor: "<span style='color: green'>No Monsters!</span>",
-        whisper: gm
+//resets
+function resetData(name) {
+  let data;
+  switch (name) {
+    case 'lightData':
+      data = {
+        actors: {},
+        lastTick: game.time.worldTime
       };
+      break;
+    case 'turnData':
+      data = {
+        procCount: 0,
+        rest: 0,
+        restWarnCount: 0,
+        session: 0,
+        total: 0,
+        journalName: game.settings.get('OSE-helper', 'timeJournalName')
+      };
+      break;
+    default:
+      console.error("OSE-helper: resetData('name') error: Name not found");
+      return;
+  }
 
-      await game.dice3d.showForRoll(theRoll, game.user, false, gm, false).then(() => {
-        ChatMessage.create(content);
-      });
-    } else {
-      let message = await tableFunc(table);
+  game.settings.set('OSE-helper', `${name}`, data);
+}
+async function oseResetSessionCount() {
+  const data = await game.settings.get('OSE-helper', 'turnData');
+  data.session = 0;
+  await game.settings.set('OSE-helper', 'turnData', data);
+  updateJournal();
+}
+async function oseResetAllCounts() {
+  const data = await game.settings.get('OSE-helper', 'turnData');
+  data.session = 0;
+  data.procCount = 0;
+  data.rest = 0;
+  data.total = 0;
+  await game.settings.set('OSE-helper', 'turnData', data);
+  updateJournal();
+}
+//increments turn data and updates setting
+async function incrementTurnData() {
+  const data = await game.settings.get('OSE-helper', 'turnData');
+  //console.log(data, 'inc data start');
+  data.rest++;
+  data.session++;
+  data.total++;
+  data.procCount++;
+  await game.settings.set('OSE-helper', 'turnData', data);
+  return game.settings.get('OSE-helper', 'turnData');
+}
 
-      await game.dice3d.showForRoll(theRoll, game.user, false, gm, false).then(() => {
-        ChatMessage.create(message);
-      });
+//dungeonTurn: advances one turn, checks if proc is enabled, if so checks if turns elapsed >= proc, if so, roll inputed table,
+/*
+{
+  proc: number          random table roll turn interval, set to 0 to skip all rolls and only advance the turn count
+  rollTarget: number,   roll under this number on a d6 to trigger a random table roll
+  tableName: string,    name of roll Table to use for random monster rolls set to 'none' to disable
+  tableRoll: boolean,   true: rolls on provided table. false: skips table roll
+  reactTable: string,   set to 'none' to disable reaction table roll
+  reactRoll: boolean    true: rolls on provided reaction table after rolling random encounter table , false: skips reaction roll
+}
+
+
+*/
+async function dungeonTurn(data) {
+  //console.log(data, 'init data');
+  //console.log(data, 'dt start');
+  const turnData = await incrementTurnData();
+  //console.log(turnData);
+  restMsg(turnData.rest); //generfate chat message regarding rest status
+  if (data.tableRoll) {
+    //if tableRoll is true
+    //console.log('ffffffffffffffffff');
+    //and random monsters are active
+    if (turnData.procCount >= data.proc) {
+      //if number of turns since last random monster roll is greater than or equal to the random check interval
+      turnData.procCount = 0; //resest number of turns since last random check
+      await game.settings.set('OSE-helper', 'turnData', turnData); //update settings data <--------
+      const theRoll = await new Roll('1d6').roll();
+      const gm = game.users.contents.filter((u) => u.data.role == 4).map((u) => u.id);
+
+      if (theRoll.result > data.rollTarget) {
+        const content = {
+          flavor: "<span style='color: green'>No Monsters!</span>",
+          whisper: gm
+        };
+
+        await game.dice3d.showForRoll(theRoll, game.user, false, gm, false).then(() => {
+          ChatMessage.create(content);
+        });
+      } else {
+        const table = game.tables.getName(data.tableName);
+        //console.log(table);
+        const roll = await table.roll(table);
+        //console.log(roll, 'monster table roll');
+        const message = {
+          flavor: `<span style='color: red'>${tableFlavor()}</span>`,
+          user: game.user._id,
+          roll: roll,
+          speaker: ChatMessage.getSpeaker(),
+          content: `<br/>${roll?.results[0]?.data?.text}<br/><br/>`,
+          whisper: gm
+        };
+
+        if (data.reactRoll) {
+          const reactTable = game.tables.entities.find((t) => t.name === data.reactTable);
+          let reactRoll = await reactTable.roll();
+          let rollResult = `They look ${reactRoll.results[0].data.text}.`;
+          message.content += rollResult;
+        }
+        await game.dice3d.showForRoll(theRoll, game.user, false, gm, false).then(() => {
+          ChatMessage.create(message);
+        });
+      }
     }
   }
+  oseTimePlus(10, 'minute'); //increment ganme time
+  updateJournal(); //update turn count journal
 }
 
-//table
-async function tableFunc(table) {
-  console.log('tabFunc');
-  let roll = await table.roll();
-
-  let chatData = {
-    flavor: `<span style='color: red'>${tableFlavor()}</span>`,
-    user: game.user._id,
-    roll: roll,
-    speaker: ChatMessage.getSpeaker(),
-    content: `<br/>${roll.results[0].data.text}<br/><br/>`,
-    whisper: game.users.entities.filter((u) => u.data.role == 4).map((u) => u._id)
-  };
-
-  chatData.content += await reactFunc();
-
-  return chatData;
-}
-async function reactFunc() {
-  const reactTable = game.tables.entities.find((t) => t.name === 'Monster Reaction Roll');
-  console.log('react', reactTable);
-  let reactRoll = await reactTable.roll();
-  let retStr = `They look ${reactRoll.results[0].data.text}.`;
-  return retStr;
-}
 //write to journal
-function updateJournal(jEntry) {
-  console.log(jEntry, 'updoooooot');
-  let entry = jEntry;
-  let rc = jEntry.getFlag('world', 'count');
-  let sc = jEntry.getFlag('world', 'sCount');
-  let tc = jEntry.getFlag('world', 'tCount');
-  let count = jEntry.getFlag('world', 'skC');
-  if (rc > 5) {
-    let jContent = `<h1>Turn Count</h1><br><p>Session Count: ${sc}</p><p> Total Count: ${tc}</p><p>Turns Since Last Rest: <span style="color: red">${rc}</span></p>`;
-    jEntry.update({ content: jContent });
-    return Promise.resolve(count, entry);
-  } else if (rc > 3) {
-    let jContent = `<h1>Turn Count</h1><br><p>Session Count: ${sc}</p><p> Total Count: ${tc}</p><p>Turns Since Last Rest: <span style="color: orangered">${rc}</span></p>`;
-    jEntry.update({ content: jContent });
-    return Promise.resolve(count, entry);
+async function updateJournal() {
+  const turnData = game.settings.get('OSE-helper', 'turnData');
+  const entry = game.journal.getName(game.settings.get('OSE-helper', 'timeJournalName'));
+  //console.log(entry, 'updoooooot');
+  if (turnData.rest > 5) {
+    let jContent = `<h1>Turn Count</h1><br><p>Session Count: ${turnData.session}</p><p> Total Count: ${turnData.total}</p><p>Turns Since Last Rest: <span style="color: red">${turnData.rest}</span></p>`;
+    await entry.update({ content: jContent });
+    return;
+  } else if (turnData.rest > 3) {
+    let jContent = `<h1>Turn Count</h1><br><p>Session Count: ${turnData.session}</p><p> Total Count: ${turnData.total}</p><p>Turns Since Last Rest: <span style="color: orangered">${turnData.rest}</span></p>`;
+    await entry.update({ content: jContent });
+    return;
   } else {
-    let jContent = `<h1>Turn Count</h1><br><p>Session Count: ${sc}</p><p> Total Count: ${tc}</p><p>Turns Since Last Rest: ${rc}</p>`;
-    jEntry.update({ content: jContent });
-    return Promise.resolve(count, entry);
+    let jContent = `<h1>Turn Count</h1><br><p>Session Count: ${turnData.session}</p><p> Total Count: ${turnData.total}</p><p>Turns Since Last Rest: ${turnData.rest}</p>`;
+    await entry.update({ content: jContent });
+    return;
   }
 }
-function restMsg(rc) {
+
+async function restMsg(rc) {
+  const turnData = await game.settings.get('OSE-helper', 'turnData');
+  console.log('rest msg', rc);
   let chatData = {
-    user: game.user._id,
-    speaker: ChatMessage.getSpeaker(),
+    //user: game.user._id,
+    //speaker: ChatMessage.getSpeaker(),
     content: ''
   };
+
   if (rc > 5) {
-    chatData.content = '<p style="color: red">You Must Rest!</p>';
+    let content = '<p style="color: red">You Must Rest!</p>';
+    let penalty = `<p style ="color: firebrick">All Players suffer a penalty of –1 to hit and damage rolls until they have rested for one turn.</p>`;
+    turnData.restWarnCount++;
+
+    if (rc == 6) {
+      content += penalty;
+    }
+    if (turnData.restWarnCount >= 5) {
+      content += penalty;
+      turnData.restWarnCount = 0;
+    }
+    game.settings.set('OSE-helper', 'turnData', turnData);
+    chatData.content = content;
     ChatMessage.create(chatData);
-  } else if (rc > 3) {
+    return;
+  }
+  if (rc > 3) {
     chatData.content = '<p style="color: orangered">You Must Rest Soon!</p>';
     ChatMessage.create(chatData);
-  } else {
     return;
   }
 }
@@ -173,9 +197,42 @@ function tableFlavor() {
     '<span style="color: DeepPink">LISTEN! Do you smell something?!?</span>'
   ];
   let index = Math.floor(Math.random() * flavorArr.length);
-  console.log(index);
-  console.log(flavorArr[index]);
+  // console.log(index);
+  //console.log(flavorArr[index]);
   return flavorArr[index];
 }
+
+//rest function
+async function oseRest() {
+  const data = game.settings.get('OSE-helper', 'turnData');
+  data.rest = 0;
+  data.restWarnCount = 0;
+  await game.settings.set('OSE-helper', 'turnData', data);
+  updateJournal();
+  ChatMessage.create({
+    user: game.user._id,
+    speaker: ChatMessage.getSpeaker(),
+    content: '<span style="color: green"> You Feel Rested! </span>'
+  });
+}
 //function calls
-await countJournalInit(jName).then(updateFlags).then(updateJournal).then(rollFunc);
+// countJournalInit(jName).then(updateFlags).then(updateJournal).then(rollFunc);
+async function oseShowTurnCount() {
+  const data = await game.settings.get('OSE-helper', 'turnData');
+  // console.log(data, 'show turn');
+  let style = '';
+  let chatData = {
+    user: game.user._id,
+    speaker: ChatMessage.getSpeaker(),
+    content: ''
+  };
+  if (data.rest > 5) {
+    style = '<span style ="color: red">';
+  } else if (data.rest > 3) {
+    style = '<span style ="color: orangered">';
+  } else {
+    style = '<span>';
+  }
+  chatData.content = `<h1>Turn Count</h1><br><p>Session Count: ${data.session}</p><p> Total Count: ${data.total}</p><p>Turns Since Last Rest: ${style}${data.rest}</span></p>`;
+  ChatMessage.create(chatData);
+}
