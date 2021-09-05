@@ -196,6 +196,8 @@ async function oseRest() {
   const data = game.settings.get('OSE-helper', 'turnData');
   data.rest = 0;
   data.restWarnCount = 0;
+  data.session++;
+  data.total++;
   await game.settings.set('OSE-helper', 'turnData', data);
   updateJournal();
   ChatMessage.create({
@@ -203,6 +205,7 @@ async function oseRest() {
     speaker: ChatMessage.getSpeaker(),
     content: '<span style="color: green"> You Feel Rested! </span>'
   });
+  oseTimePlus(10, 'minute');
 }
 //function calls
 async function oseShowTurnCount() {
