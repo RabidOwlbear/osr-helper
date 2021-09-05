@@ -25,13 +25,9 @@ async function tick() {
             data.light.actors[actorId][lightType].duration = oseLight[lightType].duration;
           }
           // if duration <= 0 run lightOff function, and delete light type object
-          //console.log(data.light.actors[actorId][lightType].duration);
           if (data.light.actors[actorId][lightType].duration <= 0) {
-            //console.log('delete item', data);
             const actor = await game.actors.find((a) => a.id == actorId);
-            // console.log(actor, 'actor');
             const item = await actor.data.items.getName(oseLight[lightType].name);
-            // console.log(item);
             const newCount = item.data.data.quantity.value - 1;
             if (newCount <= 0) {
               await item.delete();
@@ -47,7 +43,6 @@ async function tick() {
             data.light.actors[actorId].lightLit = false;
             lightOff(actorId);
             delete data.light.actors[actorId][lightType];
-            //console.log(data.light.actors[actorId], 'afterdelete');
           }
         }
       }
@@ -55,20 +50,10 @@ async function tick() {
     //update lightData
     data.light.lastTick = curTime;
     game.settings.set('OSE-helper', 'lightData', data.light);
-
-    //manage turn data
-    // console.log('turn data', data.turn);
-
-    //update data\
-
-    //update turn data
-    //game.settings.set('OSE-helper', 'turnData', data.turn);
-    //dungeonTurn();
   }
 }
 
 function setLightFlag(data) {
-  //console.log('ding', data);
   const { actor, actorId, type, duration } = data;
   const journal = game.journal.getName(game.settings.get('OSE-helper', 'timeJournalName'));
   const flagObj = {

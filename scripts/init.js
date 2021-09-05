@@ -1,5 +1,4 @@
 Hooks.once('init', async function () {
-  //CONFIG.debug.hooks = true;
   //add settings
 
   game.settings.register('OSE-helper', 'timeJournalName', {
@@ -21,15 +20,7 @@ Hooks.once('init', async function () {
     },
     config: false
   });
-  //random encounter interval
-  // await game.settings.register('OSE-helper', 'randomEncounterInt', {
-  //   name: 'Random Encounter Interval',
-  //   hint: 'How often to roll for random encounters. Set to zero to disable.',
-  //   scope: 'world',
-  //   type: Number,
-  //   default: 0,
-  //   config: true
-  // });
+
   //stores turn count data
 
   game.settings.register('OSE-helper', 'turnData', {
@@ -52,12 +43,11 @@ Hooks.once('init', async function () {
 //update proc data if changed
 Hooks.on('updateSetting', async () => {
   const turnData = game.settings.get('OSE-helper', 'turnData');
-  //turnData.proc = game.settings.get('OSE-helper', 'randomEncounterInt');
-  //console.log(turnData);
+
   const newName = game.settings.get('OSE-helper', 'timeJournalName');
   const oldName = turnData.journalName;
   const journal = await game.journal.getName(oldName);
-  //console.log(journal);
+
   if (newName != oldName) {
     turnData.journalName = newName;
     await journal.update({ name: newName });
@@ -74,13 +64,11 @@ Hooks.once('ready', async () => {
   const jName = game.settings.get('OSE-helper', 'timeJournalName');
 
   //update turn proc
-  //turnData.proc = game.settings.get('OSE-helper', 'randomEncounterInt');
+
   turnData.journalName = jName;
   game.settings.set('OSE-helper', 'turnData', turnData);
-  //console.log(turnData, 'ready turnData');
 
   if (!lightData.lastTick) {
-    //console.log('no lastTick');
     lightData.lastTick = game.time.worldTime;
   }
   Hooks.on('updateWorldTime', async () => {
@@ -92,7 +80,7 @@ Hooks.once('ready', async () => {
 
 async function countJournalInit(journalName) {
   let entry = game.journal.getName(journalName);
-  //console.log(entry);
+
   if (!entry) {
     entry = await JournalEntry.create({
       content: ``,

@@ -1,4 +1,3 @@
-//game.Gametime.advanceClock(600);
 const oseTime = {};
 //increments game-worldtime by input amount
 async function oseTimePlus(amt, inc, turn = false) {
@@ -57,7 +56,6 @@ async function oseResetAllCounts() {
 //increments turn data and updates setting
 async function incrementTurnData() {
   const data = await game.settings.get('OSE-helper', 'turnData');
-  //console.log(data, 'inc data start');
   data.rest++;
   data.session++;
   data.total++;
@@ -80,14 +78,10 @@ async function incrementTurnData() {
 
 */
 async function dungeonTurn(data) {
-  //console.log(data, 'init data');
-  //console.log(data, 'dt start');
   const turnData = await incrementTurnData();
-  //console.log(turnData);
   restMsg(turnData.rest); //generfate chat message regarding rest status
   if (data.tableRoll) {
     //if tableRoll is true
-    //console.log('ffffffffffffffffff');
     //and random monsters are active
     if (turnData.procCount >= data.proc) {
       //if number of turns since last random monster roll is greater than or equal to the random check interval
@@ -107,9 +101,7 @@ async function dungeonTurn(data) {
         });
       } else {
         const table = game.tables.getName(data.tableName);
-        //console.log(table);
         const roll = await table.roll(table);
-        //console.log(roll, 'monster table roll');
         const message = {
           flavor: `<span style='color: red'>${tableFlavor()}</span>`,
           user: game.user._id,
@@ -139,7 +131,6 @@ async function dungeonTurn(data) {
 async function updateJournal() {
   const turnData = game.settings.get('OSE-helper', 'turnData');
   const entry = game.journal.getName(game.settings.get('OSE-helper', 'timeJournalName'));
-  //console.log(entry, 'updoooooot');
   if (turnData.rest > 5) {
     let jContent = `<h1>Turn Count</h1><br><p>Session Count: ${turnData.session}</p><p> Total Count: ${turnData.total}</p><p>Turns Since Last Rest: <span style="color: red">${turnData.rest}</span></p>`;
     await entry.update({ content: jContent });
@@ -159,8 +150,6 @@ async function restMsg(rc) {
   const turnData = await game.settings.get('OSE-helper', 'turnData');
   console.log('rest msg', rc);
   let chatData = {
-    //user: game.user._id,
-    //speaker: ChatMessage.getSpeaker(),
     content: ''
   };
 
@@ -216,10 +205,8 @@ async function oseRest() {
   });
 }
 //function calls
-// countJournalInit(jName).then(updateFlags).then(updateJournal).then(rollFunc);
 async function oseShowTurnCount() {
   const data = await game.settings.get('OSE-helper', 'turnData');
-  // console.log(data, 'show turn');
   let style = '';
   let chatData = {
     user: game.user._id,
