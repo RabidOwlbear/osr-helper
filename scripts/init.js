@@ -1,5 +1,6 @@
 Hooks.once('init', async function () {
   //CONFIG.debug.hooks = true;
+  //add settings
   game.settings.register('OSE-helper', 'timeJournalName', {
     name: 'Name Of Journal Entry',
     hint: 'Name Of Journal Entry To Use For Time Keeping',
@@ -8,9 +9,9 @@ Hooks.once('init', async function () {
     default: 'Turn Count',
     config: true
   });
+  //stores  active player light data
   game.settings.register('OSE-helper', 'lightData', {
     name: 'lightData',
-    // hint: 'Name Of Journal Entry To Use For Time Keeping',
     scope: 'world',
     type: Object,
     default: {
@@ -19,13 +20,25 @@ Hooks.once('init', async function () {
     },
     config: false
   });
-  game.settings.register('OSE-helper', 'timeData', {
-    name: 'timeData',
-    // hint: 'Name Of Journal Entry To Use For Time Keeping',
+  //random encounter interval
+  await game.settings.register('OSE-helper', 'randomEncounterInt', {
+    name: 'Random Encounter Interval',
+    hint: 'How often to roll for random encounters. Set to zero to disable.',
+    scope: 'world',
+    type: String,
+    default: 0,
+    config: true
+  });
+  //stores turn count data
+  game.settings.register('OSE-helper', 'turnData', {
+    name: 'turnData',
     scope: 'world',
     type: Object,
     default: {
       turn: {
+        proc: game.settings.get('OSE-helper', 'randomEncounterInt'),
+        procCount: 0,
+        rest: 0,
         session: 0,
         total: 0
       }
@@ -35,13 +48,6 @@ Hooks.once('init', async function () {
 });
 
 Hooks.once('ready', async () => {
-  console.log('ready hook function<--------');
-  const journal = await game.journal.getName(game.settings.get('OSE-helper', 'timeJournalName'));
-  console.log(journal, 'time journal');
-});
-
-Hooks.once('ready', async () => {
-  console.log('--------------------------------->BOOOOOM!');
   const data = game.settings.get('OSE-helper', 'lightData');
   //get journal
 
@@ -52,11 +58,10 @@ Hooks.once('ready', async () => {
   Hooks.on('updateWorldTime', async () => {
     tick();
   });
-  //add journal to light class prototype
+  console.log('OSE-helper ready');
 });
 
 async function countJournalInit(journalName) {
-  console.log(journalName, 'init<---------------------------------------------------------');
   let entry = game.journal.getName(journalName);
   console.log(entry);
   if (!entry) {
@@ -64,6 +69,8 @@ async function countJournalInit(journalName) {
       content: ``,
       name: `${journalName}`
     });
+    console.log(`OSE-helper: no count journal found.
+    Journal entry named ${journalName} created.`);
   }
   return entry;
 }

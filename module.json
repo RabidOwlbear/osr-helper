@@ -3,12 +3,12 @@
   "title": "OSE Helper Module",
   "description": "A collection of helpers for OSE",
   "author": "Grim",
-  "version": "0.0.04",
+  "version": "0.0.07",
   "minimumCoreVersion": "0.8.6",
   "compatibleCoreVersion": "0.8.8",
   "styles": [],
   "esmodules": [],
-  "scripts": ["./scripts/init.js", "./scripts/util.js", "./scripts/tick.js"],
+  "scripts": ["./scripts/init.js", "./scripts/util.js", "./scripts/light.js", "./scripts/turn.js"],
   "packs": [
     {
       "name": "OSE-helper-macros",
@@ -18,8 +18,15 @@
       "module": "OSE-helper"
     }
   ],
+  "dependencies": [
+    {
+      "name": "dice-so-nice",
+      "manifest": "https://gitlab.com/riccisi/foundryvtt-dice-so-nice/-/raw/master/module/module.json",
+      "type": "module"
+    }
+  ],
   "url": "https://github.com/RabidOwlbear/OSE-helper",
-  "manifest": "https://github.com/RabidOwlbear/OSE-helper/raw/master/module.json",
-  "download": "https://github.com/RabidOwlbear/OSE-helper/archive/refs/heads/master.zip",
+  "manifest": "https://github.com/RabidOwlbear/OSE-helper/raw/plus-turnCount/module.json",
+  "download": "https://github.com/RabidOwlbear/OSE-helper/archive/refs/heads/plus-turnCount.zip",
   "readme": "REAMDE.md"
 }
