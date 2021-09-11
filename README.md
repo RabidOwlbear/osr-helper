@@ -13,11 +13,13 @@ The provided "OSE-helper reset session count" will reset the session count to ze
 The provided "OSE-helper reset all counts" macro will reset all counts.
 The provided "OSE-helper Rest" macro will reset the turns since last rest count to zero.
 
-* * *
+---
 
 ### Using the OSE-helper Dungeon Turn Macro
 
-Once imported into your game, edit the  OSE-helper Dungeon Turn macro.  You will need to edit the variables described below with the information detailed. Once that is complete you may rename the macro to whatver you wish. 
+Once imported into your game, edit the OSE-helper Dungeon Turn macro. You will need to edit the variables described below with the information detailed. Once that is complete you may rename the macro to whatver you wish.
+
+Inside the OSE-helper Dungeon Turn Base you will find the following code snippet:
 
 ```
 {
@@ -38,9 +40,9 @@ Once imported into your game, edit the  OSE-helper Dungeon Turn macro.  You will
 ```
 
 - proc: This sets how often to roll on the determined random encounter table. Must be a number greater than 0 to function correctly.
-- rollTarget: Roll equal to or under this number to trigger a table roll. Must be a number greater than 0 
+- rollTarget: Roll equal to or under this number to trigger a table roll. Must be a number greater than 0
 - tableName: Replace the name witin the quotes with the name of the random encounter table you wish to use. The name needs to match exactly case and punctuation included to function correctly.
-- reactTable:  Replace the name witin the quotes with the name of the reaction table you wish to use (if any). The name needs to match exactly case and punctuation included to function correctly.
+- reactTable: Replace the name witin the quotes with the name of the reaction table you wish to use (if any). The name needs to match exactly case and punctuation included to function correctly.
 - reactRoll: If set to false the reaction roll will be skipped. Set to true to roll on reaction table.
 - tableRoll: if set to false the random encounter table roll will be skipped. Set to true to roll for random encounters. Note: if tableRoll is set to false the reaction roll will also be skipped.
 
@@ -49,17 +51,48 @@ When used, the Dungeon Turn macro will advance the game time by 10 minutes and u
 The macro will also check to see if random encounter rolls are active, if so itt will check to see if the number of turns since the last roll is greater than the proc interval (see above), if it is, the macro will roll on the provided table, and if set, roll for reaction on the provided table.
 
 ---
+
 ### Player Lights
-To activate a light, a player needs access to the "OSE-helper Torch "or "OSE-helper Lantern" macros.  To use a player token must be selected. When clicked the macro will check for the existence of the corresponding light type item on the characters sheet, if it exists, and has and uses left it will light that light item updating the selected token light settings.
-note: the Torch and Lantern macros currently require the existance of an item named "Torches (6)", and "Oil (1 flask)" that each have a valid quantity.
-A  player may only have one light source active at a time, if a light is currently lit a warning will be thrown. 
-A player light may be extinguished at any time by clicking the macro for the corresponding light type. Once relit, the light will burn for its remaining duration.
+
+To activate a light, a player needs access to the "OSE-helper Light On " macro. To use a player token must be selected. When clicked the macro will check for the existence of the corresponding light type item on the characters sheet, if it exists, and has and uses left it will light that light item updating the selected token light settings.
+note: Several light items have been provided in the OSE-helper Items compendium.
+If the macro has been used to light a light source, the light can be extinguished by clicking the macro again, preserving any remaning duration until lit again by clicking the Light On macro and selecting the corresponding light type.
+
 If a player has a light source that is currently lit, each time the game time updates the elapsed time is subtracted from that lights duration.
-if the light duration is 0 the light is extinguished and the item count for that light type is reduced by one. If the light type has no more uses it is deleted, in the case of lanterns, only the oil item is deleted. 
+if the light duration is 0 the light is extinguished and the item count for that light type is reduced by one. If the light type has no more uses it is deleted, in the case of lanterns, only the oil item is deleted.
 
 ---
+
+### Ration Report
+
+The OSE-helper Ration Report macro
+
+```
+const data = {
+    character:['insert', 'character names', 'here'],
+    retainer: ['insert', 'retainer names', 'here'],
+		whisper: true
+}
+oseRationReport(data, true)
+```
+
+Change the following settings befor use:
+character: Array of character names to check. Must match character names exactly, case sensitive, wrap in single quotes, separate names by comma.
+retainer: Array of retainer names to check. Must match character names exactly, case sensitive, wrap in single quotes, separate names by comma.
+whisper: If set to true the report will be sent to chat via whisper.
+
+When clicked this macro will generate a report detailing all rations currently held by all tracked Player and Retainer actors seprated by name, listing items held and their quantities, color coded.
+Total number of days worth of rations for the entire tracked group(assuming the party pools resources) is also profided in a color coded display.
+
+---
+
 ### Other Useful macros
 
 - OSE-helper Show Turn Counts: Displays the current game turn count information to chat.
--  OSE-helper Light Turns Remaining: Displays in a whispered chat message the number of turns remaining for the currently lit light source.
-
+- OSE-helper Light Turns Remaining: Displays in a whispered chat message the number of turns remaining for the currently lit light source.
+- OSE-helper Actor Item Report: Generates a whispered chat message detailing all light source and ration types and quantities color coded.
+- OSE-helper Eat Ration: Generates a dialog with a dropdown selector listing all available ration types and their quantities, when the eat ration button is clicked the quantity for that item type is reduced by one, if the item has no more used it is deleted.
+- OSE-helper Rest: Resets turns since rest count. Advances time 1 turn(10 minutes).
+- OSE-helper Reset Session Count: Resets session turn count to zero.
+- OSE-helper Reset All Turn Counts: Resets all turn counts to zero.
+- OSE-helper Clear GM Light Flag: Resets OSE-helper Light data flag to default value for the GM user.
