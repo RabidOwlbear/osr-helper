@@ -3,18 +3,32 @@
   "title": "OSE Helper Module",
   "description": "A collection of helpers for OSE",
   "author": "Grim",
-  "version": "0.0.07",
+  "version": "0.0.1",
   "minimumCoreVersion": "0.8.6",
   "compatibleCoreVersion": "0.8.8",
   "styles": [],
   "esmodules": [],
-  "scripts": ["./scripts/init.js", "./scripts/util.js", "./scripts/light.js", "./scripts/turn.js"],
+  "scripts": [
+    "./scripts/init.js",
+    "./scripts/rations.js",
+    "./scripts/util.js",
+    "./scripts/light.js",
+    "./scripts/turn.js",
+    "./scripts/oseHelperData.js"
+  ],
   "packs": [
     {
       "name": "OSE-helper-macros",
       "label": "OSE-helper Macros",
       "path": "packs/macros.db",
       "entity": "Macro",
+      "module": "OSE-helper"
+    },
+    {
+      "name": "OSE-helper-items",
+      "label": "OSE-helper Items",
+      "path": "packs/items.db",
+      "entity": "Item",
       "module": "OSE-helper"
     }
   ],

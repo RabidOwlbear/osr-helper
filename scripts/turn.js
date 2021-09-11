@@ -236,6 +236,7 @@ async function oseLightTurnRemaining(name) {
       whisper: [game.user._id]
     };
     let type, turnsLeft;
+
     for (let lightType in lightData.actors[actorId]) {
       if (lightData.actors[actorId]?.[lightType]?.isOn) {
         type = lightType;
@@ -243,34 +244,18 @@ async function oseLightTurnRemaining(name) {
       }
     }
 
-    if (type == 'torch') {
-      let color = `green`;
-      if (turnsLeft <= 3) {
-        color = 'orangered';
-      }
-      if (turnsLeft <= 1) {
-        color = 'red';
-      }
-      const turn = turnsLeft == 1 ? 'turn' : 'turns';
-      chatData.content = `<h3>Torch Turns Left</h3><p style="color: ${color}">The torch has ${turnsLeft} ${turn} remaining</p>`;
-
-      ChatMessage.create(chatData);
-      return;
+    let color = `green`;
+    if (turnsLeft <= oseLight[type].warn) {
+      color = 'orangered';
     }
-    if (type == 'lantern') {
-      let color = `green`;
-      if (turnsLeft <= 6) {
-        color = 'orangered';
-      }
-      if (turnsLeft <= 3) {
-        color = 'red';
-      }
-      const turn = turnsLeft == 1 ? 'turn' : 'turns';
-      chatData.content = `<h3>Torch Turns Left</h3><p style="color: ${color}">The torch has ${turnsLeft} ${turn} remaining</p>`;
-
-      ChatMessage.create(chatData);
-      return;
+    if (turnsLeft <= oseLight[type].alert) {
+      color = 'red';
     }
+    const turn = turnsLeft == 1 ? 'turn' : 'turns';
+    chatData.content = `<h3>Torch Turns Left</h3><p style="color: ${color}">The torch has ${turnsLeft} ${turn} remaining</p>`;
+
+    ChatMessage.create(chatData);
+    return;
   }
   ui.notifications.error('No Light Lit!');
 }

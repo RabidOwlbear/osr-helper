@@ -10,9 +10,32 @@ Hooks.once('init', async function () {
     config: true
   });
   //stores  active player light data
-  game.settings.register('OSE-helper', 'lightData', {
-    name: 'lightData',
+  // game.settings.register('OSE-helper', 'lightData', {
+  //   name: 'lightData',
+  //   scope: 'world',
+  //   type: Object,
+  //   default: {
+  //     actors: {},
+  //     lastTick: game.time.worldTime
+  //   },
+  //   config: false
+  // });
+  //delete
+
+  //stores world time after last turn advance
+  game.settings.register('OSE-helper', 'lastTick', {
+    name: 'lastTick',
     scope: 'world',
+    type: Object,
+    default: {
+      lastTick: game.time.worldTime
+    },
+    config: false
+  });
+  //
+  game.settings.register('OSE-helper', 'userData', {
+    name: 'userData',
+    scope: 'client',
     type: Object,
     default: {
       actors: {},
@@ -25,6 +48,33 @@ Hooks.once('init', async function () {
 
   game.settings.register('OSE-helper', 'turnData', {
     name: 'turnData',
+    scope: 'world',
+    type: Object,
+    default: {
+      proc: 0,
+      procCount: 0,
+      rest: 0,
+      restWarnCount: 0,
+      session: 0,
+      total: 0,
+      journalName: game.settings.get('OSE-helper', 'timeJournalName')
+    },
+    config: false
+  });
+
+  //ration settings
+  game.settings.register('OSE-helper', 'trackRations', {
+    name: 'Track Rations Use',
+    hint: 'Track Rations Use',
+    scope: 'client',
+    type: Boolean,
+    default: false,
+    config: true,
+    onChange: () => console.log('user?', game.user)
+  });
+
+  game.settings.register('OSE-helper', 'rationData', {
+    name: 'rationData',
     scope: 'world',
     type: Object,
     default: {
@@ -59,7 +109,7 @@ Hooks.on('updateSetting', async () => {
 });
 
 Hooks.once('ready', async () => {
-  const lightData = game.settings.get('OSE-helper', 'lightData');
+  //const lightData = game.settings.get('OSE-helper', 'lightData');
   const turnData = game.settings.get('OSE-helper', 'turnData');
   const jName = game.settings.get('OSE-helper', 'timeJournalName');
 
@@ -68,14 +118,26 @@ Hooks.once('ready', async () => {
   turnData.journalName = jName;
   game.settings.set('OSE-helper', 'turnData', turnData);
 
-  if (!lightData.lastTick) {
-    lightData.lastTick = game.time.worldTime;
-  }
+  // if (!lightData.lastTick) {
+  //   lightData.lastTick = game.time.worldTime;
+  // }
+  //set hook to update light timer durations
   Hooks.on('updateWorldTime', async () => {
-    tick();
+    oseTick();
   });
+
+  //check for count journal
   await countJournalInit(jName);
   console.log('OSE-helper ready');
+
+  //check for userflags
+
+  for (let user of game.users.contents) {
+    const flag = await user.getFlag('OSE-helper', 'lightData');
+    if (!flag) {
+      await user.setFlag('OSE-helper', 'lightData', {});
+    }
+  }
 });
 
 async function countJournalInit(journalName) {

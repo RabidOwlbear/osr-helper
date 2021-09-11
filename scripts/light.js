@@ -1,85 +1,137 @@
-const oseLight = {
-  torch: {
-    name: 'Torches (6)',
-    dimLight: 30,
-    brightLight: 10,
-    duration: 60
-  },
-  lantern: {
-    name: 'Oil (1 flask)',
-    dimLight: 30,
-    brightLight: 10,
-    duration: 180
-  }
-};
-
-async function lightOn(actorId, type) {
-  //get data
-  const data = await game.settings.get('OSE-helper', 'lightData');
+async function oseLightOn(actorId) {
+  const lightData = game.user.getFlag('OSE-helper', 'lightData');
+  console.log(lightData, '<-----------------');
   const actor = await game.actors.find((a) => a.id == actorId);
-  const item = await actor.items.getName(oseLight[type].name);
-  console.log(oseLight[type].name, item, 'item');
-  if (!item || item.data.data.quantity.value <= 0) {
-    switch (type) {
-      case 'torch':
-        ui.notifications.error('No Torches Left!');
-        break;
-      case 'lantern':
-        ui.notifications.error('No Oil Left!');
-        break;
-    }
-    return;
-  }
-  if (data.actors?.[actorId]?.lightLit) {
-    if (data.actors?.[actorId]?.[type]?.isOn) {
-      console.log('light is on');
-      //set isOn to false
-      data.actors[actorId].lightLit = false;
-      data.actors[actorId][type].isOn = false;
 
-      //run lightOff function with actorId
-      game.settings.set('OSE-helper', 'lightData', data);
-      lightOff(actorId);
-      return;
-    }
-    ui.notifications.error('Light Already Lit!');
-    return;
-  }
-
-  console.log(data, data.actors?.[actorId]?.[type]?.isOn);
-
-  if (data.actors?.[actorId]?.[type]?.isOn == false) {
-    //if data contains actorId.type.isOn = false set isOn to true
-    data.actors[actorId].lightLit = true;
-    data.actors[actorId][type].isOn = true;
-    game.settings.set('OSE-helper', 'lightData', data);
-    updateTokens(actorId, 10, 30);
-    return;
-  }
-  if (!data.actors?.[actorId]) {
-    //if no actorId found, creat actor id and light type
-    console.log('no actor or type found');
-    data.actors[actorId] = {
-      lightLit: true,
-      [type]: {
-        isOn: true,
-        duration: oseLight[type].duration
+  if (lightData?.[actorId]?.lightLit) {
+    console.log('light lit');
+    for (let type in lightData?.[actorId]) {
+      if (typeof lightData?.[actorId][type] == 'object') {
+        console.log('object', lightData?.[actorId][type]);
+        lightData[actorId][type].isOn = false;
+        console.log('object', lightData?.[actorId][type]);
       }
-    };
-    console.log(data);
-    game.settings.set('OSE-helper', 'lightData', data);
-    updateTokens(actorId, 10, 30);
+    }
+    lightData[actorId].lightLit = false;
+    await game.user.unsetFlag('OSE-helper', 'lightData');
+    await game.user.setFlag('OSE-helper', 'lightData', lightData);
+    oseLightOff(actorId);
     return;
   }
-  if (!data.actors[actorId][type]) {
-    data.actors[actorId].lightLit = true;
-    data.actors[actorId][type] = {
-      isOn: true,
-      duration: oseLight[type].duration
-    };
-    game.settings.set('OSE-helper', 'lightData', data);
-    updateTokens(actorId, 10, 30);
+
+  let lightOptions = '';
+
+  for (let type in oseLight) {
+    console.log(type, oseLight[type].name);
+    const item = actor.data.items.getName(oseLight[type].name);
+    if (item) {
+      console.log('item', item);
+      lightOptions += `<option value="${type}">${item.name}: ${item.data.data.quantity.value}</option>`;
+    }
+  }
+
+  if (lightOptions == '') {
+    ui.notifications.error('No Light Items Found');
     return;
+  }
+  console.log(lightOptions);
+  let dialogTemplate = `
+  <h1> Pick a Light Type </h1>
+  <div style="display:flex">
+    <div  style="flex:1"><select id="lightType">${lightOptions}</select></div>
+    </div>`;
+
+  new Dialog({
+    title: 'Light on',
+    content: dialogTemplate,
+    buttons: {
+      rollAtk: {
+        label: 'Light On',
+        callback: async (html) => {
+          const itemType = html.find('#lightType')[0].value;
+          const item = actor.items.getName(oseLight[itemType].name);
+          console.log(item);
+          if (lightData?.[actorId]?.[itemType]?.isOn == false) {
+            //if data contains actorId.type.isOn = false set isOn to true
+            lightData[actorId].lightLit = true;
+            lightData[actorId][itemType].isOn = true;
+            game.user.setFlag('OSE-helper', 'lightData', lightData);
+            oseUpdateTokens(actorId, oseLight[itemType]);
+            return;
+          }
+          if (!lightData?.[actorId]) {
+            //if no actorId found, creat actor id and light type
+            console.log('no actor or type found');
+            lightData[actorId] = {
+              lightLit: true,
+              [itemType]: {
+                isOn: true,
+                duration: oseLight[itemType].duration
+              }
+            };
+            console.log(lightData);
+            game.user.setFlag('OSE-helper', 'lightData', lightData);
+            oseUpdateTokens(actorId, oseLight[itemType]);
+            return;
+          }
+          if (!lightData[actorId][itemType]) {
+            lightData[actorId].lightLit = true;
+            lightData[actorId][itemType] = {
+              isOn: true,
+              duration: oseLight[itemType].duration
+            };
+            game.user.setFlag('OSE-helper', 'lightData', lightData);
+            oseUpdateTokens(actorId, oseLight[itemType]);
+            return;
+          }
+        }
+      },
+      close: {
+        label: 'Close'
+      }
+    }
+  }).render(true);
+}
+
+async function oseUpdateTokens(actorId, lightData) {
+  console.log(lightData, actorId);
+  //loop through active game scenes
+  for (let scene of game.scenes.contents) {
+    //loop through tokens contaioned in scene
+    scene.data.tokens.contents.forEach(async (t) => {
+      //if token actorId == actorId set light settings to off
+      if (t?.actor?.id == actorId) {
+        console.log(t);
+        const data = {
+          brightLight: lightData.brightLight,
+          dimLight: lightData.dimLight,
+          lightColor: lightData.color,
+          lightAlpha: lightData.lightAlpha
+        };
+        if (t.data.lightAnimation.type == 'BlitzAlternate Torch') {
+          console.log('blitz alternate torch');
+
+          const flagData = {
+            secondaryColor: lightData.secondaryColor,
+            ratioDamper: 1,
+            blurStrength: 20,
+            alterTranslation: true,
+            alterAlpha: true
+          };
+          await t.setFlag('CommunityLighting', 'customProperties', flagData);
+          // data.flags = {
+          //   CommunityLighting: {
+          //     customProperties: {
+          //       secondaryColor: lightData.secondaryColor,
+          //       blurStrength: 20
+          //     }
+          //   }
+          // };
+        }
+        console.log('token found', data);
+        await t.update(data);
+      }
+    });
   }
 }
 
@@ -87,19 +139,18 @@ async function lightOff(actorId) {
   //loop through active game scenes
   updateTokens(actorId, 0, 0);
 }
-
-async function updateTokens(actorId, bl, dl) {
+async function oseLightOff(actorId) {
+  console.log('light off');
+  const data = {
+    brightLight: 0,
+    dimLight: 0,
+    color: '',
+    lightAlpha: 0.16
+  };
   //loop through active game scenes
-  for (let scene of game.scenes.contents) {
-    //loop through tokens contaioned in scene
-    scene.data.tokens.contents.forEach(async (t) => {
-      //if token actorId == actorId set light settings to off
-      if (t?.actor?.id == actorId) {
-        await t.update({ brightLight: bl, dimLight: dl });
-      }
-    });
-  }
+  oseUpdateTokens(actorId, data);
 }
+async function updateTokens(actorId, bl, dl) {}
 function singleSelected() {
   if (canvas.tokens.controlled.length == 0 || canvas.tokens.controlled.length > 1) {
     ui.notifications.error('Please select a single token');
