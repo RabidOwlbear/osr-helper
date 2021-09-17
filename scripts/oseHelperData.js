@@ -24,6 +24,28 @@ lightType: {
   
 */
 const oseLight = {
+  oglLantern: {
+    name: 'Lantern',
+    dimLight: 30,
+    brightLight: 5,
+    duration: 240,
+    color: '#ff7b24',
+    secondaryColor: '#fa9924',
+    lightAlpha: 0.09,
+    warn: 4,
+    alert: 2
+  },
+  oglTorch: {
+    name: 'Torch',
+    dimLight: 30,
+    brightLight: 5,
+    duration: 60,
+    color: '#ff7b24',
+    secondaryColor: '#fa9924',
+    lightAlpha: 0.09,
+    warn: 3,
+    alert: 1
+  },
   torch: {
     name: 'Torches (6)',
     dimLight: 30,
