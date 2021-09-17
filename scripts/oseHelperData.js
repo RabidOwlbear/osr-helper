@@ -7,7 +7,9 @@ const oseFood = {
   game: 'Foraged Rations: Game',
   mushroom: 'Foraged Rations: Mushrooms',
   hardTack: 'Hard Tack (7 days)',
-  freshFood: 'Fresh Food (7 days)'
+  freshFood: 'Fresh Food (7 days)',
+  oglRationsStandard: 'Rations, standard',
+  oglRationsIron: 'Rations, iron'
 };
 /*
 lightType: {
@@ -25,7 +27,7 @@ lightType: {
 */
 const oseLight = {
   oglLantern: {
-    name: 'Lantern',
+    name: 'Oil flask',
     dimLight: 30,
     brightLight: 5,
     duration: 240,
