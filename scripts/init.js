@@ -9,6 +9,14 @@ Hooks.once('init', async function () {
     default: 'Turn Count',
     config: true
   });
+  game.settings.register('OSE-helper', 'restMessage', {
+    name: 'Enable rest status chat messages',
+    hint: 'Enables rest status chat messages',
+    scope: 'world',
+    type: Boolean,
+    default: true,
+    config: true
+  });
   //stores  active player light data
   // game.settings.register('OSE-helper', 'lightData', {
   //   name: 'lightData',
@@ -41,6 +49,15 @@ Hooks.once('init', async function () {
       actors: {},
       lastTick: game.time.worldTime
     },
+    config: false
+  });
+  //
+  //custom effect data obj
+  game.settings.register('OSE-helper', 'customEffects', {
+    name: 'effectData',
+    scope: 'world',
+    type: Object,
+    default: {},
     config: false
   });
 
@@ -133,9 +150,13 @@ Hooks.once('ready', async () => {
   //check for userflags
 
   for (let user of game.users.contents) {
-    const flag = await user.getFlag('OSE-helper', 'lightData');
-    if (!flag) {
+    const lightFlag = await user.getFlag('OSE-helper', 'lightData');
+    const effectFlag = await user.getFlag('OSE-helper', 'effectData');
+    if (!lightFlag) {
       await user.setFlag('OSE-helper', 'lightData', {});
+    }
+    if (!effectFlag) {
+      await user.setFlag('OSE-helper', 'effectData', {});
     }
   }
 });
@@ -154,3 +175,17 @@ async function countJournalInit(journalName) {
   }
   return entry;
 }
+
+//reset monster actions hook
+
+Hooks.on('updateCombat', (combat) => {
+  if (combat.current && combat.current.round && combat.previous && combat.previous.round) {
+    if (combat.current.round - combat.previous.round == 1) {
+      console.log('round up');
+      resetMonsterAttacks();
+    }
+  }
+});
+
+// //effect report
+// Hooks.on('renderuserEffectReport', ())

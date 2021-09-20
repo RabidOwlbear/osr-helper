@@ -1,0 +1,13 @@
+#customEffectForm .effectDesc {
+  height: 100px;
+}
+
+#customEffectForm .inputDiv {
+  padding: 0.5em 0;
+}
+
+#customEffectForm .whisperTargetDiv {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.5em 0;
+}

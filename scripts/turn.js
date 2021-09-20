@@ -79,7 +79,9 @@ async function incrementTurnData() {
 */
 async function dungeonTurn(data) {
   const turnData = await incrementTurnData();
-  restMsg(turnData.rest); //generfate chat message regarding rest status
+  if (game.settings.get('OSE-helper', 'restMessage')) {
+    restMsg(turnData.rest); //generfate chat message regarding rest status
+  }
   if (data.tableRoll) {
     //if tableRoll is true
     //and random monsters are active
@@ -148,7 +150,7 @@ async function updateJournal() {
 
 async function restMsg(rc) {
   const turnData = await game.settings.get('OSE-helper', 'turnData');
-  console.log('rest msg', rc);
+  // console.log('rest msg', rc);
   let chatData = {
     content: ''
   };
@@ -227,20 +229,28 @@ async function oseShowTurnCount() {
   ChatMessage.create(chatData);
 }
 
-async function oseLightTurnRemaining(name) {
-  const lightData = game.settings.get('OSE-helper', 'lightData');
-  const actorId = game.actors.getName(name).id;
-  if (lightData.actors[actorId].lightLit) {
+async function oseLightTurnRemaining(actorId) {
+  let lightData;
+  for (let user of game.users.contents) {
+    if (user.data.flags['OSE-helper'].lightData[actorId]) {
+      let flag = await user.getFlag('OSE-helper', 'lightData');
+      lightData = flag;
+    }
+  }
+
+  //const actor = game.contents.find((a) => a.id == actorId);
+  console.log(actorId);
+  if (lightData?.[actorId].lightLit) {
     let chatData = {
       content: '',
       whisper: [game.user._id]
     };
     let type, turnsLeft;
 
-    for (let lightType in lightData.actors[actorId]) {
-      if (lightData.actors[actorId]?.[lightType]?.isOn) {
+    for (let lightType in lightData[actorId]) {
+      if (lightData[actorId]?.[lightType]?.isOn) {
         type = lightType;
-        turnsLeft = lightData.actors[actorId][lightType].duration / 10;
+        turnsLeft = lightData[actorId][lightType].duration / 10;
       }
     }
 
@@ -252,7 +262,8 @@ async function oseLightTurnRemaining(name) {
       color = 'red';
     }
     const turn = turnsLeft == 1 ? 'turn' : 'turns';
-    chatData.content = `<h3>Torch Turns Left</h3><p style="color: ${color}">The torch has ${turnsLeft} ${turn} remaining</p>`;
+    const typeCap = type.charAt(0).toUpperCase() + type.slice(1);
+    chatData.content = `<h3>${typeCap} Turns Left</h3><p style="color: ${color}">The ${type} has ${turnsLeft} ${turn} remaining</p>`;
 
     ChatMessage.create(chatData);
     return;

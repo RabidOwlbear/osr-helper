@@ -1,20 +1,39 @@
 async function oseLightOn(actorId) {
-  const lightData = game.user.getFlag('OSE-helper', 'lightData');
-  console.log(lightData, '<-----------------');
+  let lightData;
+  let userObj;
+  //check for actors in all non gm user slots before writing flag to gm user
+  if (game.user.role == 4) {
+    console.log('gm');
+    for (let user of game.users.contents) {
+      console.log(user, user.data.flags['OSE-helper'].lightData);
+      if (user.data.flags['OSE-helper'].lightData[actorId]) {
+        lightData = await user.getFlag('OSE-helper', 'lightData');
+        userObj = user;
+        console.log(user, lightData);
+      } else {
+        lightData = {};
+        userObj = game.user;
+      }
+    }
+  } else {
+    lightData = game.user.getFlag('OSE-helper', 'lightData');
+    userObj = game.user;
+  }
+  console.log(lightData, userObj, '<-----------------');
   const actor = await game.actors.find((a) => a.id == actorId);
 
   if (lightData?.[actorId]?.lightLit) {
-    console.log('light lit');
+    // console.log('light lit');
     for (let type in lightData?.[actorId]) {
       if (typeof lightData?.[actorId][type] == 'object') {
-        console.log('object', lightData?.[actorId][type]);
+        // // console.log('object', lightData?.[actorId][type]);
         lightData[actorId][type].isOn = false;
-        console.log('object', lightData?.[actorId][type]);
+        // // console.log('object', lightData?.[actorId][type]);
       }
     }
     lightData[actorId].lightLit = false;
-    await game.user.unsetFlag('OSE-helper', 'lightData');
-    await game.user.setFlag('OSE-helper', 'lightData', lightData);
+    await userObj.unsetFlag('OSE-helper', 'lightData');
+    await userObj.setFlag('OSE-helper', 'lightData', lightData);
     oseLightOff(actorId);
     return;
   }
@@ -22,10 +41,10 @@ async function oseLightOn(actorId) {
   let lightOptions = '';
 
   for (let type in oseLight) {
-    console.log(type, oseLight[type].name);
+    // // console.log(type, oseLight[type].name);
     const item = actor.data.items.getName(oseLight[type].name);
     if (item) {
-      console.log('item', item);
+      // // console.log('item', item);
       lightOptions += `<option value="${type}">${item.name}: ${item.data.data.quantity.value}</option>`;
     }
   }
@@ -34,7 +53,7 @@ async function oseLightOn(actorId) {
     ui.notifications.error('No Light Items Found');
     return;
   }
-  console.log(lightOptions);
+  // // console.log(lightOptions);
   let dialogTemplate = `
   <h1> Pick a Light Type </h1>
   <div style="display:flex">
@@ -50,18 +69,19 @@ async function oseLightOn(actorId) {
         callback: async (html) => {
           const itemType = html.find('#lightType')[0].value;
           const item = actor.items.getName(oseLight[itemType].name);
-          console.log(item);
+          // // console.log(item);
           if (lightData?.[actorId]?.[itemType]?.isOn == false) {
             //if data contains actorId.type.isOn = false set isOn to true
             lightData[actorId].lightLit = true;
             lightData[actorId][itemType].isOn = true;
-            game.user.setFlag('OSE-helper', 'lightData', lightData);
+            userObj.setFlag('OSE-helper', 'lightData', lightData);
             oseUpdateTokens(actorId, oseLight[itemType]);
             return;
           }
           if (!lightData?.[actorId]) {
+            console.log(lightData, actorId, '<---- no type found');
             //if no actorId found, creat actor id and light type
-            console.log('no actor or type found');
+            // // console.log('no actor or type found');
             lightData[actorId] = {
               lightLit: true,
               [itemType]: {
@@ -69,8 +89,8 @@ async function oseLightOn(actorId) {
                 duration: oseLight[itemType].duration
               }
             };
-            console.log(lightData);
-            game.user.setFlag('OSE-helper', 'lightData', lightData);
+            // console.log(lightData), 'lightData no id';
+            userObj.setFlag('OSE-helper', 'lightData', lightData);
             oseUpdateTokens(actorId, oseLight[itemType]);
             return;
           }
@@ -80,7 +100,7 @@ async function oseLightOn(actorId) {
               isOn: true,
               duration: oseLight[itemType].duration
             };
-            game.user.setFlag('OSE-helper', 'lightData', lightData);
+            userObj.setFlag('OSE-helper', 'lightData', lightData);
             oseUpdateTokens(actorId, oseLight[itemType]);
             return;
           }
@@ -93,23 +113,25 @@ async function oseLightOn(actorId) {
   }).render(true);
 }
 
-async function oseUpdateTokens(actorId, lightData) {
-  console.log(lightData, actorId);
+async function oseUpdateTokens(actorId, lightData, lastTurn = false) {
+  // // console.log(lightData, actorId);
   //loop through active game scenes
   for (let scene of game.scenes.contents) {
     //loop through tokens contaioned in scene
     scene.data.tokens.contents.forEach(async (t) => {
       //if token actorId == actorId set light settings to off
       if (t?.actor?.id == actorId) {
-        console.log(t);
+        let dim = lightData.dimLight;
+        if (lastTurn) dim = dim * 0.7;
+        // // console.log(t);
         const data = {
           brightLight: lightData.brightLight,
-          dimLight: lightData.dimLight,
+          dimLight: dim,
           lightColor: lightData.color,
           lightAlpha: lightData.lightAlpha
         };
         if (t.data.lightAnimation.type == 'BlitzAlternate Torch') {
-          console.log('blitz alternate torch');
+          // console.log('blitz alternate torch');
 
           const flagData = {
             secondaryColor: lightData.secondaryColor,
@@ -128,7 +150,7 @@ async function oseUpdateTokens(actorId, lightData) {
           //   }
           // };
         }
-        console.log('token found', data);
+        // console.log('token found', data);
         await t.update(data);
       }
     });
@@ -140,7 +162,7 @@ async function lightOff(actorId) {
   updateTokens(actorId, 0, 0);
 }
 async function oseLightOff(actorId) {
-  console.log('light off');
+  // console.log('light off');
   const data = {
     brightLight: 0,
     dimLight: 0,

@@ -1,4 +1,80 @@
+//tick: manages light duration, turn count
+async function oseTick() {
+  if (game.user.role >= 4) {
+    console.log('tick');
 
+    //get data
+    const data = {
+      light: null,
+      lastTick: game.settings.get('OSE-helper', 'lastTick')
+    };
+    const curTime = game.time.worldTime;
+    const elapsed = (curTime - data.lastTick) / 60;
+    //manage light duration
+    for (let user of game.users.contents) {
+      data.light = await user.getFlag('OSE-helper', 'lightData');
+      // console.log('user', user, data);
+      //loop through actorIds in light flag
+      for (let actorId in data.light) {
+        //If actor does not have light lit...
+        if (data.light[actorId].lightLit) {
+          // console.log('lit', data.light);
+          //loop through the light types in data.actorId
+          for (let lightType in data.light[actorId]) {
+            //check if light isOn = true
+            if (data.light[actorId][lightType].isOn) {
+              // console.log('isOn', lightType, elapsed);
+              //decrement duration by time elapsed in minutes
+              data.light[actorId][lightType].duration -= elapsed;
+              //if duration is greater than maximum, set to maximum.
+              // console.log(data.light[actorId][lightType].duration, 'after');
+              if (data.light[actorId][lightType].duration > oseLight[lightType].duration) {
+                // console.log('exceeded max');
+                data.light[actorId][lightType].duration = oseLight[lightType].duration;
+              }
+              //on last turn shrink light radius
+              if (data.light[actorId][lightType].duration <= 10) {
+                // console.log('last turn');
+                oseUpdateTokens(actorId, oseLight[lightType], true);
+              }
+              // if duration <= 0 run lightOff function, and delete light type object
+              if (data.light[actorId][lightType].duration <= 0) {
+                const actor = await game.actors.contents.find((a) => a.id == actorId);
+                const item = await actor.data.items.getName(oseLight[lightType].name);
+                const newCount = item.data.data.quantity.value - 1;
+                if (newCount <= 0) {
+                  await item.delete();
+                } else {
+                  await item.update({
+                    data: {
+                      quantity: {
+                        value: newCount
+                      }
+                    }
+                  });
+                }
+
+                data.light[actorId].lightLit = false;
+                // console.log('before light off');
+                oseLightOff(actorId);
+                delete data.light[actorId][lightType];
+                if (Object.keys(data.light[actorId]).length == 1) {
+                  delete data.light[actorId];
+                }
+              }
+            }
+          }
+        }
+      }
+      await user.unsetFlag('OSE-helper', 'lightData');
+      await user.setFlag('OSE-helper', 'lightData', data.light);
+    }
+
+    //update lightData
+    data.lastTick = curTime;
+    game.settings.set('OSE-helper', 'lastTick', data.lastTick);
+  }
+}
 
 async function tick() {
   if (game.user.role >= 4) {
@@ -154,7 +230,7 @@ async function oseLightOn(actorId) {
       lightOptions += `<option value="${type}">${item.name}: ${item.data.data.quantity.value}</option>`;
     }
   }
-  
+
   if (lightOptions == '') {
     ui.notifications.error('No Light Items Found');
     return;
@@ -217,3 +293,99 @@ async function oseLightOn(actorId) {
     }
   }).render(true);
 }
+
+async function oseLightTick(lastTick) {
+  if (game.user.role >= 4) {
+    console.log('tick');
+
+    //get data
+    const data = {
+      light: null
+    };
+    const curTime = game.time.worldTime;
+    const elapsed = (curTime - lastTick) / 60;
+    //manage light duration
+    for (let user of game.users.contents) {
+      data.light = await user.getFlag('OSE-helper', 'lightData');
+      // console.log('user', user, data);
+      //loop through actorIds in light flag
+      for (let actorId in data.light) {
+        //If actor does not have light lit...
+        if (data.light[actorId].lightLit) {
+          // console.log('lit', data.light);
+          //loop through the light types in data.actorId
+          for (let lightType in data.light[actorId]) {
+            //check if light isOn = true
+            if (data.light[actorId][lightType].isOn) {
+              // console.log('isOn', lightType, elapsed);
+              //decrement duration by time elapsed in minutes
+              data.light[actorId][lightType].duration -= elapsed;
+              //if duration is greater than maximum, set to maximum.
+              // console.log(data.light[actorId][lightType].duration, 'after');
+              if (data.light[actorId][lightType].duration > oseLight[lightType].duration) {
+                // console.log('exceeded max');
+                data.light[actorId][lightType].duration = oseLight[lightType].duration;
+              }
+              //on last turn shrink light radius
+              if (data.light[actorId][lightType].duration <= 10) {
+                // console.log('last turn');
+                oseUpdateTokens(actorId, oseLight[lightType], true);
+              }
+              // if duration <= 0 run lightOff function, and delete light type object
+              if (data.light[actorId][lightType].duration <= 0) {
+                const actor = await game.actors.contents.find((a) => a.id == actorId);
+                const item = await actor.data.items.getName(oseLight[lightType].name);
+                const newCount = item.data.data.quantity.value - 1;
+                if (newCount <= 0) {
+                  await item.delete();
+                } else {
+                  await item.update({
+                    data: {
+                      quantity: {
+                        value: newCount
+                      }
+                    }
+                  });
+                }
+
+                data.light[actorId].lightLit = false;
+                // console.log('before light off');
+                oseLightOff(actorId);
+                delete data.light[actorId][lightType];
+                if (Object.keys(data.light[actorId]).length == 1) {
+                  delete data.light[actorId];
+                }
+              }
+            }
+          }
+        }
+      }
+      await user.unsetFlag('OSE-helper', 'lightData');
+      await user.setFlag('OSE-helper', 'lightData', data.light);
+    }
+  }
+}
+
+//custom application
+class userEffectReport extends Application {
+  constructor(userId) {
+    super();
+    this.userId = userId;
+  }
+
+  static get defaultOptions() {
+    return mergeObject(super.defaultOptions, {
+      classes: ['application', 'oseEffectReport'],
+      popOut: true,
+      template: `modules/OSE-helper/templates/report.html`,
+      id: 'oseEffectReport',
+      title: 'Custom Effect Report'
+    });
+  }
+
+  activateListeners(html) {
+    super.activateListeners(html);
+  }
+}
+
+window.userEffectReport = userEffectReport;
