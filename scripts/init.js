@@ -17,18 +17,14 @@ Hooks.once('init', async function () {
     default: true,
     config: true
   });
-  //stores  active player light data
-  // game.settings.register('OSE-helper', 'lightData', {
-  //   name: 'lightData',
-  //   scope: 'world',
-  //   type: Object,
-  //   default: {
-  //     actors: {},
-  //     lastTick: game.time.worldTime
-  //   },
-  //   config: false
-  // });
-  //delete
+  game.settings.register('OSE-helper', 'tokenLightDefault', {
+    name: 'Update default token settings on creation.',
+    hint: 'Enables Owlbear preferred default token light settings.',
+    scope: 'world',
+    type: Boolean,
+    default: true,
+    config: true
+  });
 
   //stores world time after last turn advance
   game.settings.register('OSE-helper', 'lastTick', {
@@ -105,8 +101,18 @@ Hooks.once('init', async function () {
     },
     config: false
   });
-  console.log(game.settings.get('OSE-helper', 'turnData'), 'td');
+
+  game.settings.register('OSE-helper', 'centerHotbar', {
+    name: 'Center Hotbar',
+    hint: 'Center The macro Hotbar',
+    scope: 'world',
+    type: Boolean,
+    default: true,
+    config: true,
+    onChange: () => centerHotbar()
+  });
 });
+
 //update proc data if changed
 Hooks.on('updateSetting', async () => {
   const turnData = game.settings.get('OSE-helper', 'turnData');
@@ -135,9 +141,6 @@ Hooks.once('ready', async () => {
   turnData.journalName = jName;
   game.settings.set('OSE-helper', 'turnData', turnData);
 
-  // if (!lightData.lastTick) {
-  //   lightData.lastTick = game.time.worldTime;
-  // }
   //set hook to update light timer durations
   Hooks.on('updateWorldTime', async () => {
     oseTick();
@@ -159,6 +162,35 @@ Hooks.once('ready', async () => {
       await user.setFlag('OSE-helper', 'effectData', {});
     }
   }
+
+  Hooks.on('createActor', async (actor) => {
+    console.log('create actor fired');
+    if (game.settings.get('OSE-helper', 'tokenLightDefault')) {
+      if (actor.data.type == 'character') {
+        console.log('new character');
+        //const actor = game.actors.getName(sheet.object.name);
+        await actor.update({
+          token: {
+            displayBars: 30,
+            displayName: 30,
+            bar1: { attribute: 'hp' },
+            disposition: 1,
+            lightAlpha: 0.09,
+            lightAnimation: {
+              intensity: 4,
+              speed: 3,
+              type: 'BlitzAlternate Torch'
+            },
+            lightColor: '#ff9924',
+            vision: true,
+            actorLink: true
+          }
+        });
+      }
+    }
+  });
+  //check center hotbar
+  centerHotbar();
 });
 
 async function countJournalInit(journalName) {
@@ -189,3 +221,18 @@ Hooks.on('updateCombat', (combat) => {
 
 // //effect report
 // Hooks.on('renderuserEffectReport', ())
+Hooks.on('renderOseActorSheet', (actor, html) => {
+  const modBox = html.find(`[class="modifiers-btn"]`);
+  modBox.append(`<a class="ose-effect-list ose-icon" title="Show Active Effects"><i class="fas fa-list"></i></a>
+    <a class="ose-add-effect ose-icon" title="Add Effect"><i class="fas fa-hand-sparkles"></i></a>
+    <a class="ose-delete-effect ose-icon" title="Delete Active Effect"><i class="fas fa-ban"></i></a>`);
+  modBox.on('click', '.ose-add-effect', (event) => {
+    new CustomEffectForm(actor.object.id, game.user).render(true);
+  });
+  modBox.on('click', '.ose-effect-list', (event) => {
+    generateEffectReport(game.user.id);
+  });
+  modBox.on('click', '.ose-delete-effect', (event) => {
+    oseDeleteEffect();
+  });
+});

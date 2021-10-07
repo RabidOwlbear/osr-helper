@@ -3,7 +3,7 @@
   "title": "OSE Helper Module",
   "description": "A collection of helpers for OSE",
   "author": "Grim",
-  "version": "0.0.3",
+  "version": "0.0.5",
   "minimumCoreVersion": "0.8.6",
   "compatibleCoreVersion": "0.8.8",
   "styles": ["./styles/main.css"],
@@ -36,6 +36,11 @@
     {
       "name": "dice-so-nice",
       "manifest": "https://gitlab.com/riccisi/foundryvtt-dice-so-nice/-/raw/master/module/module.json",
+      "type": "module"
+    },
+    {
+      "name": "CommunityLighting",
+      "manifest": "https://raw.githubusercontent.com/BlitzKraig/fvtt-CommunityLighting/master/module.json",
       "type": "module"
     }
   ],

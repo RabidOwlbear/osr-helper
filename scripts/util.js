@@ -187,7 +187,7 @@ async function resetMonsterAttacks() {
   }
 }
 
-const newItemData = {};
+//const newItemData = {};
 
 class CustomEffectForm extends FormApplication {
   constructor(actorId, user) {
@@ -198,7 +198,8 @@ class CustomEffectForm extends FormApplication {
     this.effectId = randomID(16);
   }
   static get defaultOptions() {
-    return mergeObject(super.defaultOptions, {
+    return mergeObject(
+      super.defaultOptions, {
       classes: ['form', 'osehForm'],
       popOut: true,
       template: `modules/OSE-helper/templates/customEffectForm.html`,
@@ -361,4 +362,15 @@ function generateEffectReport(userId) {
   };
 
   new Dialog(options).render(true);
+}
+
+function centerHotbar() {
+  console.log('Hotbar Fired');
+  if (game.settings.get('OSE-helper', 'centerHotbar')) {
+    console.log('center the bar');
+    document.documentElement.style.setProperty('--hotbar-center', 'calc(50% - 290px');
+  } else {
+    console.log('dont center the bar');
+    document.documentElement.style.setProperty('--hotbar-center', '220px');
+  }
 }

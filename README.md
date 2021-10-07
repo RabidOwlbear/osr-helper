@@ -86,6 +86,18 @@ Total number of days worth of rations for the entire tracked group(assuming the 
 
 ---
 
+### Custom Effect Reminders
+
+A 'custom effect' system has been imp,ementd and can be accessed via a collection of icons located on the character portrait secton of the character sheet when moused over.
+
+- Show Active Effects pops up a widow detailing all active custom effects.
+- Add Custom Effect pops up a form for creating a new custom effect. Once created a chat message detailing the custom effect will be whispered to the player and they effects target(if selected).
+- Remove Custom Effect pops up a dialog with a drop down selector for deleting an effect early.
+
+When a custom effect expires, a chat message is whispered to the player and the target(if selected) notifying that an effect has expired.
+
+---
+
 ### Other Useful macros
 
 - OSE-helper Show Turn Counts: Displays the current game turn count information to chat.
