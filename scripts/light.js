@@ -1,5 +1,5 @@
 async function oseLightOn(actorId) {
-  let lightData;
+  let lightData = null;
   let userObj;
   //check for actors in all non gm user slots before writing flag to gm user
   if (game.user.role == 4) {
@@ -7,23 +7,26 @@ async function oseLightOn(actorId) {
     for (let user of game.users.contents) {
       console.log(user, user.data.flags['OSE-helper'].lightData);
       if (user.data.flags['OSE-helper'].lightData[actorId]) {
+        console.log('light data', user.getFlag('OSE-helper', 'lightData'));
         lightData = await user.getFlag('OSE-helper', 'lightData');
         userObj = user;
-        console.log(user, lightData);
-      } else {
-        lightData = {};
-        userObj = game.user;
+        console.log('actor found', user, lightData);
       }
+    }
+    if (!lightData == null) {
+      lightData = {};
+      userObj = game.user;
     }
   } else {
     lightData = game.user.getFlag('OSE-helper', 'lightData');
     userObj = game.user;
   }
-  console.log(lightData, userObj, '<-----------------');
-  const actor = await game.actors.find((a) => a.id == actorId);
 
+  const actor = await game.actors.find((a) => a.id == actorId);
+  console.log(lightData, userObj, actor, '<-----------------');
   if (lightData?.[actorId]?.lightLit) {
     // console.log('light lit');
+    console.log('light lit');
     for (let type in lightData?.[actorId]) {
       if (typeof lightData?.[actorId][type] == 'object') {
         // // console.log('object', lightData?.[actorId][type]);
@@ -141,14 +144,6 @@ async function oseUpdateTokens(actorId, lightData, lastTurn = false) {
             alterAlpha: true
           };
           await t.setFlag('CommunityLighting', 'customProperties', flagData);
-          // data.flags = {
-          //   CommunityLighting: {
-          //     customProperties: {
-          //       secondaryColor: lightData.secondaryColor,
-          //       blurStrength: 20
-          //     }
-          //   }
-          // };
         }
         // console.log('token found', data);
         await t.update(data);
