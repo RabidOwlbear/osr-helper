@@ -143,7 +143,8 @@ Hooks.once('ready', async () => {
 
   //set hook to update light timer durations
   Hooks.on('updateWorldTime', async () => {
-    oseTick();
+    await oseTick();
+    oseHook('OSE-helper Time Updated');
   });
 
   //check for count journal
@@ -223,16 +224,22 @@ Hooks.on('updateCombat', (combat) => {
 // Hooks.on('renderuserEffectReport', ())
 Hooks.on('renderOseActorSheet', (actor, html) => {
   const modBox = html.find(`[class="modifiers-btn"]`);
-  modBox.append(`<a class="ose-effect-list ose-icon" title="Show Active Effects"><i class="fas fa-list"></i></a>
-    <a class="ose-add-effect ose-icon" title="Add Effect"><i class="fas fa-hand-sparkles"></i></a>
-    <a class="ose-delete-effect ose-icon" title="Delete Active Effect"><i class="fas fa-ban"></i></a>`);
-  modBox.on('click', '.ose-add-effect', (event) => {
-    new CustomEffectForm(actor.object.id, game.user).render(true);
-  });
+  modBox.append(
+    `<a class="ose-effect-list ose-icon" id ="ose-effect-list" title="Show Active Effects"><i class="fas fa-list"></i></a>`
+  );
+  // modBox.on('click', '.ose-add-effect', (event) => {
+  //   new newCustomEffect(actor.object.id, game.user).render(true);
+  // });
   modBox.on('click', '.ose-effect-list', (event) => {
-    generateEffectReport(game.user.id);
+    console.log('effectList actor', actor);
+    oseEffectList(actor.object);
   });
-  modBox.on('click', '.ose-delete-effect', (event) => {
-    oseDeleteEffect();
-  });
+  //   modBox.on('click', '.ose-delete-effect', (event) => {
+  //     oseDeleteEffect();
+  //   });
 });
+/* 
+
+    <a class="ose-add-effect ose-icon" title="Add Effect"><i class="fas fa-hand-sparkles"></i></a>
+    <a class="ose-delete-effect ose-icon" title="Delete Active Effect"><i class="fas fa-ban"></i></a>
+*/
