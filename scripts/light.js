@@ -13,7 +13,8 @@ async function oseLightOn(actorId) {
         console.log('actor found', user, lightData);
       }
     }
-    if (!lightData == null) {
+    if (lightData == null) {
+      console.log('user not found');
       lightData = {};
       userObj = game.user;
     }
