@@ -3,20 +3,20 @@
   "title": "OSE Helper Module",
   "description": "A collection of helpers for OSE",
   "author": "Grim",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "minimumCoreVersion": "0.8.6",
-  "compatibleCoreVersion": "0.8.8",
+  "compatibleCoreVersion": "0.9.0",
   "styles": ["./styles/main.css"],
   "esmodules": [],
   "scripts": [
+    "./scripts/util.js",
     "./scripts/init.js",
     "./scripts/rations.js",
-    "./scripts/util.js",
     "./scripts/light.js",
     "./scripts/turn.js",
-    "./scripts/customEffect.js",
     "./scripts/oseHelperData.js",
-    "./scripts/customEffectList.js"
+    "./scripts/customEffectList.js",
+    "./scripts/updatedCustomEffects.js"
   ],
   "packs": [
     {
@@ -43,6 +43,6 @@
   ],
   "url": "https://github.com/RabidOwlbear/OSE-helper",
   "manifest": "https://github.com/RabidOwlbear/OSE-helper/raw/master/module.json",
-  "download": "https://github.com/RabidOwlbear/OSE-helper/archive/refs/heads/master.zip",
+  "download": "https://github.com/RabidOwlbear/osr-item-shop/archive/refs/heads/main.zip",
   "readme": "REAMDE.md"
 }

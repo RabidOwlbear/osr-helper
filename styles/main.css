@@ -1,6 +1,7 @@
 :root {
   --hotbar-center: 220px;
   --border: #1712228c;
+  --center-hotbar: calc(50% - 270px);
 }
 #customEffectForm .effectDesc {
   height: 100px;
@@ -16,7 +17,9 @@
   padding: 0.5em 0;
 }
 #hotbar {
-  left: var(--hotbar-center);
+  /* position: absolute; */
+  /* left: var(--hotbar-center); */
+  margin-left: var(--center-hotbar);
 }
 .ose-helper-icon {
   padding: 0 3px;

@@ -17,6 +17,14 @@ Hooks.once('init', async function () {
     default: true,
     config: true
   });
+  game.settings.register('OSE-helper', 'whisperRest', {
+    name: 'Whisper rest status messages',
+    hint: 'Whispers rest status messages',
+    scope: 'world',
+    type: Boolean,
+    default: true,
+    config: true
+  });
   game.settings.register('OSE-helper', 'tokenLightDefault', {
     name: 'Update default token settings on creation.',
     hint: 'Enables Owlbear preferred default token light settings.',
@@ -83,7 +91,7 @@ Hooks.once('init', async function () {
     type: Boolean,
     default: false,
     config: true,
-    onChange: () => console.log('user?', game.user)
+    // onChange: () => console.log('user?', game.user)
   });
 
   game.settings.register('OSE-helper', 'rationData', {
@@ -109,8 +117,19 @@ Hooks.once('init', async function () {
     type: Boolean,
     default: true,
     config: true,
-    onChange: () => centerHotbar()
+    onChange: () => OSEH.util.centerHotbar()
   });
+  //split to ose-helper eventually
+  game.settings.register('OSE-helper', 'classTypeList', {
+    name: 'classTypeList',
+    scope: 'world',
+    type: Array,
+    default: [],
+    config: false
+  });
+
+  //namespace
+  window.OSEH = window.OSEH || {};
 });
 
 //update proc data if changed
@@ -143,12 +162,12 @@ Hooks.once('ready', async () => {
 
   //set hook to update light timer durations
   Hooks.on('updateWorldTime', async () => {
-    await oseTick();
-    oseHook('OSE-helper Time Updated');
+    await OSEH.util.oseTick();
+    OSEH.util.oseHook('OSE-helper Time Updated');
   });
 
   //check for count journal
-  await countJournalInit(jName);
+  await OSEH.util.countJournalInit(jName);
   console.log('OSE-helper ready');
 
   //check for userflags
@@ -166,7 +185,7 @@ Hooks.once('ready', async () => {
 
   Hooks.on('createActor', async (actor) => {
     console.log('create actor fired');
-    if (game.settings.get('OSE-helper', 'tokenLightDefault')) {
+    if (game.settings.get('OSE-helper', 'tokenLightDefault') && game.user.role >= 4) {
       if (actor.data.type == 'character') {
         console.log('new character');
         //const actor = game.actors.getName(sheet.object.name);
@@ -176,11 +195,13 @@ Hooks.once('ready', async () => {
             displayName: 30,
             bar1: { attribute: 'hp' },
             disposition: 1,
-            lightAlpha: 0.09,
-            lightAnimation: {
-              intensity: 4,
-              speed: 3,
-              type: 'BlitzAlternate Torch'
+            light: {
+              alpha: 0.5,
+              animation: {
+                intensity: 5,
+                speed: 3,
+                type: 'Torch'
+              }
             },
             lightColor: '#ff9924',
             vision: true,
@@ -191,23 +212,8 @@ Hooks.once('ready', async () => {
     }
   });
   //check center hotbar
-  centerHotbar();
+  OSEH.util.centerHotbar();
 });
-
-async function countJournalInit(journalName) {
-  let entry = game.journal.getName(journalName);
-
-  if (!entry) {
-    entry = await JournalEntry.create({
-      content: ``,
-      name: `${journalName}`
-    });
-    updateJournal();
-    console.log(`OSE-helper: no count journal found.
-    Journal entry named ${journalName} created.`);
-  }
-  return entry;
-}
 
 //reset monster actions hook
 
@@ -215,7 +221,7 @@ Hooks.on('updateCombat', (combat) => {
   if (combat.current && combat.current.round && combat.previous && combat.previous.round) {
     if (combat.current.round - combat.previous.round == 1) {
       console.log('round up');
-      resetMonsterAttacks();
+      OSEH.util.resetMonsterAttacks();
     }
   }
 });
@@ -231,8 +237,8 @@ Hooks.on('renderOseActorSheet', (actor, html) => {
   //   new newCustomEffect(actor.object.id, game.user).render(true);
   // });
   modBox.on('click', '.ose-effect-list', (event) => {
-    console.log('effectList actor', actor);
-    oseEffectList(actor.object);
+    // console.log('effectList actor', actor);
+    OSEH.ce.effectList(actor.object);
   });
   //   modBox.on('click', '.ose-delete-effect', (event) => {
   //     oseDeleteEffect();
@@ -243,3 +249,39 @@ Hooks.on('renderOseActorSheet', (actor, html) => {
     <a class="ose-add-effect ose-icon" title="Add Effect"><i class="fas fa-hand-sparkles"></i></a>
     <a class="ose-delete-effect ose-icon" title="Delete Active Effect"><i class="fas fa-ban"></i></a>
 */
+Hooks.on('osrItemShopActive', async () => {
+  const randTime = 100 + Math.floor(Math.random() * 2000);
+  setTimeout(async () => {
+    let curData = await game.settings.get('osrItemShop', 'sourceList');
+    let itemList = await game.settings.get('osrItemShop', 'itemList');
+
+    let newList = itemList.concat(OSEH.data.helperItems);
+
+    if (!curData.find((i) => i.header == 'OSE Helper')) {
+      curData.push({
+        header: 'OSE Helper',
+        data: OSEH.data.helperItems,
+        options: [
+          {
+            name: 'OSE Helper Items',
+            source: 'oseHelper',
+            itemTypes: ['light source', 'food']
+          }
+        ]
+      });
+    }
+    if (game.user.role >= 4) {
+      await game.settings.set('osrItemShop', 'itemList', newList);
+      await game.settings.set('osrItemShop', 'sourceList', curData);
+      console.log('OSE Helper Items Added');
+    }
+  }, randTime);
+});
+
+Hooks.on('gmPleasePause', () => {
+  if (game.user.role == 4) {
+    // console.log('game paused');
+    let newState = game.paused ? false : true;
+    game.togglePause(newState, true);
+  }
+});

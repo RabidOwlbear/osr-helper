@@ -1,0 +1,111 @@
+<form>
+  <div id="cb-stats" class="fx-sb">
+    <!-- stat block div -->
+    <div id="cb-stat-block">
+      <h3>Character Atributes</h3>
+      <div class="cb-stat-div">
+        <div class="cb-s-cont">
+          <div><label for="str">STR</label></div>
+          <input class="cb-stat-inp" type="number" name="str" id="" />
+        </div>
+        <div class="cb-s-cont">
+          <div><label for="int">INT</label></div>
+          <input class="cb-stat-inp" type="number" name="int" id="" />
+        </div>
+        <div class="cb-s-cont">
+          <div><label for="wis">WIS</label></div>
+          <input class="cb-stat-inp" type="number" name="wis" id="" />
+        </div>
+        <div class="cb-s-cont">
+          <div><label for="dex">DEX</label></div>
+          <input class="cb-stat-inp" type="number" name="dex" id="" />
+        </div>
+        <div class="cb-s-cont">
+          <div><label for="con">CON</label></div>
+          <input class="cb-stat-inp" type="number" name="con" id="" />
+        </div>
+        <div class="cb-s-cont">
+          <div><label for="cha">CHA</label></div>
+          <input class="cb-stat-inp" type="number" name="cha" id="" />
+        </div>
+      </div>
+    </div>
+    <!-- reroll stats div -->
+    <div id="stat-reroll-block">
+      <h3>Reroll Stats:</h3>
+      <div class="hero-check-div">
+        <div class="fx-sb">
+          <div class="fx-jc-aic pr5">
+            <label for="hero-check">4d6 Drop Lowest:</label>
+            <input type="checkbox" name="hero-check" id="hero-check" />
+          </div>
+          <div class="fx-jc">
+            <button type="button" id="stat-reroll-btn" title="Reroll Stats"><i class="fas fa-dice-six"></i></button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="cb-main" class="fx-sb">
+    <!-- class option source list template -->
+    <div class="cb-col fx-col pr5 pl5 fx-sb" id="cb-class-select">
+      <div class="cb-div" id="cb-type-select">
+        <h3 class="cb-pt">Class Type:</h3>
+        <!-- class option list container -->
+        <div id="classOptionDiv">
+          <!-- item listing template -->
+          <!-- <div class="fx-sb cb-list">
+            <label for="ose-basic">{{name}}</label>
+            <input type="radio" name="classType" id="ose-basic" value="{{name}}" checked />
+          </div> -->
+        </div>
+      </div>
+      <!-- alignment div -->
+      <div class="cb-div" id="cb-align-select">
+        <h3 class="">Alignment:</h3>
+        <div class="fx-sb cb-list">
+          <label for="ose-lawful">Lawful:</label>
+          <input type="radio" name="alignment" id="ose-lawful" value="lawful" />
+        </div>
+        <div class="fx-sb cb-list">
+          <label for="ose-neutral">Neutral:</label>
+          <input type="radio" name="alignment" id="ose-neutral" value="neutral" checked />
+        </div>
+        <div class="fx-sb cb-list">
+          <label for="ose-chaotic">Chaotic:</label>
+          <input type="radio" name="alignment" id="ose-chaotic" value="chaotic" />
+        </div>
+      </div>
+      <!-- gold div -->
+      <div class="cb-div" id="cb-gold">
+        <h3>Gold:</h3>
+        <div class="fx-sb">
+          <div class="cb-mb"><input type="number" value="0" id="cb-gold-input" name="goldAmount" /> GP</div>
+          <button class="cb-mb" type="button" id="cb-reroll-gold" title="Reroll Gold">
+            <i class="fas fa-dice-six"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+    <!-- class list template -->
+    <div class="cb-col aic pr5 pl5" id="cb-class-option">
+      <h3 class="cb-pt">Select A Class:</h3>
+      <div id="cb-class-list"></div>
+    </div>
+    <!-- class desc template -->
+    <div class="cb-col aic pr5" id="cb-class-description">
+      <h3 class="cb-pt">Class Information:</h3>
+      <div class="cb-div" id="cb-info-head"></div>
+      <div class="cb-div" id="cb-info-body"></div>
+    </div>
+  </div>
+  <!-- button div -->
+  <div id="cb-buttons" class="fx-sb">
+    <button type="button" class="cb-form-btn" id="cb-close-btn">Close</button>
+
+    <div class="fx-sb-aic cb-mb" id="shop-check"></div>
+
+    <button type="submit" class="cb-form-btn" id="cb-sub-btn">Choose</button>
+  </div>
+</form>
