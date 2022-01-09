@@ -39,11 +39,6 @@
       "name": "dice-so-nice",
       "manifest": "https://gitlab.com/riccisi/foundryvtt-dice-so-nice/-/raw/master/module/module.json",
       "type": "module"
-    },
-    {
-      "name": "CommunityLighting",
-      "manifest": "https://raw.githubusercontent.com/BlitzKraig/fvtt-CommunityLighting/master/module.json",
-      "type": "module"
     }
   ],
   "url": "https://github.com/RabidOwlbear/OSE-helper",
