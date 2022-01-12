@@ -46,7 +46,7 @@ OSEH.turn.resetSessionCount = async function () {
   const data = await game.settings.get('OSE-helper', 'turnData');
   data.session = 0;
   await game.settings.set('OSE-helper', 'turnData', data);
-  updateJournal();
+  OSEH.turn.updateJournal();
 }
 
 OSEH.turn.resetAllCounts = async function () {
@@ -56,7 +56,7 @@ OSEH.turn.resetAllCounts = async function () {
   data.rest = 0;
   data.total = 0;
   await game.settings.set('OSE-helper', 'turnData', data);
-  updateJournal();
+  OSEH.turn.updateJournal();
 }
 //increments turn data and updates setting
 OSEH.turn.incrementTurnData = async function () {
@@ -200,7 +200,7 @@ OSEH.turn.rest = async function () {
   data.session++;
   data.total++;
   await game.settings.set('OSE-helper', 'turnData', data);
-  updateJournal();
+  OSEH.turn.updateJournal();
   const chatData ={
   
     

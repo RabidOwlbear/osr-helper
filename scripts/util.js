@@ -301,7 +301,7 @@ Hooks.on('ready', () => {
         content: ``,
         name: `${journalName}`
       });
-      updateJournal();
+      OSEH.turn.updateJournal();
       console.log(`OSE-helper: no count journal found.
       Journal entry named ${journalName} created.`);
     }
