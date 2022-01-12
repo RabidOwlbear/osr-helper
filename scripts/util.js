@@ -233,7 +233,7 @@ Hooks.on('ready', () => {
     console.log('Hotbar Fired');
     if (game.settings.get('OSE-helper', 'centerHotbar')) {
       console.log('center the bar');
-      document.documentElement.style.setProperty('--hotbar-center', 'calc(50% - 290px');
+      document.documentElement.style.setProperty('--hotbar-center', 'calc(50% - 270px');
     } else {
       console.log('dont center the bar');
       document.documentElement.style.setProperty('--hotbar-center', '220px');

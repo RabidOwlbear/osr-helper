@@ -17,9 +17,13 @@
   padding: 0.5em 0;
 }
 #hotbar {
-  /* position: absolute; */
-  /* left: var(--hotbar-center); */
-  margin-left: var(--center-hotbar);
+  position: absolute;
+  left: var(--hotbar-center);
+  /* margin-left: var(--center-hotbar); */
+}
+#fps {
+  position: relative;
+  left:calc(100% - 110px)
 }
 .ose-helper-icon {
   padding: 0 3px;
