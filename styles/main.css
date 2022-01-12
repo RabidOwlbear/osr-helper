@@ -19,11 +19,11 @@
 #hotbar {
   position: absolute;
   left: var(--hotbar-center);
-  /* margin-left: var(--center-hotbar); */
+  top: calc(100% - 62px);
 }
 #fps {
   position: relative;
-  left:calc(100% - 110px)
+  left: calc(100% - 110px);
 }
 .ose-helper-icon {
   padding: 0 3px;
