@@ -137,7 +137,9 @@ OSEH.turn.dungeonTurn = async function (data) {
 //write to journal
 OSEH.turn.updateJournal = async function () {
   const turnData = game.settings.get('OSE-helper', 'turnData');
-  const entry = game.journal.getName(game.settings.get('OSE-helper', 'timeJournalName'));
+  const journalName =(game.settings.get('OSE-helper', 'timeJournalName'))
+  const entry = game.journal.getName(journalName) ||await  OSEH.util.countJournalInit(journalName);
+  console.log('entry', entry)
   if (turnData.rest > 5) {
     let jContent = `<h1>Turn Count</h1><br><p>Session Count: ${turnData.session}</p><p> Total Count: ${turnData.total}</p><p>Turns Since Last Rest: <span style="color: red">${turnData.rest}</span></p>`;
     await entry.update({ content: jContent });
