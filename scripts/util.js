@@ -263,8 +263,9 @@ Hooks.on('ready', () => {
           console.log(t, actorId);
           let dim = lightData.dimLight;
           if (lastTurn) dim = dim * 0.7;
-          // // console.log(t);
-          const data = {
+          //hacky version check, if less than v8 = false, data checks if oldVer is false, and sends appropriate data object 
+          const oldVer = game.version < 8;
+          const data = !oldVer ? {
             light: {
               bright: lightData.brightLight,
               dim: dim,
@@ -273,20 +274,15 @@ Hooks.on('ready', () => {
               gradual: true,
               animation: { type: 'torch', speed: 3, intensity: 5 }
             }
-          };
-          // if (t.data.lightAnimation.type == 'BlitzAlternate Torch') {
-          //   // console.log('blitz alternate torch');
-
-          //   const flagData = {
-          //     secondaryColor: lightData.secondaryColor,
-          //     ratioDamper: 1,
-          //     blurStrength: 20,
-          //     alterTranslation: true,
-          //     alterAlpha: true
-          //   };
-          //   await t.setFlag('CommunityLighting', 'customProperties', flagData);
-          // }
-          // console.log('token found', data);
+          } :
+          {
+            brightLight: lightData.brightLight,
+            dimLight: dim,
+            lightColor: lightData.color,
+            lightAlpha: lightData.lightAlpha,
+            lightAnimation: { type: 'torch', speed: 3, intensity: 5 }
+          }
+          //end version check
           await t.update(data);
         }
       });
