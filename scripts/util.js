@@ -265,23 +265,29 @@ Hooks.on('ready', () => {
           if (lastTurn) dim = dim * 0.7;
           //hacky version check, if less than v8 = false, data checks if oldVer is false, and sends appropriate data object 
           const oldVer = parseInt(game.version) < 9;
-          const data = !oldVer ? {
-            light: {
-              bright: lightData.brightLight,
-              dim: dim,
-              color: lightData.color,
-              alpha: lightData.lightAlpha,
-              gradual: true,
-              animation: { type: 'torch', speed: 3, intensity: 5 }
+          console.log('Old Verison', oldVer)
+          let data
+          if(oldVer){
+            data = {
+              light: {
+                bright: lightData.brightLight,
+                dim: dim,
+                color: lightData.color,
+                alpha: lightData.lightAlpha,
+                gradual: true,
+                animation: { type: 'torch', speed: 3, intensity: 5 }
+              }
             }
-          } :
-          {
-            brightLight: lightData.brightLight,
-            dimLight: dim,
-            lightColor: lightData.color,
-            lightAlpha: lightData.lightAlpha,
-            lightAnimation: { type: 'torch', speed: 3, intensity: 5 }
+          } else {
+            data = {
+              brightLight: lightData.brightLight,
+              dimLight: dim,
+              lightColor: lightData.color,
+              lightAlpha: lightData.lightAlpha,
+              lightAnimation: { type: 'torch', speed: 3, intensity: 5 }
+            }
           }
+          
           console.log(data)
           //end version check
           await t.update(data);
