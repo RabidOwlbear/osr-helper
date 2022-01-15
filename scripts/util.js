@@ -47,7 +47,7 @@ Hooks.on('ready', () => {
                 //on last turn shrink light radius
                 if (data.light[actorId][lightType].duration <= 10) {
                   // console.log('last turn');
-                  oseUpdateTokens(actorId, OSEH.data.lightSource[lightType], true);
+                  OSEH.updateTokens(actorId, OSEH.data.lightSource[lightType], true);
                 }
                 // if duration <= 0 run lightOff function, and delete light type object
                 if (data.light[actorId][lightType].duration <= 0) {
@@ -68,7 +68,7 @@ Hooks.on('ready', () => {
 
                   data.light[actorId].lightLit = false;
                   // console.log('before light off');
-                  oseLightOff(actorId);
+                  OSEH.light.lightOff(actorId);
                   delete data.light[actorId][lightType];
                   if (Object.keys(data.light[actorId]).length == 1) {
                     delete data.light[actorId];
@@ -194,7 +194,7 @@ Hooks.on('ready', () => {
   OSEH.util.GetActorById = function (id) {
     return game.actors.contents.find((a) => a.id == id);
   };
-  function oseGetActorId(actorName) {
+  OSEH.util.getActorId = function (actorName) {
     const id = game.actors.getName(actorName)?.id;
     if (id) {
       // console.log('id=', id);
@@ -216,7 +216,7 @@ Hooks.on('ready', () => {
     const whisperArray = [userId];
     if (effectData.data.whisperTarget) {
       // console.log(effectData.data.target);
-      const targetId = oseGetActorId(effectData.data.target);
+      const targetId = OSEH.util.getActorId(effectData.data.target);
       const targetUserId = OSEH.util.UserAssigned(targetId);
       // console.log('target actor id', targetId, 'target userId', targetUserId);
       // if target is a user controlled character
