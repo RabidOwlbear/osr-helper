@@ -117,9 +117,17 @@ OSEH.turn.dungeonTurn = async function (data) {
           content: `<br/>${roll?.results[0]?.data?.text}<br/><br/>`,
           whisper: gm
         };
-
+       
         if (data.reactRoll) {
-          const reactTable = game.tables.entities.find((t) => t.name === data.reactTable);
+          let reactTable;
+          if(parseInt(OSEH.gameVersion) < 9){
+            reactTable = game.tables.entities.find((t) => t.name === data.reactTable);
+          } else {
+            reactTable = await game.tables.getName(data.reactTable)
+          }
+
+
+          
           let reactRoll = await reactTable.roll();
           let rollResult = `They look ${reactRoll.results[0].data.text}.`;
           message.content += rollResult;

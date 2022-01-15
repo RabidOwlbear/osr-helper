@@ -265,7 +265,7 @@ Hooks.on('ready', () => {
           let dim = lightData.dimLight;
           if (lastTurn) dim = dim * 0.7;
           //hacky version check, if less than v8 = false, data checks if oldVer is false, and sends appropriate data object 
-          const version = game.version ? game.version : game.data.version;
+          const version = OSEH.gameVersion
           console.log(version)
           const oldVer = parseInt(version) < 9;
           console.log(game.version)

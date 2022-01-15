@@ -130,6 +130,7 @@ Hooks.once('init', async function () {
 
   //namespace
   window.OSEH = window.OSEH || {};
+  OSEH.gameVersion = game.version ? game.version : game.data.version;
 });
 
 //update proc data if changed
