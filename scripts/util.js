@@ -282,6 +282,7 @@ Hooks.on('ready', () => {
             lightAlpha: lightData.lightAlpha,
             lightAnimation: { type: 'torch', speed: 3, intensity: 5 }
           }
+          console.log(data)
           //end version check
           await t.update(data);
         }
