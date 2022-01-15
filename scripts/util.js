@@ -47,7 +47,7 @@ Hooks.on('ready', () => {
                 //on last turn shrink light radius
                 if (data.light[actorId][lightType].duration <= 10) {
                   // console.log('last turn');
-                  OSEH.updateTokens(actorId, OSEH.data.lightSource[lightType], true);
+                  OSEH.util.updateTokens(actorId, OSEH.data.lightSource[lightType], true);
                 }
                 // if duration <= 0 run lightOff function, and delete light type object
                 if (data.light[actorId][lightType].duration <= 0) {
@@ -68,7 +68,8 @@ Hooks.on('ready', () => {
 
                   data.light[actorId].lightLit = false;
                   // console.log('before light off');
-                  OSEH.light.lightOff(actorId);
+                  //changed oseh.light.ligthOff to oseLightOff
+                  OSEH.light.oseLightOff(actorId);
                   delete data.light[actorId][lightType];
                   if (Object.keys(data.light[actorId]).length == 1) {
                     delete data.light[actorId];
