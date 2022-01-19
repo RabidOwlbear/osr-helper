@@ -1,5 +1,4 @@
 Hooks.on('rendercustomEffectList', (CEL, html, form) => {
-  console.log('customEffectList', CEL, 'html', html, 'formData', form);
   CEL.renderEffectList(html);
 });
 
@@ -31,7 +30,7 @@ Hooks.on('ready', () => {
 
     activateListeners(html) {
       super.activateListeners(html);
-      console.log('init htmml', html);
+
       html.find('#newEffect')[0].addEventListener('click', () => {
         this.renderNewEffect(html);
       });
@@ -44,25 +43,18 @@ Hooks.on('ready', () => {
     }
 
     async renderEffectList(html) {
-      console.log('effectL:ist', this, html);
       const effectListDiv = html.find('#effectList')[0];
       const effectObj = this.user.getFlag('OSE-helper', 'effectData');
       const keys = Object.keys(effectObj);
       if (keys.length) {
         const sortedList = keys.sort((a, b) => {
-          console.log(
-            'list stuff',
-            typeof effectObj[a].duration,
-            typeof effectObj[b].duration,
-            parseInt(effectObj[a].duration) > parseInt(effectObj[b].duration)
-          );
           return parseInt(effectObj[a].duration) > parseInt(effectObj[b].duration) ? 1 : -1;
         });
         let HTMLcontent = ``;
-        console.log('sortedList', sortedList);
+
         for (let key of sortedList) {
           let effect = effectObj[key];
-          console.log('effect', effect);
+
           const colorClass =
             effect.duration > 10 ? (effect.duration > 20 ? 'effect-green' : 'effect-orange') : 'effect-red';
           HTMLcontent += `<div class="fx-sb mb ${colorClass}">
@@ -88,7 +80,6 @@ Hooks.on('ready', () => {
       }
     }
     async renderEffectDesc(html, effect) {
-      console.log('clicked, yo', effect);
       const detailContainer = html.find('#effectDetails')[0];
       let descHtml = await renderTemplate('modules/OSE-helper/templates/customEffectListDescription.html', {
         name: effect.name,
@@ -97,7 +88,7 @@ Hooks.on('ready', () => {
         target: effect.data.target,
         whisper: effect.data.whisperTarget
       });
-      console.log(descHtml, effect);
+
       detailContainer.innerHTML = descHtml;
       html.find('#deleteEffect')[0].addEventListener('click', () => {
         this.deleteEffect(effect._id);
@@ -107,15 +98,14 @@ Hooks.on('ready', () => {
 
     async deleteEffect(id) {
       let effectData = this.user.getFlag('OSE-helper', 'effectData');
-      console.log(effectData);
+
       delete effectData[id];
-      console.log(effectData);
+
       await this.user.unsetFlag('OSE-helper', 'effectData');
       await this.user.setFlag('OSE-helper', 'effectData', effectData);
     }
 
     clearText(field) {
-      console.log('event', field);
       if (field.defaultValue == field.value) {
         field.value = ``;
       } else if (field.value == ``) {
@@ -160,7 +150,7 @@ Hooks.on('ready', () => {
           userId: this.user.id
         }
       };
-      console.log(formData, effectData, this.user);
+
       this.user.setFlag('OSE-helper', 'effectData', effectData);
       containerDiv.innerHTML = '';
       this.render();
@@ -178,7 +168,6 @@ Hooks.on('ready', () => {
     async renderNewEffect(html) {
       const newEffectBtn = html.find('#newEffect')[0];
 
-      console.log(html);
       const containerDiv = html.find('#effectDetails')[0];
       const template = await renderTemplate('modules/OSE-helper/templates/newEffectForm.html', {});
       containerDiv.innerHTML = template;
@@ -187,7 +176,6 @@ Hooks.on('ready', () => {
 
       let inputs = html.find('input');
       for (let input of inputs) {
-        //console.log(input);
         input.addEventListener('focus', () => {
           this.clearText(input);
         });
@@ -196,14 +184,12 @@ Hooks.on('ready', () => {
         });
       }
       OSEH.util.oseHook('OSE-helper newEffectBtnToggle', [newEffectBtn]);
-      console.log(subBtn);
-      console.log(html);
+
       cancelBtn.addEventListener('click', () => {
         OSEH.util.oseHook('OSE-helper newEffectBtnToggle', [newEffectBtn]);
         containerDiv.innerHTML = '';
       });
       subBtn.addEventListener('click', (event) => {
-        console.log(event, html);
         this.addEffect(html);
       });
     }
@@ -216,9 +202,7 @@ Hooks.on('ready', () => {
     list.render(true);
     //refresh window if time advances
     Hooks.on('OSE-helper Time Updated', async () => {
-      console.log('hook fired', list, list.render);
       if (list.rendered) {
-        console.log('LIST OPEN');
         await list.close();
         await list.render(true);
       }
@@ -228,7 +212,6 @@ Hooks.on('ready', () => {
   // window.customEffectList = customEffectList;
 
   Hooks.on('OSE-helper newEffectBtnToggle', (...args) => {
-    console.log('ARRRRRRRRRRGGGGSSS', args);
     OSEH.util.toggleButton(args[0]);
   });
 
@@ -241,18 +224,17 @@ Hooks.on('ready', () => {
       } else return false;
     });
     for (let user of game.users.contents) {
-      console.log(user);
       // options += `<option value="${user.id}" name="${user.name}">${user.name}</option>`
       options += `<option value="${user.id}" name="${user.name}">
       ${user.name}</option>`;
     }
-    console.log('options', options);
+
     const template = `
   <h1> Choose User Effect list </h1>
   <div style="display:flex">
     <div  style="flex:1"><select id="selectedUser">${options}</select></div>
     </div>`;
-    console.log(template);
+
     new Dialog({
       title: 'User Effect Select',
       content: template,
@@ -261,7 +243,7 @@ Hooks.on('ready', () => {
           label: 'Get List',
           callback: (html) => {
             const selected = html.find('#selectedUser')[0].value;
-            console.log('selected', selected);
+
             OSEH.ce.effectList(null, game.users.get(selected));
           }
         }

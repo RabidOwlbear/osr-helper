@@ -14,8 +14,6 @@ Hooks.on('ready', () => {
   };
   OSEH.util.oseLightTick = async function (lastTick) {
     if (game.user.role >= 4) {
-      console.log('tick');
-
       //get data
       const data = {
         light: null
@@ -25,28 +23,22 @@ Hooks.on('ready', () => {
       //manage light duration
       for (let user of game.users.contents) {
         data.light = await user.getFlag('OSE-helper', 'lightData');
-        // console.log('user', user, data);
         //loop through actorIds in light flag
         for (let actorId in data.light) {
           //If actor does not have light lit...
           if (data.light[actorId].lightLit) {
-            // console.log('lit', data.light);
             //loop through the light types in data.actorId
             for (let lightType in data.light[actorId]) {
               //check if light isOn = true
               if (data.light[actorId][lightType].isOn) {
-                // console.log('isOn', lightType, elapsed);
                 //decrement duration by time elapsed in minutes
                 data.light[actorId][lightType].duration -= elapsed;
                 //if duration is greater than maximum, set to maximum.
-                // console.log(data.light[actorId][lightType].duration, 'after');
                 if (data.light[actorId][lightType].duration > OSEH.data.lightSource[lightType].duration) {
-                  // console.log('exceeded max');
                   data.light[actorId][lightType].duration = OSEH.data.lightSource[lightType].duration;
                 }
                 //on last turn shrink light radius
                 if (data.light[actorId][lightType].duration <= 10) {
-                  // console.log('last turn');
                   OSEH.util.updateTokens(actorId, OSEH.data.lightSource[lightType], true);
                 }
                 // if duration <= 0 run lightOff function, and delete light type object
@@ -67,7 +59,6 @@ Hooks.on('ready', () => {
                   }
 
                   data.light[actorId].lightLit = false;
-                  // console.log('before light off');
                   //changed oseh.light.ligthOff to oseLightOff
                   OSEH.light.oseLightOff(actorId);
                   delete data.light[actorId][lightType];
@@ -88,28 +79,19 @@ Hooks.on('ready', () => {
     if (game.user.role >= 4) {
       const curTime = game.time.worldTime;
       const elapsed = (curTime - lastTick) / 60;
-      // console.log('effect', elapsed);
       for (let user of game.users.contents) {
         effectData = await user.getFlag('OSE-helper', 'effectData');
 
         for (let effectId in effectData) {
           let effect = effectData[effectId];
-          // console.log('customEffect', effect.name, effect.duration);
           effect.duration -= elapsed;
-          // console.log('after', effect.name, effect.duration);
 
           if (effect.duration <= 0) {
-            console.log('effect depleted');
             const msgData = `<h3 style="color: red;"> Custom Effect Expired</h3>
     <div>Custom effect ${effectData[effectId].name} has expired!.`;
             OSEH.util.ChatMessage(effectData[effectId], effectData[effectId].data.userId, msgData);
             delete effectData[effectId];
           }
-
-          //if actor object empty, delete
-          // if (Object.keys(effectData[actorId]).length == 0) {
-          //   delete effectData[actorId];
-          // }
         }
 
         await user.unsetFlag('OSE-helper', 'effectData');
@@ -164,33 +146,23 @@ Hooks.on('ready', () => {
 
   OSEH.util.oseClearUserFlag = async function (data) {
     const { user, scope, flagname, reset } = data;
-    // console.log(scope, flagname);
     await user.unsetFlag(scope, flagname);
-    // console.log('OSE-helper: Flag Unset');
     if (reset) await user.setFlag(scope, flagname, {});
-    // console.log('OSE-helper: Flag Reset');
   };
 
   OSEH.util.resetMonsterAttacks = async function () {
     for (let combatant of game.combats.active.combatants.contents) {
-      // console.log(combatant, combatant.actor.type);
       const actor = combatant.actor;
-      // console.log('actor', actor);
       if (actor.type == 'monster') {
         for (let item of actor.data.items.contents) {
           if (item.type == 'weapon') {
-            // console.log('item', item, item.data.data.counter.max);
             let count = item.data.data.counter.max;
-            // console.log('before', item.data.data.counter.value);
             await item.update({ data: { counter: { value: count } } });
-            // console.log('after', item.data.data.counter);
           }
         }
       }
     }
   };
-
-  //const newItemData = {};
 
   OSEH.util.GetActorById = function (id) {
     return game.actors.contents.find((a) => a.id == id);
@@ -198,32 +170,26 @@ Hooks.on('ready', () => {
   OSEH.util.getActorId = function (actorName) {
     const id = game.actors.getName(actorName)?.id;
     if (id) {
-      // console.log('id=', id);
       return id;
     }
-  }
+  };
 
   OSEH.util.UserAssigned = function (actorId) {
     for (let user of game.users.contents) {
       if (user?.character?.id == actorId) {
-        console.log('User Found');
         return user.id;
       }
     }
   };
 
   OSEH.util.ChatMessage = function (effectData, userId, msgContent) {
-    // console.log('oseChat', effectData);
     const whisperArray = [userId];
     if (effectData.data.whisperTarget) {
-      // console.log(effectData.data.target);
       const targetId = OSEH.util.getActorId(effectData.data.target);
       const targetUserId = OSEH.util.UserAssigned(targetId);
-      // console.log('target actor id', targetId, 'target userId', targetUserId);
       // if target is a user controlled character
       if (targetUserId) {
         whisperArray.push(targetUserId);
-        // console.log('new array', whisperArray);
       }
     }
 
@@ -231,12 +197,9 @@ Hooks.on('ready', () => {
   };
 
   OSEH.util.centerHotbar = function () {
-    console.log('Hotbar Fired');
     if (game.settings.get('OSE-helper', 'centerHotbar')) {
-      console.log('center the bar');
       document.documentElement.style.setProperty('--hotbar-center', 'calc(50% - 270px');
     } else {
-      console.log('dont center the bar');
       document.documentElement.style.setProperty('--hotbar-center', '220px');
     }
   };
@@ -253,7 +216,6 @@ Hooks.on('ready', () => {
   };
 
   OSEH.util.updateTokens = async function (actorId, lightData, lastTurn = false) {
-    // // console.log(lightData, actorId);
     //loop through active game scenes
     for (let scene of game.scenes.contents) {
       //loop through tokens contaioned in scene
@@ -261,26 +223,23 @@ Hooks.on('ready', () => {
         //if token actorId == actorId set light settings to off
 
         if (t?.actor?.id == actorId) {
-          console.log(t, actorId);
           let dim = lightData.dimLight;
           if (lastTurn) dim = dim * 0.7;
-          //hacky version check, if less than v8 = false, data checks if oldVer is false, and sends appropriate data object 
-          const version = OSEH.gameVersion
-          console.log(version)
+          //hacky version check, if less than v8 = false, data checks if oldVer is false, and sends appropriate data object
+          const version = OSEH.gameVersion;
+
           const oldVer = parseInt(version) < 9;
-          console.log(game.version)
-          console.log('Old Verison', oldVer)
-          let data
-          if(oldVer){
+
+          let data;
+          if (oldVer) {
             data = {
               brightLight: lightData.brightLight,
               dimLight: dim,
               lightColor: lightData.color,
               lightAlpha: lightData.lightAlpha,
               lightAnimation: { type: 'torch', speed: 3, intensity: 5 }
-            }
+            };
           } else {
-           
             data = {
               light: {
                 bright: lightData.brightLight,
@@ -290,10 +249,9 @@ Hooks.on('ready', () => {
                 gradual: true,
                 animation: { type: 'torch', speed: 3, intensity: 5 }
               }
-            }
+            };
           }
-          
-          console.log(data)
+
           //end version check
           await t.update(data);
         }
@@ -309,7 +267,7 @@ Hooks.on('ready', () => {
         content: ``,
         name: `${journalName}`
       });
-      console.log('entry', entry)
+
       OSEH.turn.updateJournal();
       console.log(`OSE-helper: no count journal found.
       Journal entry named ${journalName} created.`);
@@ -335,8 +293,6 @@ Hooks.on('ready', () => {
       '<span style="color: DeepPink">LISTEN! Do you smell something?!?</span>'
     ];
     let index = Math.floor(Math.random() * flavorArr.length);
-    // console.log(index);
-    //// console.log(flavorArr[index]);
     return flavorArr[index];
   };
 });

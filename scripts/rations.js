@@ -19,7 +19,6 @@ Hooks.on('ready', () => {
 
       //folder = game.folders.getName(folderName);
       for (let actor of folder.content) {
-        console.log(actor);
         actorIds.push(actor?.id);
       }
     }
@@ -41,7 +40,6 @@ Hooks.on('ready', () => {
 
 */
   OSEH.ration.actorReport = async function (data) {
-    console.log(data);
     const actor = game.actors.getName(data.actorName);
     const Rations = [];
     const Lights = [];
@@ -57,17 +55,15 @@ Hooks.on('ready', () => {
       food: '',
       light: ''
     };
-    console.log(Rations, Lights);
 
     for (let name of Rations) {
       let actorItem = '';
-      console.log('name', name, 'actorItem', actorItem);
 
       let ration = actor.data.items.getName(OSEH.data.food[name]);
-      console.log(ration);
+
       if (ration) {
         const qty = ration.data.data.quantity.value;
-        console.log(name, qty, 'name, quantity');
+
         totalRations += qty;
         style = 'color: green';
         if (qty <= 2) style = 'color: orangered';
@@ -78,12 +74,11 @@ Hooks.on('ready', () => {
     }
     for (let name of Lights) {
       let actorItem = '';
-      console.log('actor', actor, 'id', actor.id, 'name', name);
 
       let light = actor.data.items.getName(OSEH.data.lightSource[name].name);
       if (light) {
         const qty = light.data.data.quantity.value;
-        console.log(name, qty);
+
         style = 'color: green';
         if (qty <= 2) style = 'color: orangered';
         if (qty <= 1) style = 'color: red';
@@ -94,7 +89,7 @@ Hooks.on('ready', () => {
     let ratStyle = 'color: green;';
     if (totalRations <= 3) ratStyle = 'color: orangeRed;';
     if (totalRations <= 1) ratStyle = 'color: red;';
-    console.log(msgData);
+
     const rationText = totalRations <= 0 ? '<ul><li><span style="color: red;">None</span></li></ul>' : msgData.food;
     const lightText = msgData.light == '' ? '<ul><li><span style="color: red;">None</span></li></ul>' : msgData.light;
     let contents =
@@ -130,27 +125,26 @@ data: {
     for (let key in OSEH.data.food) {
       Rations.push(OSEH.data.food[key]);
     }
-    console.log('rat', Rations, data);
+
     let totalRations = 0;
     const { character, retainer } = data;
-    //console.log('c', character, 'r', retainer);
+
     const msgData = {
       character: '',
       retainer: ''
     };
-    console.log('before loop');
+
     for (let key in data) {
-      console.log(key);
       for (let name of data[key]) {
         let actor = game.actors.getName(name);
         let actorRations = '';
-        console.log('actor', actor, 'id', actor?.id, 'name', name, 'key', key);
+
         if (actor) {
           for (let type of Rations) {
             let ration = actor.data.items.getName(type);
             if (ration) {
               const qty = ration.data.data.quantity.value;
-              console.log(type, qty);
+
               totalRations += qty;
               style = 'color: green';
               if (qty <= 2) style = 'color: orangered';
@@ -162,9 +156,7 @@ data: {
         }
       }
     }
-    console.log('after loop<-----', msgData);
 
-    console.log(totalRations, character, '<---------------');
     let contents =
       `<div >
     <h2>Ration Report</h2>
@@ -192,11 +184,10 @@ data: {
     for (let type in OSEH.data.food) {
       const item = actor.data.items.getName(OSEH.data.food[type]);
       if (item) {
-        console.log('item', item);
         rationOptions += `<option value="${item.name}">${item.name}: ${item.data.data.quantity.value}</option>`;
       }
     }
-    console.log('ratItems', rationOptions);
+
     let dialogTemplate = `
   <h1> Pick a Ration Type </h1>
   <div style="display:flex">
@@ -222,7 +213,6 @@ data: {
                 }
               });
             }
-            console.log(item);
           }
         },
         close: {

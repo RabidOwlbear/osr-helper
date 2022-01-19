@@ -90,8 +90,7 @@ Hooks.once('init', async function () {
     scope: 'client',
     type: Boolean,
     default: false,
-    config: true,
-    // onChange: () => console.log('user?', game.user)
+    config: true
   });
 
   game.settings.register('OSE-helper', 'rationData', {
@@ -185,10 +184,8 @@ Hooks.once('ready', async () => {
   }
 
   Hooks.on('createActor', async (actor) => {
-    console.log('create actor fired');
     if (game.settings.get('OSE-helper', 'tokenLightDefault') && game.user.role >= 4) {
       if (actor.data.type == 'character') {
-        console.log('new character');
         //const actor = game.actors.getName(sheet.object.name);
         await actor.update({
           token: {
@@ -221,7 +218,6 @@ Hooks.once('ready', async () => {
 Hooks.on('updateCombat', (combat) => {
   if (combat.current && combat.current.round && combat.previous && combat.previous.round) {
     if (combat.current.round - combat.previous.round == 1) {
-      console.log('round up');
       OSEH.util.resetMonsterAttacks();
     }
   }
@@ -238,7 +234,6 @@ Hooks.on('renderOseActorSheet', (actor, html) => {
   //   new newCustomEffect(actor.object.id, game.user).render(true);
   // });
   modBox.on('click', '.ose-effect-list', (event) => {
-    // console.log('effectList actor', actor);
     OSEH.ce.effectList(actor.object);
   });
   //   modBox.on('click', '.ose-delete-effect', (event) => {
@@ -281,7 +276,6 @@ Hooks.on('osrItemShopActive', async () => {
 
 Hooks.on('gmPleasePause', () => {
   if (game.user.role == 4) {
-    // console.log('game paused');
     let newState = game.paused ? false : true;
     game.togglePause(newState, true);
   }

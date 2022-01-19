@@ -1,5 +1,3 @@
-
-
 class newCustomEffect extends FormApplication {
   constructor(actorId, user) {
     super();
@@ -22,9 +20,8 @@ class newCustomEffect extends FormApplication {
     super.activateListeners(html);
   }
   async _updateObject(event, formData) {
-    console.log('formData', formData, this);
     const effectId = this.effectId;
-    console.log('effectId', effectId);
+
     let effectData = await this.user.getFlag('OSE-helper', 'effectData');
     effectData[effectId] = {
       _id: effectId,
@@ -38,7 +35,6 @@ class newCustomEffect extends FormApplication {
         userId: this.user.id
       }
     };
-    console.log('effectData', effectData);
 
     game.user.setFlag('OSE-helper', 'effectData', effectData);
     const msgContent = `<h3 style="color:green;">Custom Effect Created!</h3>
@@ -57,7 +53,7 @@ window.newCustomEffect = newCustomEffect;
 async function oseDeleteEffect() {
   const user = game.user;
   const effectData = user.getFlag('OSE-helper', 'effectData');
-  console.log('effectData', effectData);
+
   let activeEffects = '';
   //if no effects, return
   if (!Object.keys(effectData).length) {
@@ -65,7 +61,6 @@ async function oseDeleteEffect() {
     return;
   }
   for (let effect in effectData) {
-    console.log('effect', effect, effectData[effect]);
     activeEffects += `<option value="${effect}" name="${effectData[effect].name}">
       ${effectData[effect].name}: ${effectData[effect].duration} Minutes Left</option>`;
   }
@@ -85,10 +80,10 @@ async function oseDeleteEffect() {
           const effectId = html.find('#selectedEffect')[0].value;
           const effectName = effectData[effectId].name;
           const whisperArray = [game.user.id];
-          console.log(whisperArray);
+
           let msgContent = `<h3 style="color: red">Effect Deleted!</h3>
           <div>Custom Effect named ${effectName} has been deleted.</div>`;
-          console.log('before osechat', effectData);
+
           oseChatMessage(effectData[effectId], user.id, msgContent);
           delete effectData[html.find('#selectedEffect')[0].value];
           await user.unsetFlag('OSE-helper', 'effectData');
@@ -112,7 +107,7 @@ function generateEffectReport(userId) {
   }
   for (let effectId in effectData) {
     let effect = effectData[effectId];
-    console.log('effect', effect);
+
     msgContent += `
     <div>
     <h4>${effect.name}</h4>
@@ -123,7 +118,7 @@ function generateEffectReport(userId) {
     </div>
     <br/>`;
   }
-  //console.log(msgContent);
+
   let options = {
     title: 'Custom Effect Report',
     content: msgContent,
