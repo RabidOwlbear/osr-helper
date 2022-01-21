@@ -73,7 +73,7 @@ const data = {
     retainer: ['insert', 'retainer names', 'here'],
 		whisper: true
 }
-oseRationReport(data, true)
+OSEH.ration.rationReport(data, true)
 ```
 
 Change the following settings befor use:
