@@ -5,6 +5,12 @@ created by Grim.
 An unimaginatively named module that aims to assist with light, time, and resource management. For use in games using the Old School Essentials system for FoundryVTT.
 This module provides several macros found in a compendium named "OSE-helper Macros".
 
+### installation
+
+install using the following manifest url:
+
+https://raw.githubusercontent.com/RabidOwlbear/OSE-helper/master/module.json
+
 ### usage
 
 Upon initial load a journal entry will be created using the default name of "Turn Count". This journal will be populated with several statistics reflecting number of turns elapsed this session, since that last rest was taken, and the total number of turns so far in the game. Using the provided "OSE-helper Dungeon Turn (base)" macro the Referee can advance the game time in standard 10 minute turn intervals. The "Turn Count" journal will be updated to reflect the current counts.
