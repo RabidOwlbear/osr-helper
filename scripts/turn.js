@@ -83,12 +83,28 @@ Hooks.on('ready', () => {
 
 
 */
-  OSEH.turn.dungeonTurn = async function (data) {
+  OSEH.turn.dungeonTurn = async function () {
+    const data = await game.settings.get('OSE-helper', 'dungeonTurnData')
+    const encTable = game.tables.getName(data.eTable);
+    const reactTable = await game.tables.getName(data.rTable);
+    // checks
+    if(data.rollEnc && !encTable){
+      ui.notifications.error('Encounter Table Not Found');
+      return
+    }
+    if(data.rollReact && !reactTable){
+      ui.notifications.error('Reaction Table Not Found');
+      return
+    }
+
+    console.log(data)
     const turnData = await OSEH.turn.incrementTurnData();
+    turnData.proc = data.proc
     if (game.settings.get('OSE-helper', 'restMessage')) {
       OSEH.turn.restMsg(turnData.rest); //generfate chat message regarding rest status
     }
-    if (data.tableRoll) {
+    console.log(data.rollEnc, turnData)
+    if (data.rollEnc) {
       //if tableRoll is true
       //and random monsters are active
       if (turnData.procCount >= data.proc) {
@@ -109,8 +125,7 @@ Hooks.on('ready', () => {
             ChatMessage.create(content);
           });
         } else {
-          const table = game.tables.getName(data.tableName);
-          const roll = await table.roll(table);
+          const roll = await encTable.roll(encTable);
           const message = {
             flavor: `<span style='color: red'>${OSEH.util.tableFlavor()}</span>`,
             user: game.user.id,
@@ -120,12 +135,12 @@ Hooks.on('ready', () => {
             whisper: gm
           };
 
-          if (data.reactRoll) {
-            let reactTable;
+          if (data.rollReact) {
+            
             if (parseInt(OSEH.gameVersion) < 9) {
-              reactTable = game.tables.entities.find((t) => t.name === data.reactTable);
+              reactTable = game.tables.entities.find((t) => t.name === data.rTable);
             } else {
-              reactTable = await game.tables.getName(data.reactTable);
+             
             }
 
             let reactRoll = await reactTable.roll();

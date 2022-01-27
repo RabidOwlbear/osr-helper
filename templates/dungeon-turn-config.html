@@ -1,0 +1,36 @@
+<form action="">
+  <div>
+    
+    <div class="pb5">
+      <label class="mb5"for="enc-table">Encounter Table name:</label>
+      <input id="enc-table" type="text" />
+    </div>
+    <div class="pb5">
+      <label class="mb5"for="react-table">Reaction Table Name:</label>
+      <input id="react-table" type="text" placeholder="Case Sensitive"/>
+    </div>
+    <div>
+      <div class="pb5">
+        <input id="proc" type="number" value="0" />
+        <label for="proc">How often to roll for encounter.</label>
+      </div>
+    </div>
+    <div>
+      <div class="pb5">
+        <input id="roll-target" type="number" value="0" />
+        <label for="roll-target">Target to roll below to trigger table roll.</label>
+      </div>
+      <div class="pb5">
+        <input id="roll-enc" type="checkbox"  />
+        <label for="roll-enc">Roll for encounters</label>
+      </div>
+      <div class="pb5">
+        <input id="roll-react" type="checkbox" />
+        <label for="roll-react">Roll for reaction</label>
+      </div>
+    </div>
+    <div class="fx jcc">
+      <input type="submit"id="submit">
+    </div>
+  </div>
+</form>

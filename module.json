@@ -16,7 +16,8 @@
     "./scripts/turn.js",
     "./scripts/oseHelperData.js",
     "./scripts/customEffectList.js",
-    "./scripts/updatedCustomEffects.js"
+    "./scripts/updatedCustomEffects.js",
+    "./scripts/reports.js"
   ],
   "packs": [
     {

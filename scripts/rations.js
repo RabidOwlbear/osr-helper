@@ -120,63 +120,7 @@ data: {
 }
 */
 
-  OSEH.ration.rationReport = async function (data) {
-    const Rations = [];
-    for (let key in OSEH.data.food) {
-      Rations.push(OSEH.data.food[key]);
-    }
 
-    let totalRations = 0;
-    const { character, retainer } = data;
-
-    const msgData = {
-      character: '',
-      retainer: ''
-    };
-
-    for (let key in data) {
-      for (let name of data[key]) {
-        let actor = game.actors.getName(name);
-        let actorRations = '';
-
-        if (actor) {
-          for (let type of Rations) {
-            let ration = actor.data.items.getName(type);
-            if (ration) {
-              const qty = ration.data.data.quantity.value;
-
-              totalRations += qty;
-              style = 'color: green';
-              if (qty <= 2) style = 'color: orangered';
-              if (qty <= 1) style = 'color: red';
-              actorRations += `<li><span style="${style}">${type}: ${ration.data.data.quantity.value}</span></li>`;
-            }
-          }
-          msgData[key] += `<div><p> ${name}:</p><ul>` + actorRations + `</ul></div>`;
-        }
-      }
-    }
-
-    let contents =
-      `<div >
-    <h2>Ration Report</h2>
-  <div>Total Days left: ${Math.floor(totalRations / character.length)}</div>
-  <br>
-  <h3>Character Rations</h3>
-  <div>
-  ` +
-      msgData.character +
-      `</div>
-    <h3>Retainer Rations</h3>
-  <div>
-  ` +
-      msgData.retainer +
-      `</div></div>`;
-
-    if (data.whisper) {
-      ChatMessage.create({ content: contents, whisper: [game.user.id] });
-    } else ChatMessage.create({ content: contents, type: CONST.CHAT_MESSAGE_TYPES.EMOTE });
-  };
 
   OSEH.ration.eat = async function (actorId) {
     const actor = await game.actors.find((a) => a.id == actorId);
@@ -221,4 +165,8 @@ data: {
       }
     }).render(true);
   };
+
+
+
+
 });
