@@ -20,7 +20,6 @@ Hooks.on('ready', () => {
 
     for (let name of Rations) {
       let actorItem = '';
-      console.log(actor)
       let ration = actor.data.items.getName(OSEH.data.food[name]);
 
       if (ration) {
