@@ -70,19 +70,6 @@ Hooks.on('ready', () => {
     return game.settings.get('OSE-helper', 'turnData');
   };
 
-  //dungeonTurn: advances one turn, checks if proc is enabled, if so checks if turns elapsed >= proc, if so, roll inputed table,
-  /*
-{
-  proc: number          random table roll turn interval, set to 0 to skip all rolls and only advance the turn count
-  rollTarget: number,   roll under this number on a d6 to trigger a random table roll
-  tableName: string,    name of roll Table to use for random monster rolls set to 'none' to disable
-  tableRoll: boolean,   true: rolls on provided table. false: skips table roll
-  reactTable: string,   set to 'none' to disable reaction table roll
-  reactRoll: boolean    true: rolls on provided reaction table after rolling random encounter table , false: skips reaction roll
-}
-
-
-*/
   OSEH.turn.dungeonTurn = async function () {
     const data = await game.settings.get('OSE-helper', 'dungeonTurnData')
     const encTable = game.tables.getName(data.eTable);
@@ -97,13 +84,13 @@ Hooks.on('ready', () => {
       return
     }
 
-    console.log(data)
+    
     const turnData = await OSEH.turn.incrementTurnData();
     turnData.proc = data.proc
     if (game.settings.get('OSE-helper', 'restMessage')) {
-      OSEH.turn.restMsg(turnData.rest); //generfate chat message regarding rest status
+      OSEH.turn.restMsg(turnData.rest); //generate chat message regarding rest status
     }
-    console.log(data.rollEnc, turnData)
+    
     if (data.rollEnc) {
       //if tableRoll is true
       //and random monsters are active

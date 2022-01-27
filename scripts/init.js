@@ -333,16 +333,13 @@ activateListeners(html) {
   let close = html.find('#submit')
 
   close.on('click', ()=>{
-    console.log('clicked', this); 
+    
     this.close(true)
   })
   
 }
-// async _updateObject(event,formData){
-//   console.log(event, formData)
-// }
 
-async _onSubmit(event, a, b, c) {
+async _onSubmit(event) {
   
     super._onSubmit(event, { preventRefresh: true });
     let data = {
@@ -354,7 +351,7 @@ async _onSubmit(event, a, b, c) {
       rollReact:  event.target[5].checked,
     }
 
-  console.log(data)
+  
   await game.settings.set('OSE-helper', 'dungeonTurnData', data)
 }
 
@@ -362,19 +359,13 @@ async _updateObject() {}
 
 }
 Hooks.on(`renderDungTurnConfig`,async (ev,html)=>{
-  console.log(ev,html)
+  
   const data = await game.settings.get('OSE-helper', 'dungeonTurnData');
-  // console.log(encTable.value, data)
   document.getElementById('enc-table').value = data.eTable;
   document.getElementById('react-table').value = data.rTable;
   document.getElementById('proc').value = data.proc;
   document.getElementById('roll-target').value = data.rollTarget;
   document.getElementById('roll-enc').checked = data.rollEnc;
   document.getElementById('roll-react').checked = data.rollReact;
-  // encTable.value = data.eTable;
-
-  // reactTable.value = data.rTable;
-  // proc.value = data.proc;
-  // rollTarget.value = data.rollTarget;
-
+  
 } )
