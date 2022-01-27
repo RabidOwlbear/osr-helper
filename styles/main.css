@@ -3,6 +3,7 @@
   --border: #1712228c;
   --center-hotbar: calc(50% - 270px);
 }
+/* custom effect form */
 #customEffectForm .effectDesc {
   height: 100px;
 }
@@ -16,6 +17,7 @@
   justify-content: space-between;
   padding: 0.5em 0;
 }
+/* center hotbar */
 #hotbar {
   position: absolute;
   left: var(--hotbar-center);
@@ -25,6 +27,7 @@
   position: relative;
   left: calc(100% - 110px);
 }
+/* icon */
 .ose-helper-icon {
   padding: 0 3px;
 }
@@ -118,4 +121,156 @@
 }
 #customEffectList #effect-item-dur {
   width: 150px;
+}
+
+/* travel calc */
+
+#oseTravelReport .window-content {
+  margin: 0;
+  padding: 0;
+}
+#travel-calc {
+  background-color: rgb(228, 224, 218);
+  width: 100%;
+  min-height: 500px;
+}
+#travel-calc h1 {
+  text-align: center;
+  border: none;
+}
+#travel-calc .terrain {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin: 1em 0.25em;
+}
+#travel-calc h3 {
+  text-align: center;
+  padding: 0;
+  margin: 0;
+}
+#travel-calc .terrain-select-row {
+  display: flex;
+  justify-content: space-between;
+  text-align: center;
+  width: 400px;
+}
+#travel-calc .terrain-select {
+  display: flex;
+  justify-content: space-between;
+  /* padding: 0 5px; */
+  width: 100px;
+}
+#travel-calc .terrain-select label {
+  width: 190px;
+}
+#travel-calc section:nth-of-type(2n + 1) {
+  border-top: 2px solid black;
+  border-bottom: 2px solid black;
+}
+#travel-calc section {
+  min-width: 100%;
+}
+#travel-calc #party-list {
+  height: 200px;
+}
+#travel-calc .actor-list {
+  overflow: scroll;
+}
+#BTR {
+  margin: 0 5px;
+}
+/* button divs */
+#travel-calc #util-rolls {
+  display: flex;
+  justify-content: space-evenly;
+  padding: 5px 0 10px 0;
+}
+#travel-calc .button-container {
+  width: 125px;
+  height: 90px;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  align-items: center;
+}
+#travel-calc .button-container button {
+  width: 50px;
+  height: 30px;
+}
+
+#travel-calc .bonus-input {
+  width: 25px;
+  height: 20px;
+  margin-left: 5px;
+}
+#travel-calc .bonus-div{
+  padding-bottom: 5px;
+  display: flex;
+  justify-content: space-between;
+}
+#util-rolls button:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+.btn-spcr {
+  height: 20px;
+  margin-bottom: 10px;
+}
+/* framework */
+.fx {
+  display: flex;
+}
+.sb {
+  justify-content: space-between;
+}
+.jcc {
+  justify-content: center;
+}
+.w50{
+  width: 50px;
+}
+.w175 {
+  width: 150px;
+}
+.w200 {
+  width: 200px;
+}
+.ptb5 {
+  padding: 5px 0;
+}
+.mb5{
+  margin-bottom: 5px
+}
+.br2 {
+  border-right: 2px solid black;
+}
+.w180 {
+  width: 180px;
+}
+.w140 {
+  width: 140px;
+}
+.of-hide {
+  white-space: nowrap;
+  overflow: hidden;
+}
+.pb10 {
+  padding-bottom: 10px;
+}
+.pb5 {
+  padding-bottom: 5px;
+}
+.pl10 {
+  padding-left: 10px;
+}
+.pr10 {
+  padding-right: 10px;
+}
+.plr10 {
+  padding: 0 10px;
+}
+.plr5 {
+  padding: 0 5px;
 }

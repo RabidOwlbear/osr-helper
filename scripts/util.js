@@ -295,4 +295,101 @@ Hooks.on('ready', () => {
     let index = Math.floor(Math.random() * flavorArr.length);
     return flavorArr[index];
   };
+
+  OSEH.util.getPartyActors = function () {
+    const allParty = game.actors.filter((a) => a.data.flags?.ose?.party == true);
+    const retObj = {
+      party: allParty,
+      characters: [],
+      retainers: []
+    };
+    for (let actor of allParty) {
+      if (actor.data.data.retainer.enabled) {
+        retObj.retainers.push(actor);
+      } else {
+        retObj.characters.push(actor);
+      }
+    }
+    return retObj;
+  };
+
+  OSEH.util.attack = async function () {
+    // Get Selected
+    if (!OSEH.util.singleSelected()) {
+      return;
+    }
+    const selectedActor = canvas.tokens.controlled[0].actor;
+    // Get Target
+    let targets = Array.from(game.user.targets);
+    if (targets.length == 0 || targets.length > 1) {
+      ui.notifications.error('Please target one token');
+      return;
+    }
+    //  let targetActor = targets[0].actor;
+    // Select Weapon
+    let actorWeapons = selectedActor.data.items.filter((item) => item.type == 'weapon');
+    let actorSpells = selectedActor.data.items.filter((item) => {
+      if (item.type == 'spell') return true;
+    });
+    let atkOptions = '';
+    for (let item of actorWeapons) {
+      atkOptions += `<option value=${item.id}>${item.name} | ATK: ${item.data.data.damage}</option>`;
+    }
+    for (let item of actorSpells) {
+      if (item.data.data.roll != '') {
+        atkOptions += `<option value=${item.id}>${item.name} | ATK: ${item.data.data.roll}</option>`;
+      }
+    }
+    let dialogTemplate = `
+   <h1> Pick a weapon </h1>
+   <div style="display:flex; justify-content: space-between; margin-bottom: 1em;">
+     <div>
+     <select id="weapon">${atkOptions}</select>
+     </div>
+     <div>
+     <input id="ammoCheck" type="checkbox" checked />Check Ammo
+     </div>
+     <div>
+     <input id="skip" type="checkbox" checked />Skip Dialog
+     </div>
+     </div>
+   `;
+    new Dialog({
+      title: 'Roll Attack',
+      content: dialogTemplate,
+      buttons: {
+        rollAtk: {
+          label: 'Roll Attack',
+          callback: async (html) => {
+            let selected = html.find('#weapon')[0];
+            let skipCheck = html.find('#skip')[0]?.checked;
+            let ammoCheck = html.find(`#ammoCheck`)[0]?.checked;
+            let weapon = selectedActor.items.find((i) => i.id == selected.value);
+            console.log(selected.value, weapon)
+            let ammoObj = OSEH.data.ammoData.find((a) => a.name == weapon?.name);
+            let ammo, ammoQty;
+            if (ammoObj && ammoCheck) {
+              ammo = selectedActor.items.find((i) => i.name == ammoObj.ammoType);
+              ammoQty = ammo.data.data.quantity.value;
+              if (ammoQty > 0) {
+                console.log('ammo and quantity');
+                await weapon.roll({ skipDialog: skipCheck });
+                await ammo.update({ data: { quantity: { value: ammoQty - 1 } } });
+              } else {
+                console.log('ammo no quantity');
+                ui.notifications.warn('No ammo');
+                main();
+              }
+            } else {
+              console.log(`no ammo needed`);
+              await weapon.roll({ skipDialog: skipCheck });
+            }
+          }
+        },
+        close: {
+          label: 'Close'
+        }
+      }
+    }).render(true);
+  };
 });

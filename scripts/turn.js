@@ -70,25 +70,28 @@ Hooks.on('ready', () => {
     return game.settings.get('OSE-helper', 'turnData');
   };
 
-  //dungeonTurn: advances one turn, checks if proc is enabled, if so checks if turns elapsed >= proc, if so, roll inputed table,
-  /*
-{
-  proc: number          random table roll turn interval, set to 0 to skip all rolls and only advance the turn count
-  rollTarget: number,   roll under this number on a d6 to trigger a random table roll
-  tableName: string,    name of roll Table to use for random monster rolls set to 'none' to disable
-  tableRoll: boolean,   true: rolls on provided table. false: skips table roll
-  reactTable: string,   set to 'none' to disable reaction table roll
-  reactRoll: boolean    true: rolls on provided reaction table after rolling random encounter table , false: skips reaction roll
-}
-
-
-*/
-  OSEH.turn.dungeonTurn = async function (data) {
-    const turnData = await OSEH.turn.incrementTurnData();
-    if (game.settings.get('OSE-helper', 'restMessage')) {
-      OSEH.turn.restMsg(turnData.rest); //generfate chat message regarding rest status
+  OSEH.turn.dungeonTurn = async function () {
+    const data = await game.settings.get('OSE-helper', 'dungeonTurnData')
+    const encTable = game.tables.getName(data.eTable);
+    const reactTable = await game.tables.getName(data.rTable);
+    // checks
+    if(data.rollEnc && !encTable){
+      ui.notifications.error('Encounter Table Not Found');
+      return
     }
-    if (data.tableRoll) {
+    if(data.rollReact && !reactTable){
+      ui.notifications.error('Reaction Table Not Found');
+      return
+    }
+
+    
+    const turnData = await OSEH.turn.incrementTurnData();
+    turnData.proc = data.proc
+    if (game.settings.get('OSE-helper', 'restMessage')) {
+      OSEH.turn.restMsg(turnData.rest); //generate chat message regarding rest status
+    }
+    
+    if (data.rollEnc) {
       //if tableRoll is true
       //and random monsters are active
       if (turnData.procCount >= data.proc) {
@@ -109,8 +112,7 @@ Hooks.on('ready', () => {
             ChatMessage.create(content);
           });
         } else {
-          const table = game.tables.getName(data.tableName);
-          const roll = await table.roll(table);
+          const roll = await encTable.roll(encTable);
           const message = {
             flavor: `<span style='color: red'>${OSEH.util.tableFlavor()}</span>`,
             user: game.user.id,
@@ -120,12 +122,12 @@ Hooks.on('ready', () => {
             whisper: gm
           };
 
-          if (data.reactRoll) {
-            let reactTable;
+          if (data.rollReact) {
+            
             if (parseInt(OSEH.gameVersion) < 9) {
-              reactTable = game.tables.entities.find((t) => t.name === data.reactTable);
+              reactTable = game.tables.entities.find((t) => t.name === data.rTable);
             } else {
-              reactTable = await game.tables.getName(data.reactTable);
+             
             }
 
             let reactRoll = await reactTable.roll();

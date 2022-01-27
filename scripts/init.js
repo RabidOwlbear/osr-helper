@@ -34,6 +34,16 @@ Hooks.once('init', async function () {
     config: true
   });
 
+  game.settings.registerMenu('OSE-helper', 'dungeonTurnSettings', {
+    name: 'Dungeon Turn Settings.',
+    label: 'Dungeon Turn Settings',
+    icon: 'fas fa-wrench',
+    scope: 'world',
+    type: DungTurnConfig,
+    config: true,
+    restricted: true,
+  })
+
   //stores world time after last turn advance
   game.settings.register('OSE-helper', 'lastTick', {
     name: 'lastTick',
@@ -124,6 +134,21 @@ Hooks.once('init', async function () {
     scope: 'world',
     type: Array,
     default: [],
+    config: false
+  });
+
+  game.settings.register('OSE-helper', 'dungeonTurnData', {
+    name: 'dungeonTurnData',
+    scope: 'world',
+    type: Object,
+    default: {
+      proc: 0,
+      rTable: 'none',
+      eTable: 'none', 
+      rollTarget: 0,
+      rollEnc: false,
+      rollReact: false,
+    },
     config: false
   });
 
@@ -281,3 +306,66 @@ Hooks.on('gmPleasePause', () => {
     game.togglePause(newState, true);
   }
 });
+
+
+class DungTurnConfig extends FormApplication {
+  constructor() {
+    super();
+    
+  }
+  static get defaultOptions() {
+    const options = super.defaultOptions;
+    options.baseApplication = 'dungeonTurnConfig';
+    options.id = "dungTurnConfig";
+    options.template = "modules/OSE-helper/templates/dungeon-turn-config.html";
+    options.height = 300;
+    options.width = 400;
+    // options.left = 500;
+    // options.top = 100;
+    options.baseApplication = FormApplication;
+    return options;
+}
+// async getData(options) { 
+//   return {}
+// }
+activateListeners(html) {
+  super.activateListeners(html);
+  let close = html.find('#submit')
+
+  close.on('click', ()=>{
+    
+    this.close(true)
+  })
+  
+}
+
+async _onSubmit(event) {
+  
+    super._onSubmit(event, { preventRefresh: true });
+    let data = {
+      proc: parseInt(event.target[2].value),
+      rTable: event.target[1].value,
+      eTable: event.target[0].value, 
+      rollTarget:  parseInt(event.target[3].value),
+      rollEnc:  event.target[4].checked,
+      rollReact:  event.target[5].checked,
+    }
+
+  
+  await game.settings.set('OSE-helper', 'dungeonTurnData', data)
+}
+
+async _updateObject() {}
+
+}
+Hooks.on(`renderDungTurnConfig`,async (ev,html)=>{
+  
+  const data = await game.settings.get('OSE-helper', 'dungeonTurnData');
+  document.getElementById('enc-table').value = data.eTable;
+  document.getElementById('react-table').value = data.rTable;
+  document.getElementById('proc').value = data.proc;
+  document.getElementById('roll-target').value = data.rollTarget;
+  document.getElementById('roll-enc').checked = data.rollEnc;
+  document.getElementById('roll-react').checked = data.rollReact;
+  
+} )

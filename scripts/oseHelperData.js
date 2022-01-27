@@ -160,6 +160,17 @@ lightType: {
       lightAlpha: 0.5,
       warn: 3,
       alert: 1
+    },
+    CCcandles: {
+      name: 'Candles (10)',
+      dimLight: 5,
+      brightLight: 0,
+      duration: 60,
+      color: '#ff7b24',
+      secondaryColor: '#fa9924',
+      lightAlpha: 0.5,
+      warn: 3,
+      alert: 1
     }
   };
 
@@ -319,4 +330,71 @@ lightType: {
       id: 'oseh014'
     }
   ];
+  OSEH.data.ammoData = [
+    {
+      name: 'Shortbow',
+      ammoType: 'Arrows (quiver of 20)', 
+    },
+    {
+      name: 'Longbow',
+      ammoType: 'Arrows (quiver of 20)', 
+    },
+    {
+      name: 'Crossbow',
+      ammoType: 'Crossbow bolts (case of 30)',
+    },
+    {
+      name: 'Sling',
+      ammoType: 'Sling Stones',
+    },
+    {
+      name: 'Matchlock blunderbuss',
+      ammoType: 'Ammunition pouch',
+    },
+    {
+      name: 'Matchlock heavy musket',
+      ammoType: 'Ammunition pouch',
+    },
+    {
+      name: 'Matchlock musket',
+      ammoType: 'Ammunition pouch',
+    },
+    {
+      name: 'Matchlock pistol',
+      ammoType: 'Ammunition pouch',
+    },
+    {
+      name: 'Wheellock blunderbuss',
+      ammoType: 'Ammunition pouch',
+    },
+    {
+      name: 'Wheellock heavy musket',
+      ammoType: 'Ammunition pouch',
+    },
+    {
+      name: 'Wheellock musket',
+      ammoType: 'Ammunition pouch',
+    },
+    {
+      name: 'Wheellock pistol',
+      ammoType: 'Ammunition pouch',
+    },
+    {
+      name: 'Wheellock blunderbuss',
+      ammoType: 'Ammunition pouch',
+    },
+    {
+      name: 'Wheellock heavy musket',
+      ammoType: 'Ammunition pouch',
+    },
+    {
+      name: 'Wheellock musket',
+      ammoType: 'Ammunition pouch',
+    },
+    {
+      name: 'Wheellock pistol',
+      ammoType: 'Ammunition pouch',
+    },
+    
+  ]
 });

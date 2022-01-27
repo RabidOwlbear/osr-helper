@@ -1,0 +1,142 @@
+<div id="travel-calc">
+  <div class="title">
+    <h1>Travel Calculator</h1>
+  </div>
+  
+  
+  <section class="section" id="base-rate">
+    <div class="fx jcc ">
+      <div class="fx sb  ptb5">
+        <div><b>Base travel rate</b>:</div>
+      <div><span id="BTR">{{baseRate}}</span> mi.</div>  
+      </div>
+    </div>   
+</section>
+  <section class="" id="party-header">
+  <div class="fx sb">
+    <div class="w200 fx jcc br2">
+      <h3>Characters</h3>
+    </div>
+    <div class="w200 fx jcc">
+      <h3>Retainers</h3>
+    </div>
+  </div>
+</section>
+  <section class="fx" id="party-list">
+    <div class="actor-list w200 br2" id="character-list">
+      {{{characters}}}
+    </div>
+    <div class="actor-list w200" id="retainer-list">
+      {{{retainers}}}
+    </div>
+  </section>
+  <section>
+    <h3>Terrain Type</h3>
+  </section>
+  <section id="terrain-select">
+   
+    <div class="terrain">
+      <div class="terrain-select-row ">
+        <div class="terrain-select">
+          <input type="radio" id="trail" value="trail" name="terrain">
+          <label for="trail">trail</label>
+        </div>
+        <div class="terrain-select">
+          <input type="radio" id="road" value="road" name="terrain">
+          <label for="trail">road</label>
+        </div>
+        <div class="terrain-select">
+          <input type="radio" id="clear" value="clear" name="terrain" checked>
+          <label for="clear">clear</label>
+        </div>
+        <div class="terrain-select">
+          <input type="radio" id="grassland" value="grassland" name="terrain">
+          <label for="grassland">grassland</label>
+        </div>
+      </div>
+      <div class="terrain-select-row ">
+        <div class="terrain-select">
+          <input type="radio" id="city" value="city" name="terrain">
+          <label for="city">city</label>
+        </div>
+        <div class="terrain-select">
+          <input type="radio" id="forest" value="forest" name="terrain">
+          <label for="forest">forest</label>
+        </div>
+        <div class="terrain-select">
+          <input type="radio" id="mud" value="mud" name="terrain">
+          <label for="mud">mud</label>
+        </div>
+        <div class="terrain-select">
+          <input type="radio" id="snow" value="snow" name="terrain">
+          <label for="snow">snow</label>
+        </div>
+      </div>
+      <div class="terrain-select-row ">
+        <div class="terrain-select">
+          <input type="radio" id="hill" value="hill" name="terrain">
+          <label for="hill">hill</label>
+        </div>
+        <div class="terrain-select">
+          <input type="radio" id="desert" value="desert" name="terrain">
+          <label for="desert">desert</label>
+        </div>
+        <div class="terrain-select">
+          <input type="radio" id="brokenLand" value="brokenLand" name="terrain">
+          <label for="brokenLand">broken land</label>
+        </div>
+
+        <div class="terrain-select">
+          <input type="radio" id="mountain" value="mountain" name="terrain">
+          <label for="mountain">mountain</label>
+        </div>
+      </div>
+      <div class="terrain-select-row ">
+        <div class="terrain-select">
+          <input type="radio" id="swamp" value="swamp" name="terrain">
+          <label for="swamp">swamp</label>
+        </div>
+        <div class="terrain-select">
+          <input type="radio" id="jungle" value="jungle" name="terrain">
+          <label for="jungle">jungle</label>
+        </div>
+        <div class="terrain-select">
+          <input type="radio" id="ice" value="ice" name="terrain">
+          <label for="ice">ice</label>
+        </div>
+        <div class="terrain-select">
+          <input type="radio" id="glacier" value="glacier" name="terrain">
+          <label for="glacier">glacier</label>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section>
+    <h3>Utility Rolls</h3>
+  </section>
+  <section id="util-rolls">
+    <div class="button-container">
+      <h4>Navigation Check</h4>
+      <div class="bonus-div">
+        <label for="nav-bonus">bonus</label>
+        <input type="number" class="bonus-input" id="nav-bonus" value="0">
+      </div>
+      <button type="button" id="nav-check">Roll</button>
+    </div>
+    <div class="button-container" id="enc-roll-cont">
+    {{{encButton}}}
+    </div>
+    <div class="button-container">
+      <h4>Forage Check</h4>
+      <div class="bonus-div">
+        <label for="forage-bonus">bonus</label>
+        <input type="number" class="bonus-input" id="forage-bonus" value="0">
+      </div>
+      <button type="button" id="forage-check">Roll</button>
+    </div>
+  </section>
+  <section>
+    <button type="button" id="close-btn">close</button>
+  </section>
+</div>
+</div>
