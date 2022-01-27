@@ -1,6 +1,82 @@
 Hooks.on('ready', () => {
   OSEH.report = OSEH.report || {};
 
+  OSEH.report.actorItem = async function (actor) {
+    const Rations = [];
+    const Lights = [];
+    let totalRations = 0;
+
+    for (let key in OSEH.data.food) {
+      Rations.push(key);
+    }
+    for (let key in OSEH.data.lightSource) {
+      Lights.push(key);
+    }
+    
+    const msgData = {
+      food: '',
+      light: ''
+    };
+
+    for (let name of Rations) {
+      let actorItem = '';
+      console.log(actor)
+      let ration = actor.data.items.getName(OSEH.data.food[name]);
+
+      if (ration) {
+        const qty = ration.data.data.quantity.value;
+
+        totalRations += qty;
+        style = 'color: green';
+        if (qty <= 2) style = 'color: orangered';
+        if (qty <= 1) style = 'color: red';
+        actorItem += `<li><span style="${style}">${OSEH.data.food[name]}: ${qty}</span></li>`;
+        msgData.food += `<div><p> ${OSEH.data.food[name]}:</p><ul>` + actorItem + `</ul></div>`;
+      }
+    }
+    for (let name of Lights) {
+      let actorItem = '';
+      
+      let light = actor.data.items.getName(OSEH.data.lightSource[name].name);
+      if (light) {
+        const qty = light.data.data.quantity.value;
+
+        style = 'color: green';
+        if (qty <= 2) style = 'color: orangered';
+        if (qty <= 1) style = 'color: red';
+        actorItem += `<li><span style="${style}">${OSEH.data.lightSource[name].name}: ${light.data.data.quantity.value}</span></li>`;
+        msgData.light += `<div><p> ${OSEH.data.lightSource[name].name}:</p><ul>` + actorItem + `</ul></div>`;
+      }
+    }
+    let ratStyle = 'color: green;';
+    if (totalRations <= 3) ratStyle = 'color: orangeRed;';
+    if (totalRations <= 1) ratStyle = 'color: red;';
+
+    const rationText = totalRations <= 0 ? '<ul><li><span style="color: red;">None</span></li></ul>' : msgData.food;
+    const lightText = msgData.light == '' ? '<ul><li><span style="color: red;">None</span></li></ul>' : msgData.light;
+    let contents =
+      `
+      <details >
+      <summary><strong>Supplies Report</strong></summary>
+      <br>
+      <div >
+        <br>
+        <div style="${ratStyle}">Total Days of Rations left: ${totalRations}</div>
+        <br>
+        <h3>Character Rations:</h3>
+        <div>
+          ${rationText}
+        </div>
+        <h3>Character Light Sources:</h3>
+        <div>
+          ${lightText}
+        </div>
+      </div>
+      </details>`;
+
+    ChatMessage.create({ content: contents, whisper: [game.user.id] });
+  };
+
   OSEH.report.ration = async function () {
     let actorObj = OSEH.util.getPartyActors();
     const Rations = [];
@@ -81,7 +157,7 @@ Hooks.on('ready', () => {
     }
     function getTravelData(mod){
       oseActive = game.modules.get('old-school-essentials')?.active;
-      console.log(oseActive)
+      
       encButtonTemplate = `    
         <h4>Encounter Roll</h4>
         <div class="btn-spcr"></div>
@@ -180,7 +256,7 @@ Hooks.on('ready', () => {
         closeBtn.addEventListener('click', ()=>{ this.close()})
         if(encBtn){
           encBtn.addEventListener('click', (ev)=>{
-            console.log('test')
+            
             this.rollEnc()
             
           })
@@ -212,7 +288,7 @@ Hooks.on('ready', () => {
         }
         let roll = await new Roll(`1d6 + ${bonus.value}`).evaluate()
         let target = this.lostMod[radio] || 2;
-        console.log(roll, target)
+        
         if(roll.total <= target){
           roll.toMessage({
             whisper: [game.user],
@@ -229,7 +305,7 @@ Hooks.on('ready', () => {
             `
           })
         }
-        console.log('fired')
+        
         bonus.value = 0
 
       }
