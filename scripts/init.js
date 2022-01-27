@@ -138,7 +138,6 @@ Hooks.on('updateSetting', async () => {
 
   const newName = game.settings.get('OSE-helper', 'timeJournalName');
   const oldName = turnData?.journalName;
-  console.log(turnData, newName, oldName)
   const journal = await game.journal.getName(oldName);
   
   if (oldName && newName != oldName) {
