@@ -60,7 +60,9 @@ Hooks.on('ready', () => {
   };
   //increments turn data and updates setting
   OSEH.turn.incrementTurnData = async function () {
+   
     const data = await game.settings.get('OSE-helper', 'turnData');
+    console.log('fired', data)
     data.rest++;
     data.session++;
     data.total++;
@@ -84,6 +86,7 @@ Hooks.on('ready', () => {
 */
   OSEH.turn.dungeonTurn = async function (data) {
     const turnData = await OSEH.turn.incrementTurnData();
+    console.log('pre',turnData)
     if (game.settings.get('OSE-helper', 'restMessage')) {
       OSEH.turn.restMsg(turnData.rest); //generfate chat message regarding rest status
     }
@@ -93,7 +96,10 @@ Hooks.on('ready', () => {
       if (turnData.procCount >= data.proc) {
         //if number of turns since last random monster roll is greater than or equal to the random check interval
         turnData.procCount = 0; //resest number of turns since last random check
-        await game.settings.set('OSE-helper', 'turnData', turnData); //update settings data <--------
+        console.log('post',turnData)
+        await game.settings.set('OSE-helper', 'turnData', {});
+        await game.settings.set('OSE-helper', 'turnData', turnData);
+        console.log('get',game.settings.get('OSE-helper', 'turnData')) //update settings data <--------
         const theRoll = await new Roll('1d6').roll();
         const gm = game.users.contents.filter((u) => u.data.role == 4).map((u) => u.id);
 
