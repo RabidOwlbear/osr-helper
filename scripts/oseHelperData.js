@@ -160,17 +160,6 @@ lightType: {
       lightAlpha: 0.5,
       warn: 3,
       alert: 1
-    },
-    CCcandles: {
-      name: 'Candles (10)',
-      dimLight: 5,
-      brightLight: 0,
-      duration: 60,
-      color: '#ff7b24',
-      secondaryColor: '#fa9924',
-      lightAlpha: 0.5,
-      warn: 3,
-      alert: 1
     }
   };
 
