@@ -319,13 +319,6 @@ Hooks.on('ready', () => {
       return;
     }
     const selectedActor = canvas.tokens.controlled[0].actor;
-    // Get Target
-    let targets = Array.from(game.user.targets);
-    if (targets.length == 0 || targets.length > 1) {
-      ui.notifications.error('Please target one token');
-      return;
-    }
-    //  let targetActor = targets[0].actor;
     // Select Weapon
     let actorWeapons = selectedActor.data.items.filter((item) => item.type == 'weapon');
     let actorSpells = selectedActor.data.items.filter((item) => {
@@ -370,7 +363,7 @@ Hooks.on('ready', () => {
             let ammo, ammoQty;
             if (ammoObj && ammoCheck) {
               ammo = selectedActor.items.find((i) => i.name == ammoObj.ammoType);
-              ammoQty = ammo.data.data.quantity.value;
+              ammoQty = ammo?.data.data.quantity.value;
               if (ammoQty > 0) {
                 console.log('ammo and quantity');
                 await weapon.roll({ skipDialog: skipCheck });

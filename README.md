@@ -23,34 +23,15 @@ The provided "OSE-helper Rest" macro will reset the turns since last rest count 
 
 ### Using the OSE-helper Dungeon Turn Macro
 
-Once imported into your game, edit the OSE-helper Dungeon Turn macro. You will need to edit the variables described below with the information detailed. Once that is complete you may rename the macro to whatver you wish.
+To set the options for the dungeon turn macro navigate to the OSE helper settings in module settings.
+Clicking the dungeon tirn settings button will open a settings window with the following options:
 
-Inside the OSE-helper Dungeon Turn Base you will find the following code snippet:
-
-```
-{
-
-    proc: 0, //number: how often in turns to roll for random encounter
-
-    rollTarget: 2, //number to roll under to trigger a table roll
-
-    tableName: 'insert table name here', //name of random encounter table to use
-
-    reactTable: 'insert table name here', //name of reaction table to use
-
-    reactRoll: false, //true: will roll reaction table, false: no roll,
-
-    tableRoll: false  //true: will roll encounter table, false: no roll,
-
-}
-```
-
-- proc: This sets how often to roll on the determined random encounter table. Must be a number greater than 0 to function correctly.
-- rollTarget: Roll equal to or under this number to trigger a table roll. Must be a number greater than 0
-- tableName: Replace the name witin the quotes with the name of the random encounter table you wish to use. The name needs to match exactly case and punctuation included to function correctly.
-- reactTable: Replace the name witin the quotes with the name of the reaction table you wish to use (if any). The name needs to match exactly case and punctuation included to function correctly.
-- reactRoll: If set to false the reaction roll will be skipped. Set to true to roll on reaction table.
-- tableRoll: if set to false the random encounter table roll will be skipped. Set to true to roll for random encounters. Note: if tableRoll is set to false the reaction roll will also be skipped.
+- Encounter Table Name: Enter the name of the encounter table you wish to roll on here, case sensitive.
+- Reaction Table Name: Enter the name of the reaction table you wish to roll on here, case sensitive.
+- How often to roll for encounter: How often to roll for encounter. Example: if set to 2 a an encounter check would be rolled every 2nd turn.
+- Target to roll below to trigger table roll: Target number to roll under to trigger a table roll.
+- Roll For Encounters: If checked encounter rolls will be made using the defined options.
+- Roll for Reaction: If checked, when an encounter table is rolled, a roll will be made on the provided reaction table.
 
 When used, the Dungeon Turn macro will advance the game time by 10 minutes and update the turn counts by one. It will then check the rest count,. At 3 turns since last rest a chat message will be created warning the players that they need to rest, at +5 turns the worning becomes red. If the players progress beyond 1 hour without rest, the chat message will then include the relevant penalties, repeating this added text every 5 subsequent turns.
 
@@ -73,20 +54,6 @@ if the light duration is 0 the light is extinguished and the item count for that
 
 The OSE-helper Ration Report macro
 
-```
-const data = {
-    character:['insert', 'character names', 'here'],
-    retainer: ['insert', 'retainer names', 'here'],
-		whisper: true
-}
-OSEH.ration.rationReport(data, true)
-```
-
-Change the following settings befor use:
-character: Array of character names to check. Must match character names exactly, case sensitive, wrap in single quotes, separate names by comma.
-retainer: Array of retainer names to check. Must match character names exactly, case sensitive, wrap in single quotes, separate names by comma.
-whisper: If set to true the report will be sent to chat via whisper.
-
 When clicked this macro will generate a report detailing all rations currently held by all tracked Player and Retainer actors seprated by name, listing items held and their quantities, color coded.
 Total number of days worth of rations for the entire tracked group(assuming the party pools resources) is also profided in a color coded display.
 
@@ -94,7 +61,7 @@ Total number of days worth of rations for the entire tracked group(assuming the 
 
 ### Custom Effect Reminders
 
-A 'custom effect' system has been imp,ementd and can be accessed via a collection of icons located on the character portrait secton of the character sheet when moused over.
+A 'custom effect' system has been implementd and can be accessed via a collection of icons located on the character portrait secton of the character sheet when moused over.
 
 - Show Active Effects pops up a widow detailing all active custom effects.
 - Add Custom Effect pops up a form for creating a new custom effect. Once created a chat message detailing the custom effect will be whispered to the player and they effects target(if selected).
@@ -103,6 +70,13 @@ A 'custom effect' system has been imp,ementd and can be accessed via a collectio
 When a custom effect expires, a chat message is whispered to the player and the target(if selected) notifying that an effect has expired.
 
 ---
+
+## Travel Calculator
+
+This macro opens a window displaying the active party members and their individual travel rates, and a base rate determined by the slowest party member.
+Selecting a terrain type will update the displayed travel rates.
+The Navigation Check button will roll a d6 and apply the terrain modifier and any bonus from the bonus field and output the results to a chat message.
+The Forage check will roll a d6 plus any modifier in the bonus field and output the results to a chat message.
 
 ### Other Useful macros
 
