@@ -324,6 +324,10 @@ Hooks.on('ready', () => {
     let actorSpells = selectedActor.data.items.filter((item) => {
       if (item.type == 'spell') return true;
     });
+    if(actorWeapons.length == 0 || actorSpells.length == 0){
+      ui.notifications.error('No weapons found.')
+      return
+    }
     let atkOptions = '';
     for (let item of actorWeapons) {
       atkOptions += `<option value=${item.id}>${item.name} | ATK: ${item.data.data.damage}</option>`;
@@ -333,20 +337,29 @@ Hooks.on('ready', () => {
         atkOptions += `<option value=${item.id}>${item.name} | ATK: ${item.data.data.roll}</option>`;
       }
     }
+
+    const ammoCheck = game.modules.get('osr-item-shop')?.active ? `
+      <div>
+      <input id="ammoCheck" type="checkbox" checked />Check Ammo
+      </div>
+      ` :
+      `
+      <div">
+      </div>
+      `;
+    console.log('ammoCheck', ammoCheck)
     let dialogTemplate = `
-   <h1> Pick a weapon </h1>
-   <div style="display:flex; justify-content: space-between; margin-bottom: 1em;">
-     <div>
-     <select id="weapon">${atkOptions}</select>
-     </div>
-     <div>
-     <input id="ammoCheck" type="checkbox" checked />Check Ammo
-     </div>
-     <div>
-     <input id="skip" type="checkbox" checked />Skip Dialog
-     </div>
-     </div>
-   `;
+     <h1> Pick a weapon </h1>
+     <div style="display:flex; justify-content: space-between; margin-bottom: 1em;">
+       <div>
+       <select id="weapon">${atkOptions}</select>
+       </div>
+       ${ammoCheck}
+       <div>
+       <input id="skip" type="checkbox" checked />Skip Dialog
+       </div>
+       </div>
+     `;
     new Dialog({
       title: 'Roll Attack',
       content: dialogTemplate,
@@ -383,6 +396,76 @@ Hooks.on('ready', () => {
           label: 'Close'
         }
       }
+    }).render(true);
+  };
+
+  OSEH.util.charMonReact= async function () {
+    const tableName = 'Monster Reaction Roll'
+    const characters = await OSEH.util.getPartyActors().party;
+    // const characters = [];
+    // game.users.players.map((p)=>{
+    //     const char = p.character
+    //     characters.push({
+    //         name: char?.name,
+    //         id: char?.id,
+    //         bonus: char?.data.data.scores.cha.mod
+    //     })
+    // })
+    console.log( characters )
+    let characterList = ``
+    for(let char of characters){
+      const cData = {
+        name: char?.name,
+        id: char?.id,
+        bonus: char?.data.data.scores.cha.mod
+      }
+        if(cData.name){
+        characterList += `<option value="${cData.bonus}">${cData.name}: CHA bonus:${cData.bonus}</option>`
+        }
+    }
+    let dialogTemplate = `
+  <h1> Pick A Character </h1>
+  <div style="display:flex">
+    <div  style="flex:1">
+        <select id="character">${characterList}</select>
+    </div>
+  </div>`;
+    
+    
+    new Dialog({
+        title: 'Character vs. Monster Reaction Roll',
+        content: dialogTemplate,
+        buttons: {
+        roll: {
+            label: 'Roll',
+            callback: async (html)=>{
+                let bonus = html.find("#character")[0].value;
+                const table = await game.tables.find(t=>t.name== tableName);
+                console.log('bonus', bonus)
+                let roll = new Roll(`2d6 + @mod`, {mod: bonus});
+                let result = await table.roll({roll})
+               
+                console.log('res', result)
+                
+                const gm = game.users.find(u=>u.isGM)[0]
+                const message = {
+                    flavor: `
+                    <span style='color: red'>Reaction Roll Results</span>
+                    <br/>${result?.results[0]?.data?.text}<br/></br>
+                    mod: ${bonus}<br/>`,
+                    user: game.user.id,
+                    roll: result,
+                    speaker: ChatMessage.getSpeaker(),
+                    // content: ``,
+                    whisper: [gm]
+                    };
+                    console.log(`before message`)
+                // ChatMessage.create(message)
+                result.roll.toMessage(message)
+                    
+                }
+            }
+        }
     }).render(true);
   };
 });

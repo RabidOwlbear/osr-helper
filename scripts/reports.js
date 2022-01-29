@@ -349,6 +349,7 @@ Hooks.on('ready', () => {
         retEl.innerHTML = upData.html.retainers;
       }
     }
+    
     new travelReport(getTravelData(initMod)).render(true);
   };
 });

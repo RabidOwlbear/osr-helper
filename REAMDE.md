@@ -78,6 +78,10 @@ Selecting a terrain type will update the displayed travel rates.
 The Navigation Check button will roll a d6 and apply the terrain modifier and any bonus from the bonus field and output the results to a chat message.
 The Forage check will roll a d6 plus any modifier in the bonus field and output the results to a chat message.
 
+## Character vs Monster reaction roll.
+
+This macro opnes a dialog listing all characters in the party sheet, and their charisma modifier. Selecting an actor and clicking the roll button will roll for reaction adding the characters charisma modifier to the roll. Useful for social encounters.
+
 ### Other Useful macros
 
 - OSE-helper Show Turn Counts: Displays the current game turn count information to chat.
