@@ -344,7 +344,7 @@ Hooks.on('ready', () => {
       </div>
       ` :
       `
-      <div">
+      <div>
       </div>
       `;
     console.log('ammoCheck', ammoCheck)
@@ -371,23 +371,26 @@ Hooks.on('ready', () => {
             let skipCheck = html.find('#skip')[0]?.checked;
             let ammoCheck = html.find(`#ammoCheck`)[0]?.checked;
             let weapon = selectedActor.items.find((i) => i.id == selected.value);
-            console.log(selected.value, weapon)
             let ammoObj = OSEH.data.ammoData.find((a) => a.name == weapon?.name);
             let ammo, ammoQty;
             if (ammoObj && ammoCheck) {
               ammo = selectedActor.items.find((i) => i.name == ammoObj.ammoType);
               ammoQty = ammo?.data.data.quantity.value;
               if (ammoQty > 0) {
-                console.log('ammo and quantity');
                 await weapon.roll({ skipDialog: skipCheck });
-                await ammo.update({ data: { quantity: { value: ammoQty - 1 } } });
+                //delete ammo object if quantity is 0 or less
+                console.log(ammoQty, ammo)
+                if(ammoQty - 1 == 0){
+                  ammo.delete()
+                }else{
+                  await ammo.update({ data: { quantity: { value: ammoQty - 1 } } });
+                }
+                
               } else {
-                console.log('ammo no quantity');
                 ui.notifications.warn('No ammo');
                 main();
               }
             } else {
-              console.log(`no ammo needed`);
               await weapon.roll({ skipDialog: skipCheck });
             }
           }
