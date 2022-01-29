@@ -81,14 +81,3 @@ The Forage check will roll a d6 plus any modifier in the bonus field and output 
 ## Character vs Monster reaction roll.
 
 This macro opnes a dialog listing all characters in the party sheet, and their charisma modifier. Selecting an actor and clicking the roll button will roll for reaction adding the characters charisma modifier to the roll. Useful for social encounters.
-
-### Other Useful macros
-
-- OSE-helper Show Turn Counts: Displays the current game turn count information to chat.
-- OSE-helper Light Turns Remaining: Displays in a whispered chat message the number of turns remaining for the currently lit light source.
-- OSE-helper Actor Item Report: Generates a whispered chat message detailing all light source and ration types and quantities color coded.
-- OSE-helper Eat Ration: Generates a dialog with a dropdown selector listing all available ration types and their quantities, when the eat ration button is clicked the quantity for that item type is reduced by one, if the item has no more used it is deleted.
-- OSE-helper Rest: Resets turns since rest count. Advances time 1 turn(10 minutes).
-- OSE-helper Reset Session Count: Resets session turn count to zero.
-- OSE-helper Reset All Turn Counts: Resets all turn counts to zero.
-- OSE-helper Clear GM Light Flag: Resets OSE-helper Light data flag to default value for the GM user.
