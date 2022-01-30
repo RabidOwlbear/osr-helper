@@ -324,7 +324,7 @@ Hooks.on('ready', () => {
     let actorSpells = selectedActor.data.items.filter((item) => {
       if (item.type == 'spell') return true;
     });
-    if(actorWeapons.length == 0 || actorSpells.length == 0){
+    if(actorWeapons.length == 0 && actorSpells.length == 0){
       ui.notifications.error('No weapons found.')
       return
     }
@@ -347,7 +347,6 @@ Hooks.on('ready', () => {
       <div>
       </div>
       `;
-    console.log('ammoCheck', ammoCheck)
     let dialogTemplate = `
      <h1> Pick a weapon </h1>
      <div style="display:flex; justify-content: space-between; margin-bottom: 1em;">
