@@ -320,8 +320,8 @@ Hooks.on('ready', () => {
     }
     const selectedActor = canvas.tokens.controlled[0].actor;
     // Select Weapon
-    let actorWeapons = selectedActor.data.items.filter((item) => item.type == 'weapon');
-    let actorSpells = selectedActor.data.items.filter((item) => {
+    let actorWeapons = selectedActor?.data.items.filter((item) => item.type == 'weapon');
+    let actorSpells = selectedActor?.data.items.filter((item) => {
       if (item.type == 'spell') return true;
     });
     if(actorWeapons.length == 0 && actorSpells.length == 0){
@@ -339,19 +339,19 @@ Hooks.on('ready', () => {
     }
 
     const ammoCheck = game.modules.get('osr-item-shop')?.active ? `
-      <div>
+      <div style="width: 110px">
       <input id="ammoCheck" type="checkbox" checked />Check Ammo
       </div>
       ` :
       `
-      <div>
+      <div style="width: 110px">
       </div>
       `;
     let dialogTemplate = `
      <h1> Pick a weapon </h1>
      <div style="display:flex; justify-content: space-between; margin-bottom: 1em;">
        <div>
-       <select id="weapon">${atkOptions}</select>
+       <select id="weapon" style="width: 150px">${atkOptions}</select>
        </div>
        ${ammoCheck}
        <div>

@@ -280,29 +280,35 @@ Hooks.on('ready', () => {
       async lostRoll(){
         const radio = document.querySelector(`[name=terrain]:checked`).value;
         const bonus = document.querySelector(`#nav-bonus`)
-        
+        const gm = game.users.contents.filter((u) => u.data.role == 4).map((u) => u.id);
         if(radio == 'road' || radio == 'trail'){
           ui.notifications.warn('Cannot get lost on roads or trails')
           return
         }
-        let roll = await new Roll(`1d6 + ${bonus.value}`).evaluate()
+        let roll = await new Roll(`1d6 + ${bonus.value}`).evaluate({async: true})
         let target = this.lostMod[radio] || 2;
         
         if(roll.total <= target){
-          roll.toMessage({
+          let data = {
             whisper: [game.user],
             flavor: `
             <h3>Navigation Check: ${radio}</h3>
             <span style="color: red">The party got lost.</span>`
-          })
+          }
+          game.dice3d.showForRoll(roll, game.user, false, gm, false).then(() => {
+            ChatMessage.create(data);
+          });
         } else {
-          roll.toMessage({
+          let data = {
             whisper: [game.user],
             flavor: `
             <h3>Navigation Check: ${radio}</h3>
             The party found their way.
             `
-          })
+          }
+          game.dice3d.showForRoll(roll, game.user, false, gm, false).then(() => {
+            ChatMessage.create(data);
+          });
         }
         
         bonus.value = 0
@@ -315,24 +321,35 @@ Hooks.on('ready', () => {
         const modEl = document.getElementById('forage-bonus')
         const mod = parseInt(modEl.value);
         const terrain = document.querySelector(`[name=terrain]:checked`).value
-        let roll = await new Roll(`1d6 + ${mod}`).evaluate();
-        
+        const gm = game.users.contents.filter((u) => u.data.role == 4).map((u) => u.id);
+        let roll = await new Roll(`1d6 + ${mod}`).roll({async: true});
+        console.log(roll)
         if(roll.total <= 3){
-          roll.toMessage({
-            whisper: [game.user],
+          let cData = {
+            user: game.user,
+            whisper: gm,
+            roll: roll,
             flavor: `
             <h3>Forage check: ${terrain}</h3>
             <div><span style="color: red"><b>Foraging unsuccessful.</b></span></div>
             `
-          })
+          }
+          game.dice3d.showForRoll(roll, game.user, false, gm, false).then(() => {
+            ChatMessage.create(cData);
+          });
         }else{
-          roll.toMessage({
-            whisper: [game.user],
+          let cData = {
+            user: game.user,
+            whisper: gm,
+            roll: roll,
             flavor: `
             <h3>Forage check: ${terrain}</h3>
             <div><span style="color: green"><b>Foraging successful.</b></span></div>
             `
-          })
+          }
+          game.dice3d.showForRoll(roll, game.user, false, gm, false).then(() => {
+            ChatMessage.create(cData);
+          });
         }
         modEl.value = 0
       }
