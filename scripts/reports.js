@@ -12,7 +12,7 @@ Hooks.on('ready', () => {
     for (let key in OSEH.data.lightSource) {
       Lights.push(key);
     }
-    
+
     const msgData = {
       food: '',
       light: ''
@@ -35,7 +35,7 @@ Hooks.on('ready', () => {
     }
     for (let name of Lights) {
       let actorItem = '';
-      
+
       let light = actor.data.items.getName(OSEH.data.lightSource[name].name);
       if (light) {
         const qty = light.data.data.quantity.value;
@@ -53,8 +53,7 @@ Hooks.on('ready', () => {
 
     const rationText = totalRations <= 0 ? '<ul><li><span style="color: red;">None</span></li></ul>' : msgData.food;
     const lightText = msgData.light == '' ? '<ul><li><span style="color: red;">None</span></li></ul>' : msgData.light;
-    let contents =
-      `
+    let contents = `
       <details >
       <summary><strong>Supplies Report</strong></summary>
       <br>
@@ -82,7 +81,7 @@ Hooks.on('ready', () => {
     for (let key in OSEH.data.food) {
       Rations.push(OSEH.data.food[key]);
     }
-    
+
     let totalRations = 0;
     const { characters, retainer } = actorObj;
 
@@ -107,9 +106,9 @@ Hooks.on('ready', () => {
             actorRations += `<li style="margin-left:10px;"><span style="${rStyle} ">${type}: ${ration.data.data.quantity.value}</span></li>`;
           }
         }
-        
+
         if (actorRations == '') actorRations = '<span style="color: red">None</span>';
-        
+
         msgData[key] += `<div style="margin-left: 10px;"><p><b> ${actor.name}</b>:</p><ul> ${actorRations} </ul></div>`;
       }
     }
@@ -136,33 +135,32 @@ Hooks.on('ready', () => {
   };
 
   OSEH.report.travelCalc = async function () {
-
     const initMod = 1;
 
     function partyHtml(actorObj, mod = 1) {
       // type == 'characters' ? type : type == 'retainers' ? type : null;
       let templateData = ``;
-      
-        for (let actor of actorObj) {
-          let nameStr = actor.name.length >= 20 ? actor.name.slice(0, 19) + `...` : actor.name;
-          templateData += `
+
+      for (let actor of actorObj) {
+        let nameStr = actor.name.length >= 20 ? actor.name.slice(0, 19) + `...` : actor.name;
+        templateData += `
         <div class="actor-div fx sb plr5">
             <div class="of-hide w140">${nameStr}</div>
-            <div>${Math.floor(actor.data.data.movement.base / 5 * mod)} mi</div>
+            <div>${Math.floor((actor.data.data.movement.base / 5) * mod)} mi</div>
         </div>`;
-        }
-      
-      return templateData
+      }
+
+      return templateData;
     }
-    function getTravelData(mod){
-      oseActive = game.modules.get('old-school-essentials')?.active;
-      
+    function getTravelData(mod) {
+      let oseActive = game.modules.get('old-school-essentials')?.active;
+
       encButtonTemplate = `    
         <h4>Encounter Roll</h4>
         <div class="btn-spcr"></div>
-        <button type="button" id="enc-btn">Roll</button>`
+        <button type="button" id="enc-btn">Roll</button>`;
 
-      let encBtnHtml = oseActive ? encButtonTemplate : `<div style="height: 125px"></div>`
+      let encBtnHtml = oseActive ? encButtonTemplate : `<div style="height: 125px"></div>`;
       const partyObj = OSEH.util.getPartyActors();
       let slowest = partyObj.party[0]?.data.data.movement.base;
       //find slowest rate
@@ -171,15 +169,15 @@ Hooks.on('ready', () => {
         if (slowest > rate) slowest = rate;
       });
       //convert to miles
-      const convertedRate = Math.floor(slowest / 5 * mod);
-      return { 
-          baseRate: convertedRate, 
-          html: {
-            encButton: encBtnHtml,
-            characters: partyHtml(partyObj.characters, mod), 
-            retainers: partyHtml(partyObj.retainers, mod)},
-          }
-         
+      const convertedRate = Math.floor((slowest / 5) * mod);
+      return {
+        baseRate: convertedRate,
+        html: {
+          encButton: encBtnHtml,
+          characters: partyHtml(partyObj.characters, mod),
+          retainers: partyHtml(partyObj.retainers, mod)
+        }
+      };
     }
 
     class travelReport extends Application {
@@ -197,8 +195,8 @@ Hooks.on('ready', () => {
           tData: {
             baseRate: data.baseRate,
             characters: data.html.characters,
-            retainers: data.html.retainers ,
-            encButton: data.html.encButton,
+            retainers: data.html.retainers,
+            encButton: data.html.encButton
           }
         };
         this.terrainMod = {
@@ -217,7 +215,7 @@ Hooks.on('ready', () => {
           swamp: 0.5,
           jungle: 0.5,
           ice: 0.5,
-          glacier: 0.5,
+          glacier: 0.5
         };
         this.lostMod = {
           grassland: 1,
@@ -225,9 +223,8 @@ Hooks.on('ready', () => {
           swamp: 3,
           jungle: 3,
           desert: 3,
-          allElse: 2,
-        }
-
+          allElse: 2
+        };
       }
       static get defaultOptions() {
         return mergeObject(super.defaultOptions, {
@@ -236,7 +233,7 @@ Hooks.on('ready', () => {
           template: 'modules/OSE-helper/templates/travel-report.html',
           id: 'oseTravelReport',
           title: 'Adventure ahoy!',
-          width: 400,
+          width: 400
         });
       }
       getData() {
@@ -245,28 +242,28 @@ Hooks.on('ready', () => {
       }
       activateListeners(html) {
         super.activateListeners(html);
-        const terrain = html.find(`[type="radio"][checked]`)[0].value
-        
+        const terrain = html.find(`[type="radio"][checked]`)[0].value;
+
         const radioInputs = html.find('[name="terrain"]');
         const lostBtn = html.find('#nav-check')[0];
         const forageBtn = html.find('#forage-check')[0];
         const encBtn = html.find('#enc-btn')[0];
         const closeBtn = html.find('#close-btn')[0];
-        closeBtn.addEventListener('click', ()=>{ this.close()})
-        if(encBtn){
-          encBtn.addEventListener('click', (ev)=>{
-            
-            this.rollEnc()
-            
-          })
+        closeBtn.addEventListener('click', () => {
+          this.close();
+        });
+        if (encBtn) {
+          encBtn.addEventListener('click', (ev) => {
+            this.rollEnc();
+          });
         }
-        lostBtn.addEventListener('click', (ev)=>{
-          this.lostRoll()})
-          forageBtn.addEventListener('click', (ev)=>{
-            this.forageCheck()
-          })
+        lostBtn.addEventListener('click', (ev) => {
+          this.lostRoll();
+        });
+        forageBtn.addEventListener('click', (ev) => {
+          this.forageCheck();
+        });
         for (let input of radioInputs) {
-          
           input.addEventListener('input', (ev) => {
             const html = document.querySelector('[type="radio][checked]');
             const mod = this.terrainMod[ev.srcElement.value];
@@ -274,27 +271,26 @@ Hooks.on('ready', () => {
             this.updatePartyDist(mod);
           });
         }
-
       }
 
-      async lostRoll(){
+      async lostRoll() {
         const radio = document.querySelector(`[name=terrain]:checked`).value;
-        const bonus = document.querySelector(`#nav-bonus`)
+        const bonus = document.querySelector(`#nav-bonus`);
         const gm = game.users.contents.filter((u) => u.data.role == 4).map((u) => u.id);
-        if(radio == 'road' || radio == 'trail'){
-          ui.notifications.warn('Cannot get lost on roads or trails')
-          return
+        if (radio == 'road' || radio == 'trail') {
+          ui.notifications.warn('Cannot get lost on roads or trails');
+          return;
         }
-        let roll = await new Roll(`1d6 + ${bonus.value}`).evaluate({async: true})
+        let roll = await new Roll(`1d6 + ${bonus.value}`).evaluate({ async: true });
         let target = this.lostMod[radio] || 2;
-        
-        if(roll.total <= target){
+
+        if (roll.total <= target) {
           let data = {
             whisper: [game.user],
             flavor: `
             <h3>Navigation Check: ${radio}</h3>
             <span style="color: red">The party got lost.</span>`
-          }
+          };
           game.dice3d.showForRoll(roll, game.user, false, gm, false).then(() => {
             ChatMessage.create(data);
           });
@@ -305,26 +301,25 @@ Hooks.on('ready', () => {
             <h3>Navigation Check: ${radio}</h3>
             The party found their way.
             `
-          }
+          };
           game.dice3d.showForRoll(roll, game.user, false, gm, false).then(() => {
             ChatMessage.create(data);
           });
         }
-        
-        bonus.value = 0
 
+        bonus.value = 0;
       }
-      rollEnc(){
-        OSE.util.wildEncounter()
+      rollEnc() {
+        OSE.util.wildEncounter();
       }
-      async forageCheck(){
-        const modEl = document.getElementById('forage-bonus')
+      async forageCheck() {
+        const modEl = document.getElementById('forage-bonus');
         const mod = parseInt(modEl.value);
-        const terrain = document.querySelector(`[name=terrain]:checked`).value
+        const terrain = document.querySelector(`[name=terrain]:checked`).value;
         const gm = game.users.contents.filter((u) => u.data.role == 4).map((u) => u.id);
-        let roll = await new Roll(`1d6 + ${mod}`).roll({async: true});
-        console.log(roll)
-        if(roll.total <= 3){
+        let roll = await new Roll(`1d6 + ${mod}`).roll({ async: true });
+        console.log(roll);
+        if (roll.total <= 3) {
           let cData = {
             user: game.user,
             whisper: gm,
@@ -333,11 +328,11 @@ Hooks.on('ready', () => {
             <h3>Forage check: ${terrain}</h3>
             <div><span style="color: red"><b>Foraging unsuccessful.</b></span></div>
             `
-          }
+          };
           game.dice3d.showForRoll(roll, game.user, false, gm, false).then(() => {
             ChatMessage.create(cData);
           });
-        }else{
+        } else {
           let cData = {
             user: game.user,
             whisper: gm,
@@ -346,27 +341,26 @@ Hooks.on('ready', () => {
             <h3>Forage check: ${terrain}</h3>
             <div><span style="color: green"><b>Foraging successful.</b></span></div>
             `
-          }
+          };
           game.dice3d.showForRoll(roll, game.user, false, gm, false).then(() => {
             ChatMessage.create(cData);
           });
         }
-        modEl.value = 0
+        modEl.value = 0;
       }
 
       updatePartyDist(mod) {
         const rateEl = document.getElementById('BTR');
         const charEl = document.getElementById('character-list');
         const retEl = document.getElementById('retainer-list');
-        const upData = getTravelData(mod)
-        
+        const upData = getTravelData(mod);
 
         rateEl.innerText = upData.baseRate;
         charEl.innerHTML = upData.html.characters;
         retEl.innerHTML = upData.html.retainers;
       }
     }
-    
+
     new travelReport(getTravelData(initMod)).render(true);
   };
 });

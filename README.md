@@ -80,4 +80,11 @@ The Forage check will roll a d6 plus any modifier in the bonus field and output 
 
 ## Character vs Monster reaction roll.
 
-This macro opnes a dialog listing all characters in the party sheet, and their charisma modifier. Selecting an actor and clicking the roll button will roll for reaction adding the characters charisma modifier to the roll. Useful for social encounters.
+This macro opens a dialog listing all characters in the party sheet, and their charisma modifier. Selecting an actor and clicking the roll button will roll for reaction adding the characters charisma modifier to the roll. Useful for social encounters.
+To use, edit the macro variable tableName with the name of the monster reaction roll table you wish to use.
+
+## Random Name
+
+This macro opens a dialog containing name type options. After selecting both options, and clicking the pick button, a random name will be generated and sent to chat via message.
+If a single token is selected when the macro is run, the random name will be applied to the token and associated actor sheet.
+If whisper is checked, the created chat message will be whispered to the user that initiated the macro.

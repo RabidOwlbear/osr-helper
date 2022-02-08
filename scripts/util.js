@@ -324,9 +324,9 @@ Hooks.on('ready', () => {
     let actorSpells = selectedActor?.data.items.filter((item) => {
       if (item.type == 'spell') return true;
     });
-    if(actorWeapons.length == 0 && actorSpells.length == 0){
-      ui.notifications.error('No weapons found.')
-      return
+    if (actorWeapons.length == 0 && actorSpells.length == 0) {
+      ui.notifications.error('No weapons found.');
+      return;
     }
     let atkOptions = '';
     for (let item of actorWeapons) {
@@ -338,12 +338,13 @@ Hooks.on('ready', () => {
       }
     }
 
-    const ammoCheck = game.modules.get('osr-item-shop')?.active ? `
+    const ammoCheck = game.modules.get('osr-item-shop')?.active
+      ? `
       <div style="width: 110px">
       <input id="ammoCheck" type="checkbox" checked />Check Ammo
       </div>
-      ` :
       `
+      : `
       <div style="width: 110px">
       </div>
       `;
@@ -378,13 +379,12 @@ Hooks.on('ready', () => {
               if (ammoQty > 0) {
                 await weapon.roll({ skipDialog: skipCheck });
                 //delete ammo object if quantity is 0 or less
-                console.log(ammoQty, ammo)
-                if(ammoQty - 1 == 0){
-                  ammo.delete()
-                }else{
+                console.log(ammoQty, ammo);
+                if (ammoQty - 1 == 0) {
+                  ammo.delete();
+                } else {
                   await ammo.update({ data: { quantity: { value: ammoQty - 1 } } });
                 }
-                
               } else {
                 ui.notifications.warn('No ammo');
                 main();
@@ -401,29 +401,19 @@ Hooks.on('ready', () => {
     }).render(true);
   };
 
-  OSEH.util.charMonReact= async function () {
-    const tableName = 'Monster Reaction Roll'
+  OSEH.util.charMonReact = async function (data) {
+    const { tableName } = data;
     const characters = await OSEH.util.getPartyActors().party;
-    // const characters = [];
-    // game.users.players.map((p)=>{
-    //     const char = p.character
-    //     characters.push({
-    //         name: char?.name,
-    //         id: char?.id,
-    //         bonus: char?.data.data.scores.cha.mod
-    //     })
-    // })
-    console.log( characters )
-    let characterList = ``
-    for(let char of characters){
+    let characterList = ``;
+    for (let char of characters) {
       const cData = {
         name: char?.name,
         id: char?.id,
         bonus: char?.data.data.scores.cha.mod
+      };
+      if (cData.name) {
+        characterList += `<option value="${cData.bonus}">${cData.name}: CHA bonus:${cData.bonus}</option>`;
       }
-        if(cData.name){
-        characterList += `<option value="${cData.bonus}">${cData.name}: CHA bonus:${cData.bonus}</option>`
-        }
     }
     let dialogTemplate = `
   <h1> Pick A Character </h1>
@@ -432,42 +422,146 @@ Hooks.on('ready', () => {
         <select id="character">${characterList}</select>
     </div>
   </div>`;
-    
-    
+
     new Dialog({
-        title: 'Character vs. Monster Reaction Roll',
-        content: dialogTemplate,
-        buttons: {
+      title: 'Character vs. Monster Reaction Roll',
+      content: dialogTemplate,
+      buttons: {
         roll: {
-            label: 'Roll',
-            callback: async (html)=>{
-                let bonus = html.find("#character")[0].value;
-                const table = await game.tables.find(t=>t.name== tableName);
-                console.log('bonus', bonus)
-                let roll = new Roll(`2d6 + @mod`, {mod: bonus});
-                let result = await table.roll({roll})
-               
-                console.log('res', result)
-                
-                const gm = game.users.find(u=>u.isGM)[0]
-                const message = {
-                    flavor: `
+          label: 'Roll',
+          callback: async (html) => {
+            let bonus = html.find('#character')[0].value;
+            const table = await game.tables.find((t) => t.name == tableName);
+            console.log('bonus', bonus);
+            let roll = new Roll(`2d6 + @mod`, { mod: bonus });
+            let result = await table.roll({ roll });
+
+            console.log('res', result);
+
+            const gm = game.users.find((u) => u.isGM)[0];
+            const message = {
+              flavor: `
                     <span style='color: red'>Reaction Roll Results</span>
                     <br/>${result?.results[0]?.data?.text}<br/></br>
-                    mod: ${bonus}<br/>`,
-                    user: game.user.id,
-                    roll: result,
-                    speaker: ChatMessage.getSpeaker(),
-                    // content: ``,
-                    whisper: [gm]
-                    };
-                    console.log(`before message`)
-                // ChatMessage.create(message)
-                result.roll.toMessage(message)
-                    
-                }
-            }
+                    `,
+              user: game.user.id,
+              roll: result,
+              speaker: ChatMessage.getSpeaker(),
+              // content: ``,
+              whisper: [gm]
+            };
+            console.log(`before message`);
+            // ChatMessage.create(message)
+            result.roll.toMessage(message);
+          }
         }
+      }
     }).render(true);
+  };
+
+  OSEH.util.randomName = function (type = null) {
+    function getRandomItem(arr) {
+      return arr[Math.floor(Math.random() * arr.length)];
+    }
+     function getName(type, gender = 'all') {
+      const nameData = OSEH.data.nameData;
+      const firstObj = nameData[type];
+      const typeObj =
+        gender == 'all'
+          ? firstObj.first[Math.floor(Math.random() * firstObj.first.length)]
+          : firstObj.first.find((a) => a.type == gender);
+      let firstName = getRandomItem(typeObj.list);
+      lastName = nameData[type].last.length > 0 ? getRandomItem(nameData[type].last) : false;
+      let fullName = !lastName ? firstName : `${firstName} ${lastName}`;
+      return fullName;
+    }
+
+    if (!type) {
+      let options = ``;
+      for (let key of Object.keys(OSEH.data.nameData)) {
+        options += `
+        <option value="${key}">${key}</option>
+        `;
+      }
+
+      let diagTemplate = `
+    <h1> Pick Name Type</h1>
+    <div style="display:flex; margin-bottom: 5px;">
+      <div  style="flex:1">
+        <select id="nameType">
+          <option value="none">-type-</option>
+          ${options}
+        </select>
+      </div>
+      <div  style="flex:1">
+        <select id="gender">
+          <option value="none">-gender-</option>
+          <option value="male">male</option>
+          <option value="female">female</option>
+          <option value="all">all</option>
+        </select>
+      </div>
+      <div>
+        <label for="whisperCheck">whisper?</label>
+        <input type ="checkbox" id="whisperCheck" checked />
+      </div>
+    </div>
+    `;
+      let prefix = [
+        `Meet`,
+        `Presenting`,
+        `This old so and so right here is`,
+        `Look who it is, it's`,
+        `Hey, it's`,
+        `As I live and breath, it's`,
+        `Well I'll be damned, it's`,
+        `Look what the cat dragged in. This here is`,
+        `Introducing`
+      ];
+      let picker = new Dialog({
+        title: 'Random Name',
+        content: diagTemplate,
+        buttons: {
+          pick: {
+            label: 'Pick',
+            callback: async function (html) {
+              const nameType = html.find('#nameType')[0].value;
+              const gender = html.find('#gender')[0].value;
+              const whisper = html.find('#whisperCheck')[0].checked;
+              console.log(whisper);
+              if (nameType == 'none' || gender == 'none') {
+                ui.notifications.warn('Please select an option');
+                picker.render();
+                return;
+              }
+              let fullName = await getName(nameType, gender);
+              let cData = {
+                type: 1,
+                user: game.user.id,
+                content: `${getRandomItem(prefix)} ${fullName}`
+              };
+              if (whisper) {
+                cData.whisper = [game.user];
+              }
+              ChatMessage.create(cData);
+
+              if (canvas.tokens.controlled.length && canvas.tokens.controlled.length == 1) {
+                let token = canvas.tokens.controlled[0];
+                let actor = token.actor;
+                console.log(token, actor);
+                await actor.update({ name: fullName });
+                await token.document.update({ name: fullName });
+                ui.notifications.info('Token and Actor names updated.');
+              }
+            }
+          }
+        }
+      });
+      picker.render(true);
+    }
+    if(type) {
+      let name = getName(type)
+      return name
+    }
   };
 });

@@ -153,7 +153,15 @@ Hooks.once('init', async function () {
   });
 
   //namespace
-  window.OSEH = window.OSEH || {};
+  window.OSEH = window.OSEH || {
+    ce: {},
+    data: {},
+    light: {},
+    ration: {},
+    report: {},
+    turn: {},
+    util: {}
+    };
   OSEH.gameVersion = game.version ? game.version : game.data.version;
 });
 
