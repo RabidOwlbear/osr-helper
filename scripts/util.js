@@ -459,11 +459,11 @@ Hooks.on('ready', () => {
     }).render(true);
   };
 
-  OSEH.util.randomName = function (type = null) {
+  OSEH.util.randomName = function (type = null, gender = null) {
     function getRandomItem(arr) {
       return arr[Math.floor(Math.random() * arr.length)];
     }
-     function getName(type, gender = 'all') {
+    function getName(type, gender = 'all') {
       const nameData = OSEH.data.nameData;
       const firstObj = nameData[type];
       const typeObj =
@@ -495,7 +495,7 @@ Hooks.on('ready', () => {
       </div>
       <div  style="flex:1">
         <select id="gender">
-          <option value="none">-gender-</option>
+          <option value="all">-gender-</option>
           <option value="male">male</option>
           <option value="female">female</option>
           <option value="all">all</option>
@@ -528,7 +528,15 @@ Hooks.on('ready', () => {
               const nameType = html.find('#nameType')[0].value;
               const gender = html.find('#gender')[0].value;
               const whisper = html.find('#whisperCheck')[0].checked;
-              console.log(whisper);
+              let openSheets = document.querySelectorAll('.ose.sheet.actor.character');
+              let focusedSheet = openSheets ? openSheets[0] : null
+              for(let sheet of openSheets){
+                if(parseInt(focusedSheet.style.zIndex) < parseInt(sheet.style.zIndex)){
+                  focusedSheet = sheet;
+                }
+              }
+              const tokens = canvas.tokens.controlled;
+              // console.log(whisper);
               if (nameType == 'none' || gender == 'none') {
                 ui.notifications.warn('Please select an option');
                 picker.render();
@@ -544,14 +552,50 @@ Hooks.on('ready', () => {
                 cData.whisper = [game.user];
               }
               ChatMessage.create(cData);
-
               if (canvas.tokens.controlled.length && canvas.tokens.controlled.length == 1) {
                 let token = canvas.tokens.controlled[0];
                 let actor = token.actor;
-                console.log(token, actor);
-                await actor.update({ name: fullName });
+                // console.log(token, actor);
+                await actor.update({
+                  name: fullName,
+                  token: {
+                    name: fullName
+                  }
+                });
                 await token.document.update({ name: fullName });
                 ui.notifications.info('Token and Actor names updated.');
+              }
+              if (tokens.length) {
+                tokens.forEach(async t=>{
+                  let token = t;
+                  let actor = t.actor;
+                  let newName = await getName(nameType, gender);
+                  
+                  if(actor.type=='character'){
+                    await actor.update({
+                      name: newName,
+                      token: {
+                        name: newName
+                      }
+                    });
+                  }
+                  
+                  await token.document.update({name: newName})
+                  
+                  
+                })
+                ui.notifications.info('Token and Actor names updated.');
+              }
+              if (!canvas.tokens.controlled.length && focusedSheet) {
+                const charSheet = focusedSheet//document.querySelector('.ose.sheet.actor.character');
+                const name = charSheet ? charSheet.querySelector('.ose.sheet.actor .window-title').innerText : 'none';
+                const actor = game.actors.getName(name);
+                await actor.update({
+                  name: fullName,
+                  token: {
+                    name: fullName
+                  }
+                });
               }
             }
           }
@@ -559,9 +603,10 @@ Hooks.on('ready', () => {
       });
       picker.render(true);
     }
-    if(type) {
-      let name = getName(type)
-      return name
+    if (type) {
+      let gdr = gender ? gender : 'all';
+      let name = getName(type, gdr);
+      return name;
     }
   };
 });
