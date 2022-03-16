@@ -1,4 +1,4 @@
-Hooks.on('ready', ()=>{
+export const registerNameData = ()=>{
 console.log('namedata    ,-----------------------------------')
   OSEH.data.nameData = {
     human: {
@@ -135,4 +135,4 @@ console.log('namedata    ,-----------------------------------')
 
   }
 
-})
+};

@@ -1,8 +1,6 @@
-Hooks.on('rendercustomEffectList', (CEL, html, form) => {
-  CEL.renderEffectList(html);
-});
 
-Hooks.on('ready', () => {
+
+export const registerCustomEffectList = () => {
   OSEH.ce = OSEH.ce || {};
 
   OSEH.ce.customEffectList = class customEffectList extends Application {
@@ -250,4 +248,4 @@ Hooks.on('ready', () => {
       }
     }).render(true);
   }
-});
+};

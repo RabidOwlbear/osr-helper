@@ -1,3 +1,11 @@
+import {registerLight} from "./modules/light.js"
+import {registerTurn} from "./modules/turn.js"
+import {registerRations} from "./modules/rations.js"
+import {registerUtil} from "./modules/util.js"
+import {registerData} from "./data/oseHelperData.js"
+import {registerCustomEffectList} from "./modules/customEffectList.js"
+import {registerReports} from "./modules/reports.js"
+import {registerNameData} from "./data/nameData.js"
 Hooks.once('init', async function () {
   //add settings
 
@@ -163,6 +171,15 @@ Hooks.once('init', async function () {
     util: {}
     };
   OSEH.gameVersion = game.version ? game.version : game.data.version;
+// import modules
+  registerLight()
+  registerTurn()
+  registerRations()
+  registerUtil()
+  registerData()
+  registerCustomEffectList()
+  registerReports()
+  registerNameData()
 });
 
 //update proc data if changed
@@ -259,21 +276,35 @@ Hooks.on('updateCombat', (combat) => {
 
 // //effect report
 // Hooks.on('renderuserEffectReport', ())
-Hooks.on('renderOseActorSheet', (actor, html) => {
+Hooks.on('renderOseActorSheet',async (actor, html) => {
   const modBox = html.find(`[class="modifiers-btn"]`);
   modBox.append(
     `<a class="ose-effect-list ose-icon" id ="ose-effect-list" title="Show Active Effects"><i class="fas fa-list"></i></a>`
   );
-  // modBox.on('click', '.ose-add-effect', (event) => {
-  //   new newCustomEffect(actor.object.id, game.user).render(true);
-  // });
+
   modBox.on('click', '.ose-effect-list', (event) => {
     OSEH.ce.effectList(actor.object);
   });
-  //   modBox.on('click', '.ose-delete-effect', (event) => {
-  //     oseDeleteEffect();
-  //   });
+
+  //currency converter
+  let linkCont = html.find(`#treasure .item-controls`)[0]
+  let el = document.createElement('a');
+  let iEl = document.createElement('i');
+  el.classList = 'item-control'
+  el.title = 'Currency Converter'
+  iEl.classList = 'fa fa-coins';
+  iEl.style['margin-right'] = '5px';
+  el.appendChild(iEl);
+  linkCont.prepend(el);
+  el.addEventListener('click', (ev)=>{
+    
+    ev.preventDefault();
+    actor.render()
+    OSEH.util.curConDiag(actor.object)
+    
+  })
 });
+
 /* 
 
     <a class="ose-add-effect ose-icon" title="Add Effect"><i class="fas fa-hand-sparkles"></i></a>
@@ -377,3 +408,6 @@ Hooks.on(`renderDungTurnConfig`,async (ev,html)=>{
   document.getElementById('roll-react').checked = data.rollReact;
   
 } )
+Hooks.on('rendercustomEffectList', (CEL, html, form) => {
+  CEL.renderEffectList(html);
+});

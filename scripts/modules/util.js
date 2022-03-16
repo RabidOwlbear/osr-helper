@@ -1,4 +1,4 @@
-Hooks.on('ready', () => {
+export const registerUtil =  () => {
   OSEH.util = OSEH.util || {};
   //tick: manages light duration, turn count
   OSEH.util.oseTick = async function () {
@@ -471,7 +471,7 @@ Hooks.on('ready', () => {
           ? firstObj.first[Math.floor(Math.random() * firstObj.first.length)]
           : firstObj.first.find((a) => a.type == gender);
       let firstName = getRandomItem(typeObj.list);
-      lastName = nameData[type].last.length > 0 ? getRandomItem(nameData[type].last) : false;
+      let lastName = nameData[type].last.length > 0 ? getRandomItem(nameData[type].last) : false;
       let fullName = !lastName ? firstName : `${firstName} ${lastName}`;
       return fullName;
     }
@@ -609,4 +609,125 @@ Hooks.on('ready', () => {
       return name;
     }
   };
-});
+
+  
+  OSEH.util.getCurrencyItems = async function (actor){
+    let items = actor.data.items
+    let currencyList = [] 
+      items.forEach((i)=>{
+        let tags = i.data.data.manualTags;
+        let tag = tags && tags.find(t=>t.title == 'Currency')? true : null;
+        if(tag)currencyList.push(i)
+        
+        
+      })
+      return currencyList;
+  }
+  OSEH.util.curConvert = async function (amt, curCur, newCur, actor){
+    const curItems = actor.data.items;
+    const curCheck = async (type)=>{
+      let itemExists = actor.data.items.getName(type)
+      let pack = game.packs.get('OSE-helper.OSE-helper-items');
+      if(!itemExists){
+        let curItm = await pack.getDocument(pack.index.getName(type)._id);
+        let itemData = curItm.clone().data
+        await actor.createEmbeddedDocuments('Item', [itemData])
+        return await actor.data.items.getName(type)
+      } else {
+        return itemExists
+      } 
+    }
+    const curItem = await curCheck(curCur);
+    const newItem = await curCheck(newCur);
+    console.log(curItem, newItem)
+    if(curItem.data.data.quantity.value < amt){
+      ui.notifications.warn(`Not enough ${curCur}`)
+      OSEH.util.curConDiag(actor, amt)
+      return
+    }
+    let newVal = (curItem.data.data.cost * amt) / newItem.data.data.cost;
+    if(newVal % 1 != 0){
+      ui.notifications.warn(`Can't Convert To Fractional Amounts. Please Select A Different Amount To Convert`)
+      curConDiag(actor, amt)
+      return
+    }
+    await curItem.update({
+      data: {
+        
+          quantity: {
+            value: curItem.data.data.quantity.value - amt
+          }
+        }
+      
+    })
+    await newItem.update({
+      data: {
+        
+          quantity: {
+            value: newItem.data.data.quantity.value + newVal
+          }
+        }
+      
+    })
+  }
+
+  OSEH.util.curConDiag = async function (actor, amt = 0){
+
+
+
+    let content = `
+    <div style="display: flex; height: 75px; align-items: center; justify-content: space-around;">
+     
+       
+     
+     <div>Amount:</div>
+     
+     <input id="amt" type="number" value="${amt}">
+     <div><b> X </b></div>
+     <select id="curCur">
+       <option value="null">Currency</option>
+       <option value='PP'>PP</option>
+       <option value='GP'>GP</option>
+       <option value='EP'>EP</option>
+       <option value='SP'>SP</option>
+       <option value='CP'>CP</option>
+     </select>
+     <div> to:</div>
+     <select id="newCur">
+       <option value="null">Currency</option>
+       <option value='PP'>PP</option>
+       <option value='GP'>GP</option>
+       <option value='EP'>EP</option>
+       <option value='SP'>SP</option>
+       <option value='CP'>CP</option>
+     </select>
+     </div>
+    ` 
+    let diag = new Dialog({
+      title: 'Currency Converter',
+      content: content,
+      buttons:{
+        convert: {
+          label: 'convert',
+          callback: (html)=>{
+           // let actor = canvas.tokens.controlled[0]?.actor;
+            if(!actor)ui.notifications.warn('No token Selected')
+            console.log(html)
+           let curCur = html.find('#curCur')[0].value
+           let newCur = html.find('#newCur')[0].value
+           let amt = parseInt(html.find('#amt')[0].value)
+           if(curCur == 'null' || newCur == 'null'){
+             ui.notifications.warn('Please make sure both currencies are selected.')
+             OSEH.util.curConDiag(actor, amt)
+             return
+           }
+           
+           console.log('aa',actor, curCur, newCur, amt)
+           OSEH.util.curConvert(amt, curCur, newCur, actor)
+          }
+        }
+      }
+    })
+    diag.render(true)
+   }
+};

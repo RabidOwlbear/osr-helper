@@ -1,4 +1,4 @@
-Hooks.on('ready', () => {
+export const registerLight = () => {
   OSEH.light = OSEH.light || {};
 
   OSEH.light.lightOn = async function (actorId) {
@@ -122,4 +122,4 @@ Hooks.on('ready', () => {
     OSEH.util.updateTokens(actorId, data);
   };
   // async function updateTokens(actorId, bl, dl) {}
-});
+};
