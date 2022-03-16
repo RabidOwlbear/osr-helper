@@ -1,4 +1,4 @@
-Hooks.on('ready', () => {
+export const registerRations = () => {
   OSEH.ration = OSEH.ration || {};
 
   OSEH.ration.rationTrackingInit = async function () {
@@ -86,8 +86,4 @@ data: {
       }
     }).render(true);
   };
-
-
-
-
-});
+};

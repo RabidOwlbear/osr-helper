@@ -3,23 +3,12 @@
   "title": "OSE Helper Module",
   "description": "A collection of helpers for OSE",
   "author": "Grim",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "minimumCoreVerson": "0.8.0",
   "compatibleCoreVersion": "0.9.0",
   "styles": ["./styles/main.css"],
-  "esmodules": [],
-  "scripts": [
-    "./scripts/util.js",
-    "./scripts/init.js",
-    "./scripts/rations.js",
-    "./scripts/light.js",
-    "./scripts/turn.js",
-    "./scripts/oseHelperData.js",
-    "./scripts/customEffectList.js",
-    "./scripts/updatedCustomEffects.js",
-    "./scripts/reports.js",
-    "./scripts/nameData.js"
-  ],
+  "esmodules": ["./scripts/init.js"],
+  "scripts": [],
   "packs": [
     {
       "name": "OSE-helper-macros",

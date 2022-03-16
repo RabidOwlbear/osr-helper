@@ -1,6 +1,5 @@
-Hooks.on('ready', () => {
+export const registerData = () => {
   OSEH.data = OSEH.data || {};
-
   OSEH.data.food = {
     iron: 'Rations (iron, 7 days)',
     standard: 'Rations (standard, 7 days)',
@@ -397,4 +396,4 @@ lightType: {
     },
     
   ]
-});
+};

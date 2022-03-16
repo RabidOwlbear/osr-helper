@@ -1,4 +1,4 @@
-Hooks.on('ready', () => {
+export const registerTurn =  () => {
   OSEH.turn = OSEH.turn || {};
 
   const oseTime = {};
@@ -279,4 +279,4 @@ Hooks.on('ready', () => {
     }
     ui.notifications.error('No Light Lit!');
   };
-});
+};

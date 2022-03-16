@@ -1,4 +1,4 @@
-Hooks.on('ready', () => {
+export const registerReports = () => {
   OSEH.report = OSEH.report || {};
 
   OSEH.report.actorItem = async function (actor) {
@@ -363,4 +363,4 @@ Hooks.on('ready', () => {
 
     new travelReport(getTravelData(initMod)).render(true);
   };
-});
+};
