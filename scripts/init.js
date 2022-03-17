@@ -295,7 +295,7 @@ Hooks.on('renderOseActorSheet',async (actor, html) => {
   iEl.classList = 'fa fa-coins';
   iEl.style['margin-right'] = '5px';
   el.appendChild(iEl);
-  linkCont.prepend(el);
+  if(linkCont) linkCont.prepend(el);
   el.addEventListener('click', (ev)=>{
     
     ev.preventDefault();
