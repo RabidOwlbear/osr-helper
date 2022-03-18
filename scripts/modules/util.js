@@ -3,7 +3,7 @@ export const registerUtil =  () => {
   //tick: manages light duration, turn count
   OSEH.util.oseTick = async function () {
     if (game.user.role >= 4) {
-      lastTick = game.settings.get('OSE-helper', 'lastTick');
+      let lastTick = game.settings.get('OSE-helper', 'lastTick');
       await OSEH.util.oseLightTick(lastTick);
       await OSEH.util.oseEffectTick(lastTick);
 
@@ -80,7 +80,7 @@ export const registerUtil =  () => {
       const curTime = game.time.worldTime;
       const elapsed = (curTime - lastTick) / 60;
       for (let user of game.users.contents) {
-        effectData = await user.getFlag('OSE-helper', 'effectData');
+        let effectData = await user.getFlag('OSE-helper', 'effectData');
 
         for (let effectId in effectData) {
           let effect = effectData[effectId];
