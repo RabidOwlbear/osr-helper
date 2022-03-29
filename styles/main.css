@@ -357,8 +357,11 @@
 .oseh-new-active-effect-form .window-content {
   background: rgb(162, 125, 186);
   background: linear-gradient(0deg, var(--ef-g-1) 0%, var(--ef-g-2) 25%, var(--ef-g-3) 100%);
+  overflow: none;
 }
-
+.oseh-new-active-effect-form textarea{
+  height: 65px;
+}
 .oseh-new-active-effect-form button {
   color: white;
 }

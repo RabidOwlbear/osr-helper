@@ -1,16 +1,25 @@
 export const registerEffectModule = async function () {
   OSEH.effect = OSEH.effect || {};
 
-  OSEH.effect.renderNewEffectForm = async function (actor, effectList) {
-    new OSEH.effect.NewActiveEffectForm(actor, actor.id, effectList).render(true);
+  OSEH.effect.renderNewEffectForm = async function () {
+    if (OSEH.util.singleSelected()) {
+      let actor = canvas.tokens.controlled[0].actor;
+
+      let vh = document.documentElement.clientHeight;
+      let vw = document.documentElement.clientWidth;
+      let pos = { x: vw / 2 - 150, y: vh / 2 - 250 };
+      if (Object.values(ui.windows).filter((i) => i.id.includes(`activeEffectList`)).length == 0) {
+        new OSEH.effect.ActiveEffectList(actor, pos, game.user.isGM).render(true);
+      }
+    }
   };
   OSEH.effect.NewActiveEffectForm = class NewActiveEffectForm extends FormApplication {
     constructor(actor, actorId, pos, effectList = false) {
-      super(pos, {id: `new-active-effect.${actorId}`, top: pos.y, left: pos.x});
+      super(pos, { id: `new-active-effect.${actorId}`, top: pos.y, left: pos.x });
       this.actor = actor;
       this.actorId = actorId;
       this.effectList = effectList;
-      this.pos = pos
+      this.pos = pos;
     }
     static get defaultOptions() {
       return mergeObject(super.defaultOptions, {
@@ -35,16 +44,16 @@ export const registerEffectModule = async function () {
       let saves = {};
       let saveInputs = html.find('.saves-cont input');
       let numInputs = html.find('input[type="number"]');
-      for(let i of numInputs){
-        i.addEventListener('focus', (ev)=>{
+      for (let i of numInputs) {
+        i.addEventListener('focus', (ev) => {
           i.value = '';
-        })
-        i.addEventListener('blur', (ev)=>{
-          console.log(i, parseInt(i.value))
-          if(!parseInt(i.value)){
-            i.value = 0
+        });
+        i.addEventListener('blur', (ev) => {
+          console.log(i, parseInt(i.value));
+          if (!parseInt(i.value)) {
+            i.value = 0;
           }
-        })
+        });
       }
       createBtn.addEventListener('click', (ev) => {
         console.log('clicked');
@@ -54,31 +63,30 @@ export const registerEffectModule = async function () {
           ev.preventDefault();
 
           ui.notifications.warn('Please target one actor.');
-
         }
-        if(nameField.value == ''){
+        if (nameField.value == '') {
           ev.preventDefault();
           ui.notifications.warn('Please Enter An Efect Name');
         }
-        console.log(durationField.value)
-        if(parseInt(durationField.value) == 0){
+        console.log(durationField.value);
+        if (parseInt(durationField.value) == 0) {
           ev.preventDefault();
           ui.notifications.warn('Please Enter An Efect Duration');
         }
       });
-      resetBtn.addEventListener('click', (ev)=>{
+      resetBtn.addEventListener('click', (ev) => {
         ev.preventDefault();
         nameField.value = '';
         descrip.value = '';
         durationField = '';
-        for(let input of numInputs){
-          input.value = 0
+        for (let input of numInputs) {
+          input.value = 0;
         }
-      })
+      });
     }
     async _updateObject(ev, formData) {
       // ev.preventDefault();
-      console.log(close)
+      console.log(close);
       let userTargets = game.user.targets;
       let targetInp = ev.target.querySelector('[name="target"]:checked').id;
       let actor = this.actor;
@@ -201,14 +209,12 @@ export const registerEffectModule = async function () {
           effectData.flags['data'].interval = interval;
           effectData.duration.seconds = interval == 'minutes' ? Math.floor(value * 60) : Math.floor(value);
         }
-        
       }
 
-        await OSEH.socket.executeAsGM('gmCreateEffect', target, effectData, this.actorId);
-      
-      
+      await OSEH.socket.executeAsGM('gmCreateEffect', target, effectData, this.actorId);
+
       // if (this.effectList) this.effectList.render();
-      OSEH.socket.executeAsGM('effectHousekeeping')
+      OSEH.socket.executeAsGM('effectHousekeeping');
     }
   };
 
@@ -240,13 +246,12 @@ export const registerEffectModule = async function () {
   };
 
   OSEH.effect.ActiveEffectList = class ActiveEffectList extends FormApplication {
-    constructor(actor, pos) {
-      console.log(pos)
-      super(pos, {id: `activeEffectList.${actor.id}`, top: pos.y, left: pos.x});
+    constructor(actor, pos, isGM = false) {
+      console.log(pos);
+      super(pos, { id: `activeEffectList.${actor.id}`, top: pos.y, left: pos.x });
       this.actor = actor;
       this.pos = pos;
-      this.string = 'string'
-      
+      this.isGM = isGM;
     }
     static get defaultOptions() {
       let options = {
@@ -259,30 +264,38 @@ export const registerEffectModule = async function () {
         template: `modules/OSE-helper/templates/active-effect-list.html`,
         // id: 'activeEffectList',
         title: 'OSEH Active Effect List'
-      }
-      console.log( options)
+      };
+      console.log(options);
       return mergeObject(super.defaultOptions, options);
     }
     async getData() {
-      let selfEffectData = await game.settings
-        .get('OSE-helper', 'effectData')
-        .filter((e) => e.createdBy == this.actor.id);
+      let selfEffectData = [];
+      let otherEffectData = [];
+      let gmEffectsData = [];
+      if (this.isGM) {
+        gmEffectsData = await game.settings.get('OSE-helper', 'effectData').filter((e) => e.target == this.actor.uuid);
+      } else {
+        selfEffectData = await game.settings
+          .get('OSE-helper', 'effectData')
+          .filter((e) => e.createdBy == this.actor.id);
 
-      let otherEffectData = await game.settings
-        .get('OSE-helper', 'effectData')
-        .filter((e) => e.target == this.actor.uuid && this.actor.id != e.createdBy);
+        otherEffectData = await game.settings
+          .get('OSE-helper', 'effectData')
+          .filter((e) => e.target == this.actor.uuid && this.actor.id != e.createdBy);
+      }
+
       let selfEffectsTemplate = [];
       let otherEffectsTemplate = [];
+      let gmEffectsTemplate = [];
       if (selfEffectData.length) {
         selfEffectData.forEach(async (e) => {
           // let tActor = await game.actors.get(e.targetActorId);
           let tActor = await fromUuid(e.target);
           if (tActor.collectionName == 'tokens') tActor = tActor.actor;
-          
 
           let effect = await tActor.getEmbeddedDocument('ActiveEffect', e.effectId);
           let entryData = {};
-          
+
           let durObj = effect.data.duration;
           entryData.name = effect.data.label;
           entryData.effectId = e.effectId;
@@ -298,10 +311,10 @@ export const registerEffectModule = async function () {
           entryData.list = ``;
           for (let change of effect.data.changes) {
             let keyData = change.key.split('.');
-            
+
             let type = keyData[1] == 'thac0' && keyData[2] == 'mod' ? `attack mod` : keyData[1];
             let attrib = keyData[1] == 'thac0' && keyData[2] == 'mod' ? keyData[3] : keyData[2];
-            
+
             let listItem = `<li>${type} - ${attrib}: ${change.value}</li>`;
 
             entryData.list += listItem;
@@ -309,16 +322,15 @@ export const registerEffectModule = async function () {
           selfEffectsTemplate.push(entryData);
         });
       }
-      if(otherEffectData.length){
-        otherEffectData.forEach(async e=>{
+      if (otherEffectData.length) {
+        otherEffectData.forEach(async (e) => {
           let tActor = await fromUuid(e.target);
           let eCreator = await game.actors.get(e.createdBy);
           if (tActor.collectionName == 'tokens') tActor = tActor.actor;
-          
 
           let effect = await tActor.getEmbeddedDocument('ActiveEffect', e.effectId);
           let entryData = {};
-          
+
           let durObj = effect.data.duration;
           entryData.name = effect.data.label;
           entryData.effectId = e.effectId;
@@ -334,22 +346,56 @@ export const registerEffectModule = async function () {
           entryData.list = ``;
           for (let change of effect.data.changes) {
             let keyData = change.key.split('.');
-            
+
             let type = keyData[1] == 'thac0' && keyData[2] == 'mod' ? `attack mod` : keyData[1];
             let attrib = keyData[1] == 'thac0' && keyData[2] == 'mod' ? keyData[3] : keyData[2];
-            
+
             let listItem = `<li>${type} - ${attrib}: ${change.value}</li>`;
 
             entryData.list += listItem;
           }
-         otherEffectsTemplate.push(entryData);
+          otherEffectsTemplate.push(entryData);
+        });
+      }
+      if (gmEffectsData.length) {
+        gmEffectsData.forEach(async (e) => {
+          let tActor = await fromUuid(e.target);
+          let eCreator = await game.actors.get(e.createdBy);
+          if (tActor.collectionName == 'tokens') tActor = tActor.actor;
 
-        })
+          let effect = await tActor.getEmbeddedDocument('ActiveEffect', e.effectId);
+          let entryData = {};
 
+          let durObj = effect.data.duration;
+          entryData.name = effect.data.label;
+          entryData.effectId = e.effectId;
+          entryData.target = eCreator.name;
+          entryData.durType = effect.data.flags['data'].interval == 'minutes' ? 'min.' : 'sec.';
+          let elapsed = game.time.worldTime - durObj.startTime;
+          let timeLeft =
+            effect.data.flags['data'].interval == 'minutes'
+              ? Math.floor((durObj.seconds - elapsed) / 60)
+              : Math.floor(durObj.seconds - elapsed);
+          entryData.duration = timeLeft;
+          entryData.descrip = effect.data.flags['data'].details;
+          entryData.list = ``;
+          for (let change of effect.data.changes) {
+            let keyData = change.key.split('.');
+
+            let type = keyData[1] == 'thac0' && keyData[2] == 'mod' ? `attack mod` : keyData[1];
+            let attrib = keyData[1] == 'thac0' && keyData[2] == 'mod' ? keyData[3] : keyData[2];
+
+            let listItem = `<li>${type} - ${attrib}: ${change.value}</li>`;
+
+            entryData.list += listItem;
+          }
+          gmEffectsTemplate.push(entryData);
+        });
       }
       return {
+        gmList: gmEffectsTemplate,
         selfEffects: selfEffectsTemplate,
-        otherEffects: otherEffectsTemplate,
+        otherEffects: otherEffectsTemplate
       };
     }
     activateListeners(html) {
@@ -369,7 +415,6 @@ export const registerEffectModule = async function () {
         let name = entry.querySelector('.effect-name');
         let details = entry.querySelector('.details-cont');
         name.addEventListener('click', (ev) => {
-          
           if (details.style.display == 'none') {
             details.style.display = 'flex';
           } else {
@@ -381,11 +426,10 @@ export const registerEffectModule = async function () {
       newBtn.addEventListener('click', (ev) => {
         ev.preventDefault();
         // OSEH.socket.executeAsGM('renderNewEffectForm', this.actor, this)
-        let pos = {x: this.position.left + 400, y:this.position.top}
-        if(Object.values(ui.windows).filter(i=>i.id == `new-active-effect.${this.actor.id}`).length == 0){
+        let pos = { x: this.position.left + 400, y: this.position.top };
+        if (Object.values(ui.windows).filter((i) => i.id == `new-active-effect.${this.actor.id}`).length == 0) {
           new OSEH.effect.NewActiveEffectForm(this.actor, this.actor.id, pos, this).render(true);
         }
-        
       });
     }
     async _updateObject(ev, formData) {}
@@ -436,16 +480,14 @@ export const registerEffectModule = async function () {
     // let actor = await game.actors.getName("Sara Penn");
     // actor = canvas.tokens.controlled[0].actor
     for (let effect of actor.data.effects.contents) {
-      
       await effect.delete();
     }
-
   };
   OSEH.effect.delete = async function (effectId) {
     let effectData = await deepClone(game.settings.get('OSE-helper', 'effectData')).filter(
       (e) => e.effectId == effectId
     )[0];
-    
+
     let actor = await fromUuid(effectData.target);
     if (actor.collectionName == 'tokens') actor = actor.actor;
     let effect = await actor.effects.get(effectId);
@@ -454,25 +496,22 @@ export const registerEffectModule = async function () {
       (e) => e.effectId != effectId
     );
     await game.settings.set('OSE-helper', 'effectData', activeEffectData);
-    OSEH.socket.executeForEveryone('refreshEffectLists')
+    OSEH.socket.executeForEveryone('refreshEffectLists');
   };
 
   OSEH.effect.housekeeping = async function () {
     console.log('housekeeping', game.time.worldTime);
     let effectData = await deepClone(game.settings.get('OSE-helper', 'effectData'));
-    
 
     for (let effect of effectData) {
-      
       //get actor from uuid
       let actor = await fromUuid(effect.target);
-      
+
       //if token get token actor
       if (actor.collectionName == 'tokens') actor = actor.actor;
-      
 
       let activeEffect = await actor.getEmbeddedDocument('ActiveEffect', effect.effectId);
-      
+
       if (activeEffect.duration.remaining <= 0) {
         effectData = effectData.filter((e) => e.effectId != activeEffect.id);
         await actor.deleteEmbeddedDocuments('ActiveEffect', [effect.effectId]);
@@ -481,18 +520,17 @@ export const registerEffectModule = async function () {
     }
     await game.settings.set('OSE-helper', 'effectData', effectData);
     OSEH.socket.executeForEveryone('refreshEffectLists');
-   
   };
-  OSEH.effect.refreshEffectLists = async function(){
-    let openEffectLists = Object.values(ui.windows).filter(i=>i.id.includes(`activeEffectList`))
-    if(openEffectLists.length){
-      openEffectLists.forEach(e=>e.render())
+  OSEH.effect.refreshEffectLists = async function () {
+    let openEffectLists = Object.values(ui.windows).filter((i) => i.id.includes(`activeEffectList`));
+    if (openEffectLists.length) {
+      openEffectLists.forEach((e) => e.render());
     }
-  }
+  };
   OSEH.effect.gmCreateEffect = async function (target, effectData, creatorId) {
     let actor = await fromUuid(target);
     if (actor.collectionName == 'tokens') actor = actor.actor;
-    
+
     let e = await ActiveEffect.create(effectData, { parent: actor });
 
     let activeEffectData = deepClone(await game.settings.get('OSE-helper', 'effectData'));
@@ -502,7 +540,7 @@ export const registerEffectModule = async function () {
       createdBy: creatorId,
       target: target
     });
-    
+
     await game.settings.set('OSE-helper', 'effectData', activeEffectData);
   };
 };

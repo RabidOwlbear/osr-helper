@@ -86,6 +86,14 @@ export const registerSettings = async function (){
     default: true,
     config: true
   });
+  game.settings.register('OSE-helper', 'combatTimeAdvance', {
+    name: 'Advance game time 10 seconds each combat round.',
+    hint: 'Advances the game time 10 seconds each time a combat round advances',
+    scope: 'world',
+    type: Boolean,
+    default: true,
+    config: true
+  });
 
   game.settings.registerMenu('OSE-helper', 'dungeonTurnSettings', {
     name: 'Dungeon Turn Settings.',

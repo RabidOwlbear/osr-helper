@@ -310,18 +310,20 @@ Hooks.on('deleteCombat', ()=>{
 })
 
 Hooks.on('updateCombat',async (combat, details)=>{
-  console.log('update combat')
-  let lastRound = await game.settings.get('OSE-helper', 'lastRound');
-  let round = details.round
-  console.log(round, lastRound)
-  if(round && round > lastRound){
-    game.time.advance(10)
-    // await game.settings.set('OSE-helper', 'lastRound', round)
-    OSEH.socket.executeAsGM('lastRound', round, 'set');
-  }
-  if(round && round < lastRound){
-    game.time.advance(-10)
-    // await game.settings.set('OSE-helper', 'lastRound', round)
-    OSEH.socket.executeAsGM('lastRound', round, 'set');
+  if(game.user.isGM && await game.settings.get('OSE-helper', 'combatTimeAdvance')){
+    console.log('update combat', details)
+    let lastRound = await game.settings.get('OSE-helper', 'lastRound');
+    let round = details.round
+    console.log(round, lastRound)
+    if(round && round > lastRound){
+      game.time.advance(10)
+      await game.settings.set('OSE-helper', 'lastRound', round)
+      // OSEH.socket.executeAsGM('setting','lastRound', round, 'set');
+    }
+    if(round && round < lastRound){
+      game.time.advance(-10)
+      await game.settings.set('OSE-helper', 'lastRound', round)
+      // OSEH.socket.executeAsGM('setting','lastRound', round, 'set');
+    }
   }
 })
