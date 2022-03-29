@@ -3,11 +3,12 @@
   "title": "OSE Helper Module",
   "description": "A collection of helpers for OSE",
   "author": "Grim",
-  "version": "0.2.3",
+  "version": "0.3.0",
   "minimumCoreVerson": "0.8.0",
   "compatibleCoreVersion": "0.9.0",
   "styles": ["./styles/main.css"],
   "esmodules": ["./scripts/init.js"],
+  "socket": true,
   "scripts": [],
   "packs": [
     {

@@ -155,7 +155,7 @@ export const registerReports = () => {
     function getTravelData(mod) {
       let oseActive = game.modules.get('old-school-essentials')?.active;
 
-      encButtonTemplate = `    
+      let encButtonTemplate = `    
         <h4>Encounter Roll</h4>
         <div class="btn-spcr"></div>
         <button type="button" id="enc-btn">Roll</button>`;

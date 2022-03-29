@@ -73,7 +73,7 @@ export const registerTurn =  () => {
   OSEH.turn.dungeonTurn = async function () {
     const data = await game.settings.get('OSE-helper', 'dungeonTurnData')
     const encTable = game.tables.getName(data.eTable);
-    const reactTable = await game.tables.getName(data.rTable);
+    let reactTable = await game.tables.getName(data.rTable);
     // checks
     if(data.rollEnc && !encTable){
       ui.notifications.error('Encounter Table Not Found');

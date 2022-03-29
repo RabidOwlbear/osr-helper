@@ -3,7 +3,7 @@ export const registerUtil =  () => {
   //tick: manages light duration, turn count
   OSEH.util.oseTick = async function () {
     if (game.user.role >= 4) {
-      lastTick = game.settings.get('OSE-helper', 'lastTick');
+      let lastTick = await game.settings.get('OSE-helper', 'lastTick');
       await OSEH.util.oseLightTick(lastTick);
       await OSEH.util.oseEffectTick(lastTick);
 
@@ -80,7 +80,7 @@ export const registerUtil =  () => {
       const curTime = game.time.worldTime;
       const elapsed = (curTime - lastTick) / 60;
       for (let user of game.users.contents) {
-        effectData = await user.getFlag('OSE-helper', 'effectData');
+        let effectData = await user.getFlag('OSE-helper', 'effectData');
 
         for (let effectId in effectData) {
           let effect = effectData[effectId];
@@ -730,4 +730,30 @@ export const registerUtil =  () => {
     })
     diag.render(true)
    }
+  OSEH.util.debounce = function(callback, wait) {
+    let timeoutId = null;
+    return (...args) => {
+      window.clearTimeout(timeoutId);
+      timeoutId = window.setTimeout(() => {
+        callback.apply(null, args);
+      }, wait);
+    };
+  }
+  OSEH.util.setting = async function (setting, value, type){
+    if(type == 'set'){
+      await game.settings.set('OSE-helper', setting, value);
+    }
+    if(type=='get'){
+      return await game.settings.get('OSE-helper', setting);
+    }
+  }
+  OSEH.util.createActiveEffectOnTarget= async function(data, target){
+    console.log(target._id, target)
+    let id = target._id ? target._id : target.id;
+    if(id){
+      console.log('fuck yuou')
+      target = game.actors.get(id)
+      let effect = await ActiveEffect.create(data, { parent: target }) 
+      return effect;}
+  }
 };

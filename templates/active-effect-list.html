@@ -1,0 +1,91 @@
+<form action="">
+  <h3><b>Active Effects:</b></h3>
+  
+  <div class="effect-cont">
+    {{#if selfEffects}}
+    <div class="list-header fx sb w100p bgg05">
+      <div class="header-name"><b>Name</b></div>
+      <div class="header-name"><b>Target</b></div>
+      <div class="header-dur"><b>Duration</b></div>
+      <div class="header-del"><b>Delete</b></div>
+    </div>
+    {{/if}}
+    {{#each selfEffects}}
+    <div class="active-effect">
+      <div class="fx ">
+        <a class="effect-name" title="{{this.name}}">{{this.name}}</a>
+        <div class="effect-target">{{this.target}}</div>
+        <div class="effect-dur">{{this.duration}} {{this.durType}}</div>
+        <div class="pr5"><a id="{{this.effectId}}"class="delete-btn"><i class="fas fa-times"></i></a></div>
+      </div>
+      <div class="details-cont" style="display: none">
+        <div class="effect-list-cont effect-details-section">
+          <h4>effects:</h4>
+          <ul class="effect-list">
+            {{{this.list}}}
+            <!-- <li>test1</li>
+            <li>test1</li>
+            <li>test1</li> -->
+          </ul>
+        </div>
+        <div class="descrip-cont effect-details-section">
+          <h4>description:</h4>
+          <p style="width: 170px;">{{this.descrip}}</p>
+        </div>
+      </div>
+    </div>
+    <!-- <details>
+      <summary >
+       <span style="min-width: 100px; background-color: green;">test</span>
+      </summary>
+      
+    </details> -->
+    
+    
+    {{/each}}
+    {{#if otherEffects}}
+    <div class="list-header fx sb w100p bgb05">
+      <div class="header-name"><b>Name</b></div>
+      <div class="header-name"><b>Created By</b></div>
+      <div class="header-dur"><b>Duration</b></div>
+      <div class="header-del">      </div>
+    </div>
+    {{/if}}
+    {{#each otherEffects}}
+    <div class="active-effect">
+      <div class="fx">
+        <a class="effect-name" title="{{this.name}}">{{this.name}}</a>
+        <div class="effect-target">{{this.target}}</div>
+        <div class="effect-dur">{{this.duration}} {{this.durType}}</div>
+        <div class="pr5"></div>
+      </div>
+      <div class="details-cont" style="display: none">
+        <div class="effect-list-cont effect-details-section">
+          <h4>effects:</h4>
+          <ul class="effect-list">
+            {{{this.list}}}
+            <!-- <li>test1</li>
+            <li>test1</li>
+            <li>test1</li> -->
+          </ul>
+        </div>
+        <div class="descrip-cont effect-details-section">
+          <h4>description:</h4>
+          <p style="width: 170px;">{{this.descrip}}</p>
+        </div>
+      </div>
+    </div>
+    <!-- <details>
+      <summary >
+       <span style="min-width: 100px; background-color: green;">test</span>
+      </summary>
+      
+    </details> -->
+    
+    {{/each}}
+  </div>
+  <div class="button-cont fx sb w100p">
+    <button id="close-btn">close</button>
+    <button id="new-btn">new</button>
+  </div>
+</form>
