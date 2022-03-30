@@ -295,7 +295,7 @@ export const registerLightModule = async function () {
       if(s.tokens.size){
         s.tokens.forEach(async t=> {
           console.log(t?.actor?.uuid)
-          if(t.actor && t.actor.uuid){
+          if(t.actor && t.actor.uuid == uuid){
             let data = {
                       light: {
                         bright: lightData.bright,
