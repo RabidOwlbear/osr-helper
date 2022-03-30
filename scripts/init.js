@@ -11,6 +11,7 @@ import { registerSettings } from './modules/settingsModule.js';
 import { registerEffectModule } from './modules/effectModule.js';
 //namespace
 window.OSEH = window.OSEH || {
+  moduleName: `OSE-helper`,
   ce: {},
   data: {},
   light: {},
@@ -38,13 +39,13 @@ Hooks.once('init', async function () {
   registerLightModule();
   registerEffectModule();
   OSEH.gameVersion = game.version ? game.version : game.data.version;
-  Hooks.call('OSE-helper.registered');
+  Hooks.call(`${OSEH.moduleName}.registered`);
 });
 Hooks.once('socketlib.ready', () => {
   console.log('SL ready');
 
-  Hooks.once('OSE-helper.registered', () => {
-    OSEH.socket = socketlib.registerModule('OSE-helper');
+  Hooks.once(`${OSEH.moduleName}.registered`, () => {
+    OSEH.socket = socketlib.registerModule(`${OSEH.moduleName}`);
     console.log('reg');
     OSEH.socket.register('lightCheck', OSEH.light.lightCheck);
     OSEH.socket.register('updateTokens', OSEH.light.updateTokens);
@@ -63,9 +64,9 @@ Hooks.once('socketlib.ready', () => {
 });
 //update proc data if changed
 Hooks.on('updateSetting', async () => {
-  const turnData = game.settings.get('OSE-helper', 'turnData');
+  const turnData = game.settings.get(`${OSEH.moduleName}`, 'turnData');
 
-  const newName = game.settings.get('OSE-helper', 'timeJournalName');
+  const newName = game.settings.get(`${OSEH.moduleName}`, 'timeJournalName');
   const oldName = turnData?.journalName;
   const journal = await game.journal.getName(oldName);
 
@@ -77,20 +78,20 @@ Hooks.on('updateSetting', async () => {
   //turn journal update
   OSEH.socket.executeAsGM('setting', 'turnData', turnData, 'set');
   // if (game.user.role >= 4) {
-  //   game.settings.set('OSE-helper', 'turnData', turnData);
+  //   game.settings.set(`${OSEH.moduleName}`, 'turnData', turnData);
 
   // }
 });
 
 Hooks.once('ready', async () => {
-  //const lightData = game.settings.get('OSE-helper', 'lightData');
-  const turnData = game.settings.get('OSE-helper', 'turnData');
-  const jName = game.settings.get('OSE-helper', 'timeJournalName');
+  //const lightData = game.settings.get(`${OSEH.moduleName}`, 'lightData');
+  const turnData = game.settings.get(`${OSEH.moduleName}`, 'turnData');
+  const jName = game.settings.get(`${OSEH.moduleName}`, 'timeJournalName');
 
   //update turn proc
 
   turnData.journalName = jName;
-  // game.settings.set('OSE-helper', 'turnData', turnData);
+  // game.settings.set(`${OSEH.moduleName}`, 'turnData', turnData);
   OSEH.socket.executeAsGM('setting', 'turnData', turnData, 'set');
 
   //set hook to update light timer durations
@@ -100,31 +101,31 @@ Hooks.once('ready', async () => {
     OSEH.socket.executeAsGM('lightCheck');
     // OSEH.socket.executeAsGM('clearExpiredEffects')
     // OSEH.util.debounce(, 300);
-    OSEH.util.oseHook('OSE-helper Time Updated');
+    OSEH.util.oseHook(`${OSEH.moduleName} Time Updated`);
   });
 
-  Hooks.on('OSE-helper Time Updated', () => {
+  Hooks.on(`${OSEH.moduleName} Time Updated`, () => {
     if (game.user.isGM) OSEH.socket.executeAsGM('effectHousekeeping');
   });
   //check for count journal
   await OSEH.util.countJournalInit(jName);
-  console.log('OSE-helper ready');
+  console.log(`${OSEH.moduleName} ready`);
 
   //check for userflags
 
   for (let user of game.users.contents) {
-    const lightFlag = await user.getFlag('OSE-helper', 'lightData');
-    const effectFlag = await user.getFlag('OSE-helper', 'effectData');
+    const lightFlag = await user.getFlag(`${OSEH.moduleName}`, 'lightData');
+    const effectFlag = await user.getFlag(`${OSEH.moduleName}`, 'effectData');
     if (!lightFlag) {
-      await user.setFlag('OSE-helper', 'lightData', {});
+      await user.setFlag(`${OSEH.moduleName}`, 'lightData', {});
     }
     if (!effectFlag) {
-      await user.setFlag('OSE-helper', 'effectData', {});
+      await user.setFlag(`${OSEH.moduleName}`, 'effectData', {});
     }
   }
 
   Hooks.on('createActor', async (actor) => {
-    if (game.settings.get('OSE-helper', 'tokenLightDefault') && game.user.role >= 4) {
+    if (game.settings.get(`${OSEH.moduleName}`, 'tokenLightDefault') && game.user.role >= 4) {
       if (actor.data.type == 'character') {
         //const actor = game.actors.getName(sheet.object.name);
         await actor.update({
@@ -198,7 +199,7 @@ Hooks.on('renderOseActorSheet', async (actor, html) => {
   });
 
   //  lightItemSettings
-  if (await game.settings.get('OSE-helper', 'enableLightConfig')) {
+  if (await game.settings.get(`${OSEH.moduleName}`, 'enableLightConfig')) {
     let lightItems = actor.object.items.filter((i) => {
       let tags = i.data.data.manualTags;
       if (tags && tags.find((t) => t.value == 'Light')) return i;
@@ -216,7 +217,7 @@ Hooks.on('renderOseActorSheet', async (actor, html) => {
       targetEl.prepend(el);
       el.addEventListener('click', async (ev) => {
         ev.preventDefault();
-        let itemConfig = await item.getFlag('OSE-helper', 'lightItemData');
+        let itemConfig = await item.getFlag(`${OSEH.moduleName}`, 'lightItemData');
         console.log(item, itemConfig);
         if (Object.values(ui.windows).filter((i) => i.id.includes(`light-item-config.${item.id}`)).length == 0) {
           new OSEH.light.ItemSettingsForm(item).render(true);
@@ -268,7 +269,7 @@ Hooks.on('gmPleasePause', () => {
 });
 
 Hooks.on(`renderDungTurnConfig`, async (ev, html) => {
-  const data = await game.settings.get('OSE-helper', 'dungeonTurnData');
+  const data = await game.settings.get(`${OSEH.moduleName}`, 'dungeonTurnData');
   document.getElementById('enc-table').value = data.eTable;
   document.getElementById('react-table').value = data.rTable;
   document.getElementById('proc').value = data.proc;
@@ -282,12 +283,12 @@ Hooks.on('rendercustomEffectList', (CEL, html, form) => {
 
 Hooks.on('renderItemSheet', async (sheetObj, html) => {
   const isLight = sheetObj.object.data.data.tags?.find((t) => t.value == 'Light');
-  if ((await game.settings.get('OSE-helper', 'enableLightConfig')) && isLight) {
+  if ((await game.settings.get(`${OSEH.moduleName}`, 'enableLightConfig')) && isLight) {
     let item = sheetObj.item;
     let el = document.createElement('a');
     el.addEventListener('click', async (ev) => {
       ev.preventDefault();
-      let itemConfig = await item.getFlag('OSE-helper', 'lightItemConfig');
+      let itemConfig = await item.getFlag(`${OSEH.moduleName}`, 'lightItemConfig');
       console.log(item, itemConfig);
       if (Object.values(ui.windows).filter((i) => i.id.includes(`light-item-config`)).length == 0) {
         new OSEH.light.ItemSettingsForm(item).render(true);
@@ -302,24 +303,24 @@ Hooks.on('renderItemSheet', async (sheetObj, html) => {
 Hooks.on('deleteCombat', () => {
   OSEH.socket.executeAsGM('lastRound', 0, 'set');
   // if(game.user.isGM){
-  //   game.settings.set('OSE-helper', 'lastRound', 0)
+  //   game.settings.set(`${OSEH.moduleName}`, 'lastRound', 0)
   // }
 });
 
 Hooks.on('updateCombat', async (combat, details) => {
-  if (game.user.isGM && (await game.settings.get('OSE-helper', 'combatTimeAdvance'))) {
+  if (game.user.isGM && (await game.settings.get(`${OSEH.moduleName}`, 'combatTimeAdvance'))) {
     console.log('update combat', details);
-    let lastRound = await game.settings.get('OSE-helper', 'lastRound');
+    let lastRound = await game.settings.get(`${OSEH.moduleName}`, 'lastRound');
     let round = details.round;
     console.log(round, lastRound);
     if (round && round > lastRound) {
       game.time.advance(10);
-      await game.settings.set('OSE-helper', 'lastRound', round);
+      await game.settings.set(`${OSEH.moduleName}`, 'lastRound', round);
       // OSEH.socket.executeAsGM('setting','lastRound', round, 'set');
     }
     if (round && round < lastRound) {
       game.time.advance(-10);
-      await game.settings.set('OSE-helper', 'lastRound', round);
+      await game.settings.set(`${OSEH.moduleName}`, 'lastRound', round);
       // OSEH.socket.executeAsGM('setting','lastRound', round, 'set');
     }
   }

@@ -1,13 +1,16 @@
 export const registerLightModule = async function () {
 
-  OSEH.light.lightToggle = async function (actorId, tokenId) {
-    let actor = await game.actors.get(actorId);
+  OSEH.light.lightToggle = async function (uuid, tokenId) {
+    let actor = await fromUuid(uuid);
+    actor = actor.collectionName === 'tokens' ? actor.actor : actor
+    
     let lightItems = actor.items.filter((i) => {
+      
       let tags = i.data.data.manualTags;
       if (tags && tags.find((t) => t.value == 'Light')) return i;
     });
-    const lightData = deepClone(await game.settings.get('OSE-helper', 'lightData'));
-    let actorLightData = lightData[actorId];
+    const lightData = deepClone(await game.settings.get(`${OSEH.moduleName}`, 'lightData'));
+    let actorLightData = lightData[actor.id];
 
     // check for light already lit
     if (actorLightData?.lightLit) {
@@ -21,7 +24,7 @@ export const registerLightModule = async function () {
         type: 'set'
       };
       await OSEH.socket.executeAsGM('setting', 'lightData', lightData, 'set');
-      await OSEH.light.updateTokens(actorId, {
+      await OSEH.light.updateTokens(actor.uuid, {
         dim: 0,
         bright: 0,
         color: activeLight.color,
@@ -51,13 +54,14 @@ export const registerLightModule = async function () {
           callback: async (html) => {
             const itemID = await html.find('#lightType')[0].value;
             const item = await actor.items.get(itemID);
-            const lightItemData = await item.getFlag('OSE-helper', 'lightItemData');
+            const lightItemData = await item.getFlag(`${OSEH.moduleName}`, 'lightItemData');
 
             //if no actorId found, creat actor id and light type
             if (!actorLightData) {
               lightData[actor.id] = {
                 lightLit: true,
                 id: actor.id,
+                uuid: actor.uuid,
                 lights: [
                   {
                     id: randomID(16),
@@ -72,16 +76,16 @@ export const registerLightModule = async function () {
                   }
                 ]
               };
-              actorLightData = lightData[actorId];
+              actorLightData = lightData[actor.id];
 
-              // await game.settings.set('OSE-helper', 'lightData', lightData);
+              // await game.settings.set(`${OSEH.moduleName}`, 'lightData', lightData);
               let settingData = {
                 setting: 'lightData',
                 value: lightData,
                 type: 'set'
               };
               await OSEH.socket.executeAsGM('setting', 'lightData', lightData, 'set' );
-              await OSEH.socket.executeAsGM('updateTokens', actorId, lightItemData);
+              await OSEH.socket.executeAsGM('updateTokens', actor.uuid, lightItemData);
               return;
             }
             // if light exists in lightData
@@ -97,8 +101,8 @@ export const registerLightModule = async function () {
                 type: 'set'
               };
               await OSEH.socket.executeAsGM('setting', 'lightData', lightData, 'set' );
-              // await game.settings.set('OSE-helper', 'lightData', lightData);
-              await OSEH.light.updateTokens(actorId, lightItemData);
+              // await game.settings.set(`${OSEH.moduleName}`, 'lightData', lightData);
+              await OSEH.light.updateTokens(actor.uuid, lightItemData);
               return;
             }
 
@@ -122,8 +126,8 @@ export const registerLightModule = async function () {
                 type: 'set'
               };
               await OSEH.socket.executeAsGM('setting', 'lightData', lightData, 'set');
-              // await game.settings.set('OSE-helper', 'lightData', lightData);
-              await OSEH.light.updateTokens(actorId, lightItemData);
+              // await game.settings.set(`${OSEH.moduleName}`, 'lightData', lightData);
+              await OSEH.light.updateTokens(actor.uuid, lightItemData);
               return;
             }
           }
@@ -136,7 +140,7 @@ export const registerLightModule = async function () {
   };
 
   OSEH.light.lightCheck = async function () {
-    let lightData = deepClone(await game.settings.get('OSE-helper', 'lightData'));
+    let lightData = deepClone(await game.settings.get(`${OSEH.moduleName}`, 'lightData'));
     let curTime = game.time.worldTime;
     let expired = [];
     for (let actorId in lightData) {
@@ -149,25 +153,27 @@ export const registerLightModule = async function () {
         let elapsed = curTime - start;
 
         if (elapsed >= duration) {
+          
           dataObj.lightLit = false;
           dataObj.lights = dataObj.lights.filter((i) => i.id != light.id);
-          await OSEH.light.updateTokens(actorId, {
+          await OSEH.light.updateTokens(dataObj.uuid,{
             dim: 0,
             bright: 0,
             color: data.color,
             alpha: data.alpha
           });
 
-          OSEH.light.decrementLightItem(light.actorId, light.itemId);
+          OSEH.light.decrementLightItem(dataObj.uuid, light.itemId);
           if (!dataObj.lights.length) delete lightData[actorId];
         }
       }
     }
-    await game.settings.set('OSE-helper', 'lightData', lightData);
+    await game.settings.set(`${OSEH.moduleName}`, 'lightData', lightData);
   };
 
-  OSEH.light.decrementLightItem = async function (actorId, itemId) {
-    let actor = await game.actors.get(actorId);
+  OSEH.light.decrementLightItem = async function (uuid, itemId) {
+    let actor = await fromUuid(uuid);
+    actor = actor.collectionName === 'tokens' ? actor.actor : actor
     let item = await actor.data.items.get(itemId);
 
     if (item.data.data.quantity.value > 1) {
@@ -191,15 +197,15 @@ export const registerLightModule = async function () {
         popOut: true,
         height: 520,
         width: 300,
-        template: `modules/OSE-helper/templates/light-item-config-form.html`,
+        template: `modules/${OSEH.moduleName}/templates/light-item-config-form.html`,
         
         
       });
     }
 
     getData() {
-      let flag = this.item.getFlag('OSE-helper', 'lightItemData');
-      console.log(flag, flag.speed);
+      let flag = this.item.getFlag(`${OSEH.moduleName}`, 'lightItemData');
+      
       // Send data to the template
       return {
         name: this.item.name,
@@ -250,7 +256,7 @@ export const registerLightModule = async function () {
         ev.preventDefault();
         updateBtn.blur();
 
-        await this.item.setFlag('OSE-helper', 'lightItemData', formData);
+        await this.item.setFlag(`${OSEH.moduleName}`, 'lightItemData', formData);
         ui.notifications.info('Light Item Data Updated');
         this.close();
       });
@@ -276,11 +282,14 @@ export const registerLightModule = async function () {
     async _updateObject(event, formData, a, b) {}
   };
 
-  OSEH.light.updateTokens = async function (actorId, lightData, lastTurn = false) {
+  OSEH.light.updateTokens = async function (uuid, lightData, lastTurn = false) {
+    let actor = await fromUuid(uuid)
+    
     //loop through active game scenes
     for (let scene of game.scenes.contents) {
+      
       //loop through tokens contaioned in scene
-      let tokens = scene.tokens.filter((t) => t.actor.id == actorId);
+      let tokens = scene.tokens.filter((t) => t.actor.uuid == uuid);
       tokens.forEach(async (t) => {
         let data = {
           light: {
@@ -299,7 +308,7 @@ export const registerLightModule = async function () {
   };
   
   OSEH.light.turnsRemaining = async function (actorId) {
-    let lightData = game.settings.get('OSE-helper', 'lightData')?.[actorId]?.lights.filter((i) => i.isOn)?.[0];
+    let lightData = game.settings.get(`${OSEH.moduleName}`, 'lightData')?.[actorId]?.lights.filter((i) => i.isOn)?.[0];
     if (lightData) {
       let elapsed = game.time.worldTime - lightData.start;
       let remaining = lightData.duration - elapsed;

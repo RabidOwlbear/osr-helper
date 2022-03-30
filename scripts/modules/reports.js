@@ -230,7 +230,7 @@ export const registerReports = () => {
         return mergeObject(super.defaultOptions, {
           classes: ['application', 'testApp'],
           popOut: true,
-          template: 'modules/OSE-helper/templates/travel-report.html',
+          template: `modules/${OSEH.moduleName}/templates/travel-report.html`,
           id: 'oseTravelReport',
           title: 'Adventure ahoy!',
           width: 400

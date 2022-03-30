@@ -13,7 +13,7 @@ export const registerRations = () => {
           // parent: 'OMbaST8BhMtHx2zT',
           color: '#006688'
         });
-        console.log(`OSE-helper: No ${name} Folder Found.
+        console.log(`${OSEH.moduleName}: No ${name} Folder Found.
     Folder Named ${name} Created.`);
       }
 

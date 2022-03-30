@@ -29,7 +29,7 @@ export const registerEffectModule = async function () {
         top: 0,
         left: 0,
         width: 300,
-        template: `modules/OSE-helper/templates/new-active-effect-form.html`,
+        template: `modules/${OSEH.moduleName}/templates/new-active-effect-form.html`,
         id: 'new-active-effect',
         title: 'OSEH New Active Effect'
       });
@@ -219,7 +219,7 @@ export const registerEffectModule = async function () {
   };
 
   OSEH.effect.clearExpired = async function () {
-    let activeEffects = deepClone(await game.settings.get('OSE-helper', 'effectData'));
+    let activeEffects = deepClone(await game.settings.get(`${OSEH.moduleName}`, 'effectData'));
     for (let e of activeEffects) {
       let type = await game.actors.get(e.targetActorId).data.type;
       if (type == `monster`) {
@@ -241,7 +241,7 @@ export const registerEffectModule = async function () {
         }
       }
     }
-    // await game.settings.set('OSE-helper', 'effectData', activeEffects);
+    // await game.settings.set(`${OSEH.moduleName}`, 'effectData', activeEffects);
     OSEH.socket.executeAsGM('setting', 'effectData', activeEffects, 'set');
   };
 
@@ -261,7 +261,7 @@ export const registerEffectModule = async function () {
         width: 400,
         top: 0,
         left: 0,
-        template: `modules/OSE-helper/templates/active-effect-list.html`,
+        template: `modules/${OSEH.moduleName}/templates/active-effect-list.html`,
         // id: 'activeEffectList',
         title: 'OSEH Active Effect List'
       };
@@ -273,14 +273,14 @@ export const registerEffectModule = async function () {
       let otherEffectData = [];
       let gmEffectsData = [];
       if (this.isGM) {
-        gmEffectsData = await game.settings.get('OSE-helper', 'effectData').filter((e) => e.target == this.actor.uuid);
+        gmEffectsData = await game.settings.get(`${OSEH.moduleName}`, 'effectData').filter((e) => e.target == this.actor.uuid);
       } else {
         selfEffectData = await game.settings
-          .get('OSE-helper', 'effectData')
+          .get(`${OSEH.moduleName}`, 'effectData')
           .filter((e) => e.createdBy == this.actor.id);
 
         otherEffectData = await game.settings
-          .get('OSE-helper', 'effectData')
+          .get(`${OSEH.moduleName}`, 'effectData')
           .filter((e) => e.target == this.actor.uuid && this.actor.id != e.createdBy);
       }
 
@@ -437,7 +437,7 @@ export const registerEffectModule = async function () {
 
   OSEH.effect.deleteEffect = async function (activeEffectId, effectList) {
     console.log('fired');
-    let activeEffectData = await game.settings.get('OSE-helper', 'effectData');
+    let activeEffectData = await game.settings.get(`${OSEH.moduleName}`, 'effectData');
 
     let effectData = activeEffectData.filter((e) => e.effectId == activeEffectId)[0];
 
@@ -484,7 +484,7 @@ export const registerEffectModule = async function () {
     }
   };
   OSEH.effect.delete = async function (effectId) {
-    let effectData = await deepClone(game.settings.get('OSE-helper', 'effectData')).filter(
+    let effectData = await deepClone(game.settings.get(`${OSEH.moduleName}`, 'effectData')).filter(
       (e) => e.effectId == effectId
     )[0];
 
@@ -492,16 +492,16 @@ export const registerEffectModule = async function () {
     if (actor.collectionName == 'tokens') actor = actor.actor;
     let effect = await actor.effects.get(effectId);
     effect.delete();
-    let activeEffectData = await deepClone(game.settings.get('OSE-helper', 'effectData')).filter(
+    let activeEffectData = await deepClone(game.settings.get(`${OSEH.moduleName}`, 'effectData')).filter(
       (e) => e.effectId != effectId
     );
-    await game.settings.set('OSE-helper', 'effectData', activeEffectData);
+    await game.settings.set(`${OSEH.moduleName}`, 'effectData', activeEffectData);
     OSEH.socket.executeForEveryone('refreshEffectLists');
   };
 
   OSEH.effect.housekeeping = async function () {
     console.log('housekeeping', game.time.worldTime);
-    let effectData = await deepClone(game.settings.get('OSE-helper', 'effectData'));
+    let effectData = await deepClone(game.settings.get(`${OSEH.moduleName}`, 'effectData'));
 
     for (let effect of effectData) {
       //get actor from uuid
@@ -518,7 +518,7 @@ export const registerEffectModule = async function () {
         // await activeEffect.delete()
       }
     }
-    await game.settings.set('OSE-helper', 'effectData', effectData);
+    await game.settings.set(`${OSEH.moduleName}`, 'effectData', effectData);
     OSEH.socket.executeForEveryone('refreshEffectLists');
   };
   OSEH.effect.refreshEffectLists = async function () {
@@ -533,7 +533,7 @@ export const registerEffectModule = async function () {
 
     let e = await ActiveEffect.create(effectData, { parent: actor });
 
-    let activeEffectData = deepClone(await game.settings.get('OSE-helper', 'effectData'));
+    let activeEffectData = deepClone(await game.settings.get(`${OSEH.moduleName}`, 'effectData'));
     activeEffectData.push({
       effectId: e.id,
       targetActor: actor,
@@ -541,7 +541,7 @@ export const registerEffectModule = async function () {
       target: target
     });
 
-    await game.settings.set('OSE-helper', 'effectData', activeEffectData);
+    await game.settings.set(`${OSEH.moduleName}`, 'effectData', activeEffectData);
   };
 };
 

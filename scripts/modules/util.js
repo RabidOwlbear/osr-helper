@@ -3,13 +3,13 @@ export const registerUtil =  () => {
   //tick: manages light duration, turn count
   OSEH.util.oseTick = async function () {
     if (game.user.role >= 4) {
-      let lastTick = await game.settings.get('OSE-helper', 'lastTick');
+      let lastTick = await game.settings.get(`${OSEH.moduleName}`, 'lastTick');
       await OSEH.util.oseLightTick(lastTick);
       await OSEH.util.oseEffectTick(lastTick);
 
       //update lightTick
 
-      await game.settings.set('OSE-helper', 'lastTick', game.time.worldTime);
+      await game.settings.set(`${OSEH.moduleName}`, 'lastTick', game.time.worldTime);
     }
   };
   OSEH.util.oseLightTick = async function (lastTick) {
@@ -22,7 +22,7 @@ export const registerUtil =  () => {
       const elapsed = (curTime - lastTick) / 60;
       //manage light duration
       for (let user of game.users.contents) {
-        data.light = await user.getFlag('OSE-helper', 'lightData');
+        data.light = await user.getFlag(`${OSEH.moduleName}`, 'lightData');
         //loop through actorIds in light flag
         for (let actorId in data.light) {
           //If actor does not have light lit...
@@ -70,8 +70,8 @@ export const registerUtil =  () => {
             }
           }
         }
-        await user.unsetFlag('OSE-helper', 'lightData');
-        await user.setFlag('OSE-helper', 'lightData', data.light);
+        await user.unsetFlag(`${OSEH.moduleName}`, 'lightData');
+        await user.setFlag(`${OSEH.moduleName}`, 'lightData', data.light);
       }
     }
   };
@@ -80,7 +80,7 @@ export const registerUtil =  () => {
       const curTime = game.time.worldTime;
       const elapsed = (curTime - lastTick) / 60;
       for (let user of game.users.contents) {
-        let effectData = await user.getFlag('OSE-helper', 'effectData');
+        let effectData = await user.getFlag(`${OSEH.moduleName}`, 'effectData');
 
         for (let effectId in effectData) {
           let effect = effectData[effectId];
@@ -94,14 +94,14 @@ export const registerUtil =  () => {
           }
         }
 
-        await user.unsetFlag('OSE-helper', 'effectData');
-        await user.setFlag('OSE-helper', 'effectData', effectData);
+        await user.unsetFlag(`${OSEH.moduleName}`, 'effectData');
+        await user.setFlag(`${OSEH.moduleName}`, 'effectData', effectData);
       }
     }
   };
   OSEH.util.setLightFlag = function (data) {
     const { actor, actorId, type, duration } = data;
-    const journal = game.journal.getName(game.settings.get('OSE-helper', 'timeJournalName'));
+    const journal = game.journal.getName(game.settings.get(`${OSEH.moduleName}`, 'timeJournalName'));
     const flagObj = {
       [actorId]: {
         [type]: {
@@ -136,7 +136,7 @@ export const registerUtil =  () => {
 
   OSEH.util.unSetLightFlag = function (data) {
     const { actor, actorId } = data;
-    const journal = game.journal.getName(game.settings.get('OSE-helper', 'timeJournalName'));
+    const journal = game.journal.getName(game.settings.get(`${OSEH.moduleName}`, 'timeJournalName'));
     let flags = journal.data.flags.world.oseLights;
     delete flags[actorId];
     journal.unsetFlag('world', 'oseLights');
@@ -197,7 +197,7 @@ export const registerUtil =  () => {
   };
 
   OSEH.util.centerHotbar = function () {
-    if (game.settings.get('OSE-helper', 'centerHotbar')) {
+    if (game.settings.get(`${OSEH.moduleName}`, 'centerHotbar')) {
       document.documentElement.style.setProperty('--hotbar-center', 'calc(50% - 270px');
     } else {
       document.documentElement.style.setProperty('--hotbar-center', '220px');
@@ -741,10 +741,10 @@ export const registerUtil =  () => {
   }
   OSEH.util.setting = async function (setting, value, type){
     if(type == 'set'){
-      await game.settings.set('OSE-helper', setting, value);
+      await game.settings.set(`${OSEH.moduleName}`, setting, value);
     }
     if(type=='get'){
-      return await game.settings.get('OSE-helper', setting);
+      return await game.settings.get(`${OSEH.moduleName}`, setting);
     }
   }
   OSEH.util.createActiveEffectOnTarget= async function(data, target){
