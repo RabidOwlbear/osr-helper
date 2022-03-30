@@ -31,47 +31,47 @@ export const registerTurn =  () => {
           restWarnCount: 0,
           session: 0,
           total: 0,
-          journalName: game.settings.get('OSE-helper', 'timeJournalName')
+          journalName: game.settings.get(`${OSEH.moduleName}`, 'timeJournalName')
         };
         break;
       default:
-        console.error("OSE-helper: resetData('name') error: Name not found");
+        console.error(`${OSEH.moduleName}: resetData('name') error: Name not found`);
         return;
     }
 
-    game.settings.set('OSE-helper', `${name}`, data);
+    game.settings.set(`${OSEH.moduleName}`, `${name}`, data);
   };
 
   OSEH.turn.resetSessionCount = async function () {
-    const data = await game.settings.get('OSE-helper', 'turnData');
+    const data = await game.settings.get(`${OSEH.moduleName}`, 'turnData');
     data.session = 0;
-    await game.settings.set('OSE-helper', 'turnData', data);
+    await game.settings.set(`${OSEH.moduleName}`, 'turnData', data);
     OSEH.turn.updateJournal();
   };
 
   OSEH.turn.resetAllCounts = async function () {
-    const data = await game.settings.get('OSE-helper', 'turnData');
+    const data = await game.settings.get(`${OSEH.moduleName}`, 'turnData');
     data.session = 0;
     data.procCount = 0;
     data.rest = 0;
     data.total = 0;
-    await game.settings.set('OSE-helper', 'turnData', data);
+    await game.settings.set(`${OSEH.moduleName}`, 'turnData', data);
     OSEH.turn.updateJournal();
   };
   //increments turn data and updates setting
   OSEH.turn.incrementTurnData = async function () {
    
-    const data = await game.settings.get('OSE-helper', 'turnData');
+    const data = await game.settings.get(`${OSEH.moduleName}`, 'turnData');
     data.rest++;
     data.session++;
     data.total++;
     data.procCount++;
-    await game.settings.set('OSE-helper', 'turnData', data);
-    return game.settings.get('OSE-helper', 'turnData');
+    await game.settings.set(`${OSEH.moduleName}`, 'turnData', data);
+    return game.settings.get(`${OSEH.moduleName}`, 'turnData');
   };
 
   OSEH.turn.dungeonTurn = async function () {
-    const data = await game.settings.get('OSE-helper', 'dungeonTurnData')
+    const data = await game.settings.get(`${OSEH.moduleName}`, 'dungeonTurnData')
     const encTable = game.tables.getName(data.eTable);
     let reactTable = await game.tables.getName(data.rTable);
     // checks
@@ -87,7 +87,7 @@ export const registerTurn =  () => {
     
     const turnData = await OSEH.turn.incrementTurnData();
     turnData.proc = data.proc
-    if (game.settings.get('OSE-helper', 'restMessage')) {
+    if (game.settings.get(`${OSEH.moduleName}`, 'restMessage')) {
       OSEH.turn.restMsg(turnData.rest); //generate chat message regarding rest status
     }
     
@@ -97,8 +97,8 @@ export const registerTurn =  () => {
       if (turnData.procCount >= data.proc) {
         //if number of turns since last random monster roll is greater than or equal to the random check interval
         turnData.procCount = 0; //resest number of turns since last random check
-        await game.settings.set('OSE-helper', 'turnData', {});
-        await game.settings.set('OSE-helper', 'turnData', turnData); //update settings data <--------
+        await game.settings.set(`${OSEH.moduleName}`, 'turnData', {});
+        await game.settings.set(`${OSEH.moduleName}`, 'turnData', turnData); //update settings data <--------
         const theRoll = await new Roll('1d6').roll();
         const gm = game.users.contents.filter((u) => u.data.role == 4).map((u) => u.id);
 
@@ -146,8 +146,8 @@ export const registerTurn =  () => {
 
   //write to journal
   OSEH.turn.updateJournal = async function () {
-    const turnData = game.settings.get('OSE-helper', 'turnData');
-    const journalName = game.settings.get('OSE-helper', 'timeJournalName');
+    const turnData = game.settings.get(`${OSEH.moduleName}`, 'turnData');
+    const journalName = game.settings.get(`${OSEH.moduleName}`, 'timeJournalName');
     const entry = game.journal.getName(journalName) || (await OSEH.util.countJournalInit(journalName));
     if (turnData.rest > 5) {
       let jContent = `<h1>Turn Count</h1><br><p>Session Count: ${turnData.session}</p><p> Total Count: ${turnData.total}</p><p>Turns Since Last Rest: <span style="color: red">${turnData.rest}</span></p>`;
@@ -166,8 +166,8 @@ export const registerTurn =  () => {
 
   OSEH.turn.restMsg = async function (rc) {
     const gm = game.users.contents.filter((u) => u.data.role == 4).map((u) => u.data.id);
-    const whisper = await game.settings.get('OSE-helper', 'whisperRest');
-    const turnData = await game.settings.get('OSE-helper', 'turnData');
+    const whisper = await game.settings.get(`${OSEH.moduleName}`, 'whisperRest');
+    const turnData = await game.settings.get(`${OSEH.moduleName}`, 'turnData');
     let chatData = {
       user: game.user.id,
       content: ''
@@ -187,7 +187,7 @@ export const registerTurn =  () => {
         content += penalty;
         turnData.restWarnCount = 0;
       }
-      game.settings.set('OSE-helper', 'turnData', turnData);
+      game.settings.set(`${OSEH.moduleName}`, 'turnData', turnData);
       chatData.content = content;
       ChatMessage.create(chatData);
       return;
@@ -201,14 +201,14 @@ export const registerTurn =  () => {
 
   //rest function
   OSEH.turn.rest = async function () {
-    const whisper = game.settings.get('OSE-helper', 'whisperRest');
-    const data = game.settings.get('OSE-helper', 'turnData');
+    const whisper = game.settings.get(`${OSEH.moduleName}`, 'whisperRest');
+    const data = game.settings.get(`${OSEH.moduleName}`, 'turnData');
     const gm = game.users.contents.filter((u) => u.data.role == 4).map((u) => u.data.id);
     data.rest = 0;
     data.restWarnCount = 0;
     data.session++;
     data.total++;
-    await game.settings.set('OSE-helper', 'turnData', data);
+    await game.settings.set(`${OSEH.moduleName}`, 'turnData', data);
     OSEH.turn.updateJournal();
     const chatData = {
       content: '<span style="color: green"> You Feel Rested! </span>'
@@ -222,7 +222,7 @@ export const registerTurn =  () => {
   };
   //function calls
   OSEH.turn.showTurnCount = async function () {
-    const data = await game.settings.get('OSE-helper', 'turnData');
+    const data = await game.settings.get(`${OSEH.moduleName}`, 'turnData');
     let style = '';
     let chatData = {
       user: game.user.id,
@@ -243,8 +243,8 @@ export const registerTurn =  () => {
   OSEH.turn.lightTurnRemaining = async function (actorId) {
     let lightData;
     for (let user of game.users.contents) {
-      if (user.data.flags['OSE-helper'].lightData[actorId]) {
-        let flag = await user.getFlag('OSE-helper', 'lightData');
+      if (user.data.flags[`${OSEH.moduleName}`].lightData[actorId]) {
+        let flag = await user.getFlag(`${OSEH.moduleName}`, 'lightData');
         lightData = flag;
       }
     }

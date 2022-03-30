@@ -1,0 +1,106 @@
+<form id="light-item-config" action="">
+  <div class="list-cont">
+    <div>
+      <div class="list-item">
+        <div>Name:</div>
+        <div>{{name}}</div>
+      </div>
+      <div class="list-item">
+        <label for="dim">Dim Radius:</label>
+        <input class="light-config-input type-a"type="number" id="dim" placeholder="{{dim}}" value="{{dim}}" name="dim">
+      </div>
+      <div class="list-item">
+        <label for="bright">Bright Radius:</label>
+        <input class="light-config-input type-a"type="number" id="bright" placeholder="{{bright}}" value="{{bright}}" name="bright">
+      </div>
+      <div class="list-item">
+        <label for="color">Color (hex):</label>
+        <input class="light-config-input"type="color" id="color" value={{color}} name="color">
+      </div>
+      <div class="list-item">
+        <label for="duration">Duration (minutes):</label>
+        <input class="light-config-input type-a"type="number" id="duration" placeholder="{{dur}}" value="{{dur}}" name="dur">
+      </div>
+      <div class="list-item">
+        <label for="alpha">Alpha:</label>
+        <input class="light-config-input type-b"type="number" id="alpha" placeholder="{{alpha}}" value="{{alpha}}" name="alpha">
+      </div>
+      <div class="list-item">
+        <label for="warn">Warn (rounds before expire):</label>
+        <input class="light-config-input type-a"type="number" id="warn" placeholder="{{warn}}" min="0" value="{{warn}}" name="warn">
+      </div>
+      <div class="list-item">
+        <label for="alert">Alert (rounds before expire):</label>
+        <input class="light-config-input type-a"type="number" id="alert" placeholder="{{alert}}" min="0" value="{{alert}}" name="alert">
+      </div>
+      <div class="list-item">
+        <label for="animation">Animation Type:</label>
+        <select class="light-config-input"name="animation" id="animation">
+          <option value="">None</option>
+          <option value="torch" selected="">Torch</option>
+          <option value="pulse">Pulse</option>
+          <option value="chroma">Chroma</option>
+          <option value="wave">Pulsing Wave</option>
+          <option value="fog">Swirling Fog</option>
+          <option value="sunburst">Sunburst</option>
+          <option value="dome">Light Dome</option>
+          <option value="emanation">Mysterious Emanation</option>
+          <option value="hexa">Hexa Dome</option>
+          <option value="ghost">Ghostly Light</option>
+          <option value="energy">Energy Field</option>
+          <option value="roiling">Roiling Mass</option>
+          <option value="hole">Black Hole</option>
+          <option value="vortex">Vortex</option>
+          <option value="witchwave">Bewitching Wave</option>
+          <option value="rainbowswirl">Swirling Rainbow</option>
+          <option value="radialrainbow">Radial Rainbow</option>
+          <option value="fairy">Fairy Light</option>
+        </select>
+      </div>
+      <div class="list-item">
+        <label for="speed">Animation Speed:</label>
+        <input class="light-config-input type-b"type="number" id="speed" placeholder="{{speed}}" min="0" max="10" value="{{speed}}" name="speed">
+      </div>
+      <div class="list-item">
+        <label for="intensity">Animation Intensity:</label>
+        <input class="light-config-input type-b"type="number" id="intensity" placeholder="{{intensity}}" min="1" max="10" value="{{intensity}}" name="intensity">
+      </div>
+      <div class="list-item">
+        <label for="coloration">Light Coloration</label>
+        <select class="light-config-input" name="coloration:" id="coloration">
+          <option value="0">Legacy Coloration</option>
+          <option value="1" selected="">Adaptive Luminance</option>
+          <option value="2">Internal Halo</option>
+          <option value="3">External Halo</option>
+          <option value="4">Color Burn</option>
+          <option value="5">Internal Color Burn</option>
+          <option value="6">External Color Burn</option>
+          <option value="7">Low Absorption</option>
+          <option value="8">High Absorption</option>
+          <option value="9">Invert Absorption</option>
+        </select>
+      </div>
+      <div class="list-item">
+        <label for="luminosity">Luminosity:</label>
+        <input class="light-config-input type-b"type="number" id="luminosity" placeholder="{{luminosity}}" min="0" max="1" value="{{luminosity}}" name="luminosity">
+      </div>
+      <div class="list-item">
+        <label for="bgSat">Background Saturation:</label>
+        <input class="light-config-input type-b"type="number" id="bgSat" placeholder="{{bgSat}}" min="0" max="1" value="{{bgSat}}" name="bgSat">
+      </div>
+      <div class="list-item">
+        <label for="bgCont">Background Contrast:</label>
+        <input class="light-config-input type-b"type="number" id="bgCont" placeholder="{{bgCont}}" min="0" max="1" value="{{bgCont}}" name="bgCont">
+      </div>
+      <div class="list-item">
+        <label for="bgShadow">Background Shadows:</label>
+        <input class="light-config-input type-b"type="number" id="bgShadow" placeholder="{{bgShadow}}" min="0" max="1" value="{{bgShadow}}" name="bgShadow">
+      </div>
+    </div>
+    <div class="form-button-div">
+      <button id="close-btn">Close</button>
+      <button type="submit" id="update-btn">Update</button>
+    </div>
+  </div>
+</form>
+

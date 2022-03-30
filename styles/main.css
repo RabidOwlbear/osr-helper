@@ -2,6 +2,21 @@
   --hotbar-center: 220px;
   --border: #1712228c;
   --center-hotbar: calc(50% - 270px);
+  --bg-red05: rgba(255, 0, 0, 0.025);
+  --bg-blue05: rgba(0, 0, 255, 0.05);
+  --bg-yellow05: rgba(255, 255, 0, 0.05);
+  --bg-green5: rgba(0, 255, 0, 0.05);
+  --bg-orange05: rgba(255, 115, 0, 0.05);
+  --bg-purple05: rgba(125, 0, 125, 0.05);
+  --el-button-glow: rgb(255 0 156);
+  --ef-g-1: rgb(181, 142, 209);
+  --ef-g-2: rgb(179, 234, 248);
+  --ef-g-3: rgb(233, 255, 222);
+  --ef-g-bg: rgb(162, 125, 186);
+  --lf-g-1: rgb(123, 203, 204) ;
+  --lf-g-2: rgb(248, 235, 207);
+  --lf-g-3: rgb(248, 214, 198);
+  --lf-g-bg: rgb(174, 204, 204);
 }
 /* custom effect form */
 #customEffectForm .effectDesc {
@@ -204,7 +219,7 @@
   height: 20px;
   margin-left: 5px;
 }
-#travel-calc .bonus-div{
+#travel-calc .bonus-div {
   padding-bottom: 5px;
   display: flex;
   justify-content: space-between;
@@ -222,13 +237,22 @@
 .fx {
   display: flex;
 }
+.fdc {
+  flex-direction: column;
+}
 .sb {
   justify-content: space-between;
+}
+.aic {
+  align-items: center;
+}
+.sa {
+  justify-content: space-around;
 }
 .jcc {
   justify-content: center;
 }
-.w50{
+.w50 {
   width: 50px;
 }
 .w175 {
@@ -240,11 +264,14 @@
 .ptb5 {
   padding: 5px 0;
 }
-.mb5{
-  margin-bottom: 5px
+.mb5 {
+  margin-bottom: 5px;
 }
 .br2 {
   border-right: 2px solid black;
+}
+.bt2 {
+  border-top: 2px solid rgba(0, 0, 0, 0.24);
 }
 .w180 {
   width: 180px;
@@ -268,9 +295,215 @@
 .pr10 {
   padding-right: 10px;
 }
+.pr20 {
+  padding-right: 20px;
+}
 .plr10 {
   padding: 0 10px;
 }
 .plr5 {
   padding: 0 5px;
+}
+.pt5 {
+  padding-top: 5px;
+}
+.pt10 {
+  padding-top: 10px;
+}
+.w100p {
+  width: 100%;
+}
+.bgr05 {
+  /* border: 2px solid rgba(255,0,0,.25); */
+  background-color: var(--bg-red05);
+}
+.bgp05 {
+  /* border: 2px solid rgba(125,0,125,.5); */
+  background-color: var(--bg-purple05);
+}
+.bgy05 {
+  /* border: 2px solid rgba(255, 255, 0, 0.25); */
+  background-color: var(--bg-yellow05);
+}
+.bgb05 {
+  /* border: 2px solid rgba(0,0,255,.25); */
+  background-color: var(--bg-blue05);
+}
+.bgg05 {
+  /* border: 2px solid rgba(0,255,0,.25); */
+  background-color: var(--bg-green5);
+}
+.bgo05 {
+  /* border: 2px solid rgba(255, 115, 0, .25); */
+  background-color: var(--bg-orange05);
+}
+
+/* light config form */
+.light-item-config .list-cont {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  overflow: hidden;
+  height: 300px;
+}
+.light-item-config .list-item {
+  display: flex;
+  align-content: space-around;
+  justify-content: space-between;
+}
+.light-item-config input {
+  width: 70px;
+}
+.light-item-config .form-button-div {
+  display: flex;
+  margin: 1em 0 0.5em 0;
+}
+.light-item-config .window-content{
+  background: var(--lf-g-bg);
+  background: linear-gradient(0deg, var(--lf-g-1)0%, var(--lf-g-2) 32%, var(--lf-g-3) 100%);
+}
+.oseh-new-active-effect-form .window-content {
+  background: rgb(162, 125, 186);
+  background: linear-gradient(0deg, var(--ef-g-1) 0%, var(--ef-g-2) 20%, var(--ef-g-3) 100%);
+  overflow: none;
+}
+.oseh-new-active-effect-form textarea{
+  height: 65px;
+}
+.oseh-new-active-effect-form button {
+  color: white;
+}
+.oseh-new-active-effect-form button:focus,
+.oseh-new-active-effect-form button:hover {
+  box-shadow: 0 0 5px var(--el-button-glow);
+}
+#new-active-effect-cont {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+#new-active-effect-cont .attrib-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+#new-active-effect-cont .combined-row {
+  display: flex;
+  justify-content: space-between;
+}
+#new-active-effect-cont .bbl {
+  border: solid black;
+  border-width: 0px 2px 2px 4px;
+}
+#new-active-effect-cont .bbr {
+  border: solid black;
+  border-width: 0px 4px 2px 2px;
+}
+#new-active-effect-cont h4 {
+  text-align: center;
+  width: 100%;
+  margin: 0;
+}
+#new-active-effect-cont label {
+  padding-bottom: 5px;
+}
+#new-active-effect-cont textarea {
+  resize: none;
+}
+#new-active-effect-cont #duration {
+  width: 70px;
+}
+#new-active-effect-cont h4,
+#new-active-effect-cont h3,
+#new-active-effect-cont #name-label #new-active-effect-cont #descrip-label {
+  font-weight: 550;
+}
+
+#new-active-effect-cont .armor {
+  width: 120px;
+}
+
+/* active effect list */
+.oseh-active-effect-list .effect-cont {
+  height: 470px;
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.1);
+  border: 2px solid rgba(0, 0, 0, 0.3);
+  border-radius: 3px;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.oseh-active-effect-list form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+}
+.oseh-active-effect-list .header-name {
+  padding-left: 3px;
+  text-overflow: ellipsis;
+  width: 130px;
+}
+.oseh-active-effect-list .header-del {
+  width: 40px;
+}
+.oseh-active-effect-list .delete-btn .fas.fa-times {
+  color: rgb(175, 28, 28);
+}
+.oseh-active-effect-list .effect-name {
+  padding-left: 3px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 140px;
+}
+.oseh-active-effect-list .effect-target {
+  padding-left: 3px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 140px;
+}
+.oseh-active-effect-list .effect-dur {
+  padding-left: 3px;
+  width: 80px;
+}
+.active-effect:nth-of-type(even) {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+.oseh-active-effect-list .details-cont {
+  display: none;
+  justify-content: space-between;
+}
+.descrip-cont {
+  /* min-height: 100%; */
+  word-wrap: normal;
+  word-break: break-word;
+  overflow-x: hidden;
+  background-color: rgba(0, 0, 0, 0.05);
+}
+.effect-list {
+  margin: 0;
+}
+.effect-details-section {
+  width: 180px;
+  padding: 3px 5px;
+}
+.effect-details-section h4 {
+  margin-bottom: 0;
+}
+.effect-details-section p {
+  margin: 0 4px 0 0;
+}
+.oseh-active-effect-list .button-cont button {
+  color: white;
+}
+.oseh-active-effect-list .button-cont button:focus,
+.oseh-active-effect-list .button-cont button:hover {
+  box-shadow: 0 0 5px var(--el-button-glow);
+}
+.oseh-active-effect-list .window-content {
+  /* background-color: rgba(100,200,100, .1) !important; */
+  background: var(--ef-g-bg);
+  background: linear-gradient(0deg, var(--ef-g-1) 0%, var(--ef-g-2) 30%, var(--ef-g-3) 100%);
 }

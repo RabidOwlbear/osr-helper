@@ -7,8 +7,8 @@ export const registerLight = () => {
     //check for actors in all non gm user slots before writing flag to gm user
     if (game.user.role == 4) {
       for (let user of game.users.contents) {
-        if (user.data.flags['OSE-helper'].lightData[actorId]) {
-          lightData = await user.getFlag('OSE-helper', 'lightData');
+        if (user.data.flags[`${OSEH.moduleName}`].lightData[actorId]) {
+          lightData = await user.getFlag(`${OSEH.moduleName}`, 'lightData');
           userObj = user;
         }
       }
@@ -17,7 +17,7 @@ export const registerLight = () => {
         userObj = game.user;
       }
     } else {
-      lightData = game.user.getFlag('OSE-helper', 'lightData');
+      lightData = game.user.getFlag(`${OSEH.moduleName}`, 'lightData');
       userObj = game.user;
     }
 
@@ -30,8 +30,8 @@ export const registerLight = () => {
         }
       }
       lightData[actorId].lightLit = false;
-      await userObj.unsetFlag('OSE-helper', 'lightData');
-      await userObj.setFlag('OSE-helper', 'lightData', lightData);
+      await userObj.unsetFlag(`${OSEH.moduleName}`, 'lightData');
+      await userObj.setFlag(`${OSEH.moduleName}`, 'lightData', lightData);
       OSEH.light.oseLightOff(actorId);
       return;
     }
@@ -70,7 +70,7 @@ export const registerLight = () => {
               //if data contains actorId.type.isOn = false set isOn to true
               lightData[actorId].lightLit = true;
               lightData[actorId][itemType].isOn = true;
-              userObj.setFlag('OSE-helper', 'lightData', lightData);
+              userObj.setFlag(`${OSEH.moduleName}`, 'lightData', lightData);
               OSEH.util.updateTokens(actorId, OSEH.data.lightSource[itemType]);
               return;
             }
@@ -85,7 +85,7 @@ export const registerLight = () => {
                 }
               };
 
-              userObj.setFlag('OSE-helper', 'lightData', lightData);
+              userObj.setFlag(`${OSEH.moduleName}`, 'lightData', lightData);
               OSEH.util.updateTokens(actorId, OSEH.data.lightSource[itemType]);
               return;
             }
@@ -95,7 +95,7 @@ export const registerLight = () => {
                 isOn: true,
                 duration: OSEH.data.lightSource[itemType].duration
               };
-              userObj.setFlag('OSE-helper', 'lightData', lightData);
+              userObj.setFlag(`${OSEH.moduleName}`, 'lightData', lightData);
               OSEH.util.updateTokens(actorId, OSEH.data.lightSource[itemType]);
               return;
             }

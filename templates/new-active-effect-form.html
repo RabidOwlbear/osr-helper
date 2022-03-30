@@ -1,0 +1,106 @@
+<form action="submit">
+  <div id="new-active-effect-cont">
+    <div class="name fx fdc aic w100p ">
+      <h4 id="name-label">name:</h4>
+      <input type="text" name="name" id="name">
+    </div>
+    <div class="descrip fx fdc aic ">
+      <h4 id="descrip-label" >description:</h4>
+      <textarea rows="3" cols="50" name="descrip" id="descrip" placeholder="Effect Description Here..."></textarea>
+    </div>
+    <div class="fx sb w100p ">
+      <div class="fx sb plr5">
+        <label for="self">self:</label>
+        <input type="radio" name="target" id="self" checked>
+      </div>
+      <h4>target</h4>
+      <div class="fx sb plr5">
+        <label for="targeted">target: </label>
+        <input type="radio" name="target" id="targeted">
+      </div>
+    </div>
+    <div class="attrib fx fdc aic w100p  pb5">
+      <h4>attributes</h4>
+      <div class="attrib-cont fx sa w100p">
+        <div class="attrib-block"><label for="str"></label>str:<input name="attribute.str"id="str" type="number" value="0"></div>
+        <div class="attrib-block"><label for="int"></label>int:<input name="attribute.int"id="int" type="number" value="0"></div>
+        <div class="attrib-block"><label for="wis"></label>wis:<input name="attribute.wis"id="wis" type="number" value="0"></div>
+        <div class="attrib-block"><label for="dex"></label>dex:<input name="attribute.dex"id="dex" type="number" value="0"></div>
+        <div class="attrib-block"><label for="con"></label>con:<input name="attribute.con"id="con" type="number" value="0"></div>
+        <div class="attrib-block"><label for="cha"></label>cha:<input name="attribute.cha"id="cha" type="number" value="0"></div>
+      </div>
+    </div>
+    <div class="saves fx fdc aic w100p  pb5">
+      <h4>saves</h4>
+      <div class="saves-cont fx sa w100p">
+        <div class="attrib-block"><label for="breath">breath:</label><input name="saves.breath" id="breath" type="number" value="0"></div>
+        <div class="attrib-block"><label for="death">death:</label><input name="saves.death" id="death" type="number" value="0"></div>
+        <div class="attrib-block"><label for="paralysis">paralysis:</label><input name="saves.paralysis" id="paralysis" type="number" value="0"></div>
+        <div class="attrib-block"><label for="spell">spell:</label><input name="saves.spell" id="spell" type="number" value="0"></div>
+        <div class="attrib-block"><label for="wand">wand:</label><input name="saves.wand" id="wand" type="number" value="0"></div>
+      </div>
+    </div>
+    <div class="combined-row w100p">
+      <!-- <div class="initiative fx fdc aic  w100p  pb5">
+        <h4>initiative</h4>
+        <div class="init-cont fx sa w100p">
+          <div class="attrib-block">
+            <label for="init">value:</label>
+            <input name="init" id="init" type="number" value="0">
+          </div>
+          <div class="attrib-block">
+            <label for="isSlow">is Slow:</label>
+            <input name="isSlow" id="isSlow" type="checkbox">
+          </div>
+        </div>
+      </div> -->
+      <div class="combat fx fdc aic w100p  pb5">
+        <h4>combat bonus</h4>
+        <div class="combat-cont fx sa w100p">
+          <div class="attrib-block"><label for="thac0">thac0/ab:</label><input name="thac0.thac0" id="thac0" type="number" value="0"></div>
+          <div class="attrib-block"><label for="melee">melee:</label><input name="atkmod.melee" id="melee" type="number" value="0"></div>
+          <div class="attrib-block"><label for="ranged">ranged:</label><input name="atkmod.ranged" id="ranged" type="number" value="0"></div>
+        </div>
+      </div>
+      <div class="armor fx fdc aic   pb5">
+        <h4>armor bonus</h4>
+        <div class="attrib-block"><label for="ac">ac/aac:</label><input name="ac.aac" id="ac" type="number" value="0"></div>
+      </div>
+    </div>
+    <div class="combined-row w100p">
+      <div class="hp fx fdc aic w100p  pb5">
+        <h4>hp</h4>
+        <div class="hp-cont fx sb w100p">
+          <div class="attrib-block plr5"><label for="hp-max">max:</label><input name="hp.max" id="hp-max" type="number" value="0"></div>
+          <div class="attrib-block plr5"><label for="hp-val">value:</label><input name="hp.value" id="hp-val" type="number" value="0"></div>
+        </div>
+      </div>
+      <!-- <div class="hp fx fdc aic w100p  pb5">
+        <h4>movement</h4>
+        <div class="attrib-block"><label for="movement">value:</label><input name="movement" id="movement" type="number" value="0"></div>
+      </div> -->
+      <div class="hp fx fdc aic w100p  pb5">
+        <h4>duration</h4>
+        
+        <div class="attrib-block w100p">
+          <!-- <label for="duration">minutes:</label> -->
+          <div class="interval-select fx sb w100p pb5">
+            <div class="radio plr5">
+              <label for="seconds">sec.</label>
+              <input type="radio" name="interval" id="seconds">
+            </div>
+            <div class="radio plr5">
+              <label for="minutes">min.</label>
+              <input type="radio" name="interval" id="minutes" checked>
+            </div>
+          </div>
+          <input name="duration" id="duration" type="number" value="0">
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="button-div fx w100p sb pt10">
+    <button id="reset-btn">Reset</button>
+    <button id="create-btn">Create</button>
+  </div>
+</form>

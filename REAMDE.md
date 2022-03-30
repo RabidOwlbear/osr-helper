@@ -39,14 +39,32 @@ The macro will also check to see if random encounter rolls are active, if so itt
 
 ---
 
-### Player Lights
+### Custom Lights
 
-To activate a light, a player needs access to the "OSE-helper Light On " macro. To use a player token must be selected. When clicked the macro will check for the existence of the corresponding light type item on the characters sheet, if it exists, and has and uses left it will light that light item updating the selected token light settings.
+Custom light sources can be created by checking the **Enable Light Item Settings Config.** setting in the ose helper module settings. This setting will add a wrench icon to item display for any item with a "Light" tag applied to it in the characters inventory. (The tag needs to be capitalized in order to function correctly.)
+
+The wrench icon (number 1. in image below) will also be added to the header of the item details window, allowing for lights to be configured from the item sidebar tab, or inside compendiums. 
+
+![light configuration panel image](./images/doc/lights-doc-01.webp)
+
+1. Configuration icon: Click this to open the light item configuration panel.
+2. Light Configuration Panel: Here you can define the custom light properties and duration.
+3. Close: Closes the configuration panel without saving.
+4. Update: Updates the light configuration data.
+
+To activate a light, a player needs access to the provided "Light Toggle " macro. 
+
+To use, a player token must be selected.
+
+When clicked:
+- if a light is already lit on the selected token, the light will be extinguished.
+- if no light is currently lit, a dialog will be created containing a dropdown populated with the names and quantities of all items in the selected token actors inventory that contain a "Light" tag.
+- once a light source is selected, clicking "Light On" with change the selected token's light settings to match tose contained in the selected light source's configuration settings.
+
 note: Several light items have been provided in the OSE-helper Items compendium.
 If the macro has been used to light a light source, the light can be extinguished by clicking the macro again, preserving any remaning duration until lit again by clicking the Light On macro and selecting the corresponding light type.
 
-If a player has a light source that is currently lit, each time the game time updates the elapsed time is subtracted from that lights duration.
-if the light duration is 0 the light is extinguished and the item count for that light type is reduced by one. If the light type has no more uses it is deleted, in the case of lanterns, only the oil item is deleted.
+Each time game world time advances, all lit light sources will be checked against their duration, if the duration is exceeded the tight source will be extinguished, and the total quantity for that item will be decremented by 1. If the item quantity is reduced to zero the item will be deleted from the actor's invetory.
 
 ---
 
@@ -59,15 +77,42 @@ Total number of days worth of rations for the entire tracked group(assuming the 
 
 ---
 
-### Custom Effect Reminders
+### Custom Effects
 
-A 'custom effect' system has been implementd and can be accessed via a collection of icons located on the character portrait secton of the character sheet when moused over.
+A 'custom effect' system has been implementd and can be accessed via an  icon located on the character portrait secton of the character sheet when moused over (number 1 in the image below).
 
-- Show Active Effects pops up a widow detailing all active custom effects.
-- Add Custom Effect pops up a form for creating a new custom effect. Once created a chat message detailing the custom effect will be whispered to the player and they effects target(if selected).
-- Remove Custom Effect pops up a dialog with a drop down selector for deleting an effect early.
+#### Active Effects List
 
-When a custom effect expires, a chat message is whispered to the player and the target(if selected) notifying that an effect has expired.
+![light configuration panel image](./images/doc/effects-doc-01.webp)
+
+
+1. Active Effects List Icon: Click here to open the Active Effects List panel. This icon will only appear on 'character' type actor sheets.
+2. Active Effect List: all current active effects related to this actor will be displayed here.
+3. Actor Created Effects: Active Effects created by this actor are displayed here. Each effect will display its name, taget, duration, and a button to delete the effect. Clicking the name of the effect will expand the entry revealing the applied effects and the effect description(if any).
+4. Other Created Effects: Active effects created by other actors are displayed here. Each effect will display its name, actor created by, and duration. Each entry can be expanded as above.
+5. Close: Closes the panel.
+6. New: Opens a New Active Effect panel.
+
+#### New Active Effect
+
+7. Name (required): Active effect name.
+8. Description: active effect description.
+9. Target: Selecting 'self' will apply the created active effect to the actor the active effect list was opened from. Selecting target will apply the created active effect to the actor associated with the current targeted single token.
+10. Attributes: Changes to abilitiy scores are applied here. The fields accept positive and negative  number values.
+11. Saves: Changes to saves are applied here. The fields accept positive and negative number values.
+12. Combat Bonus: changes to thac0/attack bonus, melee, and ranged attacks are applied here. This input will assumes a positve number is a bonus, and a negative value is a penalty and will multply the value entered by -1 automatically as required by the selected game system thac0 setting.
+13. Armor Bonus: changes to ac/aac are applied here. This input will assumes a positve number is a bonus, and a negative value is a penalty and will multply the value entered by -1 automatically as required by the selected game system armor class setting.
+14. Hp: changes to hp current and max values are applied here.
+15. Duration (required): The duration of the effect is entered here. The duration will be set as the selected duration type, minutes or seconds.
+16. Reset: Clicking here will reset all number inputs to 0 and clear all text fields.
+17. Create: Clicking here will create a new active effect with the inputted effects on the selected target (number 9. image above).
+18. Active Effect Icons: Upon active effect creation an icon will be applied to the targeted actors token. This icon will be removed when the active effect expires.
+
+Effects may also be created uing the provided 'render new active effect form' macro while selecting or targeting a single token.
+
+Effects created by/placed on monster actors my be viewed by using the provided "Render Active Effect List" while selecting an actor token.
+
+Each time the game world time updates all active effect's duration will be checked, and any expired effects will be removed.
 
 ---
 
