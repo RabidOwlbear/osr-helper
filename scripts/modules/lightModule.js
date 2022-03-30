@@ -1,11 +1,9 @@
 export const registerLightModule = async function () {
-
   OSEH.light.lightToggle = async function (uuid, tokenId) {
     let actor = await fromUuid(uuid);
-    actor = actor.collectionName === 'tokens' ? actor.actor : actor
-    
+    actor = actor.collectionName === 'tokens' ? actor.actor : actor;
+
     let lightItems = actor.items.filter((i) => {
-      
       let tags = i.data.data.manualTags;
       if (tags && tags.find((t) => t.value == 'Light')) return i;
     });
@@ -41,7 +39,8 @@ export const registerLightModule = async function () {
     if (lightOptions == '') {
       ui.notifications.error('No Light Items Found');
       return;
-    }if (lightOptions == '') {
+    }
+    if (lightOptions == '') {
       ui.notifications.error('No Light Items Found');
       return;
     }
@@ -90,7 +89,7 @@ export const registerLightModule = async function () {
                 value: lightData,
                 type: 'set'
               };
-              await OSEH.socket.executeAsGM('setting', 'lightData', lightData, 'set' );
+              await OSEH.socket.executeAsGM('setting', 'lightData', lightData, 'set');
               await OSEH.socket.executeAsGM('updateTokens', actor.uuid, lightItemData);
               return;
             }
@@ -106,7 +105,7 @@ export const registerLightModule = async function () {
                 value: lightData,
                 type: 'set'
               };
-              await OSEH.socket.executeAsGM('setting', 'lightData', lightData, 'set' );
+              await OSEH.socket.executeAsGM('setting', 'lightData', lightData, 'set');
               // await game.settings.set(`${OSEH.moduleName}`, 'lightData', lightData);
               await OSEH.light.updateTokens(actor.uuid, lightItemData);
               return;
@@ -157,20 +156,49 @@ export const registerLightModule = async function () {
         let { start, duration, data } = light;
         start = curTime < start ? curTime : start;
         let elapsed = curTime - start;
-
+        let lastTurn = duration - elapsed == 600 ? true : false;
+        console.log(lastTurn, data)
+        if(lastTurn){
+          let lData = {
+            dim: data.dim * 0.7,
+            bright:  data.bright,
+            color: data.color,
+            alpha: data.alpha,
+            animation: data.animation,
+            bgCont: data.bgCont,
+            bgSat: data.bgSat,
+            bgShadow: data.bgShadow,
+            coloration: data.coloration,
+            intensity: data.intensity,
+            luminosity: data.liminosity,
+            speed: data.speed
+          } 
+          console.log(lData)
+          await OSEH.light.updateTokens(dataObj.uuid, lData);
+        }
         if (elapsed >= duration) {
-          
           dataObj.lightLit = false;
-          dataObj.lights = dataObj.lights.filter((i) => i.id != light.id);
-          await OSEH.light.updateTokens(dataObj.uuid,{
-            dim: 0,
+          dataObj.lights = await dataObj.lights.filter((i) => i.id != light.id);
+          let lData = {
+            dim:  0,
             bright: 0,
             color: data.color,
-            alpha: data.alpha
-          });
-
+            alpha: data.alpha,
+            animation: data.animation,
+            bgCont: data.bgCont,
+            bgSat: data.bgSat,
+            bgShadow: data.bgShadow,
+            coloration: data.coloration,
+            intensity: data.intensity,
+            luminosity: data.liminosity,
+            speed: data.speed
+          } 
+          console.log('lc', lData)
+          await OSEH.light.updateTokens(dataObj.uuid, lData);
+          
           OSEH.light.decrementLightItem(dataObj.uuid, light.itemId);
           if (!dataObj.lights.length) delete lightData[actorId];
+          
         }
       }
     }
@@ -179,7 +207,7 @@ export const registerLightModule = async function () {
 
   OSEH.light.decrementLightItem = async function (uuid, itemId) {
     let actor = await fromUuid(uuid);
-    actor = actor.collectionName === 'tokens' ? actor.actor : actor
+    actor = actor.collectionName === 'tokens' ? actor.actor : actor;
     let item = await actor.data.items.get(itemId);
 
     if (item.data.data.quantity.value > 1) {
@@ -193,7 +221,7 @@ export const registerLightModule = async function () {
 
   OSEH.light.ItemSettingsForm = class ItemSettingsForm extends FormApplication {
     constructor(item) {
-      super(item, {id: `light-item-config.${item.id}`, title: `OSEH Light Item Config - ${item.name}`});
+      super(item, { id: `light-item-config.${item.id}`, title: `OSEH Light Item Config - ${item.name}` });
       this.item = item;
     }
 
@@ -203,15 +231,13 @@ export const registerLightModule = async function () {
         popOut: true,
         height: 520,
         width: 300,
-        template: `modules/${OSEH.moduleName}/templates/light-item-config-form.html`,
-        
-        
+        template: `modules/${OSEH.moduleName}/templates/light-item-config-form.html`
       });
     }
 
     getData() {
       let flag = this.item.getFlag(`${OSEH.moduleName}`, 'lightItemData');
-      
+
       // Send data to the template
       return {
         name: this.item.name,
@@ -240,7 +266,7 @@ export const registerLightModule = async function () {
       let inputsA = html.find('.light-config-input.type-a');
       let inputsB = html.find('.light-config-input.type-b');
       closeBtn.addEventListener('click', (ev) => {
-        this.close()
+        this.close();
       });
       // update button
       updateBtn.addEventListener('click', async (ev) => {
@@ -267,21 +293,21 @@ export const registerLightModule = async function () {
         this.close();
       });
       // numberInput qol
-      for(let input of inputsA){
-        input.addEventListener('blur', (ev)=>{
-          if(!ev.target.value)ev.target.value = 0;
+      for (let input of inputsA) {
+        input.addEventListener('blur', (ev) => {
+          if (!ev.target.value) ev.target.value = 0;
           ev.target.value = ev.target.value < 0 ? 0 : ev.target.value;
-        })
+        });
       }
-      for(let input of inputsB){
-        input.addEventListener('blur', (ev)=>{
-          if(!ev.target.value)ev.target.value = 0;
-          if(ev.target.value < 0) ev.target.value = 0;
-          if(ev.target.value > 1 && ev.target.id != 'speed' && ev.target.id != 'intensity') ev.target.value = 1;
-          if(ev.target.id != 'speed' || ev.target.id != 'intensity'){
-            if(ev.target.value  > 10)ev.target.value = 10;
-          } 
-        })
+      for (let input of inputsB) {
+        input.addEventListener('blur', (ev) => {
+          if (!ev.target.value) ev.target.value = 0;
+          if (ev.target.value < 0) ev.target.value = 0;
+          if (ev.target.value > 1 && ev.target.id != 'speed' && ev.target.id != 'intensity') ev.target.value = 1;
+          if (ev.target.id != 'speed' || ev.target.id != 'intensity') {
+            if (ev.target.value > 10) ev.target.value = 10;
+          }
+        });
       }
     }
 
@@ -289,32 +315,40 @@ export const registerLightModule = async function () {
   };
 
   OSEH.light.updateTokens = async function (uuid, lightData, lastTurn = false) {
-    let actor = await fromUuid(uuid)
-    game.scenes.map(s=>{
-      console.log(s, s.tokens)
-      if(s.tokens.size){
-        s.tokens.forEach(async t=> {
-          console.log(t?.actor?.uuid)
-          if(t.actor && t.actor.uuid == uuid){
+    console.log('udt', lightData)
+    let actor = await fromUuid(uuid);
+    game.scenes.map((s) => {
+      if (s.tokens.size) {
+        s.tokens.forEach(async (t) => {
+          // console.log(t?.actor?.uuid);
+          if (t.actor && t.actor.uuid == uuid) {
             let data = {
-                      light: {
-                        bright: lightData.bright,
-                        dim: lastTurn ? lightData.dim * 0.7 : lightData.dim,
-                        color: lightData.color,
-                        alpha: lightData.alpha,
-                        gradual: true,
-                        animation: { type: lightData.animation, speed: 3, intensity: 5 }
-                      }
-                    };
-            
-                    await t.update(data);
+              light: {
+                bright: lightData.bright,
+                dim: lightData.dim,
+                color: lightData.color,
+                alpha: lightData.alpha,
+                gradual: true,
+                animation: {
+                  type: lightData.animation,
+                  speed: lightData.speed,
+                  intensity: lightData.intensity
+                },
+                coloration: lightData.coloration,
+                contrast: lightData.bgCont,
+                luminosity: lightData.luminosity,
+                saturation: lightData.saturation,
+                shadows: lightData.bgShadow
+              }
+            };
+
+            await t.update(data);
           }
         });
       }
-    })
-    
+    });
   };
-  
+
   OSEH.light.turnsRemaining = async function (actorId) {
     let lightData = game.settings.get(`${OSEH.moduleName}`, 'lightData')?.[actorId]?.lights.filter((i) => i.isOn)?.[0];
     if (lightData) {
