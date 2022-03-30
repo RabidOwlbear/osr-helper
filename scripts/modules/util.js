@@ -3,7 +3,7 @@ export const registerUtil =  () => {
   //tick: manages light duration, turn count
   OSEH.util.oseTick = async function () {
     if (game.user.role >= 4) {
-      let lastTick = game.settings.get('OSE-helper', 'lastTick');
+      let lastTick = await game.settings.get('OSE-helper', 'lastTick');
       await OSEH.util.oseLightTick(lastTick);
       await OSEH.util.oseEffectTick(lastTick);
 
