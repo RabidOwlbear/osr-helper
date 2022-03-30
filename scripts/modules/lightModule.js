@@ -181,43 +181,43 @@ export const registerLightModule = async function () {
 
   OSEH.light.ItemSettingsForm = class ItemSettingsForm extends FormApplication {
     constructor(item) {
-      super();
+      super(item, {id: `light-item-config.${item.id}`, title: `OSEH Light Item Config - ${item.name}`});
       this.item = item;
     }
 
     static get defaultOptions() {
       return mergeObject(super.defaultOptions, {
-        classes: ['form'],
+        classes: ['form', `light-item-config`],
         popOut: true,
         height: 520,
         width: 300,
         template: `modules/OSE-helper/templates/light-item-config-form.html`,
-        id: 'light-item-config',
-        title: 'OSEH Light Item Config'
+        
+        
       });
     }
 
     getData() {
       let flag = this.item.getFlag('OSE-helper', 'lightItemData');
-
+      console.log(flag, flag.speed);
       // Send data to the template
       return {
         name: this.item.name,
-        dim: flag ? flag.dim : 30,
-        bright: flag ? flag.bright : 10,
-        color: flag ? flag.color : '#ff7b24',
-        dur: flag ? flag.duration : 60,
-        alpha: flag ? flag.alpha : 0.5,
-        alert: flag ? flag.alert : 1,
-        warn: flag ? flag.warn : 3,
-        animation: flag ? flag.animation : 'torch',
-        speed: flag ? flag.speed : 3,
-        intensity: flag ? flag.intensity : 5,
-        coloration: flag ? flag.coloration : '1',
-        luminosity: flag ? flag.luminosity : 0.5,
-        bgSat: flag ? flag.bgSat : 0,
-        bgCont: flag ? flag.gbCont : 0,
-        bgShadow: flag ? flag.bgShadow : 0
+        dim: flag?.dim ? flag.dim : 30,
+        bright: flag?.bright ? flag.bright : 10,
+        color: flag?.color ? flag.color : '#ff7b24',
+        dur: flag?.duration ? flag.duration : 60,
+        alpha: flag?.alpha ? flag.alpha : 0.5,
+        alert: flag?.alert ? flag.alert : 1,
+        warn: flag?.warn ? flag.warn : 3,
+        animation: flag?.animation ? flag.animation : 'torch',
+        speed: flag?.speed ? flag.speed : 3,
+        intensity: flag?.intensity ? flag.intensity : 5,
+        coloration: flag?.coloration ? flag.coloration : '1',
+        luminosity: flag?.luminosity ? flag.luminosity : 0.5,
+        bgSat: flag?.bgSat ? flag.bgSat : 0,
+        bgCont: flag?.bgCont ? flag.bgCont : 0,
+        bgShadow: flag?.bgShadow ? flag.bgShadow : 0
       };
     }
 

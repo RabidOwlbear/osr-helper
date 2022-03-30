@@ -13,6 +13,10 @@
   --ef-g-2: rgb(179, 234, 248);
   --ef-g-3: rgb(233, 255, 222);
   --ef-g-bg: rgb(162, 125, 186);
+  --lf-g-1: rgb(123, 203, 204) ;
+  --lf-g-2: rgb(248, 235, 207);
+  --lf-g-3: rgb(248, 214, 198);
+  --lf-g-bg: rgb(174, 204, 204);
 }
 /* custom effect form */
 #customEffectForm .effectDesc {
@@ -335,28 +339,32 @@
 }
 
 /* light config form */
-#light-item-config .list-cont {
+.light-item-config .list-cont {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   overflow: hidden;
   height: 300px;
 }
-#light-item-config .list-item {
+.light-item-config .list-item {
   display: flex;
   align-content: space-around;
   justify-content: space-between;
 }
-#light-item-config input {
+.light-item-config input {
   width: 70px;
 }
-#light-item-config .form-button-div {
+.light-item-config .form-button-div {
   display: flex;
   margin: 1em 0 0.5em 0;
 }
+.light-item-config .window-content{
+  background: var(--lf-g-bg);
+  background: linear-gradient(0deg, var(--lf-g-1)0%, var(--lf-g-2) 32%, var(--lf-g-3) 100%);
+}
 .oseh-new-active-effect-form .window-content {
   background: rgb(162, 125, 186);
-  background: linear-gradient(0deg, var(--ef-g-1) 0%, var(--ef-g-2) 25%, var(--ef-g-3) 100%);
+  background: linear-gradient(0deg, var(--ef-g-1) 0%, var(--ef-g-2) 20%, var(--ef-g-3) 100%);
   overflow: none;
 }
 .oseh-new-active-effect-form textarea{
