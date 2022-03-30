@@ -38,7 +38,13 @@ export const registerLightModule = async function () {
     for (let light of lightItems) {
       lightOptions += `<option value="${light.id}">${light.name}: ${light.data.data.quantity.value}</option>`;
     }
-
+    if (lightOptions == '') {
+      ui.notifications.error('No Light Items Found');
+      return;
+    }if (lightOptions == '') {
+      ui.notifications.error('No Light Items Found');
+      return;
+    }
     let dialogTemplate = `
     <h1> Pick a Light Type </h1>
     <div style="display:flex">
