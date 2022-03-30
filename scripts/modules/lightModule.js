@@ -290,27 +290,29 @@ export const registerLightModule = async function () {
 
   OSEH.light.updateTokens = async function (uuid, lightData, lastTurn = false) {
     let actor = await fromUuid(uuid)
-    
-    //loop through active game scenes
-    for (let scene of game.scenes.contents) {
-      
-      //loop through tokens contaioned in scene
-      let tokens = scene.tokens.filter((t) => t.actor.uuid == uuid);
-      tokens.forEach(async (t) => {
-        let data = {
-          light: {
-            bright: lightData.bright,
-            dim: lastTurn ? lightData.dim * 0.7 : lightData.dim,
-            color: lightData.color,
-            alpha: lightData.alpha,
-            gradual: true,
-            animation: { type: lightData.animation, speed: 3, intensity: 5 }
+    game.scenes.map(s=>{
+      console.log(s, s.tokens)
+      if(s.tokens.size){
+        s.tokens.forEach(async t=> {
+          console.log(t?.actor?.uuid)
+          if(t.actor && t.actor.uuid){
+            let data = {
+                      light: {
+                        bright: lightData.bright,
+                        dim: lastTurn ? lightData.dim * 0.7 : lightData.dim,
+                        color: lightData.color,
+                        alpha: lightData.alpha,
+                        gradual: true,
+                        animation: { type: lightData.animation, speed: 3, intensity: 5 }
+                      }
+                    };
+            
+                    await t.update(data);
           }
-        };
-
-        await t.update(data);
-      });
-    }
+        });
+      }
+    })
+    
   };
   
   OSEH.light.turnsRemaining = async function (actorId) {
