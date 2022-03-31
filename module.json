@@ -3,7 +3,7 @@
   "title": "OSE Helper Module",
   "description": "A collection of helpers for OSE",
   "author": "Grim",
-  "version": "0.3.3",
+  "version": "0.3.4",
   "minimumCoreVerson": "0.8.0",
   "compatibleCoreVersion": "0.9.0",
   "styles": ["./styles/main.css"],
@@ -35,6 +35,11 @@
     {
       "name": "dice-so-nice",
       "manifest": "https://gitlab.com/riccisi/foundryvtt-dice-so-nice/-/raw/master/module/module.json",
+      "type": "module"
+    },
+    {
+      "name": "socketlib",
+      "manifest": "https://raw.githubusercontent.com/manuelVo/foundryvtt-socketlib/master/module.json",
       "type": "module"
     }
   ],
