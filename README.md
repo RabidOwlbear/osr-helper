@@ -1,6 +1,8 @@
 # OSE-helper module
 
-created by Grim.
+Created by RabidOwlbear.
+
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/J3J1BW12R)
 
 An unimaginatively named module that aims to assist with light, time, and resource management. For use in games using the Old School Essentials system for FoundryVTT.
 This module provides several macros found in a compendium named "OSE-helper Macros".
