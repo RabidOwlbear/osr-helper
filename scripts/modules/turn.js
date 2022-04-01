@@ -1,7 +1,7 @@
 export const registerTurn =  () => {
   OSRH.turn = OSRH.turn || {};
 
-  const oseTime = {};
+  const osrTime = {};
   //increments game-worldtime by input amount
   OSRH.turn.timePlus = async function (amt, inc, turn = false) {
     const increments = {

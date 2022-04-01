@@ -3,7 +3,7 @@ import { registerLightModule } from './modules/lightModule.js';
 import { registerTurn } from './modules/turn.js';
 import { registerRations } from './modules/rations.js';
 import { registerUtil } from './modules/util.js';
-import { registerData } from './data/oseHelperData.js';
+import { registerData } from './data/osrHelperData.js';
 import { registerCustomEffectList } from './modules/customEffectList.js';
 import { registerReports } from './modules/reports.js';
 import { registerNameData } from './data/nameData.js';
@@ -96,12 +96,12 @@ Hooks.once('ready', async () => {
 
   //set hook to update light timer durations
   Hooks.on('updateWorldTime', async () => {
-    await OSRH.util.oseTick();
+    await OSRH.util.osrTick();
     console.log('time');
     OSRH.socket.executeAsGM('lightCheck');
     // OSRH.socket.executeAsGM('clearExpiredEffects')
     // OSRH.util.debounce(, 300);
-    OSRH.util.oseHook(`${OSRH.moduleName} Time Updated`);
+    OSRH.util.osrHook(`${OSRH.moduleName} Time Updated`);
   });
 
   Hooks.on(`${OSRH.moduleName} Time Updated`, () => {
@@ -247,7 +247,7 @@ Hooks.on('osrItemShopActive', async () => {
         options: [
           {
             name: 'OSE Helper Items',
-            source: 'oseHelper',
+            source: 'osrHelper',
             itemTypes: ['light source', 'food']
           }
         ]

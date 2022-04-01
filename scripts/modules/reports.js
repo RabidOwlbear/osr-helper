@@ -231,7 +231,7 @@ export const registerReports = () => {
           classes: ['application', 'testApp'],
           popOut: true,
           template: `modules/${OSRH.moduleName}/templates/travel-report.html`,
-          id: 'oseTravelReport',
+          id: 'osrTravelReport',
           title: 'Adventure ahoy!',
           width: 400
         });

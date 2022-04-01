@@ -140,7 +140,7 @@
 
 /* travel calc */
 
-#oseTravelReport .window-content {
+#osrTravelReport .window-content {
   margin: 0;
   padding: 0;
 }
@@ -362,22 +362,22 @@
   background: var(--lf-g-bg);
   background: linear-gradient(0deg, var(--lf-g-1) 0%, var(--lf-g-2) 32%, var(--lf-g-3) 100%);
 }
-.oseh-new-active-effect-form .window-content {
+.osrh-new-active-effect-form .window-content {
   background: rgb(162, 125, 186);
   background: linear-gradient(0deg, var(--ef-g-1) 0%, var(--ef-g-2) 20%, var(--ef-g-3) 100%);
   overflow: none;
 }
-.oseh-new-active-effect-form textarea{
+.osrh-new-active-effect-form textarea{
   height: 65px;
 }
-.oseh-new-active-effect-form button {
+.osrh-new-active-effect-form button {
   color: white;
 }
-.oseh-new-active-effect-form .radio {
+.osrh-new-active-effect-form .radio {
   width: 30px
 }
-.oseh-new-active-effect-form button:focus,
-.oseh-new-active-effect-form button:hover {
+.osrh-new-active-effect-form button:focus,
+.osrh-new-active-effect-form button:hover {
   box-shadow: 0 0 5px var(--el-button-glow);
 }
 #new-active-effect-cont {
@@ -427,7 +427,7 @@
 }
 
 /* active effect list */
-.oseh-active-effect-list .effect-cont {
+.osrh-active-effect-list .effect-cont {
   height: 470px;
   width: 100%;
   background-color: rgba(0, 0, 0, 0.1);
@@ -437,44 +437,44 @@
   overflow-y: auto;
 }
 
-.oseh-active-effect-list form {
+.osrh-active-effect-list form {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
 }
-.oseh-active-effect-list .header-name {
+.osrh-active-effect-list .header-name {
   padding-left: 3px;
   text-overflow: ellipsis;
   width: 130px;
 }
-.oseh-active-effect-list .header-del {
+.osrh-active-effect-list .header-del {
   width: 40px;
 }
-.oseh-active-effect-list .delete-btn .fas.fa-times {
+.osrh-active-effect-list .delete-btn .fas.fa-times {
   color: rgb(175, 28, 28);
 }
-.oseh-active-effect-list .effect-name {
+.osrh-active-effect-list .effect-name {
   padding-left: 3px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   width: 140px;
 }
-.oseh-active-effect-list .effect-target {
+.osrh-active-effect-list .effect-target {
   padding-left: 3px;
   overflow: hidden;
   text-overflow: ellipsis;
   width: 140px;
 }
-.oseh-active-effect-list .effect-dur {
+.osrh-active-effect-list .effect-dur {
   padding-left: 3px;
   width: 80px;
 }
 .active-effect:nth-of-type(even) {
   background-color: rgba(0, 0, 0, 0.05);
 }
-.oseh-active-effect-list .details-cont {
+.osrh-active-effect-list .details-cont {
   display: none;
   justify-content: space-between;
 }
@@ -498,14 +498,14 @@
 .effect-details-section p {
   margin: 0 4px 0 0;
 }
-.oseh-active-effect-list .button-cont button {
+.osrh-active-effect-list .button-cont button {
   color: white;
 }
-.oseh-active-effect-list .button-cont button:focus,
-.oseh-active-effect-list .button-cont button:hover {
+.osrh-active-effect-list .button-cont button:focus,
+.osrh-active-effect-list .button-cont button:hover {
   box-shadow: 0 0 5px var(--el-button-glow);
 }
-.oseh-active-effect-list .window-content {
+.osrh-active-effect-list .window-content {
   /* background-color: rgba(100,200,100, .1) !important; */
   background: var(--ef-g-bg);
   background: linear-gradient(0deg, var(--ef-g-1) 0%, var(--ef-g-2) 30%, var(--ef-g-3) 100%);

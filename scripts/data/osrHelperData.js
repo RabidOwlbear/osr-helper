@@ -175,7 +175,7 @@ lightType: {
 
   OSRH.data.helperItems = [
     {
-      source: 'oseHelper',
+      source: 'osrHelper',
       type: 'light source',
       name: 'Blue Moss Torch (3)',
       cost: 1,
@@ -183,10 +183,10 @@ lightType: {
       qty: 3,
       stack: true,
       pack: `${OSRH.moduleName}.${OSRH.moduleName}-items`,
-      id: 'oseh001'
+      id: 'osrh001'
     },
     {
-      source: 'oseHelper',
+      source: 'osrHelper',
       type: 'light source',
       name: 'Purple Moss Torch (3)',
       cost: 1,
@@ -194,10 +194,10 @@ lightType: {
       qty: 3,
       stack: true,
       pack: `${OSRH.moduleName}.${OSRH.moduleName}-items`,
-      id: 'oseh002'
+      id: 'osrh002'
     },
     {
-      source: 'oseHelper',
+      source: 'osrHelper',
       type: 'light source',
       name: 'Green Moss Torch (3)',
       cost: 1,
@@ -205,10 +205,10 @@ lightType: {
       qty: 3,
       stack: true,
       pack: `${OSRH.moduleName}.${OSRH.moduleName}-items`,
-      id: 'oseh003'
+      id: 'osrh003'
     },
     {
-      source: 'oseHelper',
+      source: 'osrHelper',
       type: 'light source',
       name: 'Low Quality Oil (1 flask)',
       cost: 1,
@@ -216,10 +216,10 @@ lightType: {
       qty: 1,
       stack: true,
       pack: `${OSRH.moduleName}.${OSRH.moduleName}-items`,
-      id: 'oseh004'
+      id: 'osrh004'
     },
     {
-      source: 'oseHelper',
+      source: 'osrHelper',
       type: 'light source',
       name: 'Standard Quality Oil (1 flask)',
       cost: 2,
@@ -227,10 +227,10 @@ lightType: {
       qty: 1,
       stack: true,
       pack: `${OSRH.moduleName}.${OSRH.moduleName}-items`,
-      id: 'oseh005'
+      id: 'osrh005'
     },
     {
-      source: 'oseHelper',
+      source: 'osrHelper',
       type: 'light source',
       name: 'Low Quality Oil (1 flask)',
       cost: 1,
@@ -238,10 +238,10 @@ lightType: {
       qty: 1,
       stack: true,
       pack: `${OSRH.moduleName}.${OSRH.moduleName}-items`,
-      id: 'oseh006'
+      id: 'osrh006'
     },
     {
-      source: 'oseHelper',
+      source: 'osrHelper',
       type: 'light source',
       name: 'High Quality Oil (1 flask)',
       cost: 5,
@@ -249,10 +249,10 @@ lightType: {
       qty: 1,
       stack: true,
       pack: `${OSRH.moduleName}.${OSRH.moduleName}-items`,
-      id: 'oseh007'
+      id: 'osrh007'
     },
     {
-      source: 'oseHelper',
+      source: 'osrHelper',
       type: 'food',
       name: 'Foraged Rations: Berries',
       cost: 1,
@@ -260,10 +260,10 @@ lightType: {
       qty: 1,
       stack: true,
       pack: `${OSRH.moduleName}.${OSRH.moduleName}-items`,
-      id: 'oseh008'
+      id: 'osrh008'
     },
     {
-      source: 'oseHelper',
+      source: 'osrHelper',
       type: 'food',
       name: 'Foraged Rations: Fish',
       cost: 1,
@@ -271,10 +271,10 @@ lightType: {
       qty: 1,
       stack: true,
       pack: `${OSRH.moduleName}.${OSRH.moduleName}-items`,
-      id: 'oseh009'
+      id: 'osrh009'
     },
     {
-      source: 'oseHelper',
+      source: 'osrHelper',
       type: 'food',
       name: 'Foraged Rations: Game',
       cost: 1,
@@ -282,10 +282,10 @@ lightType: {
       qty: 1,
       stack: true,
       pack: `${OSRH.moduleName}.${OSRH.moduleName}-items`,
-      id: 'oseh010'
+      id: 'osrh010'
     },
     {
-      source: 'oseHelper',
+      source: 'osrHelper',
       type: 'food',
       name: 'Foraged Rations: Fruit',
       cost: 1,
@@ -293,10 +293,10 @@ lightType: {
       qty: 1,
       stack: true,
       pack: `${OSRH.moduleName}.${OSRH.moduleName}-items`,
-      id: 'oseh011'
+      id: 'osrh011'
     },
     {
-      source: 'oseHelper',
+      source: 'osrHelper',
       type: 'food',
       name: 'Foraged Rations: Mushrooms',
       cost: 1,
@@ -304,10 +304,10 @@ lightType: {
       qty: 1,
       stack: true,
       pack: `${OSRH.moduleName}.${OSRH.moduleName}-items`,
-      id: 'oseh012'
+      id: 'osrh012'
     },
     {
-      source: 'oseHelper',
+      source: 'osrHelper',
       type: 'food',
       name: 'Fresh Food (7 days)',
       cost: 5,
@@ -315,10 +315,10 @@ lightType: {
       qty: 1,
       stack: true,
       pack: `${OSRH.moduleName}.${OSRH.moduleName}-items`,
-      id: 'oseh013'
+      id: 'osrh013'
     },
     {
-      source: 'oseHelper',
+      source: 'osrHelper',
       type: 'food',
       name: 'Hard Tack (7 days)',
       cost: 15,
@@ -326,7 +326,7 @@ lightType: {
       qty: 1,
       stack: false,
       pack: `${OSRH.moduleName}.${OSRH.moduleName}-items`,
-      id: 'oseh014'
+      id: 'osrh014'
     }
   ];
   OSRH.data.ammoData = [

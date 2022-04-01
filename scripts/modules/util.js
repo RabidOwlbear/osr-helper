@@ -1,18 +1,18 @@
 export const registerUtil =  () => {
   OSRH.util = OSRH.util || {};
   //tick: manages light duration, turn count
-  OSRH.util.oseTick = async function () {
+  OSRH.util.osrTick = async function () {
     if (game.user.role >= 4) {
       let lastTick = await game.settings.get(`${OSRH.moduleName}`, 'lastTick');
-      await OSRH.util.oseLightTick(lastTick);
-      await OSRH.util.oseEffectTick(lastTick);
+      await OSRH.util.osrLightTick(lastTick);
+      await OSRH.util.osrEffectTick(lastTick);
 
       //update lightTick
 
       await game.settings.set(`${OSRH.moduleName}`, 'lastTick', game.time.worldTime);
     }
   };
-  OSRH.util.oseLightTick = async function (lastTick) {
+  OSRH.util.osrLightTick = async function (lastTick) {
     if (game.user.role >= 4) {
       //get data
       const data = {
@@ -59,8 +59,8 @@ export const registerUtil =  () => {
                   }
 
                   data.light[actorId].lightLit = false;
-                  //changed oseh.light.ligthOff to oseLightOff
-                  OSRH.light.oseLightOff(actorId);
+                  
+                  OSRH.light.osrLightOff(actorId);
                   delete data.light[actorId][lightType];
                   if (Object.keys(data.light[actorId]).length == 1) {
                     delete data.light[actorId];
@@ -75,7 +75,7 @@ export const registerUtil =  () => {
       }
     }
   };
-  OSRH.util.oseEffectTick = async function (lastTick) {
+  OSRH.util.osrEffectTick = async function (lastTick) {
     if (game.user.role >= 4) {
       const curTime = game.time.worldTime;
       const elapsed = (curTime - lastTick) / 60;
@@ -113,7 +113,7 @@ export const registerUtil =  () => {
         }
       }
     };
-    journal.setFlag('world', 'oseLights', flagObj);
+    journal.setFlag('world', 'osrLights', flagObj);
     actor.setFlag('world', 'lightLit', true);
   };
 
@@ -137,14 +137,14 @@ export const registerUtil =  () => {
   OSRH.util.unSetLightFlag = function (data) {
     const { actor, actorId } = data;
     const journal = game.journal.getName(game.settings.get(`${OSRH.moduleName}`, 'timeJournalName'));
-    let flags = journal.data.flags.world.oseLights;
+    let flags = journal.data.flags.world.osrLights;
     delete flags[actorId];
-    journal.unsetFlag('world', 'oseLights');
-    journal.setFlag('world', 'oseLights', flags);
+    journal.unsetFlag('world', 'osrLights');
+    journal.setFlag('world', 'osrLights', flags);
     actor.setFlag('world', 'lightLit', false);
   };
 
-  OSRH.util.oseClearUserFlag = async function (data) {
+  OSRH.util.osrClearUserFlag = async function (data) {
     const { user, scope, flagname, reset } = data;
     await user.unsetFlag(scope, flagname);
     if (reset) await user.setFlag(scope, flagname, {});
@@ -204,7 +204,7 @@ export const registerUtil =  () => {
     }
   };
 
-  OSRH.util.oseHook = function (hookName, args = []) {
+  OSRH.util.osrHook = function (hookName, args = []) {
     Hooks.callAll(hookName, ...args);
   };
   OSRH.util.toggleButton = function (btn) {

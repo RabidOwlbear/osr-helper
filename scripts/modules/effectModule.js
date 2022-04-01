@@ -23,7 +23,7 @@ export const registerEffectModule = async function () {
     }
     static get defaultOptions() {
       return mergeObject(super.defaultOptions, {
-        classes: ['form', 'oseh-new-active-effect-form'],
+        classes: ['form', 'osrh-new-active-effect-form'],
         popOut: true,
         height: 540,
         top: 0,
@@ -257,7 +257,7 @@ export const registerEffectModule = async function () {
     }
     static get defaultOptions() {
       let options = {
-        classes: ['form', `oseh-active-effect-list`],
+        classes: ['form', `osrh-active-effect-list`],
         popOut: true,
         height: 600,
         width: 400,
