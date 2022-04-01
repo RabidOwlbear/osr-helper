@@ -10,8 +10,8 @@ import { registerNameData } from './data/nameData.js';
 import { registerSettings } from './modules/settingsModule.js';
 import { registerEffectModule } from './modules/effectModule.js';
 //namespace
-window.OSEH = window.OSEH || {
-  moduleName: `OSE-helper`,
+window.OSRH = window.OSRH || {
+  moduleName: `osr-helper`,
   ce: {},
   data: {},
   light: {},
@@ -38,35 +38,35 @@ Hooks.once('init', async function () {
   registerNameData();
   registerLightModule();
   registerEffectModule();
-  OSEH.gameVersion = game.version ? game.version : game.data.version;
-  Hooks.call(`${OSEH.moduleName}.registered`);
+  OSRH.gameVersion = game.version ? game.version : game.data.version;
+  Hooks.call(`${OSRH.moduleName}.registered`);
 });
 Hooks.once('socketlib.ready', () => {
   console.log('SL ready');
 
-  Hooks.once(`${OSEH.moduleName}.registered`, () => {
-    OSEH.socket = socketlib.registerModule(`${OSEH.moduleName}`);
+  Hooks.once(`${OSRH.moduleName}.registered`, () => {
+    OSRH.socket = socketlib.registerModule(`${OSRH.moduleName}`);
     console.log('reg');
-    OSEH.socket.register('lightCheck', OSEH.light.lightCheck);
-    OSEH.socket.register('updateTokens', OSEH.light.updateTokens);
-    OSEH.socket.register('setting', OSEH.util.setting);
-    OSEH.socket.register('decrementLightItem', OSEH.light.decrementLightItem);
-    OSEH.socket.register('clearExpiredEffects', OSEH.effect.clearExpired);
-    OSEH.socket.register('renderNewEffectForm', OSEH.effect.renderNewEffectForm);
-    OSEH.socket.register('createActiveEffectOnTarget', OSEH.util.createActiveEffectOnTarget);
-    // OSEH.socket.register('deleteEffect', OSEH.effect.deleteEffect)
-    OSEH.socket.register('deleteAll', OSEH.effect.deleteAll);
-    OSEH.socket.register('effectHousekeeping', OSEH.effect.housekeeping);
-    OSEH.socket.register('gmCreateEffect', OSEH.effect.gmCreateEffect);
-    OSEH.socket.register('deleteEffect', OSEH.effect.delete);
-    OSEH.socket.register('refreshEffectLists', OSEH.effect.refreshEffectLists);
+    OSRH.socket.register('lightCheck', OSRH.light.lightCheck);
+    OSRH.socket.register('updateTokens', OSRH.light.updateTokens);
+    OSRH.socket.register('setting', OSRH.util.setting);
+    OSRH.socket.register('decrementLightItem', OSRH.light.decrementLightItem);
+    OSRH.socket.register('clearExpiredEffects', OSRH.effect.clearExpired);
+    OSRH.socket.register('renderNewEffectForm', OSRH.effect.renderNewEffectForm);
+    OSRH.socket.register('createActiveEffectOnTarget', OSRH.util.createActiveEffectOnTarget);
+    // OSRH.socket.register('deleteEffect', OSRH.effect.deleteEffect)
+    OSRH.socket.register('deleteAll', OSRH.effect.deleteAll);
+    OSRH.socket.register('effectHousekeeping', OSRH.effect.housekeeping);
+    OSRH.socket.register('gmCreateEffect', OSRH.effect.gmCreateEffect);
+    OSRH.socket.register('deleteEffect', OSRH.effect.delete);
+    OSRH.socket.register('refreshEffectLists', OSRH.effect.refreshEffectLists);
   });
 });
 //update proc data if changed
 Hooks.on('updateSetting', async () => {
-  const turnData = game.settings.get(`${OSEH.moduleName}`, 'turnData');
+  const turnData = game.settings.get(`${OSRH.moduleName}`, 'turnData');
 
-  const newName = game.settings.get(`${OSEH.moduleName}`, 'timeJournalName');
+  const newName = game.settings.get(`${OSRH.moduleName}`, 'timeJournalName');
   const oldName = turnData?.journalName;
   const journal = await game.journal.getName(oldName);
 
@@ -76,56 +76,56 @@ Hooks.on('updateSetting', async () => {
     await journal.update({ name: newName });
   }
   //turn journal update
-  OSEH.socket.executeAsGM('setting', 'turnData', turnData, 'set');
+  OSRH.socket.executeAsGM('setting', 'turnData', turnData, 'set');
   // if (game.user.role >= 4) {
-  //   game.settings.set(`${OSEH.moduleName}`, 'turnData', turnData);
+  //   game.settings.set(`${OSRH.moduleName}`, 'turnData', turnData);
 
   // }
 });
 
 Hooks.once('ready', async () => {
-  //const lightData = game.settings.get(`${OSEH.moduleName}`, 'lightData');
-  const turnData = game.settings.get(`${OSEH.moduleName}`, 'turnData');
-  const jName = game.settings.get(`${OSEH.moduleName}`, 'timeJournalName');
+  //const lightData = game.settings.get(`${OSRH.moduleName}`, 'lightData');
+  const turnData = game.settings.get(`${OSRH.moduleName}`, 'turnData');
+  const jName = game.settings.get(`${OSRH.moduleName}`, 'timeJournalName');
 
   //update turn proc
 
   turnData.journalName = jName;
-  // game.settings.set(`${OSEH.moduleName}`, 'turnData', turnData);
-  OSEH.socket.executeAsGM('setting', 'turnData', turnData, 'set');
+  // game.settings.set(`${OSRH.moduleName}`, 'turnData', turnData);
+  OSRH.socket.executeAsGM('setting', 'turnData', turnData, 'set');
 
   //set hook to update light timer durations
   Hooks.on('updateWorldTime', async () => {
-    await OSEH.util.oseTick();
+    await OSRH.util.oseTick();
     console.log('time');
-    OSEH.socket.executeAsGM('lightCheck');
-    // OSEH.socket.executeAsGM('clearExpiredEffects')
-    // OSEH.util.debounce(, 300);
-    OSEH.util.oseHook(`${OSEH.moduleName} Time Updated`);
+    OSRH.socket.executeAsGM('lightCheck');
+    // OSRH.socket.executeAsGM('clearExpiredEffects')
+    // OSRH.util.debounce(, 300);
+    OSRH.util.oseHook(`${OSRH.moduleName} Time Updated`);
   });
 
-  Hooks.on(`${OSEH.moduleName} Time Updated`, () => {
-    if (game.user.isGM) OSEH.socket.executeAsGM('effectHousekeeping');
+  Hooks.on(`${OSRH.moduleName} Time Updated`, () => {
+    if (game.user.isGM) OSRH.socket.executeAsGM('effectHousekeeping');
   });
   //check for count journal
-  await OSEH.util.countJournalInit(jName);
-  console.log(`${OSEH.moduleName} ready`);
+  await OSRH.util.countJournalInit(jName);
+  console.log(`${OSRH.moduleName} ready`);
 
   //check for userflags
 
   for (let user of game.users.contents) {
-    const lightFlag = await user.getFlag(`${OSEH.moduleName}`, 'lightData');
-    const effectFlag = await user.getFlag(`${OSEH.moduleName}`, 'effectData');
+    const lightFlag = await user.getFlag(`${OSRH.moduleName}`, 'lightData');
+    const effectFlag = await user.getFlag(`${OSRH.moduleName}`, 'effectData');
     if (!lightFlag) {
-      await user.setFlag(`${OSEH.moduleName}`, 'lightData', {});
+      await user.setFlag(`${OSRH.moduleName}`, 'lightData', {});
     }
     if (!effectFlag) {
-      await user.setFlag(`${OSEH.moduleName}`, 'effectData', {});
+      await user.setFlag(`${OSRH.moduleName}`, 'effectData', {});
     }
   }
 
   Hooks.on('createActor', async (actor) => {
-    if (game.settings.get(`${OSEH.moduleName}`, 'tokenLightDefault') && game.user.role >= 4) {
+    if (game.settings.get(`${OSRH.moduleName}`, 'tokenLightDefault') && game.user.role >= 4) {
       if (actor.data.type == 'character') {
         //const actor = game.actors.getName(sheet.object.name);
         await actor.update({
@@ -151,7 +151,7 @@ Hooks.once('ready', async () => {
     }
   });
   //check center hotbar
-  OSEH.util.centerHotbar();
+  OSRH.util.centerHotbar();
 });
 
 //reset monster actions hook
@@ -159,7 +159,7 @@ Hooks.once('ready', async () => {
 Hooks.on('updateCombat', (combat) => {
   if (combat.current && combat.current.round && combat.previous && combat.previous.round) {
     if (combat.current.round - combat.previous.round == 1) {
-      OSEH.util.resetMonsterAttacks();
+      OSRH.util.resetMonsterAttacks();
     }
   }
 });
@@ -174,11 +174,11 @@ Hooks.on('renderOseActorSheet', async (actor, html) => {
 
   modBox.on('click', '.ose-effect-list', (e) => {
     // active effects button
-    // OSEH.ce.effectList(actor.object);
+    // OSRH.ce.effectList(actor.object);
     let pos = { x: e.pageX + 100, y: e.pageY - 200 };
     // check window for instances of form
     if (Object.values(ui.windows).filter((i) => i.id == `activeEffectList.${actor.object.id}`).length == 0) {
-      new OSEH.effect.ActiveEffectList(actor.object, pos).render(true);
+      new OSRH.effect.ActiveEffectList(actor.object, pos).render(true);
     }
   });
 
@@ -195,11 +195,11 @@ Hooks.on('renderOseActorSheet', async (actor, html) => {
   el.addEventListener('click', (ev) => {
     ev.preventDefault();
     actor.render();
-    OSEH.util.curConDiag(actor.object);
+    OSRH.util.curConDiag(actor.object);
   });
 
   //  lightItemSettings
-  if (await game.settings.get(`${OSEH.moduleName}`, 'enableLightConfig')) {
+  if (await game.settings.get(`${OSRH.moduleName}`, 'enableLightConfig')) {
     let lightItems = actor.object.items.filter((i) => {
       let tags = i.data.data.manualTags;
       if (tags && tags.find((t) => t.value == 'Light')) return i;
@@ -217,10 +217,10 @@ Hooks.on('renderOseActorSheet', async (actor, html) => {
       targetEl.prepend(el);
       el.addEventListener('click', async (ev) => {
         ev.preventDefault();
-        let itemConfig = await item.getFlag(`${OSEH.moduleName}`, 'lightItemData');
+        let itemConfig = await item.getFlag(`${OSRH.moduleName}`, 'lightItemData');
         console.log(item, itemConfig);
         if (Object.values(ui.windows).filter((i) => i.id.includes(`light-item-config.${item.id}`)).length == 0) {
-          new OSEH.light.ItemSettingsForm(item).render(true);
+          new OSRH.light.ItemSettingsForm(item).render(true);
         }
       });
     }
@@ -238,12 +238,12 @@ Hooks.on('osrItemShopActive', async () => {
     let curData = await game.settings.get('osrItemShop', 'sourceList');
     let itemList = await game.settings.get('osrItemShop', 'itemList');
 
-    let newList = itemList.concat(OSEH.data.helperItems);
+    let newList = itemList.concat(OSRH.data.helperItems);
 
     if (!curData.find((i) => i.header == 'OSE Helper')) {
       curData.push({
         header: 'OSE Helper',
-        data: OSEH.data.helperItems,
+        data: OSRH.data.helperItems,
         options: [
           {
             name: 'OSE Helper Items',
@@ -269,7 +269,7 @@ Hooks.on('gmPleasePause', () => {
 });
 
 Hooks.on(`renderDungTurnConfig`, async (ev, html) => {
-  const data = await game.settings.get(`${OSEH.moduleName}`, 'dungeonTurnData');
+  const data = await game.settings.get(`${OSRH.moduleName}`, 'dungeonTurnData');
   document.getElementById('enc-table').value = data.eTable;
   document.getElementById('react-table').value = data.rTable;
   document.getElementById('proc').value = data.proc;
@@ -283,45 +283,45 @@ Hooks.on('rendercustomEffectList', (CEL, html, form) => {
 
 Hooks.on('renderItemSheet', async (sheetObj, html) => {
   const isLight = sheetObj.object.data.data.tags?.find((t) => t.value == 'Light');
-  if ((await game.settings.get(`${OSEH.moduleName}`, 'enableLightConfig')) && isLight) {
+  if ((await game.settings.get(`${OSRH.moduleName}`, 'enableLightConfig')) && isLight) {
     let item = sheetObj.item;
     let el = document.createElement('a');
     el.addEventListener('click', async (ev) => {
       ev.preventDefault();
-      let itemConfig = await item.getFlag(`${OSEH.moduleName}`, 'lightItemConfig');
+      let itemConfig = await item.getFlag(`${OSRH.moduleName}`, 'lightItemConfig');
       console.log(item, itemConfig);
       if (Object.values(ui.windows).filter((i) => i.id.includes(`light-item-config`)).length == 0) {
-        new OSEH.light.ItemSettingsForm(item).render(true);
+        new OSRH.light.ItemSettingsForm(item).render(true);
       }
     });
     let target = html.find('.header-button.configure-sheet');
-    el.innerHTML = `<a title="OSEH Light Item Config"><i class="fas fa-wrench"></i></a>`;
+    el.innerHTML = `<a title="OSRH Light Item Config"><i class="fas fa-wrench"></i></a>`;
     target.before(el);
   }
 });
 // remove once ose combat time advancement fixed
 Hooks.on('deleteCombat', () => {
-  OSEH.socket.executeAsGM('lastRound', 0, 'set');
+  OSRH.socket.executeAsGM('setting','lastRound', 0, 'set');
   // if(game.user.isGM){
-  //   game.settings.set(`${OSEH.moduleName}`, 'lastRound', 0)
+  //   game.settings.set(`${OSRH.moduleName}`, 'lastRound', 0)
   // }
 });
 
 Hooks.on('updateCombat', async (combat, details) => {
-  if (game.user.isGM && (await game.settings.get(`${OSEH.moduleName}`, 'combatTimeAdvance'))) {
+  if (game.user.isGM && (await game.settings.get(`${OSRH.moduleName}`, 'combatTimeAdvance'))) {
     console.log('update combat', details);
-    let lastRound = await game.settings.get(`${OSEH.moduleName}`, 'lastRound');
+    let lastRound = await game.settings.get(`${OSRH.moduleName}`, 'lastRound');
     let round = details.round;
     console.log(round, lastRound);
     if (round && round > lastRound) {
       game.time.advance(10);
-      await game.settings.set(`${OSEH.moduleName}`, 'lastRound', round);
-      // OSEH.socket.executeAsGM('setting','lastRound', round, 'set');
+      await game.settings.set(`${OSRH.moduleName}`, 'lastRound', round);
+      // OSRH.socket.executeAsGM('setting','lastRound', round, 'set');
     }
     if (round && round < lastRound) {
       game.time.advance(-10);
-      await game.settings.set(`${OSEH.moduleName}`, 'lastRound', round);
-      // OSEH.socket.executeAsGM('setting','lastRound', round, 'set');
+      await game.settings.set(`${OSRH.moduleName}`, 'lastRound', round);
+      // OSRH.socket.executeAsGM('setting','lastRound', round, 'set');
     }
   }
 });

@@ -360,7 +360,7 @@
 }
 .light-item-config .window-content{
   background: var(--lf-g-bg);
-  background: linear-gradient(0deg, var(--lf-g-1)0%, var(--lf-g-2) 32%, var(--lf-g-3) 100%);
+  background: linear-gradient(0deg, var(--lf-g-1) 0%, var(--lf-g-2) 32%, var(--lf-g-3) 100%);
 }
 .oseh-new-active-effect-form .window-content {
   background: rgb(162, 125, 186);
@@ -372,6 +372,9 @@
 }
 .oseh-new-active-effect-form button {
   color: white;
+}
+.oseh-new-active-effect-form .radio {
+  width: 30px
 }
 .oseh-new-active-effect-form button:focus,
 .oseh-new-active-effect-form button:hover {

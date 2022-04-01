@@ -1,6 +1,6 @@
 export const registerData = () => {
-  OSEH.data = OSEH.data || {};
-  OSEH.data.food = {
+  OSRH.data = OSRH.data || {};
+  OSRH.data.food = {
     iron: 'Rations (iron, 7 days)',
     standard: 'Rations (standard, 7 days)',
     berries: 'Foraged Rations: Berries',
@@ -27,7 +27,7 @@ lightType: {
   }
   
 */
-  OSEH.data.lightSource = {
+  OSRH.data.lightSource = {
     oglLantern: {
       name: 'Oil flask',
       dimLight: 30,
@@ -173,7 +173,7 @@ lightType: {
     }
   };
 
-  OSEH.data.helperItems = [
+  OSRH.data.helperItems = [
     {
       source: 'oseHelper',
       type: 'light source',
@@ -182,7 +182,7 @@ lightType: {
       maxAllowed: 1,
       qty: 3,
       stack: true,
-      pack: 'OSE-helper.OSE-helper-items',
+      pack: `${OSRH.moduleName}.${OSRH.moduleName}-items`,
       id: 'oseh001'
     },
     {
@@ -193,7 +193,7 @@ lightType: {
       maxAllowed: 1,
       qty: 3,
       stack: true,
-      pack: 'OSE-helper.OSE-helper-items',
+      pack: `${OSRH.moduleName}.${OSRH.moduleName}-items`,
       id: 'oseh002'
     },
     {
@@ -204,7 +204,7 @@ lightType: {
       maxAllowed: 1,
       qty: 3,
       stack: true,
-      pack: 'OSE-helper.OSE-helper-items',
+      pack: `${OSRH.moduleName}.${OSRH.moduleName}-items`,
       id: 'oseh003'
     },
     {
@@ -215,7 +215,7 @@ lightType: {
       maxAllowed: 1,
       qty: 1,
       stack: true,
-      pack: 'OSE-helper.OSE-helper-items',
+      pack: `${OSRH.moduleName}.${OSRH.moduleName}-items`,
       id: 'oseh004'
     },
     {
@@ -226,7 +226,7 @@ lightType: {
       maxAllowed: 1,
       qty: 1,
       stack: true,
-      pack: 'OSE-helper.OSE-helper-items',
+      pack: `${OSRH.moduleName}.${OSRH.moduleName}-items`,
       id: 'oseh005'
     },
     {
@@ -237,7 +237,7 @@ lightType: {
       maxAllowed: 1,
       qty: 1,
       stack: true,
-      pack: 'OSE-helper.OSE-helper-items',
+      pack: `${OSRH.moduleName}.${OSRH.moduleName}-items`,
       id: 'oseh006'
     },
     {
@@ -248,7 +248,7 @@ lightType: {
       maxAllowed: 1,
       qty: 1,
       stack: true,
-      pack: 'OSE-helper.OSE-helper-items',
+      pack: `${OSRH.moduleName}.${OSRH.moduleName}-items`,
       id: 'oseh007'
     },
     {
@@ -259,7 +259,7 @@ lightType: {
       maxAllowed: 1,
       qty: 1,
       stack: true,
-      pack: 'OSE-helper.OSE-helper-items',
+      pack: `${OSRH.moduleName}.${OSRH.moduleName}-items`,
       id: 'oseh008'
     },
     {
@@ -270,7 +270,7 @@ lightType: {
       maxAllowed: 1,
       qty: 1,
       stack: true,
-      pack: 'OSE-helper.OSE-helper-items',
+      pack: `${OSRH.moduleName}.${OSRH.moduleName}-items`,
       id: 'oseh009'
     },
     {
@@ -281,7 +281,7 @@ lightType: {
       maxAllowed: 1,
       qty: 1,
       stack: true,
-      pack: 'OSE-helper.OSE-helper-items',
+      pack: `${OSRH.moduleName}.${OSRH.moduleName}-items`,
       id: 'oseh010'
     },
     {
@@ -292,7 +292,7 @@ lightType: {
       maxAllowed: 1,
       qty: 1,
       stack: true,
-      pack: 'OSE-helper.OSE-helper-items',
+      pack: `${OSRH.moduleName}.${OSRH.moduleName}-items`,
       id: 'oseh011'
     },
     {
@@ -303,7 +303,7 @@ lightType: {
       maxAllowed: 1,
       qty: 1,
       stack: true,
-      pack: 'OSE-helper.OSE-helper-items',
+      pack: `${OSRH.moduleName}.${OSRH.moduleName}-items`,
       id: 'oseh012'
     },
     {
@@ -314,7 +314,7 @@ lightType: {
       maxAllowed: 1,
       qty: 1,
       stack: true,
-      pack: 'OSE-helper.OSE-helper-items',
+      pack: `${OSRH.moduleName}.${OSRH.moduleName}-items`,
       id: 'oseh013'
     },
     {
@@ -325,11 +325,11 @@ lightType: {
       maxAllowed: 1,
       qty: 1,
       stack: false,
-      pack: 'OSE-helper.OSE-helper-items',
+      pack: `${OSRH.moduleName}.${OSRH.moduleName}-items`,
       id: 'oseh014'
     }
   ];
-  OSEH.data.ammoData = [
+  OSRH.data.ammoData = [
     {
       name: 'Shortbow',
       ammoType: 'Arrows (quiver of 20)', 

@@ -1,14 +1,14 @@
 export const registerLight = () => {
-  OSEH.light = OSEH.light || {};
+  OSRH.light = OSRH.light || {};
 
-  OSEH.light.lightOn = async function (actorId) {
+  OSRH.light.lightOn = async function (actorId) {
     let lightData = null;
     let userObj;
     //check for actors in all non gm user slots before writing flag to gm user
     if (game.user.role == 4) {
       for (let user of game.users.contents) {
-        if (user.data.flags[`${OSEH.moduleName}`].lightData[actorId]) {
-          lightData = await user.getFlag(`${OSEH.moduleName}`, 'lightData');
+        if (user.data.flags[`${OSRH.moduleName}`].lightData[actorId]) {
+          lightData = await user.getFlag(`${OSRH.moduleName}`, 'lightData');
           userObj = user;
         }
       }
@@ -17,7 +17,7 @@ export const registerLight = () => {
         userObj = game.user;
       }
     } else {
-      lightData = game.user.getFlag(`${OSEH.moduleName}`, 'lightData');
+      lightData = game.user.getFlag(`${OSRH.moduleName}`, 'lightData');
       userObj = game.user;
     }
 
@@ -30,16 +30,16 @@ export const registerLight = () => {
         }
       }
       lightData[actorId].lightLit = false;
-      await userObj.unsetFlag(`${OSEH.moduleName}`, 'lightData');
-      await userObj.setFlag(`${OSEH.moduleName}`, 'lightData', lightData);
-      OSEH.light.oseLightOff(actorId);
+      await userObj.unsetFlag(`${OSRH.moduleName}`, 'lightData');
+      await userObj.setFlag(`${OSRH.moduleName}`, 'lightData', lightData);
+      OSRH.light.oseLightOff(actorId);
       return;
     }
 
     let lightOptions = '';
 
-    for (let type in OSEH.data.lightSource) {
-      const item = actor.data.items.getName(OSEH.data.lightSource[type].name);
+    for (let type in OSRH.data.lightSource) {
+      const item = actor.data.items.getName(OSRH.data.lightSource[type].name);
       if (item) {
         lightOptions += `<option value="${type}">${item.name}: ${item.data.data.quantity.value}</option>`;
       }
@@ -64,14 +64,14 @@ export const registerLight = () => {
           label: 'Light On',
           callback: async (html) => {
             const itemType = html.find('#lightType')[0].value;
-            const item = actor.items.getName(OSEH.data.lightSource[itemType].name);
+            const item = actor.items.getName(OSRH.data.lightSource[itemType].name);
 
             if (lightData?.[actorId]?.[itemType]?.isOn == false) {
               //if data contains actorId.type.isOn = false set isOn to true
               lightData[actorId].lightLit = true;
               lightData[actorId][itemType].isOn = true;
-              userObj.setFlag(`${OSEH.moduleName}`, 'lightData', lightData);
-              OSEH.util.updateTokens(actorId, OSEH.data.lightSource[itemType]);
+              userObj.setFlag(`${OSRH.moduleName}`, 'lightData', lightData);
+              OSRH.util.updateTokens(actorId, OSRH.data.lightSource[itemType]);
               return;
             }
             if (!lightData?.[actorId]) {
@@ -81,22 +81,22 @@ export const registerLight = () => {
                 lightLit: true,
                 [itemType]: {
                   isOn: true,
-                  duration: OSEH.data.lightSource[itemType].duration
+                  duration: OSRH.data.lightSource[itemType].duration
                 }
               };
 
-              userObj.setFlag(`${OSEH.moduleName}`, 'lightData', lightData);
-              OSEH.util.updateTokens(actorId, OSEH.data.lightSource[itemType]);
+              userObj.setFlag(`${OSRH.moduleName}`, 'lightData', lightData);
+              OSRH.util.updateTokens(actorId, OSRH.data.lightSource[itemType]);
               return;
             }
             if (!lightData[actorId][itemType]) {
               lightData[actorId].lightLit = true;
               lightData[actorId][itemType] = {
                 isOn: true,
-                duration: OSEH.data.lightSource[itemType].duration
+                duration: OSRH.data.lightSource[itemType].duration
               };
-              userObj.setFlag(`${OSEH.moduleName}`, 'lightData', lightData);
-              OSEH.util.updateTokens(actorId, OSEH.data.lightSource[itemType]);
+              userObj.setFlag(`${OSRH.moduleName}`, 'lightData', lightData);
+              OSRH.util.updateTokens(actorId, OSRH.data.lightSource[itemType]);
               return;
             }
           }
@@ -108,18 +108,18 @@ export const registerLight = () => {
     }).render(true);
   };
 
-  OSEH.light.lightOff = async function (actorId) {
+  OSRH.light.lightOff = async function (actorId) {
     //loop through active game scenes
-    OSEH.util.updateTokens(actorId, 0, 0);
+    OSRH.util.updateTokens(actorId, 0, 0);
   };
-  OSEH.light.oseLightOff = async function (actorId) {
+  OSRH.light.oseLightOff = async function (actorId) {
     const data = {
       brightLight: 0,
       dimLight: 0,
       lightAlpha: 0.5
     };
     //loop through active game scenes
-    OSEH.util.updateTokens(actorId, data);
+    OSRH.util.updateTokens(actorId, data);
   };
   // async function updateTokens(actorId, bl, dl) {}
 };

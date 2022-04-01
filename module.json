@@ -1,9 +1,9 @@
 {
-  "name": "OSE-helper",
-  "title": "OSE Helper Module",
-  "description": "A collection of helpers for OSE",
-  "author": "Grim",
-  "version": "0.3.4",
+  "name": "osr-helper",
+  "title": "OSR Helper Module",
+  "description": "A collection of helpers for the Foundry Vtt implementation of the 'Old School Essentials' system.",
+  "author": "RabidOwlbear",
+  "version": "0.3.5",
   "minimumCoreVerson": "0.8.0",
   "compatibleCoreVersion": "0.9.0",
   "styles": ["./styles/main.css"],
@@ -12,18 +12,25 @@
   "scripts": [],
   "packs": [
     {
-      "name": "OSE-helper-macros",
-      "label": "OSE-helper Macros",
-      "path": "packs/macros.db",
-      "entity": "Macro",
-      "module": "OSE-helper"
+      "name": "osr-helper-patch-notes",
+      "label": "OSR-helper Patch Notes",
+      "path": "packs/patch-notes.db",
+      "entity": "JournalEntry",
+      "module": "osr-helper"
     },
     {
-      "name": "OSE-helper-items",
-      "label": "OSE-helper Items",
+      "name": "osr-helper-macros",
+      "label": "OSR-helper Macros",
+      "path": "packs/macros.db",
+      "entity": "Macro",
+      "module": "osr-helper"
+    },
+    {
+      "name": "osr-helper-items",
+      "label": "OSR-helper Items",
       "path": "packs/items.db",
       "entity": "Item",
-      "module": "OSE-helper"
+      "module": "osr-helper"
     }
   ],
   "dependencies": [
@@ -43,8 +50,8 @@
       "type": "module"
     }
   ],
-  "url": "https://github.com/RabidOwlbear/OSE-helper",
-  "manifest": "https://raw.githubusercontent.com/RabidOwlbear/OSE-helper/master/module.json",
-  "download": "https://github.com/RabidOwlbear/OSE-helper/archive/refs/heads/master.zip",
+  "url": "https://github.com/RabidOwlbear/osr-helper",
+  "manifest": "https://raw.githubusercontent.com/RabidOwlbear/osr-helper/master/module.json",
+  "download": "https://github.com/RabidOwlbear/osr-helper/archive/refs/heads/master.zip",
   "readme": "REAMDE.md"
 }

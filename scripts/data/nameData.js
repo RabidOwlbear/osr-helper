@@ -1,6 +1,6 @@
 export const registerNameData = ()=>{
 console.log('namedata    ,-----------------------------------')
-  OSEH.data.nameData = {
+  OSRH.data.nameData = {
     human: {
       first: [
         {

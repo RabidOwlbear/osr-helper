@@ -1,19 +1,19 @@
 export const registerEffectModule = async function () {
-  OSEH.effect = OSEH.effect || {};
+  OSRH.effect = OSRH.effect || {};
 
-  OSEH.effect.renderNewEffectForm = async function () {
-    if (OSEH.util.singleSelected()) {
+  OSRH.effect.renderNewEffectForm = async function () {
+    if (OSRH.util.singleSelected()) {
       let actor = canvas.tokens.controlled[0].actor;
 
       let vh = document.documentElement.clientHeight;
       let vw = document.documentElement.clientWidth;
       let pos = { x: vw / 2 - 150, y: vh / 2 - 250 };
       if (Object.values(ui.windows).filter((i) => i.id.includes(`activeEffectList`)).length == 0) {
-        new OSEH.effect.ActiveEffectList(actor, pos, game.user.isGM).render(true);
+        new OSRH.effect.ActiveEffectList(actor, pos, game.user.isGM).render(true);
       }
     }
   };
-  OSEH.effect.NewActiveEffectForm = class NewActiveEffectForm extends FormApplication {
+  OSRH.effect.NewActiveEffectForm = class NewActiveEffectForm extends FormApplication {
     constructor(actor, actorId, pos, effectList = false) {
       super(pos, { id: `new-active-effect.${actorId}`, top: pos.y, left: pos.x });
       this.actor = actor;
@@ -25,13 +25,13 @@ export const registerEffectModule = async function () {
       return mergeObject(super.defaultOptions, {
         classes: ['form', 'oseh-new-active-effect-form'],
         popOut: true,
-        height: 520,
+        height: 540,
         top: 0,
         left: 0,
-        width: 300,
-        template: `modules/${OSEH.moduleName}/templates/new-active-effect-form.html`,
+        width: 310,
+        template: `modules/${OSRH.moduleName}/templates/new-active-effect-form.html`,
         id: 'new-active-effect',
-        title: 'OSEH New Active Effect'
+        title: 'OSRH New Active Effect'
       });
     }
     getData() {}
@@ -49,7 +49,6 @@ export const registerEffectModule = async function () {
           i.value = '';
         });
         i.addEventListener('blur', (ev) => {
-          console.log(i, parseInt(i.value));
           if (!parseInt(i.value)) {
             i.value = 0;
           }
@@ -59,6 +58,7 @@ export const registerEffectModule = async function () {
         console.log('clicked');
         let userTargets = game.user.targets;
         let targetInp = html.find('[name="target"]:checked')[0].id;
+        let interval = html.find('[name="interval"]:checked')[0].id;
         if (targetInp == 'targeted' && userTargets.size != 1) {
           ev.preventDefault();
 
@@ -68,8 +68,8 @@ export const registerEffectModule = async function () {
           ev.preventDefault();
           ui.notifications.warn('Please Enter An Efect Name');
         }
-        console.log(durationField.value);
-        if (parseInt(durationField.value) == 0) {
+
+        if (parseInt(durationField.value) == 0 && interval != 'infinite') {
           ev.preventDefault();
           ui.notifications.warn('Please Enter An Efect Duration');
         }
@@ -94,6 +94,7 @@ export const registerEffectModule = async function () {
       let target = targetInp == 'self' ? actor.uuid : game.user.targets.first()?.actor?.uuid;
       // let target = game.user.targets.first() ? game.user.targets.first()?.actor?.uuid : actor.uuid;
       let interval = ev.target.querySelector('[name="interval"]:checked').id;
+
       let effectData = {
         label: '',
         icon: 'icons/svg/circle.svg',
@@ -102,6 +103,7 @@ export const registerEffectModule = async function () {
         priority: 0,
         flags: {
           data: {
+            isInf: false,
             name: '',
             details: '',
             effects: []
@@ -161,7 +163,7 @@ export const registerEffectModule = async function () {
           effectData.icon = `icons/svg/combat.svg`;
           effectData.tint = '#aa5000';
           effectData.changes.push({
-            key: aac ? `data.aac.mod` : `data.ac.mod`,
+            key: aac ? `data.aac.mod` : `data.ac.mod` * -1,
             value: parseInt(value),
             priority: 1
           });
@@ -205,21 +207,22 @@ export const registerEffectModule = async function () {
             value: parseInt(value)
           });
         }
-        if (type == 'duration' && value > 0) {
+        if ((type == 'duration' && value > 0) || (type == 'duration' && interval == 'infinite')) {
           effectData.flags['data'].interval = interval;
+          effectData.flags['data'].isInf = interval == 'infinite' ? true : false;
           effectData.duration.seconds = interval == 'minutes' ? Math.floor(value * 60) : Math.floor(value);
         }
       }
 
-      await OSEH.socket.executeAsGM('gmCreateEffect', target, effectData, this.actorId);
+      await OSRH.socket.executeAsGM('gmCreateEffect', target, effectData, this.actorId);
 
       // if (this.effectList) this.effectList.render();
-      OSEH.socket.executeAsGM('effectHousekeeping');
+      OSRH.socket.executeAsGM('effectHousekeeping');
     }
   };
 
-  OSEH.effect.clearExpired = async function () {
-    let activeEffects = deepClone(await game.settings.get(`${OSEH.moduleName}`, 'effectData'));
+  OSRH.effect.clearExpired = async function () {
+    let activeEffects = deepClone(await game.settings.get(`${OSRH.moduleName}`, 'effectData'));
     for (let e of activeEffects) {
       let type = await game.actors.get(e.targetActorId).data.type;
       if (type == `monster`) {
@@ -241,13 +244,12 @@ export const registerEffectModule = async function () {
         }
       }
     }
-    // await game.settings.set(`${OSEH.moduleName}`, 'effectData', activeEffects);
-    OSEH.socket.executeAsGM('setting', 'effectData', activeEffects, 'set');
+    // await game.settings.set(`${OSRH.moduleName}`, 'effectData', activeEffects);
+    OSRH.socket.executeAsGM('setting', 'effectData', activeEffects, 'set');
   };
 
-  OSEH.effect.ActiveEffectList = class ActiveEffectList extends FormApplication {
+  OSRH.effect.ActiveEffectList = class ActiveEffectList extends FormApplication {
     constructor(actor, pos, isGM = false) {
-      console.log(pos);
       super(pos, { id: `activeEffectList.${actor.id}`, top: pos.y, left: pos.x });
       this.actor = actor;
       this.pos = pos;
@@ -261,11 +263,11 @@ export const registerEffectModule = async function () {
         width: 400,
         top: 0,
         left: 0,
-        template: `modules/${OSEH.moduleName}/templates/active-effect-list.html`,
+        template: `modules/${OSRH.moduleName}/templates/active-effect-list.html`,
         // id: 'activeEffectList',
-        title: 'OSEH Active Effect List'
+        title: 'OSRH Active Effect List'
       };
-      console.log(options);
+
       return mergeObject(super.defaultOptions, options);
     }
     async getData() {
@@ -273,14 +275,16 @@ export const registerEffectModule = async function () {
       let otherEffectData = [];
       let gmEffectsData = [];
       if (this.isGM) {
-        gmEffectsData = await game.settings.get(`${OSEH.moduleName}`, 'effectData').filter((e) => e.target == this.actor.uuid);
+        gmEffectsData = await game.settings
+          .get(`${OSRH.moduleName}`, 'effectData')
+          .filter((e) => e.target == this.actor.uuid);
       } else {
         selfEffectData = await game.settings
-          .get(`${OSEH.moduleName}`, 'effectData')
+          .get(`${OSRH.moduleName}`, 'effectData')
           .filter((e) => e.createdBy == this.actor.id);
 
         otherEffectData = await game.settings
-          .get(`${OSEH.moduleName}`, 'effectData')
+          .get(`${OSRH.moduleName}`, 'effectData')
           .filter((e) => e.target == this.actor.uuid && this.actor.id != e.createdBy);
       }
 
@@ -296,14 +300,17 @@ export const registerEffectModule = async function () {
           let effect = await tActor.getEmbeddedDocument('ActiveEffect', e.effectId);
           let entryData = {};
 
-          let durObj = effect.data.duration;
           entryData.name = effect.data.label;
           entryData.effectId = e.effectId;
           entryData.target = tActor.name;
+          let durObj = effect.data.duration;
           entryData.durType = effect.data.flags['data'].interval == 'minutes' ? 'min.' : 'sec.';
           let elapsed = game.time.worldTime - durObj.startTime;
+          let interval = effect.data.flags['data'].interval;
           let timeLeft =
-            effect.data.flags['data'].interval == 'minutes'
+            interval == 'infinite'
+              ? 'inf'
+              : interval == 'minutes'
               ? Math.floor((durObj.seconds - elapsed) / 60)
               : Math.floor(durObj.seconds - elapsed);
           entryData.duration = timeLeft;
@@ -359,8 +366,10 @@ export const registerEffectModule = async function () {
       }
       if (gmEffectsData.length) {
         gmEffectsData.forEach(async (e) => {
+          console.log(e);
           let tActor = await fromUuid(e.target);
           let eCreator = await game.actors.get(e.createdBy);
+          let isInf = e.isInf;
           if (tActor.collectionName == 'tokens') tActor = tActor.actor;
 
           let effect = await tActor.getEmbeddedDocument('ActiveEffect', e.effectId);
@@ -370,12 +379,13 @@ export const registerEffectModule = async function () {
           entryData.name = effect.data.label;
           entryData.effectId = e.effectId;
           entryData.target = eCreator.name;
-          entryData.durType = effect.data.flags['data'].interval == 'minutes' ? 'min.' : 'sec.';
+          entryData.durType = e.isInf ? '' : effect.data.flags['data'].interval == 'minutes' ? 'min.' : 'sec.';
           let elapsed = game.time.worldTime - durObj.startTime;
-          let timeLeft =
-            effect.data.flags['data'].interval == 'minutes'
-              ? Math.floor((durObj.seconds - elapsed) / 60)
-              : Math.floor(durObj.seconds - elapsed);
+          let timeLeft = isInf
+            ? 'inf'
+            : effect.data.flags['data'].interval == 'minutes'
+            ? Math.floor((durObj.seconds - elapsed) / 60)
+            : Math.floor(durObj.seconds - elapsed);
           entryData.duration = timeLeft;
           entryData.descrip = effect.data.flags['data'].details;
           entryData.list = ``;
@@ -406,8 +416,8 @@ export const registerEffectModule = async function () {
       for (let b of deleteBtnArr) {
         b.addEventListener('click', async (ev) => {
           ev.preventDefault();
-          // await OSEH.effect.deleteEffect(b.id, this);
-          await OSEH.socket.executeAsGM('deleteEffect', b.id, this);
+          // await OSRH.effect.deleteEffect(b.id, this);
+          await OSRH.socket.executeAsGM('deleteEffect', b.id, this);
           this.render();
         });
       }
@@ -425,19 +435,19 @@ export const registerEffectModule = async function () {
       // new effect button
       newBtn.addEventListener('click', (ev) => {
         ev.preventDefault();
-        // OSEH.socket.executeAsGM('renderNewEffectForm', this.actor, this)
+        // OSRH.socket.executeAsGM('renderNewEffectForm', this.actor, this)
         let pos = { x: this.position.left + 400, y: this.position.top };
         if (Object.values(ui.windows).filter((i) => i.id == `new-active-effect.${this.actor.id}`).length == 0) {
-          new OSEH.effect.NewActiveEffectForm(this.actor, this.actor.id, pos, this).render(true);
+          new OSRH.effect.NewActiveEffectForm(this.actor, this.actor.id, pos, this).render(true);
         }
       });
     }
     async _updateObject(ev, formData) {}
   };
 
-  OSEH.effect.deleteEffect = async function (activeEffectId, effectList) {
+  OSRH.effect.deleteEffect = async function (activeEffectId, effectList) {
     console.log('fired');
-    let activeEffectData = await game.settings.get(`${OSEH.moduleName}`, 'effectData');
+    let activeEffectData = await game.settings.get(`${OSRH.moduleName}`, 'effectData');
 
     let effectData = activeEffectData.filter((e) => e.effectId == activeEffectId)[0];
 
@@ -455,7 +465,7 @@ export const registerEffectModule = async function () {
           try {
             await t.actor.deleteEmbeddedDocuments('ActiveEffect', [activeEffectId]);
             activeEffectData = activeEffectData.filter((i) => i.effectId != activeEffectId);
-            await OSEH.socket.executeAsGM('setting', 'effectData', activeEffectData, 'set');
+            await OSRH.socket.executeAsGM('setting', 'effectData', activeEffectData, 'set');
 
             // effectList.render()
             return;
@@ -468,13 +478,13 @@ export const registerEffectModule = async function () {
       await targetActor.deleteEmbeddedDocuments('ActiveEffect', [activeEffectId]);
       activeEffectData = activeEffectData.filter((i) => i.effectId != activeEffectId);
 
-      await OSEH.socket.executeAsGM('setting', 'effectData', activeEffectData, 'set');
+      await OSRH.socket.executeAsGM('setting', 'effectData', activeEffectData, 'set');
       // effectList.render()
       return;
     }
   };
 
-  OSEH.effect.deleteAll = async function (target) {
+  OSRH.effect.deleteAll = async function (target) {
     let actor = await fromUuid(target);
     if (actor.collectionName == 'tokens') actor = actor.actor;
     // let actor = await game.actors.getName("Sara Penn");
@@ -483,8 +493,8 @@ export const registerEffectModule = async function () {
       await effect.delete();
     }
   };
-  OSEH.effect.delete = async function (effectId) {
-    let effectData = await deepClone(game.settings.get(`${OSEH.moduleName}`, 'effectData')).filter(
+  OSRH.effect.delete = async function (effectId) {
+    let effectData = await deepClone(game.settings.get(`${OSRH.moduleName}`, 'effectData')).filter(
       (e) => e.effectId == effectId
     )[0];
 
@@ -492,56 +502,58 @@ export const registerEffectModule = async function () {
     if (actor.collectionName == 'tokens') actor = actor.actor;
     let effect = await actor.effects.get(effectId);
     effect.delete();
-    let activeEffectData = await deepClone(game.settings.get(`${OSEH.moduleName}`, 'effectData')).filter(
+    let activeEffectData = await deepClone(game.settings.get(`${OSRH.moduleName}`, 'effectData')).filter(
       (e) => e.effectId != effectId
     );
-    await game.settings.set(`${OSEH.moduleName}`, 'effectData', activeEffectData);
-    OSEH.socket.executeForEveryone('refreshEffectLists');
+    await game.settings.set(`${OSRH.moduleName}`, 'effectData', activeEffectData);
+    OSRH.socket.executeForEveryone('refreshEffectLists');
   };
 
-  OSEH.effect.housekeeping = async function () {
+  OSRH.effect.housekeeping = async function () {
     console.log('housekeeping', game.time.worldTime);
-    let effectData = await deepClone(game.settings.get(`${OSEH.moduleName}`, 'effectData'));
+    let effectData = await deepClone(game.settings.get(`${OSRH.moduleName}`, 'effectData'));
 
     for (let effect of effectData) {
-      //get actor from uuid
-      let actor = await fromUuid(effect.target);
+      if (!effect?.isInf) {
+        //get actor from uuid
+        let actor = await fromUuid(effect.target);
 
-      //if token get token actor
-      if (actor.collectionName == 'tokens') actor = actor.actor;
+        //if token get token actor
+        if (actor.collectionName == 'tokens') actor = actor.actor;
 
-      let activeEffect = await actor.getEmbeddedDocument('ActiveEffect', effect.effectId);
+        let activeEffect = await actor.getEmbeddedDocument('ActiveEffect', effect.effectId);
 
-      if (activeEffect.duration.remaining <= 0) {
-        effectData = effectData.filter((e) => e.effectId != activeEffect.id);
-        await actor.deleteEmbeddedDocuments('ActiveEffect', [effect.effectId]);
-        // await activeEffect.delete()
+        if (activeEffect.duration.remaining <= 0) {
+          effectData = effectData.filter((e) => e.effectId != activeEffect.id);
+          await actor.deleteEmbeddedDocuments('ActiveEffect', [effect.effectId]);
+          // await activeEffect.delete()
+        }
       }
     }
-    await game.settings.set(`${OSEH.moduleName}`, 'effectData', effectData);
-    OSEH.socket.executeForEveryone('refreshEffectLists');
+    await game.settings.set(`${OSRH.moduleName}`, 'effectData', effectData);
+    OSRH.socket.executeForEveryone('refreshEffectLists');
   };
-  OSEH.effect.refreshEffectLists = async function () {
+  OSRH.effect.refreshEffectLists = async function () {
     let openEffectLists = Object.values(ui.windows).filter((i) => i.id.includes(`activeEffectList`));
     if (openEffectLists.length) {
       openEffectLists.forEach((e) => e.render());
     }
   };
-  OSEH.effect.gmCreateEffect = async function (target, effectData, creatorId) {
+  OSRH.effect.gmCreateEffect = async function (target, effectData, creatorId) {
     let actor = await fromUuid(target);
     if (actor.collectionName == 'tokens') actor = actor.actor;
 
     let e = await ActiveEffect.create(effectData, { parent: actor });
 
-    let activeEffectData = deepClone(await game.settings.get(`${OSEH.moduleName}`, 'effectData'));
+    let activeEffectData = deepClone(await game.settings.get(`${OSRH.moduleName}`, 'effectData'));
     activeEffectData.push({
+      isInf: effectData.flags['data'].isInf,
       effectId: e.id,
       targetActor: actor,
       createdBy: creatorId,
       target: target
     });
-
-    await game.settings.set(`${OSEH.moduleName}`, 'effectData', activeEffectData);
+    await game.settings.set(`${OSRH.moduleName}`, 'effectData', activeEffectData);
   };
 };
 
