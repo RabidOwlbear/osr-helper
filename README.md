@@ -13,6 +13,8 @@ If updating from the previous version named "OSE-helper", any macros existing in
 
 If you have created custom light items in your world you will need to run the provided conversion macro named "Convert Light Data" located in the included macro compendium "Utility Macros" folder. This wil convert your existing light configurations, existing lights  will not function without conversion. this only needs to be run once.
 
+You will also need to disable and/or uninstall the previous "OSE-CharacterBuilder" installation to avoid conflicts.
+
 ---
 
 ### installation
