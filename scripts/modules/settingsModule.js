@@ -9,7 +9,7 @@ export const registerSettings = async function (){
       const options = super.defaultOptions;
       options.baseApplication = 'dungeonTurnConfig';
       options.id = "dungTurnConfig";
-      options.template = `modules/${OSEH.moduleName}/templates/dungeon-turn-config.html`;
+      options.template = `modules/${OSRH.moduleName}/templates/dungeon-turn-config.html`;
       options.height = 300;
       options.width = 400;
       // options.left = 500;
@@ -44,14 +44,14 @@ export const registerSettings = async function (){
       }
   
     
-    await game.settings.set(`${OSEH.moduleName}`, 'dungeonTurnData', data)
+    await game.settings.set(`${OSRH.moduleName}`, 'dungeonTurnData', data)
   }
   
   async _updateObject() {}
   
   }
 
-  game.settings.register(`${OSEH.moduleName}`, 'timeJournalName', {
+  game.settings.register(`${OSRH.moduleName}`, 'timeJournalName', {
     name: 'Name Of Journal Entry',
     hint: 'Name Of Journal Entry To Use For Time Keeping',
     scope: 'world',
@@ -60,7 +60,7 @@ export const registerSettings = async function (){
     config: true
   });
 
-  game.settings.register(`${OSEH.moduleName}`, 'restMessage', {
+  game.settings.register(`${OSRH.moduleName}`, 'restMessage', {
     name: 'Enable rest status chat messages',
     hint: 'Enables rest status chat messages',
     scope: 'world',
@@ -69,7 +69,7 @@ export const registerSettings = async function (){
     config: true
   });
 
-  game.settings.register(`${OSEH.moduleName}`, 'whisperRest', {
+  game.settings.register(`${OSRH.moduleName}`, 'whisperRest', {
     name: 'Whisper rest status messages',
     hint: 'Whispers rest status messages',
     scope: 'world',
@@ -78,7 +78,7 @@ export const registerSettings = async function (){
     config: true
   });
 
-  game.settings.register(`${OSEH.moduleName}`, 'tokenLightDefault', {
+  game.settings.register(`${OSRH.moduleName}`, 'tokenLightDefault', {
     name: 'Update default token settings on creation.',
     hint: 'Enables Owlbear preferred default token light settings.',
     scope: 'world',
@@ -86,7 +86,7 @@ export const registerSettings = async function (){
     default: true,
     config: true
   });
-  game.settings.register(`${OSEH.moduleName}`, 'combatTimeAdvance', {
+  game.settings.register(`${OSRH.moduleName}`, 'combatTimeAdvance', {
     name: 'Advance game time 10 seconds each combat round.',
     hint: 'Advances the game time 10 seconds each time a combat round advances',
     scope: 'world',
@@ -95,7 +95,7 @@ export const registerSettings = async function (){
     config: true
   });
 
-  game.settings.registerMenu(`${OSEH.moduleName}`, 'dungeonTurnSettings', {
+  game.settings.registerMenu(`${OSRH.moduleName}`, 'dungeonTurnSettings', {
     name: 'Dungeon Turn Settings.',
     label: 'Dungeon Turn Settings',
     icon: 'fas fa-wrench',
@@ -106,7 +106,7 @@ export const registerSettings = async function (){
   })
 
   //stores world time after last turn advance
-  game.settings.register(`${OSEH.moduleName}`, 'lastTick', {
+  game.settings.register(`${OSRH.moduleName}`, 'lastTick', {
     name: 'lastTick',
     scope: 'world',
     type: Object,
@@ -116,7 +116,7 @@ export const registerSettings = async function (){
     config: false
   });
 
-  game.settings.register(`${OSEH.moduleName}`, 'userData', {
+  game.settings.register(`${OSRH.moduleName}`, 'userData', {
     name: 'userData',
     scope: 'client',
     type: Object,
@@ -128,21 +128,21 @@ export const registerSettings = async function (){
   });
 
   //custom effect data obj
-  game.settings.register(`${OSEH.moduleName}`, 'customEffects', {
+  game.settings.register(`${OSRH.moduleName}`, 'customEffects', {
     name: 'effectData',
     scope: 'world',
     type: Object,
     default: {},
     config: false
   });
-  game.settings.register(`${OSEH.moduleName}`, 'lightData', {
+  game.settings.register(`${OSRH.moduleName}`, 'lightData', {
     name: 'lightData',
     scope: 'world',
     type: Object,
     default: {},
     config: false
   });
-  game.settings.register(`${OSEH.moduleName}`, 'effectData', {
+  game.settings.register(`${OSRH.moduleName}`, 'effectData', {
     name: 'effectData',
     scope: 'world',
     type: Array,
@@ -152,7 +152,7 @@ export const registerSettings = async function (){
 
   //stores turn count data
 
-  game.settings.register(`${OSEH.moduleName}`, 'turnData', {
+  game.settings.register(`${OSRH.moduleName}`, 'turnData', {
     name: 'turnData',
     scope: 'world',
     type: Object,
@@ -163,13 +163,13 @@ export const registerSettings = async function (){
       restWarnCount: 0,
       session: 0,
       total: 0,
-      journalName: game.settings.get(`${OSEH.moduleName}`, 'timeJournalName')
+      journalName: game.settings.get(`${OSRH.moduleName}`, 'timeJournalName')
     },
     config: false
   });
 
   //ration settings
-  game.settings.register(`${OSEH.moduleName}`, 'trackRations', {
+  game.settings.register(`${OSRH.moduleName}`, 'trackRations', {
     name: 'Track Rations Use',
     hint: 'Track Rations Use',
     scope: 'client',
@@ -178,7 +178,7 @@ export const registerSettings = async function (){
     config: true
   });
 
-  game.settings.register(`${OSEH.moduleName}`, 'rationData', {
+  game.settings.register(`${OSRH.moduleName}`, 'rationData', {
     name: 'rationData',
     scope: 'world',
     type: Object,
@@ -189,22 +189,22 @@ export const registerSettings = async function (){
       restWarnCount: 0,
       session: 0,
       total: 0,
-      journalName: game.settings.get(`${OSEH.moduleName}`, 'timeJournalName')
+      journalName: game.settings.get(`${OSRH.moduleName}`, 'timeJournalName')
     },
     config: false
   });
 
-  game.settings.register(`${OSEH.moduleName}`, 'centerHotbar', {
+  game.settings.register(`${OSRH.moduleName}`, 'centerHotbar', {
     name: 'Center Hotbar',
     hint: 'Center The macro Hotbar',
     scope: 'world',
     type: Boolean,
     default: true,
     config: true,
-    onChange: () => OSEH.util.centerHotbar()
+    onChange: () => OSRH.util.centerHotbar()
   });
   //split to ose-helper eventually
-  game.settings.register(`${OSEH.moduleName}`, 'classTypeList', {
+  game.settings.register(`${OSRH.moduleName}`, 'classTypeList', {
     name: 'classTypeList',
     scope: 'world',
     type: Array,
@@ -212,7 +212,7 @@ export const registerSettings = async function (){
     config: false
   });
 
-  game.settings.register(`${OSEH.moduleName}`, 'dungeonTurnData', {
+  game.settings.register(`${OSRH.moduleName}`, 'dungeonTurnData', {
     name: 'dungeonTurnData',
     scope: 'world',
     type: Object,
@@ -227,7 +227,7 @@ export const registerSettings = async function (){
     config: false
   });
   
-  game.settings.register(`${OSEH.moduleName}`, 'enableLightConfig', {
+  game.settings.register(`${OSRH.moduleName}`, 'enableLightConfig', {
     name: 'Enable Light Item Settings Config.',
     hint: 'Adds icon to Items tagged with "Light" that allows for configuration of custom light options.',
     scope: 'world',
@@ -235,7 +235,7 @@ export const registerSettings = async function (){
     default: false,
     config: true
   })
-  game.settings.register(`${OSEH.moduleName}`, 'effectPresets', {
+  game.settings.register(`${OSRH.moduleName}`, 'effectPresets', {
     name: 'effectPresets',
     scope: 'world',
     type: Array,
@@ -243,7 +243,7 @@ export const registerSettings = async function (){
     config: false
   });
 // ---------------remove once ose system fixed to accomodate time advance on game round advance
-  game.settings.register(`${OSEH.moduleName}`, 'lastRound', {
+  game.settings.register(`${OSRH.moduleName}`, 'lastRound', {
     name: 'lastRound',
     scope: 'world',
     type: Number,

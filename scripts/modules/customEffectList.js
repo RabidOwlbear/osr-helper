@@ -1,16 +1,16 @@
 
 
 export const registerCustomEffectList = () => {
-  OSEH.ce = OSEH.ce || {};
+  OSRH.ce = OSRH.ce || {};
 
-  OSEH.ce.customEffectList = class customEffectList extends Application {
+  OSRH.ce.customEffectList = class customEffectList extends Application {
     constructor(actorId = null, user = game.user) {
       super();
       this.user = user;
       //if not gm user
       if (!actorId == null) {
         this.actorId = actorId;
-        this.actor = OSEH.util.GetActorById(actorId);
+        this.actor = OSRH.util.GetActorById(actorId);
         this.actorName = this.actor.name;
       }
     }
@@ -19,7 +19,7 @@ export const registerCustomEffectList = () => {
         baseApplication: 'customEffectList',
         classes: ['form', 'custom-effect-list'],
         popOut: true,
-        template: `modules/${OSEH.moduleName}/templates/customEffectList.html`,
+        template: `modules/${OSRH.moduleName}/templates/customEffectList.html`,
         id: 'customEffectList',
         title: 'Currently Active Effects',
         width: 650
@@ -42,7 +42,7 @@ export const registerCustomEffectList = () => {
 
     async renderEffectList(html) {
       const effectListDiv = html.find('#effectList')[0];
-      const effectObj = this.user.getFlag(`${OSEH.moduleName}`, 'effectData');
+      const effectObj = this.user.getFlag(`${OSRH.moduleName}`, 'effectData');
       const keys = Object.keys(effectObj);
       if (keys.length) {
         const sortedList = keys.sort((a, b) => {
@@ -79,7 +79,7 @@ export const registerCustomEffectList = () => {
     }
     async renderEffectDesc(html, effect) {
       const detailContainer = html.find('#effectDetails')[0];
-      let descHtml = await renderTemplate(`modules/${OSEH.moduleName}/templates/customEffectListDescription.html`, {
+      let descHtml = await renderTemplate(`modules/${OSRH.moduleName}/templates/customEffectListDescription.html`, {
         name: effect.name,
         duration: effect.duration,
         description: effect.description,
@@ -95,12 +95,12 @@ export const registerCustomEffectList = () => {
     }
 
     async deleteEffect(id) {
-      let effectData = this.user.getFlag(`${OSEH.moduleName}`, 'effectData');
+      let effectData = this.user.getFlag(`${OSRH.moduleName}`, 'effectData');
 
       delete effectData[id];
 
-      await this.user.unsetFlag(`${OSEH.moduleName}`, 'effectData');
-      await this.user.setFlag(`${OSEH.moduleName}`, 'effectData', effectData);
+      await this.user.unsetFlag(`${OSRH.moduleName}`, 'effectData');
+      await this.user.setFlag(`${OSRH.moduleName}`, 'effectData', effectData);
     }
 
     clearText(field) {
@@ -114,7 +114,7 @@ export const registerCustomEffectList = () => {
     async addEffect(html) {
       const newEffectBtn = html.find('#newEffect')[0];
       const containerDiv = html.find('#effectDetails')[0];
-      OSEH.util.oseHook(`${OSEH.moduleName}newEffectBtnToggle`, [newEffectBtn]);
+      OSRH.util.oseHook(`${OSRH.moduleName}newEffectBtnToggle`, [newEffectBtn]);
       const formData = {
         _id: randomID(16),
         name: html.find('#effectName')[0].value,
@@ -135,7 +135,7 @@ export const registerCustomEffectList = () => {
         ui.notifications.warn('Please enter an effect duration.');
         return;
       }
-      let effectData = await this.user.getFlag(`${OSEH.moduleName}`, 'effectData');
+      let effectData = await this.user.getFlag(`${OSRH.moduleName}`, 'effectData');
       effectData[formData._id] = {
         _id: formData._id,
         name: formData.name,
@@ -149,11 +149,11 @@ export const registerCustomEffectList = () => {
         }
       };
 
-      this.user.setFlag(`${OSEH.moduleName}`, 'effectData', effectData);
+      this.user.setFlag(`${OSRH.moduleName}`, 'effectData', effectData);
       containerDiv.innerHTML = '';
       this.render();
 
-      const msgTemplate = await renderTemplate(`modules/${OSEH.moduleName}/templates/customEffectChatMsgA.html`, {
+      const msgTemplate = await renderTemplate(`modules/${OSRH.moduleName}/templates/customEffectChatMsgA.html`, {
         name: formData.name,
         duration: formData.duration,
         description: formData.description,
@@ -167,7 +167,7 @@ export const registerCustomEffectList = () => {
       const newEffectBtn = html.find('#newEffect')[0];
 
       const containerDiv = html.find('#effectDetails')[0];
-      const template = await renderTemplate(`modules/${OSEH.moduleName}/templates/newEffectForm.html`, {});
+      const template = await renderTemplate(`modules/${OSRH.moduleName}/templates/newEffectForm.html`, {});
       containerDiv.innerHTML = template;
       const subBtn = html.find('#newEffectSub')[0];
       const cancelBtn = html.find('#newEffectCancel')[0];
@@ -181,10 +181,10 @@ export const registerCustomEffectList = () => {
           this.clearText(input);
         });
       }
-      OSEH.util.oseHook('${OSEH.moduleName} newEffectBtnToggle', [newEffectBtn]);
+      OSRH.util.oseHook('${OSRH.moduleName} newEffectBtnToggle', [newEffectBtn]);
 
       cancelBtn.addEventListener('click', () => {
-        OSEH.util.oseHook('${OSEH.moduleName} newEffectBtnToggle', [newEffectBtn]);
+        OSRH.util.oseHook('${OSRH.moduleName} newEffectBtnToggle', [newEffectBtn]);
         containerDiv.innerHTML = '';
       });
       subBtn.addEventListener('click', (event) => {
@@ -193,13 +193,13 @@ export const registerCustomEffectList = () => {
     }
   };
 
-  OSEH.ce.effectList = async (actor = null, user = game.user) => {
+  OSRH.ce.effectList = async (actor = null, user = game.user) => {
     const id = actor == null ? null : actor.id;
-    let list = new OSEH.ce.customEffectList(id, user);
+    let list = new OSRH.ce.customEffectList(id, user);
     list.shop = list;
     list.render(true);
     //refresh window if time advances
-    Hooks.on(`${OSEH.moduleName} Time Updated`, async () => {
+    Hooks.on(`${OSRH.moduleName} Time Updated`, async () => {
       if (list.rendered) {
         await list.close();
         await list.render(true);
@@ -209,14 +209,14 @@ export const registerCustomEffectList = () => {
 
   // window.customEffectList = customEffectList;
 
-  Hooks.on(`${OSEH.moduleName} newEffectBtnToggle`, (...args) => {
-    OSEH.util.toggleButton(args[0]);
+  Hooks.on(`${OSRH.moduleName} newEffectBtnToggle`, (...args) => {
+    OSRH.util.toggleButton(args[0]);
   });
 
   async function oseListUserEffects() {
     let options = '';
     const userList = await game.users.contents.filter((user) => {
-      let flag = user.getFlag(`${OSEH.moduleName}`, 'effectData');
+      let flag = user.getFlag(`${OSRH.moduleName}`, 'effectData');
       if (flag) {
         return true;
       } else return false;
@@ -242,7 +242,7 @@ export const registerCustomEffectList = () => {
           callback: (html) => {
             const selected = html.find('#selectedUser')[0].value;
 
-            OSEH.ce.effectList(null, game.users.get(selected));
+            OSRH.ce.effectList(null, game.users.get(selected));
           }
         }
       }

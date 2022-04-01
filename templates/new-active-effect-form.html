@@ -68,7 +68,7 @@
       </div>
     </div>
     <div class="combined-row w100p">
-      <div class="hp fx fdc aic w100p  pb5">
+      <div class="hp fx fdc aic w100p sb pb5">
         <h4>hp</h4>
         <div class="hp-cont fx sb w100p">
           <div class="attrib-block plr5"><label for="hp-max">max:</label><input name="hp.max" id="hp-max" type="number" value="0"></div>
@@ -86,12 +86,19 @@
           <!-- <label for="duration">minutes:</label> -->
           <div class="interval-select fx sb w100p pb5">
             <div class="radio plr5">
-              <label for="seconds">sec.</label>
+              
               <input type="radio" name="interval" id="seconds">
+              <label for="seconds">sec.</label>
+            </div>
+            <div class="radio">
+              
+              <input type="radio" name="interval" id="minutes" checked>
+              <label for="minutes">min.</label>
             </div>
             <div class="radio plr5">
-              <label for="minutes">min.</label>
-              <input type="radio" name="interval" id="minutes" checked>
+              
+              <input type="radio" name="interval" id="infinite">
+              <label for="minutes">inf.</label>
             </div>
           </div>
           <input name="duration" id="duration" type="number" value="0">

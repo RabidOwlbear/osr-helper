@@ -1,18 +1,18 @@
 export const registerUtil =  () => {
-  OSEH.util = OSEH.util || {};
+  OSRH.util = OSRH.util || {};
   //tick: manages light duration, turn count
-  OSEH.util.oseTick = async function () {
+  OSRH.util.oseTick = async function () {
     if (game.user.role >= 4) {
-      let lastTick = await game.settings.get(`${OSEH.moduleName}`, 'lastTick');
-      await OSEH.util.oseLightTick(lastTick);
-      await OSEH.util.oseEffectTick(lastTick);
+      let lastTick = await game.settings.get(`${OSRH.moduleName}`, 'lastTick');
+      await OSRH.util.oseLightTick(lastTick);
+      await OSRH.util.oseEffectTick(lastTick);
 
       //update lightTick
 
-      await game.settings.set(`${OSEH.moduleName}`, 'lastTick', game.time.worldTime);
+      await game.settings.set(`${OSRH.moduleName}`, 'lastTick', game.time.worldTime);
     }
   };
-  OSEH.util.oseLightTick = async function (lastTick) {
+  OSRH.util.oseLightTick = async function (lastTick) {
     if (game.user.role >= 4) {
       //get data
       const data = {
@@ -22,7 +22,7 @@ export const registerUtil =  () => {
       const elapsed = (curTime - lastTick) / 60;
       //manage light duration
       for (let user of game.users.contents) {
-        data.light = await user.getFlag(`${OSEH.moduleName}`, 'lightData');
+        data.light = await user.getFlag(`${OSRH.moduleName}`, 'lightData');
         //loop through actorIds in light flag
         for (let actorId in data.light) {
           //If actor does not have light lit...
@@ -34,17 +34,17 @@ export const registerUtil =  () => {
                 //decrement duration by time elapsed in minutes
                 data.light[actorId][lightType].duration -= elapsed;
                 //if duration is greater than maximum, set to maximum.
-                if (data.light[actorId][lightType].duration > OSEH.data.lightSource[lightType].duration) {
-                  data.light[actorId][lightType].duration = OSEH.data.lightSource[lightType].duration;
+                if (data.light[actorId][lightType].duration > OSRH.data.lightSource[lightType].duration) {
+                  data.light[actorId][lightType].duration = OSRH.data.lightSource[lightType].duration;
                 }
                 //on last turn shrink light radius
                 if (data.light[actorId][lightType].duration <= 10) {
-                  OSEH.util.updateTokens(actorId, OSEH.data.lightSource[lightType], true);
+                  OSRH.util.updateTokens(actorId, OSRH.data.lightSource[lightType], true);
                 }
                 // if duration <= 0 run lightOff function, and delete light type object
                 if (data.light[actorId][lightType].duration <= 0) {
                   const actor = await game.actors.contents.find((a) => a.id == actorId);
-                  const item = await actor.data.items.getName(OSEH.data.lightSource[lightType].name);
+                  const item = await actor.data.items.getName(OSRH.data.lightSource[lightType].name);
                   const newCount = item.data.data.quantity.value - 1;
                   if (newCount <= 0) {
                     await item.delete();
@@ -60,7 +60,7 @@ export const registerUtil =  () => {
 
                   data.light[actorId].lightLit = false;
                   //changed oseh.light.ligthOff to oseLightOff
-                  OSEH.light.oseLightOff(actorId);
+                  OSRH.light.oseLightOff(actorId);
                   delete data.light[actorId][lightType];
                   if (Object.keys(data.light[actorId]).length == 1) {
                     delete data.light[actorId];
@@ -70,17 +70,17 @@ export const registerUtil =  () => {
             }
           }
         }
-        await user.unsetFlag(`${OSEH.moduleName}`, 'lightData');
-        await user.setFlag(`${OSEH.moduleName}`, 'lightData', data.light);
+        await user.unsetFlag(`${OSRH.moduleName}`, 'lightData');
+        await user.setFlag(`${OSRH.moduleName}`, 'lightData', data.light);
       }
     }
   };
-  OSEH.util.oseEffectTick = async function (lastTick) {
+  OSRH.util.oseEffectTick = async function (lastTick) {
     if (game.user.role >= 4) {
       const curTime = game.time.worldTime;
       const elapsed = (curTime - lastTick) / 60;
       for (let user of game.users.contents) {
-        let effectData = await user.getFlag(`${OSEH.moduleName}`, 'effectData');
+        let effectData = await user.getFlag(`${OSRH.moduleName}`, 'effectData');
 
         for (let effectId in effectData) {
           let effect = effectData[effectId];
@@ -89,19 +89,19 @@ export const registerUtil =  () => {
           if (effect.duration <= 0) {
             const msgData = `<h3 style="color: red;"> Custom Effect Expired</h3>
     <div>Custom effect ${effectData[effectId].name} has expired!.`;
-            OSEH.util.ChatMessage(effectData[effectId], effectData[effectId].data.userId, msgData);
+            OSRH.util.ChatMessage(effectData[effectId], effectData[effectId].data.userId, msgData);
             delete effectData[effectId];
           }
         }
 
-        await user.unsetFlag(`${OSEH.moduleName}`, 'effectData');
-        await user.setFlag(`${OSEH.moduleName}`, 'effectData', effectData);
+        await user.unsetFlag(`${OSRH.moduleName}`, 'effectData');
+        await user.setFlag(`${OSRH.moduleName}`, 'effectData', effectData);
       }
     }
   };
-  OSEH.util.setLightFlag = function (data) {
+  OSRH.util.setLightFlag = function (data) {
     const { actor, actorId, type, duration } = data;
-    const journal = game.journal.getName(game.settings.get(`${OSEH.moduleName}`, 'timeJournalName'));
+    const journal = game.journal.getName(game.settings.get(`${OSRH.moduleName}`, 'timeJournalName'));
     const flagObj = {
       [actorId]: {
         [type]: {
@@ -117,7 +117,7 @@ export const registerUtil =  () => {
     actor.setFlag('world', 'lightLit', true);
   };
 
-  OSEH.util.getById = function (type, id) {
+  OSRH.util.getById = function (type, id) {
     if (type == 'actor') {
       return game.actors.find((a) => a.id == id);
     }
@@ -126,7 +126,7 @@ export const registerUtil =  () => {
     }
   };
 
-  OSEH.util.getActor = function () {
+  OSRH.util.getActor = function () {
     if (canvas.tokens.controlled.length > 1 || canvas.tokens.controlled.length == 0) {
       ui.notifications.error('Please select a single token');
       return;
@@ -134,9 +134,9 @@ export const registerUtil =  () => {
     return game.actors.find((a) => a.id == canvas.tokens.controlled[0].actor.id);
   };
 
-  OSEH.util.unSetLightFlag = function (data) {
+  OSRH.util.unSetLightFlag = function (data) {
     const { actor, actorId } = data;
-    const journal = game.journal.getName(game.settings.get(`${OSEH.moduleName}`, 'timeJournalName'));
+    const journal = game.journal.getName(game.settings.get(`${OSRH.moduleName}`, 'timeJournalName'));
     let flags = journal.data.flags.world.oseLights;
     delete flags[actorId];
     journal.unsetFlag('world', 'oseLights');
@@ -144,13 +144,13 @@ export const registerUtil =  () => {
     actor.setFlag('world', 'lightLit', false);
   };
 
-  OSEH.util.oseClearUserFlag = async function (data) {
+  OSRH.util.oseClearUserFlag = async function (data) {
     const { user, scope, flagname, reset } = data;
     await user.unsetFlag(scope, flagname);
     if (reset) await user.setFlag(scope, flagname, {});
   };
 
-  OSEH.util.resetMonsterAttacks = async function () {
+  OSRH.util.resetMonsterAttacks = async function () {
     for (let combatant of game.combats.active.combatants.contents) {
       const actor = combatant.actor;
       if (actor.type == 'monster') {
@@ -164,17 +164,17 @@ export const registerUtil =  () => {
     }
   };
 
-  OSEH.util.GetActorById = function (id) {
+  OSRH.util.GetActorById = function (id) {
     return game.actors.contents.find((a) => a.id == id);
   };
-  OSEH.util.getActorId = function (actorName) {
+  OSRH.util.getActorId = function (actorName) {
     const id = game.actors.getName(actorName)?.id;
     if (id) {
       return id;
     }
   };
 
-  OSEH.util.UserAssigned = function (actorId) {
+  OSRH.util.UserAssigned = function (actorId) {
     for (let user of game.users.contents) {
       if (user?.character?.id == actorId) {
         return user.id;
@@ -182,11 +182,11 @@ export const registerUtil =  () => {
     }
   };
 
-  OSEH.util.ChatMessage = function (effectData, userId, msgContent) {
+  OSRH.util.ChatMessage = function (effectData, userId, msgContent) {
     const whisperArray = [userId];
     if (effectData.data.whisperTarget) {
-      const targetId = OSEH.util.getActorId(effectData.data.target);
-      const targetUserId = OSEH.util.UserAssigned(targetId);
+      const targetId = OSRH.util.getActorId(effectData.data.target);
+      const targetUserId = OSRH.util.UserAssigned(targetId);
       // if target is a user controlled character
       if (targetUserId) {
         whisperArray.push(targetUserId);
@@ -196,18 +196,18 @@ export const registerUtil =  () => {
     ChatMessage.create({ content: msgContent, whisper: whisperArray });
   };
 
-  OSEH.util.centerHotbar = function () {
-    if (game.settings.get(`${OSEH.moduleName}`, 'centerHotbar')) {
+  OSRH.util.centerHotbar = function () {
+    if (game.settings.get(`${OSRH.moduleName}`, 'centerHotbar')) {
       document.documentElement.style.setProperty('--hotbar-center', 'calc(50% - 270px');
     } else {
       document.documentElement.style.setProperty('--hotbar-center', '220px');
     }
   };
 
-  OSEH.util.oseHook = function (hookName, args = []) {
+  OSRH.util.oseHook = function (hookName, args = []) {
     Hooks.callAll(hookName, ...args);
   };
-  OSEH.util.toggleButton = function (btn) {
+  OSRH.util.toggleButton = function (btn) {
     if (btn.disabled) {
       btn.disabled = false;
       return;
@@ -215,7 +215,7 @@ export const registerUtil =  () => {
     btn.disabled = true;
   };
 
-  OSEH.util.updateTokens = async function (actorId, lightData, lastTurn = false) {
+  OSRH.util.updateTokens = async function (actorId, lightData, lastTurn = false) {
     //loop through active game scenes
     for (let scene of game.scenes.contents) {
       //loop through tokens contaioned in scene
@@ -226,7 +226,7 @@ export const registerUtil =  () => {
           let dim = lightData.dimLight;
           if (lastTurn) dim = dim * 0.7;
           //hacky version check, if less than v8 = false, data checks if oldVer is false, and sends appropriate data object
-          const version = OSEH.gameVersion;
+          const version = OSRH.gameVersion;
 
           const oldVer = parseInt(version) < 9;
 
@@ -259,7 +259,7 @@ export const registerUtil =  () => {
     }
   };
 
-  OSEH.util.countJournalInit = async function (journalName) {
+  OSRH.util.countJournalInit = async function (journalName) {
     let entry = game.journal.getName(journalName);
 
     if (!entry) {
@@ -268,14 +268,14 @@ export const registerUtil =  () => {
         name: `${journalName}`
       });
 
-      OSEH.turn.updateJournal();
-      console.log(`OSE-helper: no count journal found.
+      OSRH.turn.updateJournal();
+      console.log(`OSR-helper: no count journal found.
       Journal entry named ${journalName} created.`);
     }
     return entry;
   };
 
-  OSEH.util.singleSelected = function () {
+  OSRH.util.singleSelected = function () {
     if (canvas.tokens.controlled.length == 0 || canvas.tokens.controlled.length > 1) {
       ui.notifications.error('Please select a single token');
       return false;
@@ -284,7 +284,7 @@ export const registerUtil =  () => {
   };
 
   //random text generator
-  OSEH.util.tableFlavor = function () {
+  OSRH.util.tableFlavor = function () {
     let flavorArr = [
       '<span style="color: DeepPink">What is THIS!!!</span>',
       '<span style="color: DeepPink">What is that I hear?</span>',
@@ -296,7 +296,7 @@ export const registerUtil =  () => {
     return flavorArr[index];
   };
 
-  OSEH.util.getPartyActors = function () {
+  OSRH.util.getPartyActors = function () {
     const allParty = game.actors.filter((a) => a.data.flags?.ose?.party == true);
     const retObj = {
       party: allParty,
@@ -313,9 +313,9 @@ export const registerUtil =  () => {
     return retObj;
   };
 
-  OSEH.util.attack = async function () {
+  OSRH.util.attack = async function () {
     // Get Selected
-    if (!OSEH.util.singleSelected()) {
+    if (!OSRH.util.singleSelected()) {
       return;
     }
     const selectedActor = canvas.tokens.controlled[0].actor;
@@ -371,7 +371,7 @@ export const registerUtil =  () => {
             let skipCheck = html.find('#skip')[0]?.checked;
             let ammoCheck = html.find(`#ammoCheck`)[0]?.checked;
             let weapon = selectedActor.items.find((i) => i.id == selected.value);
-            let ammoObj = OSEH.data.ammoData.find((a) => a.name == weapon?.name);
+            let ammoObj = OSRH.data.ammoData.find((a) => a.name == weapon?.name);
             let ammo, ammoQty;
             if (ammoObj && ammoCheck) {
               ammo = selectedActor.items.find((i) => i.name == ammoObj.ammoType);
@@ -401,9 +401,9 @@ export const registerUtil =  () => {
     }).render(true);
   };
 
-  OSEH.util.charMonReact = async function (data) {
+  OSRH.util.charMonReact = async function (data) {
     const { tableName } = data;
-    const characters = await OSEH.util.getPartyActors().party;
+    const characters = await OSRH.util.getPartyActors().party;
     let characterList = ``;
     for (let char of characters) {
       const cData = {
@@ -459,12 +459,12 @@ export const registerUtil =  () => {
     }).render(true);
   };
 
-  OSEH.util.randomName = function (type = null, gender = null) {
+  OSRH.util.randomName = function (type = null, gender = null) {
     function getRandomItem(arr) {
       return arr[Math.floor(Math.random() * arr.length)];
     }
     function getName(type, gender = 'all') {
-      const nameData = OSEH.data.nameData;
+      const nameData = OSRH.data.nameData;
       const firstObj = nameData[type];
       const typeObj =
         gender == 'all'
@@ -478,7 +478,7 @@ export const registerUtil =  () => {
 
     if (!type) {
       let options = ``;
-      for (let key of Object.keys(OSEH.data.nameData)) {
+      for (let key of Object.keys(OSRH.data.nameData)) {
         options += `
         <option value="${key}">${key}</option>
         `;
@@ -611,7 +611,7 @@ export const registerUtil =  () => {
   };
 
   
-  OSEH.util.getCurrencyItems = async function (actor){
+  OSRH.util.getCurrencyItems = async function (actor){
     let items = actor.data.items
     let currencyList = [] 
       items.forEach((i)=>{
@@ -623,11 +623,11 @@ export const registerUtil =  () => {
       })
       return currencyList;
   }
-  OSEH.util.curConvert = async function (amt, curCur, newCur, actor){
+  OSRH.util.curConvert = async function (amt, curCur, newCur, actor){
     const curItems = actor.data.items;
     const curCheck = async (type)=>{
       let itemExists = actor.data.items.getName(type)
-      let pack = game.packs.get('OSE-helper.OSE-helper-items');
+      let pack = game.packs.get(`${OSRH.moduleName}.${OSRH.moduleName}-items`);
       if(!itemExists){
         let curItm = await pack.getDocument(pack.index.getName(type)._id);
         let itemData = curItm.clone().data
@@ -642,7 +642,7 @@ export const registerUtil =  () => {
     console.log(curItem, newItem)
     if(curItem.data.data.quantity.value < amt){
       ui.notifications.warn(`Not enough ${curCur}`)
-      OSEH.util.curConDiag(actor, amt)
+      OSRH.util.curConDiag(actor, amt)
       return
     }
     let newVal = (curItem.data.data.cost * amt) / newItem.data.data.cost;
@@ -671,7 +671,7 @@ export const registerUtil =  () => {
     })
   }
 
-  OSEH.util.curConDiag = async function (actor, amt = 0){
+  OSRH.util.curConDiag = async function (actor, amt = 0){
 
 
 
@@ -718,19 +718,19 @@ export const registerUtil =  () => {
            let amt = parseInt(html.find('#amt')[0].value)
            if(curCur == 'null' || newCur == 'null'){
              ui.notifications.warn('Please make sure both currencies are selected.')
-             OSEH.util.curConDiag(actor, amt)
+             OSRH.util.curConDiag(actor, amt)
              return
            }
            
            console.log('aa',actor, curCur, newCur, amt)
-           OSEH.util.curConvert(amt, curCur, newCur, actor)
+           OSRH.util.curConvert(amt, curCur, newCur, actor)
           }
         }
       }
     })
     diag.render(true)
    }
-  OSEH.util.debounce = function(callback, wait) {
+  OSRH.util.debounce = function(callback, wait) {
     let timeoutId = null;
     return (...args) => {
       window.clearTimeout(timeoutId);
@@ -739,15 +739,15 @@ export const registerUtil =  () => {
       }, wait);
     };
   }
-  OSEH.util.setting = async function (setting, value, type){
+  OSRH.util.setting = async function (setting, value, type){
     if(type == 'set'){
-      await game.settings.set(`${OSEH.moduleName}`, setting, value);
+      await game.settings.set(`${OSRH.moduleName}`, setting, value);
     }
     if(type=='get'){
-      return await game.settings.get(`${OSEH.moduleName}`, setting);
+      return await game.settings.get(`${OSRH.moduleName}`, setting);
     }
   }
-  OSEH.util.createActiveEffectOnTarget= async function(data, target){
+  OSRH.util.createActiveEffectOnTarget= async function(data, target){
     console.log(target._id, target)
     let id = target._id ? target._id : target.id;
     if(id){

@@ -1,7 +1,7 @@
 export const registerRations = () => {
-  OSEH.ration = OSEH.ration || {};
+  OSRH.ration = OSRH.ration || {};
 
-  OSEH.ration.rationTrackingInit = async function () {
+  OSRH.ration.rationTrackingInit = async function () {
     const foldernames = ['Active Characters', 'Active Retainers'];
     const actorIds = [];
     for (let name of foldernames) {
@@ -13,7 +13,7 @@ export const registerRations = () => {
           // parent: 'OMbaST8BhMtHx2zT',
           color: '#006688'
         });
-        console.log(`${OSEH.moduleName}: No ${name} Folder Found.
+        console.log(`${OSRH.moduleName}: No ${name} Folder Found.
     Folder Named ${name} Created.`);
       }
 
@@ -26,7 +26,7 @@ export const registerRations = () => {
     return actorIds;
   };
 
-  OSEH.ration.checkRations = async function (arr) {
+  OSRH.ration.checkRations = async function (arr) {
     for (let id of arr) {
       const actor = game.actors.find((a) => a.id == id);
     }
@@ -43,11 +43,11 @@ data: {
 
 
 
-  OSEH.ration.eat = async function (actorId) {
+  OSRH.ration.eat = async function (actorId) {
     const actor = await game.actors.find((a) => a.id == actorId);
     let rationOptions = '';
-    for (let type in OSEH.data.food) {
-      const item = actor.data.items.getName(OSEH.data.food[type]);
+    for (let type in OSRH.data.food) {
+      const item = actor.data.items.getName(OSRH.data.food[type]);
       if (item) {
         rationOptions += `<option value="${item.name}">${item.name}: ${item.data.data.quantity.value}</option>`;
       }

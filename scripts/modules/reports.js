@@ -1,15 +1,15 @@
 export const registerReports = () => {
-  OSEH.report = OSEH.report || {};
+  OSRH.report = OSRH.report || {};
 
-  OSEH.report.actorItem = async function (actor) {
+  OSRH.report.actorItem = async function (actor) {
     const Rations = [];
     const Lights = [];
     let totalRations = 0;
 
-    for (let key in OSEH.data.food) {
+    for (let key in OSRH.data.food) {
       Rations.push(key);
     }
-    for (let key in OSEH.data.lightSource) {
+    for (let key in OSRH.data.lightSource) {
       Lights.push(key);
     }
 
@@ -20,7 +20,7 @@ export const registerReports = () => {
 
     for (let name of Rations) {
       let actorItem = '';
-      let ration = actor.data.items.getName(OSEH.data.food[name]);
+      let ration = actor.data.items.getName(OSRH.data.food[name]);
 
       if (ration) {
         const qty = ration.data.data.quantity.value;
@@ -29,22 +29,22 @@ export const registerReports = () => {
         style = 'color: green';
         if (qty <= 2) style = 'color: orangered';
         if (qty <= 1) style = 'color: red';
-        actorItem += `<li><span style="${style}">${OSEH.data.food[name]}: ${qty}</span></li>`;
-        msgData.food += `<div><p> ${OSEH.data.food[name]}:</p><ul>` + actorItem + `</ul></div>`;
+        actorItem += `<li><span style="${style}">${OSRH.data.food[name]}: ${qty}</span></li>`;
+        msgData.food += `<div><p> ${OSRH.data.food[name]}:</p><ul>` + actorItem + `</ul></div>`;
       }
     }
     for (let name of Lights) {
       let actorItem = '';
 
-      let light = actor.data.items.getName(OSEH.data.lightSource[name].name);
+      let light = actor.data.items.getName(OSRH.data.lightSource[name].name);
       if (light) {
         const qty = light.data.data.quantity.value;
 
         style = 'color: green';
         if (qty <= 2) style = 'color: orangered';
         if (qty <= 1) style = 'color: red';
-        actorItem += `<li><span style="${style}">${OSEH.data.lightSource[name].name}: ${light.data.data.quantity.value}</span></li>`;
-        msgData.light += `<div><p> ${OSEH.data.lightSource[name].name}:</p><ul>` + actorItem + `</ul></div>`;
+        actorItem += `<li><span style="${style}">${OSRH.data.lightSource[name].name}: ${light.data.data.quantity.value}</span></li>`;
+        msgData.light += `<div><p> ${OSRH.data.lightSource[name].name}:</p><ul>` + actorItem + `</ul></div>`;
       }
     }
     let ratStyle = 'color: green;';
@@ -75,11 +75,11 @@ export const registerReports = () => {
     ChatMessage.create({ content: contents, whisper: [game.user.id] });
   };
 
-  OSEH.report.ration = async function () {
-    let actorObj = OSEH.util.getPartyActors();
+  OSRH.report.ration = async function () {
+    let actorObj = OSRH.util.getPartyActors();
     const Rations = [];
-    for (let key in OSEH.data.food) {
-      Rations.push(OSEH.data.food[key]);
+    for (let key in OSRH.data.food) {
+      Rations.push(OSRH.data.food[key]);
     }
 
     let totalRations = 0;
@@ -134,7 +134,7 @@ export const registerReports = () => {
     ChatMessage.create({ content: contents, whisper: [game.user.id] });
   };
 
-  OSEH.report.travelCalc = async function () {
+  OSRH.report.travelCalc = async function () {
     const initMod = 1;
 
     function partyHtml(actorObj, mod = 1) {
@@ -161,7 +161,7 @@ export const registerReports = () => {
         <button type="button" id="enc-btn">Roll</button>`;
 
       let encBtnHtml = oseActive ? encButtonTemplate : `<div style="height: 125px"></div>`;
-      const partyObj = OSEH.util.getPartyActors();
+      const partyObj = OSRH.util.getPartyActors();
       let slowest = partyObj.party[0]?.data.data.movement.base;
       //find slowest rate
       partyObj.party.forEach((a) => {
@@ -230,7 +230,7 @@ export const registerReports = () => {
         return mergeObject(super.defaultOptions, {
           classes: ['application', 'testApp'],
           popOut: true,
-          template: `modules/${OSEH.moduleName}/templates/travel-report.html`,
+          template: `modules/${OSRH.moduleName}/templates/travel-report.html`,
           id: 'oseTravelReport',
           title: 'Adventure ahoy!',
           width: 400

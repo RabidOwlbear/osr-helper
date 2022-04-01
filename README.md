@@ -1,29 +1,39 @@
-# OSE-helper module
+# OSR-helper module
 
 Created by RabidOwlbear.
 
 [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/J3J1BW12R)
 
-An unimaginatively named module that aims to assist with light, time, and resource management. For use in games using the Old School Essentials system for FoundryVTT.
-This module provides several macros found in a compendium named "OSE-helper Macros".
+An unimaginatively named module that aims to assist with light, time, and resource management. For use in games using the Foundry Vtt implementation of the 'Old School Essentials' system.
+This module provides several macros found in a compendium named "OSR-helper Macros".
+
+### Important Notice
+
+If updating from the previous version named "OSE-helper", any macros existing in your game worlds from the previous version will no longer function. Please replace them with the included updated versions. We apologize for any inconvenience this causes.
+
+If you have created custom light items in your world you will need to run the provided conversion macro named "Convert Light Data" located in the included macro compendium "Utility Macros" folder. This wil convert your existing light configurations, existing lights  will not function without conversion. this only needs to be run once.
+
+You will also need to disable and/or uninstall the previous "OSE-CharacterBuilder" installation to avoid conflicts.
+
+---
 
 ### installation
 
 install using the following manifest url:
 
-https://raw.githubusercontent.com/RabidOwlbear/OSE-helper/master/module.json
+https://raw.githubusercontent.com/RabidOwlbear/osr-helper/master/module.json
 
 ### usage
 
 Upon initial load a journal entry will be created using the default name of "Turn Count". This journal will be populated with several statistics reflecting number of turns elapsed this session, since that last rest was taken, and the total number of turns so far in the game. Using the provided "OSE-helper Dungeon Turn (base)" macro the Referee can advance the game time in standard 10 minute turn intervals. The "Turn Count" journal will be updated to reflect the current counts.
 
-The provided "OSE-helper reset session count" will reset the session count to zero.
-The provided "OSE-helper reset all counts" macro will reset all counts.
-The provided "OSE-helper Rest" macro will reset the turns since last rest count to zero.
+The provided "OSR-helper reset session count" will reset the session count to zero.
+The provided "OSR-helper reset all counts" macro will reset all counts.
+The provided "OSR-helper Rest" macro will reset the turns since last rest count to zero.
 
 ---
 
-### Using the OSE-helper Dungeon Turn Macro
+### Using the OSR-helper Dungeon Turn Macro
 
 To set the options for the dungeon turn macro navigate to the OSE helper settings in module settings.
 Clicking the dungeon tirn settings button will open a settings window with the following options:
@@ -63,7 +73,7 @@ When clicked:
 - if no light is currently lit, a dialog will be created containing a dropdown populated with the names and quantities of all items in the selected token actors inventory that contain a "Light" tag.
 - once a light source is selected, clicking "Light On" with change the selected token's light settings to match tose contained in the selected light source's configuration settings.
 
-note: Several light items have been provided in the OSE-helper Items compendium.
+note: Several light items have been provided in the OSR-helper Items compendium.
 If the macro has been used to light a light source, the light can be extinguished by clicking the macro again, preserving any remaning duration until lit again by clicking the Light On macro and selecting the corresponding light type.
 
 Each time game world time advances, all lit light sources will be checked against their duration, if the duration is exceeded the tight source will be extinguished, and the total quantity for that item will be decremented by 1. If the item quantity is reduced to zero the item will be deleted from the actor's invetory.
@@ -72,7 +82,7 @@ Each time game world time advances, all lit light sources will be checked agains
 
 ### Ration Report
 
-The OSE-helper Ration Report macro
+The OSR-helper Ration Report macro
 
 When clicked this macro will generate a report detailing all rations currently held by all tracked Player and Retainer actors seprated by name, listing items held and their quantities, color coded.
 Total number of days worth of rations for the entire tracked group(assuming the party pools resources) is also profided in a color coded display.

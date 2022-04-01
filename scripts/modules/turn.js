@@ -1,21 +1,21 @@
 export const registerTurn =  () => {
-  OSEH.turn = OSEH.turn || {};
+  OSRH.turn = OSRH.turn || {};
 
   const oseTime = {};
   //increments game-worldtime by input amount
-  OSEH.turn.timePlus = async function (amt, inc, turn = false) {
+  OSRH.turn.timePlus = async function (amt, inc, turn = false) {
     const increments = {
       minute: 60,
       hour: 3600,
       turn: 600
     };
     if (turn) {
-      await OSEH.turn.incrementTurnData();
+      await OSRH.turn.incrementTurnData();
     }
     game.time.advance(amt * increments[inc]);
   };
   //resets
-  OSEH.turn.resetData = function (name) {
+  OSRH.turn.resetData = function (name) {
     let data;
     switch (name) {
       case 'lightData':
@@ -31,47 +31,47 @@ export const registerTurn =  () => {
           restWarnCount: 0,
           session: 0,
           total: 0,
-          journalName: game.settings.get(`${OSEH.moduleName}`, 'timeJournalName')
+          journalName: game.settings.get(`${OSRH.moduleName}`, 'timeJournalName')
         };
         break;
       default:
-        console.error(`${OSEH.moduleName}: resetData('name') error: Name not found`);
+        console.error(`${OSRH.moduleName}: resetData('name') error: Name not found`);
         return;
     }
 
-    game.settings.set(`${OSEH.moduleName}`, `${name}`, data);
+    game.settings.set(`${OSRH.moduleName}`, `${name}`, data);
   };
 
-  OSEH.turn.resetSessionCount = async function () {
-    const data = await game.settings.get(`${OSEH.moduleName}`, 'turnData');
+  OSRH.turn.resetSessionCount = async function () {
+    const data = await game.settings.get(`${OSRH.moduleName}`, 'turnData');
     data.session = 0;
-    await game.settings.set(`${OSEH.moduleName}`, 'turnData', data);
-    OSEH.turn.updateJournal();
+    await game.settings.set(`${OSRH.moduleName}`, 'turnData', data);
+    OSRH.turn.updateJournal();
   };
 
-  OSEH.turn.resetAllCounts = async function () {
-    const data = await game.settings.get(`${OSEH.moduleName}`, 'turnData');
+  OSRH.turn.resetAllCounts = async function () {
+    const data = await game.settings.get(`${OSRH.moduleName}`, 'turnData');
     data.session = 0;
     data.procCount = 0;
     data.rest = 0;
     data.total = 0;
-    await game.settings.set(`${OSEH.moduleName}`, 'turnData', data);
-    OSEH.turn.updateJournal();
+    await game.settings.set(`${OSRH.moduleName}`, 'turnData', data);
+    OSRH.turn.updateJournal();
   };
   //increments turn data and updates setting
-  OSEH.turn.incrementTurnData = async function () {
+  OSRH.turn.incrementTurnData = async function () {
    
-    const data = await game.settings.get(`${OSEH.moduleName}`, 'turnData');
+    const data = await game.settings.get(`${OSRH.moduleName}`, 'turnData');
     data.rest++;
     data.session++;
     data.total++;
     data.procCount++;
-    await game.settings.set(`${OSEH.moduleName}`, 'turnData', data);
-    return game.settings.get(`${OSEH.moduleName}`, 'turnData');
+    await game.settings.set(`${OSRH.moduleName}`, 'turnData', data);
+    return game.settings.get(`${OSRH.moduleName}`, 'turnData');
   };
 
-  OSEH.turn.dungeonTurn = async function () {
-    const data = await game.settings.get(`${OSEH.moduleName}`, 'dungeonTurnData')
+  OSRH.turn.dungeonTurn = async function () {
+    const data = await game.settings.get(`${OSRH.moduleName}`, 'dungeonTurnData')
     const encTable = game.tables.getName(data.eTable);
     let reactTable = await game.tables.getName(data.rTable);
     // checks
@@ -85,10 +85,10 @@ export const registerTurn =  () => {
     }
 
     
-    const turnData = await OSEH.turn.incrementTurnData();
+    const turnData = await OSRH.turn.incrementTurnData();
     turnData.proc = data.proc
-    if (game.settings.get(`${OSEH.moduleName}`, 'restMessage')) {
-      OSEH.turn.restMsg(turnData.rest); //generate chat message regarding rest status
+    if (game.settings.get(`${OSRH.moduleName}`, 'restMessage')) {
+      OSRH.turn.restMsg(turnData.rest); //generate chat message regarding rest status
     }
     
     if (data.rollEnc) {
@@ -97,8 +97,8 @@ export const registerTurn =  () => {
       if (turnData.procCount >= data.proc) {
         //if number of turns since last random monster roll is greater than or equal to the random check interval
         turnData.procCount = 0; //resest number of turns since last random check
-        await game.settings.set(`${OSEH.moduleName}`, 'turnData', {});
-        await game.settings.set(`${OSEH.moduleName}`, 'turnData', turnData); //update settings data <--------
+        await game.settings.set(`${OSRH.moduleName}`, 'turnData', {});
+        await game.settings.set(`${OSRH.moduleName}`, 'turnData', turnData); //update settings data <--------
         const theRoll = await new Roll('1d6').roll();
         const gm = game.users.contents.filter((u) => u.data.role == 4).map((u) => u.id);
 
@@ -114,7 +114,7 @@ export const registerTurn =  () => {
         } else {
           const roll = await encTable.roll(encTable);
           const message = {
-            flavor: `<span style='color: red'>${OSEH.util.tableFlavor()}</span>`,
+            flavor: `<span style='color: red'>${OSRH.util.tableFlavor()}</span>`,
             user: game.user.id,
             roll: roll,
             speaker: ChatMessage.getSpeaker(),
@@ -124,7 +124,7 @@ export const registerTurn =  () => {
 
           if (data.rollReact) {
             
-            if (parseInt(OSEH.gameVersion) < 9) {
+            if (parseInt(OSRH.gameVersion) < 9) {
               reactTable = game.tables.entities.find((t) => t.name === data.rTable);
             } else {
              
@@ -140,15 +140,15 @@ export const registerTurn =  () => {
         }
       }
     }
-    OSEH.turn.timePlus(10, 'minute'); //increment ganme time
-    OSEH.turn.updateJournal(); //update turn count journal
+    OSRH.turn.timePlus(10, 'minute'); //increment ganme time
+    OSRH.turn.updateJournal(); //update turn count journal
   };
 
   //write to journal
-  OSEH.turn.updateJournal = async function () {
-    const turnData = game.settings.get(`${OSEH.moduleName}`, 'turnData');
-    const journalName = game.settings.get(`${OSEH.moduleName}`, 'timeJournalName');
-    const entry = game.journal.getName(journalName) || (await OSEH.util.countJournalInit(journalName));
+  OSRH.turn.updateJournal = async function () {
+    const turnData = game.settings.get(`${OSRH.moduleName}`, 'turnData');
+    const journalName = game.settings.get(`${OSRH.moduleName}`, 'timeJournalName');
+    const entry = game.journal.getName(journalName) || (await OSRH.util.countJournalInit(journalName));
     if (turnData.rest > 5) {
       let jContent = `<h1>Turn Count</h1><br><p>Session Count: ${turnData.session}</p><p> Total Count: ${turnData.total}</p><p>Turns Since Last Rest: <span style="color: red">${turnData.rest}</span></p>`;
       await entry.update({ content: jContent });
@@ -164,10 +164,10 @@ export const registerTurn =  () => {
     }
   };
 
-  OSEH.turn.restMsg = async function (rc) {
+  OSRH.turn.restMsg = async function (rc) {
     const gm = game.users.contents.filter((u) => u.data.role == 4).map((u) => u.data.id);
-    const whisper = await game.settings.get(`${OSEH.moduleName}`, 'whisperRest');
-    const turnData = await game.settings.get(`${OSEH.moduleName}`, 'turnData');
+    const whisper = await game.settings.get(`${OSRH.moduleName}`, 'whisperRest');
+    const turnData = await game.settings.get(`${OSRH.moduleName}`, 'turnData');
     let chatData = {
       user: game.user.id,
       content: ''
@@ -187,7 +187,7 @@ export const registerTurn =  () => {
         content += penalty;
         turnData.restWarnCount = 0;
       }
-      game.settings.set(`${OSEH.moduleName}`, 'turnData', turnData);
+      game.settings.set(`${OSRH.moduleName}`, 'turnData', turnData);
       chatData.content = content;
       ChatMessage.create(chatData);
       return;
@@ -200,16 +200,16 @@ export const registerTurn =  () => {
   };
 
   //rest function
-  OSEH.turn.rest = async function () {
-    const whisper = game.settings.get(`${OSEH.moduleName}`, 'whisperRest');
-    const data = game.settings.get(`${OSEH.moduleName}`, 'turnData');
+  OSRH.turn.rest = async function () {
+    const whisper = game.settings.get(`${OSRH.moduleName}`, 'whisperRest');
+    const data = game.settings.get(`${OSRH.moduleName}`, 'turnData');
     const gm = game.users.contents.filter((u) => u.data.role == 4).map((u) => u.data.id);
     data.rest = 0;
     data.restWarnCount = 0;
     data.session++;
     data.total++;
-    await game.settings.set(`${OSEH.moduleName}`, 'turnData', data);
-    OSEH.turn.updateJournal();
+    await game.settings.set(`${OSRH.moduleName}`, 'turnData', data);
+    OSRH.turn.updateJournal();
     const chatData = {
       content: '<span style="color: green"> You Feel Rested! </span>'
     };
@@ -218,11 +218,11 @@ export const registerTurn =  () => {
     }
 
     ChatMessage.create(chatData);
-    OSEH.turn.timePlus(10, 'minute');
+    OSRH.turn.timePlus(10, 'minute');
   };
   //function calls
-  OSEH.turn.showTurnCount = async function () {
-    const data = await game.settings.get(`${OSEH.moduleName}`, 'turnData');
+  OSRH.turn.showTurnCount = async function () {
+    const data = await game.settings.get(`${OSRH.moduleName}`, 'turnData');
     let style = '';
     let chatData = {
       user: game.user.id,
@@ -240,11 +240,11 @@ export const registerTurn =  () => {
     ChatMessage.create(chatData);
   };
 
-  OSEH.turn.lightTurnRemaining = async function (actorId) {
+  OSRH.turn.lightTurnRemaining = async function (actorId) {
     let lightData;
     for (let user of game.users.contents) {
-      if (user.data.flags[`${OSEH.moduleName}`].lightData[actorId]) {
-        let flag = await user.getFlag(`${OSEH.moduleName}`, 'lightData');
+      if (user.data.flags[`${OSRH.moduleName}`].lightData[actorId]) {
+        let flag = await user.getFlag(`${OSRH.moduleName}`, 'lightData');
         lightData = flag;
       }
     }
@@ -264,10 +264,10 @@ export const registerTurn =  () => {
       }
 
       let color = `green`;
-      if (turnsLeft <= OSEH.data.lightSource[type].warn) {
+      if (turnsLeft <= OSRH.data.lightSource[type].warn) {
         color = 'orangered';
       }
-      if (turnsLeft <= OSEH.data.lightSource[type].alert) {
+      if (turnsLeft <= OSRH.data.lightSource[type].alert) {
         color = 'red';
       }
       const turn = turnsLeft == 1 ? 'turn' : 'turns';
