@@ -10,7 +10,7 @@
   --bg-purple05: rgba(125, 0, 125, 0.05);
   --el-button-glow: rgb(255 0 156);
   --ef-g-1: rgb(181, 142, 209);
-  --ef-g-2: rgb(179, 234, 248);
+  --ef-g-2: #b3eaf8;
   --ef-g-3: rgb(233, 255, 222);
   --ef-g-bg: rgb(162, 125, 186);
   --lf-g-1: rgb(123, 203, 204) ;
@@ -33,7 +33,7 @@
   padding: 0.5em 0;
 }
 /* center hotbar */
-#hotbar {
+#hotbar.center-hotbar{
   position: absolute;
   left: var(--hotbar-center);
   top: calc(100% - 62px);

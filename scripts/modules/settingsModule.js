@@ -149,6 +149,7 @@ export const registerSettings = async function (){
     default: [],
     config: false
   });
+  
 
   //stores turn count data
 
@@ -167,6 +168,7 @@ export const registerSettings = async function (){
     },
     config: false
   });
+  
 
   //ration settings
   game.settings.register(`${OSRH.moduleName}`, 'trackRations', {
@@ -197,7 +199,7 @@ export const registerSettings = async function (){
   game.settings.register(`${OSRH.moduleName}`, 'centerHotbar', {
     name: 'Center Hotbar',
     hint: 'Center The macro Hotbar',
-    scope: 'world',
+    scope: 'client',
     type: Boolean,
     default: true,
     config: true,

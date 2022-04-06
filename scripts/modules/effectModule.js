@@ -208,6 +208,8 @@ export const registerEffectModule = async function () {
           });
         }
         if ((type == 'duration' && value > 0) || (type == 'duration' && interval == 'infinite')) {
+          effectData.icon = `icons/svg/sun.svg`;
+          effectData.tint = '#b3eaf8';
           effectData.flags['data'].interval = interval;
           effectData.flags['data'].isInf = interval == 'infinite' ? true : false;
           effectData.duration.seconds = interval == 'minutes' ? Math.floor(value * 60) : Math.floor(value);

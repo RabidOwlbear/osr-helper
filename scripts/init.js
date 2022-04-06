@@ -325,3 +325,7 @@ Hooks.on('updateCombat', async (combat, details) => {
     }
   }
 });
+Hooks.on('renderHotbar', ()=>{
+
+  OSRH.util.centerHotbar()
+})
