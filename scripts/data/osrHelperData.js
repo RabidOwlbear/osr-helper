@@ -27,6 +27,114 @@ lightType: {
   }
   
 */
+  OSRH.data.effectIcons = [
+    {
+      name:`sword`,
+      color: '#fc293b',
+      textColor: `#fff`,
+      path:`icons/svg/sword.svg`
+    },
+    {
+      name:`combat`,
+      color: '#fcdc29',
+      textColor: `#000`,
+      path:`icons/svg/combat.svg`
+    },
+    {
+      name:`heal`,
+      color: '#cc000f',
+      textColor: `#fff`,
+      path:`icons/svg/heal.svg`
+    },
+    {
+      name:`book`,
+      color: '#005bbf',
+      textColor:` #fff`,
+      path:`icons/svg/book.svg`
+    },
+    {
+      name: `dice`,
+      color: '#ccaa4a',
+      textColor:` #fff`,
+      path:`icons/svg/dice-target.svg`
+    },
+    {
+      name:`swirl`,
+      color: '#b3eaf8',
+      textColor:` #000`,
+      path:`icons/svg/sun.svg`
+    },
+    {
+      name: 'target',
+      color: `#11e233`,
+      textColor: `#000000`,
+      path: `icons/svg/target.svg` 
+    }
+  ];
+
+  OSRH.data.themeData = [
+    {
+      name: 'purple slide',
+      c1: `#b58ed1`,
+      c2: `#b3eaf8`,
+      c3: `#e9ffde`,
+      bg: `#a27dba`,
+      glow: `#e9ffde`,
+      midNum: `30%`,
+      btnColor: `#e9ffde`
+    },
+    {
+      name: 'sante fe mall',
+      c1: `#7bcbcc`,
+      c2: `#f8ebcf`,
+      c3: `#f8d6c6`,
+      bg: `#aecccc`,
+      glow: `#fbefda`,
+      midNum: `32%`,
+      btnColor: `#ffffff`
+    },
+    {
+      name: 'deep blue',
+      c1: `#5549b9`,
+      c2: `#4f7adb`,
+      c3: `#93eafb`,
+      bg: `#4039c990`,
+      glow: `#93eafb`,
+      midNum: `20%`,
+      btnColor: `#ddeeff`
+    },
+    {
+      name: 'green slime',
+      c1: `#a27dba`,
+      c2: `#b2ffb5`,
+      c3: `#ddffcd`,
+      bg: `#a27dba`,
+      glow: `#ddffcd`,
+      midNum: `28%`,
+      btnColor: `#ddffcd`
+    },
+    {
+      name: 'cotton candy',
+      c1: `#ec5cda`,
+      c2: `#f9b2ff`,
+      c3: `#ffeaef`,
+      bg: `#ec5cda`,
+      glow: `#ffeaef`,
+      midNum: `24%`,
+      btnColor: `#ffffff`
+    },
+    {
+      name: 'pale sunrise',
+      c1: `#fffbc0`,
+      c2: `#c6fef1`,
+      c3: `#eafaff`,
+      bg: `#fffbc0`,
+      glow: `#88eefd`,
+      midNum: `28%`,
+      btnColor: `#003747`
+    },
+  ]
+
   OSRH.data.lightSource = {
     oglLantern: {
       name: 'Oil flask',

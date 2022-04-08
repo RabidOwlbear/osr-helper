@@ -1,5 +1,27 @@
-<form action="submit">
+<form action="submit" class="fx fdc aic sb h100p">
   <div id="new-active-effect-cont">
+    <div class="fx sb w100p">
+      <div class="name fx fdc sb h100p">
+        <h4 id="preset-label">saved presets:</h4>
+        <select name="preset-select" id="preset-select">
+          <option value="">-select-</option>
+          {{#each effectPresets}}
+          <option value="{{this.id}}">{{this.name}}</option>
+          {{/each}}
+        </select>
+      </div>
+      <div class="fx fdc aic w100p">
+        <h4 id="preset-label">icon:</h4>
+        <select name="icon" id="icon-select">
+          <option value="">-none-</option>
+          {{#each iconList}}
+          <option value="{{this.path}}" id="{{this.name}}" style="color: {{this.textColor}}; background-color:{{this.color}};">
+            {{this.name}}
+          </option>
+          {{/each}}
+        </select>
+      </div>
+    </div>
     <div class="name fx fdc aic w100p ">
       <h4 id="name-label">name:</h4>
       <input type="text" name="name" id="name">
@@ -108,6 +130,9 @@
   </div>
   <div class="button-div fx w100p sb pt10">
     <button id="reset-btn">Reset</button>
+    {{#if isGM}}
+    <button id="save-btn">Save</button>
+    {{/if}}
     <button id="create-btn">Create</button>
   </div>
 </form>

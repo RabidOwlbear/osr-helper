@@ -3,7 +3,7 @@
   "title": "OSR Helper Module",
   "description": "A collection of helpers for the Foundry Vtt implementation of the 'Old School Essentials' system.",
   "author": "RabidOwlbear",
-  "version": "0.3.5",
+  "version": "0.3.6",
   "minimumCoreVerson": "0.8.0",
   "compatibleCoreVersion": "0.9.0",
   "styles": ["./styles/main.css"],

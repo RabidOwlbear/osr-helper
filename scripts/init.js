@@ -24,6 +24,8 @@ window.OSRH = window.OSRH || {
 
 Hooks.once('init', async function () {
   //add settings
+  registerData();
+  registerUtil();
   console.log('init');
   await registerSettings();
 
@@ -31,8 +33,8 @@ Hooks.once('init', async function () {
   registerLight();
   registerTurn();
   registerRations();
-  registerUtil();
-  registerData();
+  
+  
   registerCustomEffectList();
   registerReports();
   registerNameData();
@@ -40,6 +42,7 @@ Hooks.once('init', async function () {
   registerEffectModule();
   OSRH.gameVersion = game.version ? game.version : game.data.version;
   Hooks.call(`${OSRH.moduleName}.registered`);
+  
 });
 Hooks.once('socketlib.ready', () => {
   console.log('SL ready');
@@ -84,6 +87,7 @@ Hooks.on('updateSetting', async () => {
 });
 
 Hooks.once('ready', async () => {
+  OSRH.util.setTheme()
   //const lightData = game.settings.get(`${OSRH.moduleName}`, 'lightData');
   const turnData = game.settings.get(`${OSRH.moduleName}`, 'turnData');
   const jName = game.settings.get(`${OSRH.moduleName}`, 'timeJournalName');
@@ -152,6 +156,9 @@ Hooks.once('ready', async () => {
   });
   //check center hotbar
   OSRH.util.centerHotbar();
+  window.addEventListener('resize', ()=>{
+    OSRH.util.centerHotbar();
+  })
 });
 
 //reset monster actions hook

@@ -750,4 +750,19 @@ export const registerUtil = () => {
       return effect;
     }
   };
+  OSRH.util.setTheme = async function (){
+    let index = await game.settings.get(OSRH.moduleName, 'theme')
+    console.log(index)
+    index = index == 'none' ? 0 : index;
+    let themeData = OSRH.data.themeData[index];
+    let root = document.documentElement;
+    root.style.setProperty('--t1-1', themeData.c1)
+    root.style.setProperty('--t1-2', themeData.c2)
+    root.style.setProperty('--t1-3', themeData.c3)
+    root.style.setProperty('--t1-bg', themeData.bg)
+    root.style.setProperty('--t1-num', themeData.midNum)
+    root.style.setProperty('--theme-btn-color', themeData.btnColor)
+    root.style.setProperty('--el-button-glow', themeData.glow)
+
+  }
 };

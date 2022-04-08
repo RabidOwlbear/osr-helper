@@ -1,0 +1,24 @@
+<form action="">
+
+  <div class="fx fdc aic w100p h100p">
+    <h3>Effect Presets</h3>
+    {{#each effectList}}
+
+    <details class="w100p">
+      <summary class="fx sb w100p">
+        <div id="name">{{this.name}}</div>
+      <div class="">
+        <a id="{{this.id}}"class="delete-btn"><i class="fas fa-times"></i></a>
+      </div>
+      </summary>
+      <div class="fx sb w100p">
+        <div class="descrip">
+          {{this.data.descrip}}
+        </div>
+      </div>
+    </details>
+    {{/each}}
+    
+
+  </div>
+</form>
