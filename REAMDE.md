@@ -1,27 +1,39 @@
-# OSE-helper module
+# OSR-helper module
 
-created by Grim.
+Created by RabidOwlbear.
 
-An unimaginatively named module that aims to assist with light, time, and resource management. For use in games using the Old School Essentials system for FoundryVTT.
-This module provides several macros found in a compendium named "OSE-helper Macros".
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/J3J1BW12R)
+
+An unimaginatively named module that aims to assist with light, time, and resource management. For use in games using the Foundry Vtt implementation of the 'Old School Essentials' system.
+This module provides several macros found in a compendium named "OSR-helper Macros".
+
+### Important Notice
+
+If updating from the previous version named "OSE-helper", any macros existing in your game worlds from the previous version will no longer function. Please replace them with the included updated versions. We apologize for any inconvenience this causes.
+
+If you have created custom light items in your world you will need to run the provided conversion macro named "Convert Light Data" located in the included macro compendium "Utility Macros" folder. This wil convert your existing light configurations, existing lights  will not function without conversion. this only needs to be run once.
+
+You will also need to disable and/or uninstall the previous "OSE-CharacterBuilder" installation to avoid conflicts.
+
+---
 
 ### installation
 
 install using the following manifest url:
 
-https://raw.githubusercontent.com/RabidOwlbear/OSE-helper/master/module.json
+https://raw.githubusercontent.com/RabidOwlbear/osr-helper/master/module.json
 
 ### usage
 
 Upon initial load a journal entry will be created using the default name of "Turn Count". This journal will be populated with several statistics reflecting number of turns elapsed this session, since that last rest was taken, and the total number of turns so far in the game. Using the provided "OSE-helper Dungeon Turn (base)" macro the Referee can advance the game time in standard 10 minute turn intervals. The "Turn Count" journal will be updated to reflect the current counts.
 
-The provided "OSE-helper reset session count" will reset the session count to zero.
-The provided "OSE-helper reset all counts" macro will reset all counts.
-The provided "OSE-helper Rest" macro will reset the turns since last rest count to zero.
+The provided "OSR-helper reset session count" will reset the session count to zero.
+The provided "OSR-helper reset all counts" macro will reset all counts.
+The provided "OSR-helper Rest" macro will reset the turns since last rest count to zero.
 
 ---
 
-### Using the OSE-helper Dungeon Turn Macro
+### Using the OSR-helper Dungeon Turn Macro
 
 To set the options for the dungeon turn macro navigate to the OSE helper settings in module settings.
 Clicking the dungeon tirn settings button will open a settings window with the following options:
@@ -61,7 +73,7 @@ When clicked:
 - if no light is currently lit, a dialog will be created containing a dropdown populated with the names and quantities of all items in the selected token actors inventory that contain a "Light" tag.
 - once a light source is selected, clicking "Light On" with change the selected token's light settings to match tose contained in the selected light source's configuration settings.
 
-note: Several light items have been provided in the OSE-helper Items compendium.
+note: Several light items have been provided in the OSR-helper Items compendium.
 If the macro has been used to light a light source, the light can be extinguished by clicking the macro again, preserving any remaning duration until lit again by clicking the Light On macro and selecting the corresponding light type.
 
 Each time game world time advances, all lit light sources will be checked against their duration, if the duration is exceeded the tight source will be extinguished, and the total quantity for that item will be decremented by 1. If the item quantity is reduced to zero the item will be deleted from the actor's invetory.
@@ -70,7 +82,7 @@ Each time game world time advances, all lit light sources will be checked agains
 
 ### Ration Report
 
-The OSE-helper Ration Report macro
+The OSR-helper Ration Report macro
 
 When clicked this macro will generate a report detailing all rations currently held by all tracked Player and Retainer actors seprated by name, listing items held and their quantities, color coded.
 Total number of days worth of rations for the entire tracked group(assuming the party pools resources) is also profided in a color coded display.
@@ -83,7 +95,7 @@ A 'custom effect' system has been implementd and can be accessed via an  icon lo
 
 #### Active Effects List
 
-![light configuration panel image](./images/doc/effects-doc-01.webp)
+![light configuration panel image](./images/doc/effects-doc-02.webp)
 
 
 1. Active Effects List Icon: Click here to open the Active Effects List panel. This icon will only appear on 'character' type actor sheets.
@@ -95,24 +107,31 @@ A 'custom effect' system has been implementd and can be accessed via an  icon lo
 
 #### New Active Effect
 
-7. Name (required): Active effect name.
-8. Description: active effect description.
-9. Target: Selecting 'self' will apply the created active effect to the actor the active effect list was opened from. Selecting target will apply the created active effect to the actor associated with the current targeted single token.
-10. Attributes: Changes to abilitiy scores are applied here. The fields accept positive and negative  number values.
-11. Saves: Changes to saves are applied here. The fields accept positive and negative number values.
-12. Combat Bonus: changes to thac0/attack bonus, melee, and ranged attacks are applied here. This input will assumes a positve number is a bonus, and a negative value is a penalty and will multply the value entered by -1 automatically as required by the selected game system thac0 setting.
-13. Armor Bonus: changes to ac/aac are applied here. This input will assumes a positve number is a bonus, and a negative value is a penalty and will multply the value entered by -1 automatically as required by the selected game system armor class setting.
-14. Hp: changes to hp current and max values are applied here.
-15. Duration (required): The duration of the effect is entered here. The duration will be set as the selected duration type, minutes or seconds.
-16. Reset: Clicking here will reset all number inputs to 0 and clear all text fields.
-17. Create: Clicking here will create a new active effect with the inputted effects on the selected target (number 9. image above).
-18. Active Effect Icons: Upon active effect creation an icon will be applied to the targeted actors token. This icon will be removed when the active effect expires.
+7. Presets: This list will be populated by presets created by the GM. To use a preset simply select one from the list. Its information will then be populated to the fields of the effect form. Click create to apply the effect. Presets can be created by th GM by filling out the active effect form and clicking the save button at the bottom of the form.
+8. Icon: an icon for the effect can be selected from thsi dropdown, the name of the icon and its color are displayed.
+9. Name (required): Active effect name.
+10. Description: active effect description.
+11. Target: Selecting 'self' will apply the created active effect to the actor the active effect list was opened from. Selecting target will apply the created active effect to the actor associated with the current targeted single token.
+12. Attributes: Changes to abilitiy scores are applied here. The fields accept positive and negative  number values.
+13. Saves: Changes to saves are applied here. The fields accept positive and negative number values.
+14. Combat Bonus: changes to thac0/attack bonus, melee, and ranged attacks are applied here. This input will assumes a positve number is a bonus, and a negative value is a penalty and will multply the value entered by -1 automatically as required by the selected game system thac0 setting.
+15. Armor Bonus: changes to ac/aac are applied here. This input will assumes a positve number is a bonus, and a negative value is a penalty and will multply the value entered by -1 automatically as required by the selected game system armor class setting.
+16. Hp: changes to hp current and max values are applied here.
+17. Duration (required): The duration of the effect is entered here. The duration will be set as the selected duration type, minutes or seconds.
+18. Reset: Clicking here will reset all number inputs to 0 and clear all text fields.
+19. Save: this button will only appear for the GM. This button will save the current effect data as a named preset in the presets dropdown, allowing for quick reuse. At this time anyone creating an active effect will be able to apply a defined preset.
+20. Create: Clicking here will create a new active effect with the inputted effects on the selected target (number 9. image above).
+21. Active Effect Icons: Upon active effect creation an icon will be applied to the targeted actors token. This icon will be removed when the active effect expires.
 
 Effects may also be created uing the provided 'render new active effect form' macro while selecting or targeting a single token.
 
 Effects created by/placed on monster actors my be viewed by using the provided "Render Active Effect List" while selecting an actor token.
 
 Each time the game world time updates all active effect's duration will be checked, and any expired effects will be removed.
+
+#### Effect Form Themes
+
+Color themes have been added for the active effect forms. The theme can be changed in the module settings.
 
 ---
 
