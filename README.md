@@ -95,7 +95,7 @@ A 'custom effect' system has been implementd and can be accessed via an  icon lo
 
 #### Active Effects List
 
-![light configuration panel image](./images/doc/effects-doc-01.webp)
+![light configuration panel image](./images/doc/effects-doc-02.webp)
 
 
 1. Active Effects List Icon: Click here to open the Active Effects List panel. This icon will only appear on 'character' type actor sheets.
@@ -107,24 +107,31 @@ A 'custom effect' system has been implementd and can be accessed via an  icon lo
 
 #### New Active Effect
 
-7. Name (required): Active effect name.
-8. Description: active effect description.
-9. Target: Selecting 'self' will apply the created active effect to the actor the active effect list was opened from. Selecting target will apply the created active effect to the actor associated with the current targeted single token.
-10. Attributes: Changes to abilitiy scores are applied here. The fields accept positive and negative  number values.
-11. Saves: Changes to saves are applied here. The fields accept positive and negative number values.
-12. Combat Bonus: changes to thac0/attack bonus, melee, and ranged attacks are applied here. This input will assumes a positve number is a bonus, and a negative value is a penalty and will multply the value entered by -1 automatically as required by the selected game system thac0 setting.
-13. Armor Bonus: changes to ac/aac are applied here. This input will assumes a positve number is a bonus, and a negative value is a penalty and will multply the value entered by -1 automatically as required by the selected game system armor class setting.
-14. Hp: changes to hp current and max values are applied here.
-15. Duration (required): The duration of the effect is entered here. The duration will be set as the selected duration type, minutes or seconds.
-16. Reset: Clicking here will reset all number inputs to 0 and clear all text fields.
-17. Create: Clicking here will create a new active effect with the inputted effects on the selected target (number 9. image above).
-18. Active Effect Icons: Upon active effect creation an icon will be applied to the targeted actors token. This icon will be removed when the active effect expires.
+7. Presets: This list will be populated by presets created by the GM. To use a preset simply select one from the list. Its information will then be populated to the fields of the effect form. Click create to apply the effect. Presets can be created by th GM by filling out the active effect form and clicking the save button at the bottom of the form.
+8. Icon: an icon for the effect can be selected from thsi dropdown, the name of the icon and its color are displayed.
+9. Name (required): Active effect name.
+10. Description: active effect description.
+11. Target: Selecting 'self' will apply the created active effect to the actor the active effect list was opened from. Selecting target will apply the created active effect to the actor associated with the current targeted single token.
+12. Attributes: Changes to abilitiy scores are applied here. The fields accept positive and negative  number values.
+13. Saves: Changes to saves are applied here. The fields accept positive and negative number values.
+14. Combat Bonus: changes to thac0/attack bonus, melee, and ranged attacks are applied here. This input will assumes a positve number is a bonus, and a negative value is a penalty and will multply the value entered by -1 automatically as required by the selected game system thac0 setting.
+15. Armor Bonus: changes to ac/aac are applied here. This input will assumes a positve number is a bonus, and a negative value is a penalty and will multply the value entered by -1 automatically as required by the selected game system armor class setting.
+16. Hp: changes to hp current and max values are applied here.
+17. Duration (required): The duration of the effect is entered here. The duration will be set as the selected duration type, minutes or seconds.
+18. Reset: Clicking here will reset all number inputs to 0 and clear all text fields.
+19. Save: this button will only appear for the GM. This button will save the current effect data as a named preset in the presets dropdown, allowing for quick reuse. At this time anyone creating an active effect will be able to apply a defined preset.
+20. Create: Clicking here will create a new active effect with the inputted effects on the selected target (number 9. image above).
+21. Active Effect Icons: Upon active effect creation an icon will be applied to the targeted actors token. This icon will be removed when the active effect expires.
 
 Effects may also be created uing the provided 'render new active effect form' macro while selecting or targeting a single token.
 
 Effects created by/placed on monster actors my be viewed by using the provided "Render Active Effect List" while selecting an actor token.
 
 Each time the game world time updates all active effect's duration will be checked, and any expired effects will be removed.
+
+#### Effect Form Themes
+
+Color themes have been added for the active effect forms. The theme can be changed in the module settings.
 
 ---
 

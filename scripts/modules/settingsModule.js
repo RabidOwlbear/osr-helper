@@ -1,14 +1,12 @@
-export const registerSettings = async function (){
-
+export const registerSettings = async function () {
   class DungTurnConfig extends FormApplication {
     constructor() {
       super();
-      
     }
     static get defaultOptions() {
       const options = super.defaultOptions;
       options.baseApplication = 'dungeonTurnConfig';
-      options.id = "dungTurnConfig";
+      options.id = 'dungTurnConfig';
       options.template = `modules/${OSRH.moduleName}/templates/dungeon-turn-config.html`;
       options.height = 300;
       options.width = 400;
@@ -16,39 +14,34 @@ export const registerSettings = async function (){
       // options.top = 100;
       options.baseApplication = FormApplication;
       return options;
-  }
-  // async getData(options) { 
-  //   return {}
-  // }
-  activateListeners(html) {
-    super.activateListeners(html);
-    let close = html.find('#submit')
-  
-    close.on('click', ()=>{
-      
-      this.close(true)
-    })
-    
-  }
-  
-  async _onSubmit(event) {
-    
+    }
+    // async getData(options) {
+    //   return {}
+    // }
+    activateListeners(html) {
+      super.activateListeners(html);
+      let close = html.find('#submit');
+
+      close.on('click', () => {
+        this.close(true);
+      });
+    }
+
+    async _onSubmit(event) {
       super._onSubmit(event, { preventRefresh: true });
       let data = {
         proc: parseInt(event.target[2].value),
         rTable: event.target[1].value,
-        eTable: event.target[0].value, 
-        rollTarget:  parseInt(event.target[3].value),
-        rollEnc:  event.target[4].checked,
-        rollReact:  event.target[5].checked,
-      }
-  
-    
-    await game.settings.set(`${OSRH.moduleName}`, 'dungeonTurnData', data)
-  }
-  
-  async _updateObject() {}
-  
+        eTable: event.target[0].value,
+        rollTarget: parseInt(event.target[3].value),
+        rollEnc: event.target[4].checked,
+        rollReact: event.target[5].checked
+      };
+
+      await game.settings.set(`${OSRH.moduleName}`, 'dungeonTurnData', data);
+    }
+
+    async _updateObject() {}
   }
 
   game.settings.register(`${OSRH.moduleName}`, 'timeJournalName', {
@@ -102,8 +95,8 @@ export const registerSettings = async function (){
     scope: 'world',
     type: DungTurnConfig,
     config: true,
-    restricted: true,
-  })
+    restricted: true
+  });
 
   //stores world time after last turn advance
   game.settings.register(`${OSRH.moduleName}`, 'lastTick', {
@@ -167,6 +160,14 @@ export const registerSettings = async function (){
     },
     config: false
   });
+  // stores saved custom effects
+  game.settings.register(`${OSRH.moduleName}`, 'savedEffects', {
+    name: 'savedEffects',
+    scope: 'world',
+    type: Object,
+    default: {},
+    config: false
+  });
 
   //ration settings
   game.settings.register(`${OSRH.moduleName}`, 'trackRations', {
@@ -197,7 +198,7 @@ export const registerSettings = async function (){
   game.settings.register(`${OSRH.moduleName}`, 'centerHotbar', {
     name: 'Center Hotbar',
     hint: 'Center The macro Hotbar',
-    scope: 'world',
+    scope: 'client',
     type: Boolean,
     default: true,
     config: true,
@@ -219,14 +220,14 @@ export const registerSettings = async function (){
     default: {
       proc: 0,
       rTable: 'none',
-      eTable: 'none', 
+      eTable: 'none',
       rollTarget: 0,
       rollEnc: false,
-      rollReact: false,
+      rollReact: false
     },
     config: false
   });
-  
+
   game.settings.register(`${OSRH.moduleName}`, 'enableLightConfig', {
     name: 'Enable Light Item Settings Config.',
     hint: 'Adds icon to Items tagged with "Light" that allows for configuration of custom light options.',
@@ -234,7 +235,7 @@ export const registerSettings = async function (){
     type: Boolean,
     default: false,
     config: true
-  })
+  });
   game.settings.register(`${OSRH.moduleName}`, 'effectPresets', {
     name: 'effectPresets',
     scope: 'world',
@@ -242,7 +243,25 @@ export const registerSettings = async function (){
     default: [],
     config: false
   });
-// ---------------remove once ose system fixed to accomodate time advance on game round advance
+
+  game.settings.register(`${OSRH.moduleName}`, 'theme', {
+    name: 'Theme',
+    hint: 'Select theme for  effect forms',
+    type: String,
+    choices: {
+      0: OSRH.data.themeData[0].name,
+      1: OSRH.data.themeData[1].name,
+      2: OSRH.data.themeData[2].name,
+      3: OSRH.data.themeData[3].name,
+      4: OSRH.data.themeData[4].name,
+      5: OSRH.data.themeData[5].name,
+    },
+    default: 'none',
+    scope: 'client',
+    config: true,
+    onChange: ()=>{OSRH.util.setTheme()}
+  });
+  // ---------------remove once ose system fixed to accomodate time advance on game round advance
   game.settings.register(`${OSRH.moduleName}`, 'lastRound', {
     name: 'lastRound',
     scope: 'world',
@@ -251,5 +270,4 @@ export const registerSettings = async function (){
     config: false
   });
   // --------------
-
-}
+};

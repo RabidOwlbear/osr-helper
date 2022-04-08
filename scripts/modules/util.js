@@ -1,4 +1,4 @@
-export const registerUtil =  () => {
+export const registerUtil = () => {
   OSRH.util = OSRH.util || {};
   //tick: manages light duration, turn count
   OSRH.util.osrTick = async function () {
@@ -59,7 +59,7 @@ export const registerUtil =  () => {
                   }
 
                   data.light[actorId].lightLit = false;
-                  
+
                   OSRH.light.osrLightOff(actorId);
                   delete data.light[actorId][lightType];
                   if (Object.keys(data.light[actorId]).length == 1) {
@@ -197,10 +197,15 @@ export const registerUtil =  () => {
   };
 
   OSRH.util.centerHotbar = function () {
+    let hotbar = document.getElementById('hotbar');
+    // console.log(hotbar);
     if (game.settings.get(`${OSRH.moduleName}`, 'centerHotbar')) {
-      document.documentElement.style.setProperty('--hotbar-center', 'calc(50% - 270px');
+      
+      document.documentElement.style.setProperty('--hotbar-center', `${window.innerWidth / 2 - 289}px`);
+      hotbar.classList.add('center-hotbar');
     } else {
-      document.documentElement.style.setProperty('--hotbar-center', '220px');
+      hotbar.classList.remove('center-hotbar');
+      // document.documentElement.style.setProperty('--hotbar-center', ''); //'220px'
     }
   };
 
@@ -529,9 +534,9 @@ export const registerUtil =  () => {
               const gender = html.find('#gender')[0].value;
               const whisper = html.find('#whisperCheck')[0].checked;
               let openSheets = document.querySelectorAll('.ose.sheet.actor.character');
-              let focusedSheet = openSheets ? openSheets[0] : null
-              for(let sheet of openSheets){
-                if(parseInt(focusedSheet.style.zIndex) < parseInt(sheet.style.zIndex)){
+              let focusedSheet = openSheets ? openSheets[0] : null;
+              for (let sheet of openSheets) {
+                if (parseInt(focusedSheet.style.zIndex) < parseInt(sheet.style.zIndex)) {
                   focusedSheet = sheet;
                 }
               }
@@ -566,12 +571,12 @@ export const registerUtil =  () => {
                 ui.notifications.info('Token and Actor names updated.');
               }
               if (tokens.length) {
-                tokens.forEach(async t=>{
+                tokens.forEach(async (t) => {
                   let token = t;
                   let actor = t.actor;
                   let newName = await getName(nameType, gender);
-                  
-                  if(actor.type=='character'){
+
+                  if (actor.type == 'character') {
                     await actor.update({
                       name: newName,
                       token: {
@@ -579,15 +584,13 @@ export const registerUtil =  () => {
                       }
                     });
                   }
-                  
-                  await token.document.update({name: newName})
-                  
-                  
-                })
+
+                  await token.document.update({ name: newName });
+                });
                 ui.notifications.info('Token and Actor names updated.');
               }
               if (!canvas.tokens.controlled.length && focusedSheet) {
-                const charSheet = focusedSheet//document.querySelector('.ose.sheet.actor.character');
+                const charSheet = focusedSheet; //document.querySelector('.ose.sheet.actor.character');
                 const name = charSheet ? charSheet.querySelector('.ose.sheet.actor .window-title').innerText : 'none';
                 const actor = game.actors.getName(name);
                 await actor.update({
@@ -610,71 +613,61 @@ export const registerUtil =  () => {
     }
   };
 
-  
-  OSRH.util.getCurrencyItems = async function (actor){
-    let items = actor.data.items
-    let currencyList = [] 
-      items.forEach((i)=>{
-        let tags = i.data.data.manualTags;
-        let tag = tags && tags.find(t=>t.title == 'Currency')? true : null;
-        if(tag)currencyList.push(i)
-        
-        
-      })
-      return currencyList;
-  }
-  OSRH.util.curConvert = async function (amt, curCur, newCur, actor){
+  OSRH.util.getCurrencyItems = async function (actor) {
+    let items = actor.data.items;
+    let currencyList = [];
+    items.forEach((i) => {
+      let tags = i.data.data.manualTags;
+      let tag = tags && tags.find((t) => t.title == 'Currency') ? true : null;
+      if (tag) currencyList.push(i);
+    });
+    return currencyList;
+  };
+  OSRH.util.curConvert = async function (amt, curCur, newCur, actor) {
     const curItems = actor.data.items;
-    const curCheck = async (type)=>{
-      let itemExists = actor.data.items.getName(type)
+    const curCheck = async (type) => {
+      let itemExists = actor.data.items.getName(type);
       let pack = game.packs.get(`${OSRH.moduleName}.${OSRH.moduleName}-items`);
-      if(!itemExists){
+      if (!itemExists) {
         let curItm = await pack.getDocument(pack.index.getName(type)._id);
-        let itemData = curItm.clone().data
-        await actor.createEmbeddedDocuments('Item', [itemData])
-        return await actor.data.items.getName(type)
+        let itemData = curItm.clone().data;
+        await actor.createEmbeddedDocuments('Item', [itemData]);
+        return await actor.data.items.getName(type);
       } else {
-        return itemExists
-      } 
-    }
+        return itemExists;
+      }
+    };
     const curItem = await curCheck(curCur);
     const newItem = await curCheck(newCur);
-    console.log(curItem, newItem)
-    if(curItem.data.data.quantity.value < amt){
-      ui.notifications.warn(`Not enough ${curCur}`)
-      OSRH.util.curConDiag(actor, amt)
-      return
+    console.log(curItem, newItem);
+    if (curItem.data.data.quantity.value < amt) {
+      ui.notifications.warn(`Not enough ${curCur}`);
+      OSRH.util.curConDiag(actor, amt);
+      return;
     }
     let newVal = (curItem.data.data.cost * amt) / newItem.data.data.cost;
-    if(newVal % 1 != 0){
-      ui.notifications.warn(`Can't Convert To Fractional Amounts. Please Select A Different Amount To Convert`)
-      curConDiag(actor, amt)
-      return
+    if (newVal % 1 != 0) {
+      ui.notifications.warn(`Can't Convert To Fractional Amounts. Please Select A Different Amount To Convert`);
+      curConDiag(actor, amt);
+      return;
     }
     await curItem.update({
       data: {
-        
-          quantity: {
-            value: curItem.data.data.quantity.value - amt
-          }
+        quantity: {
+          value: curItem.data.data.quantity.value - amt
         }
-      
-    })
+      }
+    });
     await newItem.update({
       data: {
-        
-          quantity: {
-            value: newItem.data.data.quantity.value + newVal
-          }
+        quantity: {
+          value: newItem.data.data.quantity.value + newVal
         }
-      
-    })
-  }
+      }
+    });
+  };
 
-  OSRH.util.curConDiag = async function (actor, amt = 0){
-
-
-
+  OSRH.util.curConDiag = async function (actor, amt = 0) {
     let content = `
     <div style="display: flex; height: 75px; align-items: center; justify-content: space-around;">
      
@@ -702,35 +695,35 @@ export const registerUtil =  () => {
        <option value='CP'>CP</option>
      </select>
      </div>
-    ` 
+    `;
     let diag = new Dialog({
       title: 'Currency Converter',
       content: content,
-      buttons:{
+      buttons: {
         convert: {
           label: 'convert',
-          callback: (html)=>{
-           // let actor = canvas.tokens.controlled[0]?.actor;
-            if(!actor)ui.notifications.warn('No token Selected')
-            console.log(html)
-           let curCur = html.find('#curCur')[0].value
-           let newCur = html.find('#newCur')[0].value
-           let amt = parseInt(html.find('#amt')[0].value)
-           if(curCur == 'null' || newCur == 'null'){
-             ui.notifications.warn('Please make sure both currencies are selected.')
-             OSRH.util.curConDiag(actor, amt)
-             return
-           }
-           
-           console.log('aa',actor, curCur, newCur, amt)
-           OSRH.util.curConvert(amt, curCur, newCur, actor)
+          callback: (html) => {
+            // let actor = canvas.tokens.controlled[0]?.actor;
+            if (!actor) ui.notifications.warn('No token Selected');
+            console.log(html);
+            let curCur = html.find('#curCur')[0].value;
+            let newCur = html.find('#newCur')[0].value;
+            let amt = parseInt(html.find('#amt')[0].value);
+            if (curCur == 'null' || newCur == 'null') {
+              ui.notifications.warn('Please make sure both currencies are selected.');
+              OSRH.util.curConDiag(actor, amt);
+              return;
+            }
+
+            console.log('aa', actor, curCur, newCur, amt);
+            OSRH.util.curConvert(amt, curCur, newCur, actor);
           }
         }
       }
-    })
-    diag.render(true)
-   }
-  OSRH.util.debounce = function(callback, wait) {
+    });
+    diag.render(true);
+  };
+  OSRH.util.debounce = function (callback, wait) {
     let timeoutId = null;
     return (...args) => {
       window.clearTimeout(timeoutId);
@@ -738,22 +731,38 @@ export const registerUtil =  () => {
         callback.apply(null, args);
       }, wait);
     };
-  }
-  OSRH.util.setting = async function (setting, value, type){
-    if(type == 'set'){
+  };
+  OSRH.util.setting = async function (setting, value, type) {
+    if (type == 'set') {
       await game.settings.set(`${OSRH.moduleName}`, setting, value);
     }
-    if(type=='get'){
+    if (type == 'get') {
       return await game.settings.get(`${OSRH.moduleName}`, setting);
     }
-  }
-  OSRH.util.createActiveEffectOnTarget= async function(data, target){
-    console.log(target._id, target)
+  };
+  OSRH.util.createActiveEffectOnTarget = async function (data, target) {
+    console.log(target._id, target);
     let id = target._id ? target._id : target.id;
-    if(id){
-      console.log('fuck yuou')
-      target = game.actors.get(id)
-      let effect = await ActiveEffect.create(data, { parent: target }) 
-      return effect;}
+    if (id) {
+      console.log('fuck yuou');
+      target = game.actors.get(id);
+      let effect = await ActiveEffect.create(data, { parent: target });
+      return effect;
+    }
+  };
+  OSRH.util.setTheme = async function (){
+    let index = await game.settings.get(OSRH.moduleName, 'theme')
+    console.log(index)
+    index = index == 'none' ? 0 : index;
+    let themeData = OSRH.data.themeData[index];
+    let root = document.documentElement;
+    root.style.setProperty('--t1-1', themeData.c1)
+    root.style.setProperty('--t1-2', themeData.c2)
+    root.style.setProperty('--t1-3', themeData.c3)
+    root.style.setProperty('--t1-bg', themeData.bg)
+    root.style.setProperty('--t1-num', themeData.midNum)
+    root.style.setProperty('--theme-btn-color', themeData.btnColor)
+    root.style.setProperty('--el-button-glow', themeData.glow)
+
   }
 };
