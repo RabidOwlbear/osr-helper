@@ -5,7 +5,7 @@
   "author": "RabidOwlbear",
   "version": "0.3.7",
   "minimumCoreVerson": "0.8.0",
-  "compatibleCoreVersion": "9.255",
+  "compatibleCoreVersion": "9.266",
   "styles": ["./styles/main.css"],
   "esmodules": ["./scripts/init.js"],
   "socket": true,
