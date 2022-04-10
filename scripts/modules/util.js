@@ -200,7 +200,6 @@ export const registerUtil = () => {
     let hotbar = document.getElementById('hotbar');
     // console.log(hotbar);
     if (game.settings.get(`${OSRH.moduleName}`, 'centerHotbar')) {
-      
       document.documentElement.style.setProperty('--hotbar-center', `${window.innerWidth / 2 - 289}px`);
       hotbar.classList.add('center-hotbar');
     } else {
@@ -750,19 +749,66 @@ export const registerUtil = () => {
       return effect;
     }
   };
-  OSRH.util.setTheme = async function (){
-    let index = await game.settings.get(OSRH.moduleName, 'theme')
-    console.log(index)
+  OSRH.util.setTheme = async function () {
+    let index = await game.settings.get(OSRH.moduleName, 'theme');
+    console.log(index);
     index = index == 'none' ? 0 : index;
     let themeData = OSRH.data.themeData[index];
     let root = document.documentElement;
-    root.style.setProperty('--t1-1', themeData.c1)
-    root.style.setProperty('--t1-2', themeData.c2)
-    root.style.setProperty('--t1-3', themeData.c3)
-    root.style.setProperty('--t1-bg', themeData.bg)
-    root.style.setProperty('--t1-num', themeData.midNum)
-    root.style.setProperty('--theme-btn-color', themeData.btnColor)
-    root.style.setProperty('--el-button-glow', themeData.glow)
+    root.style.setProperty('--t1-1', themeData.c1);
+    root.style.setProperty('--t1-2', themeData.c2);
+    root.style.setProperty('--t1-3', themeData.c3);
+    root.style.setProperty('--t1-bg', themeData.bg);
+    root.style.setProperty('--t1-num', themeData.midNum);
+    root.style.setProperty('--theme-btn-color', themeData.btnColor);
+    root.style.setProperty('--el-button-glow', themeData.glow);
+  };
 
-  }
+  OSRH.util.dropContainer = async function (actor, html) {
+    let containers = actor.data.items.filter((i) => i.type == 'container');
+    for (let container of containers) {
+      let contItems = container.data.data.itemIds;
+      let isEquipped = await container.getFlag('world', 'equipped');
+      if (isEquipped == undefined) {
+        console.log('no flag');
+        await container.setFlag('world', 'equipped', true);
+        isEquipped = true;
+      }
+      let eqpTag = isEquipped ? `item-equipped` : `item-unequipped`;
+      let title = html.find(`[data-item-id ="${container.id}"] h4[title="${container.name}"]`);
+      let element = title[0].parentNode.querySelector(`.item-header .item-controls`);
+      let btnEl = document.createElement('a');
+      btnEl.classList.add(`item-control`,`item-toggle`,`${eqpTag}`);
+      btnEl.title = 'Equip';
+      btnEl.innerHTML = `<i class="fas fa-tshirt"></i>`;
+      element.prepend(btnEl)
+      let eqpBtn = element.querySelector(`[title="Equip"]`);
+      eqpBtn.addEventListener('click', async (ev) => {
+        console.log('clicked', container);
+        let flag = await container.getFlag('world', 'equipped');
+        if (flag) {
+          console.log('equipped');
+          eqpBtn.classList.replace(`item-equipped`, `item-unequipped`);
+          await container.setFlag('world', 'equipped', false);
+          for(let item of contItems){
+            console.log(actor)
+            let itemObj = await actor.items.get(item.id);
+            await itemObj.setFlag('world', `weight`, itemObj.data.data.weight)
+            await itemObj.update({data: {weight: 0}})
+          }
+        }
+        if (!flag) {
+          console.log('unequipped');
+          eqpBtn.classList.replace(`item-unequipped`, `item-equipped`); 
+          for(let item of contItems){
+            let itemObj = await actor.items.get(item.id);
+            let weight = await itemObj.getFlag('world', `weight`);
+            await itemObj.update({data: {weight: weight}})
+            await itemObj.unsetFlag(`world`, `weight`)
+          }
+          await container.setFlag('world', 'equipped',  true);
+        }
+      });
+    }
+  };
 };

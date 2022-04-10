@@ -232,6 +232,11 @@ Hooks.on('renderOseActorSheet', async (actor, html) => {
       });
     }
   }
+  if( await game.settings.get(OSRH.moduleName, `enableEquippableContainers`)){
+    OSRH.util.dropContainer(actor.object, html)
+  }
+  
+  
 });
 
 /* 

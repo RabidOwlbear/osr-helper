@@ -261,6 +261,16 @@ export const registerSettings = async function () {
     config: true,
     onChange: ()=>{OSRH.util.setTheme()}
   });
+
+  game.settings.register(`${OSRH.moduleName}`, 'enableEquippableContainers', {
+    name: 'Enable Equippable Containers',
+    hint: `When enabled container items are equippable. This feature only works if "complete" encumbrance is selected in game settings.`,
+    scope: 'world',
+    type: Boolean,
+    default: false,
+    config: true
+  });
+
   // ---------------remove once ose system fixed to accomodate time advance on game round advance
   game.settings.register(`${OSRH.moduleName}`, 'lastRound', {
     name: 'lastRound',

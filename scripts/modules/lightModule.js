@@ -252,7 +252,7 @@ export const registerLightModule = async function () {
         speed: flag?.speed ? flag.speed : 3,
         intensity: flag?.intensity ? flag.intensity : 5,
         coloration: flag?.coloration ? flag.coloration : '1',
-        luminosity: flag?.luminosity ? flag.luminosity : 0.5,
+        luminosity: flag?.luminosity ? flag.luminosity : 0.4,
         bgSat: flag?.bgSat ? flag.bgSat : 0,
         bgCont: flag?.bgCont ? flag.bgCont : 0,
         bgShadow: flag?.bgShadow ? flag.bgShadow : 0
