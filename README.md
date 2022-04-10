@@ -164,3 +164,6 @@ to use:
 - click convert
 If the actor does not posses a currency item for the type of currency being converted to or from, one will be created in the actors inventory.
 
+## Equipable containers
+
+To enable this feature, check the box  on the corresponding module setting. This will add a button to container items in character inventories that when clicked will equip or unequp the container. when unequipped all items contained in the container will have their weight properties set to zero. When the container is re-equipped the contained items will have their weight restored to the original value. This feature is experimental.
