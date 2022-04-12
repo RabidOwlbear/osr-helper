@@ -13,9 +13,9 @@
       <div class="fx fdc aic w100p">
         <h4 id="preset-label">icon:</h4>
         <select name="icon" id="icon-select">
-          <option value="">-none-</option>
+          <option value="none">-none-</option>
           {{#each iconList}}
-          <option value="{{this.path}}" id="{{this.name}}" style="color: {{this.textColor}}; background-color:{{this.color}};">
+          <option value="{{this.name}}" id="{{this.name}}" style="color: {{this.textColor}}; background-color:{{this.color}};">
             {{this.name}}
           </option>
           {{/each}}

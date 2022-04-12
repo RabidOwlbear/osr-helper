@@ -1,7 +1,17 @@
 <form action="">
 
   <div class="fx fdc aic w100p h100p">
-    <h3>Effect Presets</h3>
+    <div class="fx jce w100p">
+      <h3>Effect Presets</h3>
+      <div class="fx sb">
+        <a  class="xprt-btn" id="xprt" title="Export Custom Presets">
+          <i class="fas fa-download fa-sm"></i>
+        </a>
+        <a type="file"  class="xprt-btn" id="imprt" title="Import Custom Presets">
+          <i class="fas fa-upload fa-sm"></i>
+        </a>
+      </div>
+    </div>
     {{#each effectList}}
 
     <details class="w100p">

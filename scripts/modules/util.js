@@ -198,7 +198,6 @@ export const registerUtil = () => {
 
   OSRH.util.centerHotbar = function () {
     let hotbar = document.getElementById('hotbar');
-    // console.log(hotbar);
     if (game.settings.get(`${OSRH.moduleName}`, 'centerHotbar')) {
       document.documentElement.style.setProperty('--hotbar-center', `${window.innerWidth / 2 - 289}px`);
       hotbar.classList.add('center-hotbar');
@@ -383,7 +382,6 @@ export const registerUtil = () => {
               if (ammoQty > 0) {
                 await weapon.roll({ skipDialog: skipCheck });
                 //delete ammo object if quantity is 0 or less
-                console.log(ammoQty, ammo);
                 if (ammoQty - 1 == 0) {
                   ammo.delete();
                 } else {
@@ -436,12 +434,8 @@ export const registerUtil = () => {
           callback: async (html) => {
             let bonus = html.find('#character')[0].value;
             const table = await game.tables.find((t) => t.name == tableName);
-            console.log('bonus', bonus);
             let roll = new Roll(`2d6 + @mod`, { mod: bonus });
             let result = await table.roll({ roll });
-
-            console.log('res', result);
-
             const gm = game.users.find((u) => u.isGM)[0];
             const message = {
               flavor: `
@@ -454,8 +448,6 @@ export const registerUtil = () => {
               // content: ``,
               whisper: [gm]
             };
-            console.log(`before message`);
-            // ChatMessage.create(message)
             result.roll.toMessage(message);
           }
         }
@@ -540,7 +532,6 @@ export const registerUtil = () => {
                 }
               }
               const tokens = canvas.tokens.controlled;
-              // console.log(whisper);
               if (nameType == 'none' || gender == 'none') {
                 ui.notifications.warn('Please select an option');
                 picker.render();
@@ -559,7 +550,6 @@ export const registerUtil = () => {
               if (canvas.tokens.controlled.length && canvas.tokens.controlled.length == 1) {
                 let token = canvas.tokens.controlled[0];
                 let actor = token.actor;
-                // console.log(token, actor);
                 await actor.update({
                   name: fullName,
                   token: {
@@ -638,7 +628,6 @@ export const registerUtil = () => {
     };
     const curItem = await curCheck(curCur);
     const newItem = await curCheck(newCur);
-    console.log(curItem, newItem);
     if (curItem.data.data.quantity.value < amt) {
       ui.notifications.warn(`Not enough ${curCur}`);
       OSRH.util.curConDiag(actor, amt);
@@ -704,7 +693,6 @@ export const registerUtil = () => {
           callback: (html) => {
             // let actor = canvas.tokens.controlled[0]?.actor;
             if (!actor) ui.notifications.warn('No token Selected');
-            console.log(html);
             let curCur = html.find('#curCur')[0].value;
             let newCur = html.find('#newCur')[0].value;
             let amt = parseInt(html.find('#amt')[0].value);
@@ -713,8 +701,6 @@ export const registerUtil = () => {
               OSRH.util.curConDiag(actor, amt);
               return;
             }
-
-            console.log('aa', actor, curCur, newCur, amt);
             OSRH.util.curConvert(amt, curCur, newCur, actor);
           }
         }
@@ -740,10 +726,8 @@ export const registerUtil = () => {
     }
   };
   OSRH.util.createActiveEffectOnTarget = async function (data, target) {
-    console.log(target._id, target);
     let id = target._id ? target._id : target.id;
     if (id) {
-      console.log('fuck yuou');
       target = game.actors.get(id);
       let effect = await ActiveEffect.create(data, { parent: target });
       return effect;
@@ -751,7 +735,6 @@ export const registerUtil = () => {
   };
   OSRH.util.setTheme = async function () {
     let index = await game.settings.get(OSRH.moduleName, 'theme');
-    console.log(index);
     index = index == 'none' ? 0 : index;
     let themeData = OSRH.data.themeData[index];
     let root = document.documentElement;
@@ -770,7 +753,6 @@ export const registerUtil = () => {
       let contItems = container.data.data.itemIds;
       let isEquipped = await container.getFlag('world', 'equipped');
       if (isEquipped == undefined) {
-        console.log('no flag');
         await container.setFlag('world', 'equipped', true);
         isEquipped = true;
       }
@@ -784,21 +766,17 @@ export const registerUtil = () => {
       element.prepend(btnEl)
       let eqpBtn = element.querySelector(`[title="Equip"]`);
       eqpBtn.addEventListener('click', async (ev) => {
-        console.log('clicked', container);
         let flag = await container.getFlag('world', 'equipped');
         if (flag) {
-          console.log('equipped');
           eqpBtn.classList.replace(`item-equipped`, `item-unequipped`);
           await container.setFlag('world', 'equipped', false);
           for(let item of contItems){
-            console.log(actor)
             let itemObj = await actor.items.get(item.id);
             await itemObj.setFlag('world', `weight`, itemObj.data.data.weight)
             await itemObj.update({data: {weight: 0}})
           }
         }
         if (!flag) {
-          console.log('unequipped');
           eqpBtn.classList.replace(`item-unequipped`, `item-equipped`); 
           for(let item of contItems){
             let itemObj = await actor.items.get(item.id);
