@@ -129,6 +129,20 @@ Effects created by/placed on monster actors my be viewed by using the provided "
 
 Each time the game world time updates all active effect's duration will be checked, and any expired effects will be removed.
 
+---
+
+#### Managing Effect presets
+
+![light configuration panel image](./images/doc/effects-doc-03.webp)
+
+1. Manage Custom Effects: this button will only be visible for the GM. When clickedf it will open the preset management window (see picture above, left).
+The Preset Management panel will display all currently saved active effect presets. Presetc can be deleted using the red x buttons (see 3. below). Clicking on the name of a custom effect will expand its entry to show more details about the effect.
+2. Import/Export Custom Preset Lists: Clcking the export Custom Presets button will open a file save dialog allowing the GM to save their custom presets for backup or import into another game world. The Import Custom Preset button will open a file open dialog where a GM can select a previously save custom presets JSON file for import. When a valid file is selected the GM will be prompted to Merge or Replace the existinng presets. Selecting merge will add any custom effects not currently existing into the game world's saved custom presets, selecting Replace will replace all curent saved presets with the presets contained in the file imported.
+3. Delete Preset: Clicking this button will delete the custom effect preset.
+4. Save custom preset button, only visible for GM user. Saves defined preset to the custom effects list.
+
+---
+
 #### Effect Form Themes
 
 Color themes have been added for the active effect forms. The theme can be changed in the module settings.
