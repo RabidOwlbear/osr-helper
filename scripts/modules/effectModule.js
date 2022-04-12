@@ -36,14 +36,12 @@ export const registerEffectModule = async function () {
     }
     async getData() {
       let isGM = game.user.isGM;
-      console.log(isGM)
       let savedEffects = await game.settings.get(OSRH.moduleName, 'savedEffects');
       let retObj = {
         effectPresets: [],
         iconList: OSRH.data.effectIcons,
         isGM
       };
-      console.log(retObj);
       if (Object.keys(savedEffects).length) {
         for (let key in savedEffects) {
           let effectData = savedEffects[key];
@@ -92,12 +90,10 @@ export const registerEffectModule = async function () {
             return;
           }
         }
-        console.log(this);
         OSRH.effect.saveEffect.call(this, ev, data);
       });
 
       createBtn.addEventListener('click', (ev) => {
-        console.log('clicked');
         let userTargets = game.user.targets;
         let targetInp = html.find('[name="target"]:checked')[0].id;
         let interval = html.find('[name="interval"]:checked')[0].id;
@@ -127,19 +123,13 @@ export const registerEffectModule = async function () {
       });
     }
     async _updateObject(ev, formData) {
-      // ev.preventDefault();
-      console.log(formData);
       let userTargets = game.user.targets;
       let targetInp = ev.target.querySelector('[name="target"]:checked').id;
       let actor = this.actor;
-      // let target = targetInp == 'self' ? actor : userTargets.first()?.actor;
       let target = targetInp == 'self' ? actor.uuid : game.user.targets.first()?.actor?.uuid;
-      // let target = game.user.targets.first() ? game.user.targets.first()?.actor?.uuid : actor.uuid;
       let interval = ev.target.querySelector('[name="interval"]:checked').id;
       const iconName = formData.icon;
       const iconObj = OSRH.data.effectIcons.find((i) => i.name == iconName);
-
-      console.log(iconObj);
       let effectData = {
         label: '',
         icon: iconObj.path,
@@ -275,7 +265,6 @@ export const registerEffectModule = async function () {
     for (let e of activeEffects) {
       let type = await game.actors.get(e.targetActorId).data.type;
       if (type == `monster`) {
-        console.log('monster');
         for (let scene of game.scenes) {
           let actor = await scene.tokens.get(e.targetToken).actor;
           let effect = await actor.getEmbeddedDocument('ActiveEffect', e.effectId);
@@ -337,7 +326,6 @@ export const registerEffectModule = async function () {
           .get(`${OSRH.moduleName}`, 'effectData')
           .filter((e) => e.target == this.actor.uuid && this.actor.id != e.createdBy);
       }
-      console.log('pre');
       let selfEffectsTemplate = await OSRH.effect.effectListGetData(selfEffectData, 'self');
       let otherEffectsTemplate = await OSRH.effect.effectListGetData(otherEffectData, 'other');
       let gmEffectsTemplate = await OSRH.effect.effectListGetData(gmEffectsData, 'gm');
@@ -386,7 +374,6 @@ export const registerEffectModule = async function () {
   };
 
   OSRH.effect.deleteEffect = async function (activeEffectId, effectList) {
-    console.log('fired');
     let activeEffectData = await game.settings.get(`${OSRH.moduleName}`, 'effectData');
 
     let effectData = activeEffectData.filter((e) => e.effectId == activeEffectId)[0];
@@ -394,7 +381,6 @@ export const registerEffectModule = async function () {
     let targetActor = await game.actors.get(effectData.targetActorId);
 
     if (targetActor?.data?.type == 'monster') {
-      console.log('monster');
       let tokenArr = [];
       game.scenes.map((s) => {
         let token = s.tokens.get(effectData.targetToken);
@@ -450,13 +436,11 @@ export const registerEffectModule = async function () {
   };
 
   OSRH.effect.housekeeping = async function () {
-    console.log('housekeeping', game.time.worldTime);
     let effectData = await deepClone(game.settings.get(`${OSRH.moduleName}`, 'effectData'));
 
     for (let effect of effectData) {
       if (!effect?.isInf) {
         //get actor from uuid
-        console.log(effect)
         let actor = await fromUuid(effect.target);
 
         //if token get token actor
@@ -499,7 +483,6 @@ export const registerEffectModule = async function () {
 
   OSRH.effect.effectListGetData = async function (data, type) {
     let retArr = [];
-    console.log(data, type)
     if (data.length) {
       data.forEach(async (e) => {
         let tActor = await fromUuid(e.target);
@@ -507,7 +490,6 @@ export const registerEffectModule = async function () {
         let isInf = e.isInf;
         tActor = tActor.collectionName == 'tokens' ? (tActor = tActor.actor) : tActor;
         let effect = await tActor.getEmbeddedDocument('ActiveEffect', e.effectId);
-        console.log(e, effect)
         let durObj = effect.data.duration;
         let entryData = {};
         entryData.name = effect.data.label;
@@ -563,8 +545,6 @@ export const registerEffectModule = async function () {
     effectObj.data.target = target.id;
     effectObj.data.durInt = durInt.id;
     effectObj.data.icon = icon;
-    console.log(effectObj);
-
     let savedFx = await deepClone(game.settings.get(OSRH.moduleName, 'savedEffects'));
     savedFx[effectObj.id] = effectObj;
     await game.settings.set(OSRH.moduleName, 'savedEffects', savedFx);
@@ -587,18 +567,15 @@ export const registerEffectModule = async function () {
       });
       for (let key of inputKeys) {
         let el = this.element[0].querySelector(`#${key}`);
-        // console.log(key, el);
         el.value = fxData?.data[key];
       }
     
-    console.log(fxData)
     const targetInp = this.element[0].querySelector(`#${fxData.data.target}`);
     targetInp.checked = true;
     const iconInp = this.element[0].querySelector(`#icon-select [value="${fxData.icon}"]`);
     iconInp.selected = true;
     const durIntInp = this.element[0].querySelector(`input#${fxData.data.durInt}`);
     durIntInp.checked = true;
-    // console.log(targetInp, iconInp, durIntInp);
     }
   };
 
@@ -636,7 +613,6 @@ export const registerEffectModule = async function () {
         e.preventDefault();
         let setting = await game.settings.get(OSRH.moduleName, `savedEffects`)
         let data = JSON.stringify(setting)
-        console.log(data)
         let xport = 'data:export/plain;charset=utf-8, ' + encodeURIComponent(data);
         let filename = 'saved-effects.json';
         let alink = document.createElement('a')
@@ -652,7 +628,6 @@ export const registerEffectModule = async function () {
         input.addEventListener('change', async  function (e){
           let file = this.files[0];
           if(file.type != "application/json"){
-            console.log('not json')
             ui.notifications.warn('Please select a valid JSON file.');
             return
           }
@@ -660,7 +635,6 @@ export const registerEffectModule = async function () {
           fr.onload = async function(e){
             let content = e.target.result;
             let parsed = JSON.parse(content);
-            console.log(parsed)
             new Dialog({
               title: 'Import Type',
               content:``,

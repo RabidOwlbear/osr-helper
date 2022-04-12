@@ -157,7 +157,6 @@ export const registerLightModule = async function () {
         start = curTime < start ? curTime : start;
         let elapsed = curTime - start;
         let lastTurn = duration - elapsed == 600 ? true : false;
-        console.log(lastTurn, data)
         if(lastTurn){
           let lData = {
             dim: data.dim * 0.7,
@@ -173,7 +172,6 @@ export const registerLightModule = async function () {
             luminosity: data.liminosity,
             speed: data.speed
           } 
-          console.log(lData)
           await OSRH.light.updateTokens(dataObj.uuid, lData);
         }
         if (elapsed >= duration) {
@@ -193,7 +191,6 @@ export const registerLightModule = async function () {
             luminosity: data.liminosity,
             speed: data.speed
           } 
-          console.log('lc', lData)
           await OSRH.light.updateTokens(dataObj.uuid, lData);
           
           OSRH.light.decrementLightItem(dataObj.uuid, light.itemId);
@@ -315,12 +312,10 @@ export const registerLightModule = async function () {
   };
 
   OSRH.light.updateTokens = async function (uuid, lightData, lastTurn = false) {
-    console.log('udt', lightData)
     let actor = await fromUuid(uuid);
     game.scenes.map((s) => {
       if (s.tokens.size) {
         s.tokens.forEach(async (t) => {
-          // console.log(t?.actor?.uuid);
           if (t.actor && t.actor.uuid == uuid) {
             let data = {
               light: {
