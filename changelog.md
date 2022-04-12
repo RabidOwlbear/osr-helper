@@ -10,7 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - world Custom Effect Preset import/export 
 
 ### changed
-- updated the custom effects prewset data model. This change requires the one time use of the provided "Update Saved Effects" macro to update existing saved custom effects.
+- updated the custom effects preset data model. This change requires the one time use of the provided "Update Saved Effects" macro to update existing saved custom effects.
 
 
 ## [0.3.7] 2022-4-9
