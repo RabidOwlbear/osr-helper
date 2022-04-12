@@ -29,6 +29,12 @@ lightType: {
 */
   OSRH.data.effectIcons = [
     {
+      name:`none`,
+      color: '#fff',
+      textColor: `#000`,
+      path:`none`
+    },
+    {
       name:`sword`,
       color: '#fc293b',
       textColor: `#fff`,

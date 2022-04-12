@@ -258,6 +258,9 @@
 .jcc {
   justify-content: center;
 }
+.jce {
+  justify-content: end;
+}
 .w50 {
   width: 50px;
 }
@@ -458,7 +461,7 @@
 .osrh-active-effect-list .header-del {
   width: 40px;
 }
-#del-preset-form .delete-btn .fas.fa-times,
+#manage-preset-form .delete-btn .fas.fa-times,
 .osrh-active-effect-list .delete-btn .fas.fa-times {
   color: rgb(175, 28, 28);
 }
@@ -521,19 +524,36 @@
 .osrh-new-active-effect-form #preset-select{
   width: 160px
 }
- #del-preset-form .window-content{
+ #manage-preset-form .window-content{
   overflow: auto;
  }
-#del-preset-form .window-content,
+#manage-preset-form .window-content,
 .osrh-active-effect-list .window-content ,
 .osrh-new-active-effect-form .window-content ,
 .light-item-config .window-content{
   background: var(--t1-bg);
   background: linear-gradient(0deg, var(--t1-1) 0%, var(--t1-2) var(--t1-num), var(--t1-3) 100%);
  }
-
-
+#manage-preset-form .xprt-btn{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+  width: 20px;
+  height: 20px;
+  color: black;
+}
+#manage-preset-form h3{
+  position: absolute;
+  left: 33%
+}
 .osrh-active-effect-list .button-cont button,
 .osrh-new-active-effect-form button {
   color: var(--theme-btn-color);
+}
+.osrh-active-effect-list .manage-effects-btn{
+  width: 20px
+}
+.osrh-active-effect-list .manage-effects-btn i{
+  height: 12px;
 }

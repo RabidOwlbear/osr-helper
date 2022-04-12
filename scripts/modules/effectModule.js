@@ -136,12 +136,14 @@ export const registerEffectModule = async function () {
       let target = targetInp == 'self' ? actor.uuid : game.user.targets.first()?.actor?.uuid;
       // let target = game.user.targets.first() ? game.user.targets.first()?.actor?.uuid : actor.uuid;
       let interval = ev.target.querySelector('[name="interval"]:checked').id;
-      const icon = formData.icon;
-      const iconObj = OSRH.data.effectIcons.find((i) => i.path == icon);
+      const iconName = formData.icon;
+      const iconObj = OSRH.data.effectIcons.find((i) => i.name == iconName);
+
       console.log(iconObj);
       let effectData = {
         label: '',
-        icon: icon,
+        icon: iconObj.path,
+        iconName: iconObj.name,
         tint: iconObj.color,
         mode: 2,
         priority: 0,
@@ -454,6 +456,7 @@ export const registerEffectModule = async function () {
     for (let effect of effectData) {
       if (!effect?.isInf) {
         //get actor from uuid
+        console.log(effect)
         let actor = await fromUuid(effect.target);
 
         //if token get token actor
@@ -496,6 +499,7 @@ export const registerEffectModule = async function () {
 
   OSRH.effect.effectListGetData = async function (data, type) {
     let retArr = [];
+    console.log(data, type)
     if (data.length) {
       data.forEach(async (e) => {
         let tActor = await fromUuid(e.target);
@@ -503,6 +507,7 @@ export const registerEffectModule = async function () {
         let isInf = e.isInf;
         tActor = tActor.collectionName == 'tokens' ? (tActor = tActor.actor) : tActor;
         let effect = await tActor.getEmbeddedDocument('ActiveEffect', e.effectId);
+        console.log(e, effect)
         let durObj = effect.data.duration;
         let entryData = {};
         entryData.name = effect.data.label;
@@ -539,7 +544,6 @@ export const registerEffectModule = async function () {
     let effectObj = {
       id: randomID(16)
     };
-    console.log(ev, this.element[0]);
     let numInputs = this.element[0].querySelectorAll('input[type="number"]');
     let target = this.element[0].querySelector(`[type="radio"][name="target"]:checked`);
     let durInt = this.element[0].querySelector(`[type="radio"][name="interval"]:checked`);
@@ -548,8 +552,8 @@ export const registerEffectModule = async function () {
     let icon = this.element[0].querySelector('#icon-select').value;
     let presetSel = this.element[0].querySelector('#preset-select');
 
-    console.log(numInputs, target, durInt, nameEl, descripEl, icon);
     effectObj.name = nameEl.value;
+    effectObj.icon = icon
     effectObj.data = {};
     for (let input of numInputs) {
       effectObj.data[input.id] = parseInt(input.value);
@@ -573,7 +577,7 @@ export const registerEffectModule = async function () {
   OSRH.effect.applyEffectPreset = async function (ev) {
     const savedFx = await deepClone(game.settings.get(OSRH.moduleName, 'savedEffects'));
     let fxData = savedFx[ev.srcElement.value];
-    console.log(`selected`, fxData);
+    let iconObj = OSRH.data.effectIcons.find(i => i.name == fxData.name)
     if(fxData){
       let inputKeys = Object.keys(fxData.data).filter((k) => {
         let discard = ['target', 'durInt', 'icon'];
@@ -587,10 +591,10 @@ export const registerEffectModule = async function () {
         el.value = fxData?.data[key];
       }
     
-    
+    console.log(fxData)
     const targetInp = this.element[0].querySelector(`#${fxData.data.target}`);
     targetInp.checked = true;
-    const iconInp = this.element[0].querySelector(`#icon-select [value="${fxData.data.icon}"]`);
+    const iconInp = this.element[0].querySelector(`#icon-select [value="${fxData.icon}"]`);
     iconInp.selected = true;
     const durIntInp = this.element[0].querySelector(`input#${fxData.data.durInt}`);
     durIntInp.checked = true;
@@ -598,19 +602,20 @@ export const registerEffectModule = async function () {
     }
   };
 
-  OSRH.effect.deleteCustomPresets = class deleteCustomPresets extends FormApplication {
+  OSRH.effect.manageCustomPresets = class manageCustomPresets extends FormApplication {
     constructor() {
       super();
     }
     static get defaultOptions() {
       return mergeObject(super.defaultOptions, {
         classes: ['form, del-preset'],
+        baseApplication: `ManageCustomEffects`,
         popOut: true,
         height: 400,
         width: 300,
-        template: `modules/${OSRH.moduleName}/templates/delete-preset-form.html`,
-        id: 'del-preset-form',
-        title: `Delete Presets`
+        template: `modules/${OSRH.moduleName}/templates/manage-preset-form.html`,
+        id: 'manage-preset-form',
+        title: `Manage Presets`
       });
     }
     async getData() {
@@ -625,14 +630,71 @@ export const registerEffectModule = async function () {
     }
     activateListeners(html) {
       let effectDelBtns = html.find(`a[class="delete-btn"]`);
-      console.log(effectDelBtns);
+      let xprtBtn = html.find('#xprt')[0];
+      let imprtBtn = html.find('#imprt')[0];
+      xprtBtn.addEventListener('click',async (e)=>{
+        e.preventDefault();
+        let setting = await game.settings.get(OSRH.moduleName, `savedEffects`)
+        let data = JSON.stringify(setting)
+        console.log(data)
+        let xport = 'data:export/plain;charset=utf-8, ' + encodeURIComponent(data);
+        let filename = 'saved-effects.json';
+        let alink = document.createElement('a')
+        alink.href = xport;
+        alink.setAttribute('download', filename);
+        alink.click()
+      })
+
+      imprtBtn.addEventListener('click',async (e)=>{
+        const input = document.createElement('input')
+        const form = this
+        input.type = 'file'
+        input.addEventListener('change', async  function (e){
+          let file = this.files[0];
+          if(file.type != "application/json"){
+            console.log('not json')
+            ui.notifications.warn('Please select a valid JSON file.');
+            return
+          }
+          let fr = new FileReader()
+          fr.onload = async function(e){
+            let content = e.target.result;
+            let parsed = JSON.parse(content);
+            console.log(parsed)
+            new Dialog({
+              title: 'Import Type',
+              content:``,
+              buttons: {
+                replace: {
+                  label: 'Replace',
+                  callback:async ()=>{
+                    await game.settings.set(OSRH.moduleName, 'savedEffects', parsed)
+                    new OSRH.effect.manageCustomPresets().render(true)
+                  }
+                },
+                merge: {
+                  label: 'Merge',
+                  callback:async ()=>{
+                    const orig = await deepClone(game.settings.get(OSRH.moduleName, `savedEffects`));
+                    let merged = mergeObject(orig, parsed);
+                    await game.settings.set(OSRH.moduleName, 'savedEffects', merged)
+                    new OSRH.effect.manageCustomPresets().render(true)
+                  }
+                }
+              }
+            }).render(true)
+            form.render()
+            return 'settings updated'
+          }
+          fr.readAsText(file)
+        })
+        input.click();
+      })
       for (let btn of effectDelBtns) {
         btn.addEventListener(`click`, async (ev) => {
           ev.preventDefault();
           const savedFx = await deepClone(game.settings.get(OSRH.moduleName, 'savedEffects'));
-          console.log(savedFx);
           delete savedFx[btn.id];
-          console.log(savedFx, this);
           await game.settings.set(OSRH.moduleName, 'savedEffects', savedFx);
           this.render();
         });
