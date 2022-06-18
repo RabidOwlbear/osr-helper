@@ -76,7 +76,7 @@ export const registerLightModule = async function () {
                     tokenId: tokenId,
                     isOn: true,
                     start: game.time.worldTime,
-                    duration: lightItemData.duration * 60,
+                    duration: lightItemData.duration === 'inf' ? 'inf' : lightItemData.duration * 60,
                     data: lightItemData
                   }
                 ]
@@ -122,7 +122,7 @@ export const registerLightModule = async function () {
                 tokenId: tokenId,
                 isOn: true,
                 start: game.time.worldTime,
-                duration: lightItemData.duration * 60,
+                duration: lightItemData?.duration === 'inf' ? 'inf' : lightItemData.duration * 60,
                 data: lightItemData
               });
               let settingData = {
@@ -154,13 +154,16 @@ export const registerLightModule = async function () {
       let lights = dataObj.lights.filter((i) => i.isOn);
       for (let light of lights) {
         let { start, duration, data } = light;
+        if (duration === 'inf') {
+          continue;
+        }
         start = curTime < start ? curTime : start;
         let elapsed = curTime - start;
         let lastTurn = duration - elapsed == 600 ? true : false;
-        if(lastTurn){
+        if (lastTurn) {
           let lData = {
             dim: data.dim * 0.7,
-            bright:  data.bright,
+            bright: data.bright,
             color: data.color,
             alpha: data.alpha,
             animation: data.animation,
@@ -171,14 +174,14 @@ export const registerLightModule = async function () {
             intensity: data.intensity,
             luminosity: data.liminosity,
             speed: data.speed
-          } 
+          };
           await OSRH.light.updateTokens(dataObj.uuid, lData);
         }
         if (elapsed >= duration) {
           dataObj.lightLit = false;
           dataObj.lights = await dataObj.lights.filter((i) => i.id != light.id);
           let lData = {
-            dim:  0,
+            dim: 0,
             bright: 0,
             color: data.color,
             alpha: data.alpha,
@@ -190,12 +193,11 @@ export const registerLightModule = async function () {
             intensity: data.intensity,
             luminosity: data.liminosity,
             speed: data.speed
-          } 
+          };
           await OSRH.light.updateTokens(dataObj.uuid, lData);
-          
+
           OSRH.light.decrementLightItem(dataObj.uuid, light.itemId);
           if (!dataObj.lights.length) delete lightData[actorId];
-          
         }
       }
     }
@@ -270,6 +272,10 @@ export const registerLightModule = async function () {
         let inputs = html.find('.light-config-input');
         let formData = {};
         for (let i of inputs) {
+          if (i.id === 'duration' && i.value === 'inf') {
+            formData[i.id] = i.value;
+            continue;
+          }
           let value =
             i.type == 'color'
               ? i.value
@@ -284,7 +290,7 @@ export const registerLightModule = async function () {
         }
         ev.preventDefault();
         updateBtn.blur();
-
+        console.log(formData);
         await this.item.setFlag(`${OSRH.moduleName}`, 'lightItemData', formData);
         ui.notifications.info('Light Item Data Updated');
         this.close();
