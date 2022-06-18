@@ -717,6 +717,8 @@ export const registerUtil = () => {
       }, wait);
     };
   };
+
+  
   OSRH.util.setting = async function (setting, value, type) {
     if (type == 'set') {
       await game.settings.set(`${OSRH.moduleName}`, setting, value);

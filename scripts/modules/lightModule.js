@@ -1,4 +1,5 @@
 export const registerLightModule = async function () {
+
   OSRH.light.lightToggle = async function (uuid, tokenId) {
     let actor = await fromUuid(uuid);
     actor = actor.collectionName === 'tokens' ? actor.actor : actor;
@@ -15,7 +16,9 @@ export const registerLightModule = async function () {
       let activeLight = actorLightData.lights.find((i) => i.isOn);
       activeLight.isOn = false;
       actorLightData.lightLit = false;
-
+      if(activeLight.duration === 'inf'){
+        actorLightData.lights = actorLightData.lights.filter(i=>i.id != activeLight.id)
+      }
       let settingData = {
         setting: 'lightData',
         value: lightData,
@@ -122,7 +125,7 @@ export const registerLightModule = async function () {
                 tokenId: tokenId,
                 isOn: true,
                 start: game.time.worldTime,
-                duration: lightItemData?.duration === 'inf' ? 'inf' : lightItemData.duration * 60,
+                duration: lightItemData.duration === 'inf' ? 'inf' : lightItemData.duration * 60,
                 data: lightItemData
               });
               let settingData = {
@@ -209,11 +212,11 @@ export const registerLightModule = async function () {
     actor = actor.collectionName === 'tokens' ? actor.actor : actor;
     let item = await actor.data.items.get(itemId);
 
-    if (item.data.data.quantity.value > 1) {
+    if (item.data.data.quantity.value > 0) {
       let qty = item.data.data.quantity.value - 1;
       await item.update({ data: { quantity: { value: qty } } });
     }
-    if (item.data.data.quantity.value <= 1) {
+    if (item.data.data.quantity.value <= 0) {
       await actor.deleteEmbeddedDocuments('Item', [itemId]);
     }
   };
