@@ -64,6 +64,10 @@ The wrench icon (number 1. in image below) will also be added to the header of t
 3. Close: Closes the configuration panel without saving.
 4. Update: Updates the light configuration data.
 
+![light configuration panel image](./images/doc/lights-doc-03.webp)
+
+Light durations should be a positive number, or "inf" for infinite light duration. (see above)
+
 To activate a light, a player needs access to the provided "Light Toggle " macro. 
 
 To use, a player token must be selected.

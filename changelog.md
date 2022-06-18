@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.3.8] 2022-4-12
 ### added
+- Infinite light item duration. To set a light item's duration to infinite set the durtation value to 'inf'.
+
+## [0.3.8] 2022-4-12
+### added
 - Custom Effect Preset management.
 - world Custom Effect Preset import/export 
 

@@ -49,7 +49,6 @@ Hooks.once('socketlib.ready', () => {
 
   Hooks.once(`${OSRH.moduleName}.registered`, () => {
     OSRH.socket = socketlib.registerModule(`${OSRH.moduleName}`);
-    console.log('reg');
     OSRH.socket.register('lightCheck', OSRH.light.lightCheck);
     OSRH.socket.register('updateTokens', OSRH.light.updateTokens);
     OSRH.socket.register('setting', OSRH.util.setting);
@@ -101,7 +100,6 @@ Hooks.once('ready', async () => {
   //set hook to update light timer durations
   Hooks.on('updateWorldTime', async () => {
     await OSRH.util.osrTick();
-    console.log('time');
     OSRH.socket.executeAsGM('lightCheck');
     // OSRH.socket.executeAsGM('clearExpiredEffects')
     // OSRH.util.debounce(, 300);
@@ -213,7 +211,6 @@ Hooks.on('renderOseActorSheet', async (actor, html) => {
     });
     for (let item of lightItems) {
       let targetEl = html.find(`[data-item-id="${item.id}"] .item-controls`);
-      // console.log(item, targetEl) //<i class="fa-solid fa-wrench"></i>
       let el = document.createElement('a');
       let iEl = document.createElement('i');
       el.classList = 'light-config'; //'item-control'
@@ -225,7 +222,6 @@ Hooks.on('renderOseActorSheet', async (actor, html) => {
       el.addEventListener('click', async (ev) => {
         ev.preventDefault();
         let itemConfig = await item.getFlag(`${OSRH.moduleName}`, 'lightItemData');
-        console.log(item, itemConfig);
         if (Object.values(ui.windows).filter((i) => i.id.includes(`light-item-config.${item.id}`)).length == 0) {
           new OSRH.light.ItemSettingsForm(item).render(true);
         }
@@ -301,7 +297,6 @@ Hooks.on('renderItemSheet', async (sheetObj, html) => {
     el.addEventListener('click', async (ev) => {
       ev.preventDefault();
       let itemConfig = await item.getFlag(`${OSRH.moduleName}`, 'lightItemConfig');
-      console.log(item, itemConfig);
       if (Object.values(ui.windows).filter((i) => i.id.includes(`light-item-config`)).length == 0) {
         new OSRH.light.ItemSettingsForm(item).render(true);
       }
@@ -321,10 +316,8 @@ Hooks.on('deleteCombat', () => {
 
 Hooks.on('updateCombat', async (combat, details) => {
   if (game.user.isGM && (await game.settings.get(`${OSRH.moduleName}`, 'combatTimeAdvance'))) {
-    console.log('update combat', details);
     let lastRound = await game.settings.get(`${OSRH.moduleName}`, 'lastRound');
     let round = details.round;
-    console.log(round, lastRound);
     if (round && round > lastRound) {
       game.time.advance(10);
       await game.settings.set(`${OSRH.moduleName}`, 'lastRound', round);
