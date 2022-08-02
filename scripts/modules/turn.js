@@ -146,9 +146,9 @@ export const registerTurn =  () => {
 
   //write to journal
   OSRH.turn.updateJournal = async function () {
-    const turnData = game.settings.get(`${OSRH.moduleName}`, 'turnData');
-    const journalName = game.settings.get(`${OSRH.moduleName}`, 'timeJournalName');
-    const entry = game.journal.getName(journalName) || (await OSRH.util.countJournalInit(journalName));
+    const turnData = await game.settings.get(`${OSRH.moduleName}`, 'turnData');
+    const journalName = await game.settings.get(`${OSRH.moduleName}`, 'timeJournalName');
+    const entry = await game.journal.getName(journalName) || (await OSRH.util.countJournalInit(journalName));
     if (turnData.rest > 5) {
       let jContent = `<h1>Turn Count</h1><br><p>Session Count: ${turnData.session}</p><p> Total Count: ${turnData.total}</p><p>Turns Since Last Rest: <span style="color: red">${turnData.rest}</span></p>`;
       await entry.update({ content: jContent });
