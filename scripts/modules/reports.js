@@ -40,7 +40,7 @@ export const registerReports = () => {
       if (light) {
         const qty = light.data.data.quantity.value;
 
-        style = 'color: green';
+        let style = 'color: green';
         if (qty <= 2) style = 'color: orangered';
         if (qty <= 1) style = 'color: red';
         actorItem += `<li><span style="${style}">${OSRH.data.lightSource[name].name}: ${light.data.data.quantity.value}</span></li>`;
