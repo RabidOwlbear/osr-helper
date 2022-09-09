@@ -2,10 +2,18 @@
   "name": "osr-helper",
   "title": "OSR Helper Module",
   "description": "A collection of helpers for the Foundry Vtt implementation of the 'Old School Essentials' system.",
-  "author": "RabidOwlbear",
+  "authors": [
+    {
+      "name": "Rabid Owlbear",
+      "url": "https://github.com/RabidOwlbear"
+    }
+  ],
   "version": "0.3.11",
-  "minimumCoreVerson": "8",
-  "compatibleCoreVersion": "9.255",
+  "compatibility": {
+    "minimum": "10",
+    "verified": "10.284",
+    "maximum": "10"
+  },
   "styles": ["./styles/main.css"],
   "esmodules": ["./scripts/init.js"],
   "socket": true,
@@ -16,6 +24,7 @@
       "label": "OSR-helper Patch Notes",
       "path": "packs/patch-notes.db",
       "entity": "JournalEntry",
+      "system": ["ose"],
       "module": "osr-helper"
     },
     {
@@ -23,6 +32,7 @@
       "label": "OSR-helper Macros",
       "path": "packs/macros.db",
       "entity": "Macro",
+      "system": ["ose"],
       "module": "osr-helper"
     },
     {
@@ -30,6 +40,7 @@
       "label": "OSR-helper Items",
       "path": "packs/items.db",
       "entity": "Item",
+      "system": ["ose"],
       "module": "osr-helper"
     }
   ],
