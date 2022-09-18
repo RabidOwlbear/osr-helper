@@ -5,7 +5,7 @@ export const registerLightModule = async function () {
     actor = actor.collectionName === 'tokens' ? actor.actor : actor;
 
     let lightItems = actor.items.filter((i) => {
-      let tags = i.data.data.manualTags;
+      let tags = i.system.manualTags;
       if (tags && tags.find((t) => t.value == 'Light')) return i;
     });
     const lightData = deepClone(await game.settings.get(`${OSRH.moduleName}`, 'lightData'));
@@ -37,7 +37,7 @@ export const registerLightModule = async function () {
 
     let lightOptions = '';
     for (let light of lightItems) {
-      lightOptions += `<option value="${light.id}">${light.name}: ${light.data.data.quantity.value}</option>`;
+      lightOptions += `<option value="${light.id}">${light.name}: ${light.system.quantity.value}</option>`;
     }
     if (lightOptions == '') {
       ui.notifications.error('No Light Items Found');
@@ -63,7 +63,7 @@ export const registerLightModule = async function () {
             const itemID = await html.find('#lightType')[0].value;
             const item = await actor.items.get(itemID);
             const lightItemData = await item.getFlag(`${OSRH.moduleName}`, 'lightItemData');
-
+            console.log(lightItemData)
             //if no actorId found, creat actor id and light type
             if (!actorLightData) {
               lightData[actor.id] = {
@@ -212,11 +212,11 @@ export const registerLightModule = async function () {
     actor = actor.collectionName === 'tokens' ? actor.actor : actor;
     let item = await actor.data.items.get(itemId);
 
-    if (item.data.data.quantity.value > 0) {
-      let qty = item.data.data.quantity.value - 1;
+    if (item.system.quantity.value > 0) {
+      let qty = item.system.quantity.value - 1;
       await item.update({ data: { quantity: { value: qty } } });
     }
-    if (item.data.data.quantity.value <= 0) {
+    if (item.system.quantity.value <= 0) {
       await actor.deleteEmbeddedDocuments('Item', [itemId]);
     }
   };
@@ -321,6 +321,7 @@ export const registerLightModule = async function () {
   };
 
   OSRH.light.updateTokens = async function (uuid, lightData, lastTurn = false) {
+    console.log('ding',lightData.animation)
     let actor = await fromUuid(uuid);
     game.scenes.map((s) => {
       if (s.tokens.size) {
@@ -334,7 +335,7 @@ export const registerLightModule = async function () {
                 alpha: lightData.alpha,
                 gradual: true,
                 animation: {
-                  type: lightData.animation,
+                  type: lightData.animation ? lightData.animation : 'flame',
                   speed: lightData.speed,
                   intensity: lightData.intensity
                 },

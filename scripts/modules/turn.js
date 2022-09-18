@@ -100,7 +100,7 @@ export const registerTurn =  () => {
         await game.settings.set(`${OSRH.moduleName}`, 'turnData', {});
         await game.settings.set(`${OSRH.moduleName}`, 'turnData', turnData); //update settings data <--------
         const theRoll = await new Roll('1d6').roll();
-        const gm = game.users.contents.filter((u) => u.data.role == 4).map((u) => u.id);
+        const gm = game.users.contents.filter((u) => u.role == 4).map((u) => u.id);
 
         if (theRoll.result > data.rollTarget) {
           const content = {
@@ -149,23 +149,26 @@ export const registerTurn =  () => {
     const turnData = await game.settings.get(`${OSRH.moduleName}`, 'turnData');
     const journalName = await game.settings.get(`${OSRH.moduleName}`, 'timeJournalName');
     const entry = await game.journal.getName(journalName) || (await OSRH.util.countJournalInit(journalName));
+    const page = await entry.pages.find(p=>p.name == journalName);
+    console.log(entry, page)
     if (turnData.rest > 5) {
-      let jContent = `<h1>Turn Count</h1><br><p>Session Count: ${turnData.session}</p><p> Total Count: ${turnData.total}</p><p>Turns Since Last Rest: <span style="color: red">${turnData.rest}</span></p>`;
-      await entry.update({ content: jContent });
+      let jContent = `<br><p>Session Count: ${turnData.session}</p><p> Total Count: ${turnData.total}</p><p>Turns Since Last Rest: <span style="color: red">${turnData.rest}</span></p>`;
+      await page.update({ text:{content: jContent }});
+      console.log(page)
       return;
     } else if (turnData.rest > 3) {
-      let jContent = `<h1>Turn Count</h1><br><p>Session Count: ${turnData.session}</p><p> Total Count: ${turnData.total}</p><p>Turns Since Last Rest: <span style="color: orangered">${turnData.rest}</span></p>`;
-      await entry.update({ content: jContent });
+      let jContent = `<br><p>Session Count: ${turnData.session}</p><p> Total Count: ${turnData.total}</p><p>Turns Since Last Rest: <span style="color: orangered">${turnData.rest}</span></p>`;
+      await page.update({ text:{content: jContent }});
       return;
     } else {
-      let jContent = `<h1>Turn Count</h1><br><p>Session Count: ${turnData.session}</p><p> Total Count: ${turnData.total}</p><p>Turns Since Last Rest: ${turnData.rest}</p>`;
-      await entry.update({ content: jContent });
+      let jContent = `<br><p>Session Count: ${turnData.session}</p><p> Total Count: ${turnData.total}</p><p>Turns Since Last Rest: ${turnData.rest}</p>`;
+      await page.update({ text:{content: jContent }});
       return;
     }
   };
 
   OSRH.turn.restMsg = async function (rc) {
-    const gm = game.users.contents.filter((u) => u.data.role == 4).map((u) => u.data.id);
+    const gm = game.users.contents.filter((u) => u.role == 4).map((u) => u.id);
     const whisper = await game.settings.get(`${OSRH.moduleName}`, 'whisperRest');
     const turnData = await game.settings.get(`${OSRH.moduleName}`, 'turnData');
     let chatData = {
@@ -203,7 +206,7 @@ export const registerTurn =  () => {
   OSRH.turn.rest = async function () {
     const whisper = game.settings.get(`${OSRH.moduleName}`, 'whisperRest');
     const data = game.settings.get(`${OSRH.moduleName}`, 'turnData');
-    const gm = game.users.contents.filter((u) => u.data.role == 4).map((u) => u.data.id);
+    const gm = game.users.contents.filter((u) => u.role == 4).map((u) => u.id);
     data.rest = 0;
     data.restWarnCount = 0;
     data.session++;
@@ -243,7 +246,7 @@ export const registerTurn =  () => {
   OSRH.turn.lightTurnRemaining = async function (actorId) {
     let lightData;
     for (let user of game.users.contents) {
-      if (user.data.flags[`${OSRH.moduleName}`].lightData[actorId]) {
+      if (user.flags[`${OSRH.moduleName}`].lightData[actorId]) {
         let flag = await user.getFlag(`${OSRH.moduleName}`, 'lightData');
         lightData = flag;
       }
@@ -267,7 +270,7 @@ export const registerTurn =  () => {
       if (turnsLeft <= OSRH.data.lightSource[type].warn) {
         color = 'orangered';
       }
-      if (turnsLeft <= OSRH.data.lightSource[type].alert) {
+      if (turnsLeft <= OSRH.lightSource[type].alert) {
         color = 'red';
       }
       const turn = turnsLeft == 1 ? 'turn' : 'turns';

@@ -40,7 +40,7 @@ Hooks.once('init', async function () {
   registerNameData();
   registerLightModule();
   registerEffectModule();
-  OSRH.gameVersion = game.version ? game.version : game.data.version;
+  OSRH.gameVersion = game.version ? game.version : game.version;
   Hooks.call(`${OSRH.moduleName}.registered`);
   
 });
@@ -128,7 +128,7 @@ Hooks.once('ready', async () => {
 
   Hooks.on('createActor', async (actor) => {
     if (game.settings.get(`${OSRH.moduleName}`, 'tokenLightDefault') && game.user.role >= 4) {
-      if (actor.data.type == 'character') {
+      if (actor.type == 'character') {
         //const actor = game.actors.getName(sheet.object.name);
         await actor.update({
           token: {
@@ -206,7 +206,7 @@ Hooks.on('renderOseActorSheet', async (actor, html) => {
   //  lightItemSettings
   if (await game.settings.get(`${OSRH.moduleName}`, 'enableLightConfig')) {
     let lightItems = actor.object.items.filter((i) => {
-      let tags = i.data.data.manualTags;
+      let tags = i.system.manualTags;
       if (tags && tags.find((t) => t.value == 'Light')) return i;
     });
     for (let item of lightItems) {
@@ -290,7 +290,7 @@ Hooks.on('rendercustomEffectList', (CEL, html, form) => {
 });
 
 Hooks.on('renderItemSheet', async (sheetObj, html) => {
-  const isLight = sheetObj.object.data.data.tags?.find((t) => t.value == 'Light');
+  const isLight = sheetObj.object.system.tags?.find((t) => t.value == 'Light');
   if ((await game.settings.get(`${OSRH.moduleName}`, 'enableLightConfig')) && isLight) {
     let item = sheetObj.item;
     let el = document.createElement('a');

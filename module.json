@@ -1,55 +1,77 @@
 {
+  "id": "osr-helper",
   "name": "osr-helper",
   "title": "OSR Helper Module",
   "description": "A collection of helpers for the Foundry Vtt implementation of the 'Old School Essentials' system.",
-  "author": "RabidOwlbear",
-  "version": "0.3.13",
-  "minimumCoreVerson": "8",
-  "compatibleCoreVersion": "9.255",
+  "authors": [
+    {
+      "name": "Rabid Owlbear",
+      "url": "https://github.com/RabidOwlbear"
+    }
+  ],
+  "version": "0.3.14",
+  "minimumCoreVersion": "0.8.6",
+  "compatibleCoreVersion": "10",
+  "compatibility": {
+    "minimum": "10",
+    "verified": "10.284",
+    "maximum": "10"
+  },
   "styles": ["./styles/main.css"],
   "esmodules": ["./scripts/init.js"],
   "socket": true,
   "scripts": [],
   "packs": [
     {
+      "name": "osr-helper-items",
+      "label": "OSR-helper Items",
+      "type": "Item",
+      "path": "packs/items.db",
+      "entity": "Item",
+      "module": "osr-helper",
+      "system": ["ose-dev"]
+    },
+    {
       "name": "osr-helper-patch-notes",
       "label": "OSR-helper Patch Notes",
       "path": "packs/patch-notes.db",
-      "entity": "JournalEntry",
-      "module": "osr-helper"
+      "type": "JournalEntry",
+      "module": "osr-helper",
+      "system": ["ose-dev"]
+    
+      
     },
     {
       "name": "osr-helper-macros",
       "label": "OSR-helper Macros",
       "path": "packs/macros.db",
-      "entity": "Macro",
-      "module": "osr-helper"
-    },
-    {
-      "name": "osr-helper-items",
-      "label": "OSR-helper Items",
-      "path": "packs/items.db",
-      "entity": "Item",
-      "module": "osr-helper"
+      "type": "Macro",
+      "module": "osr-helper",
+      "system": ["ose-dev"]
+    
+      
     }
   ],
-  "dependencies": [
-    {
-      "name": "compendium-folders",
-      "manifest": "https://raw.githubusercontent.com/earlSt1/vtt-compendium-folders/0.1.1/module.json",
-      "type": "module"
-    },
-    {
-      "name": "dice-so-nice",
-      "manifest": "https://gitlab.com/riccisi/foundryvtt-dice-so-nice/-/raw/master/module/module.json",
-      "type": "module"
-    },
-    {
-      "name": "socketlib",
-      "manifest": "https://raw.githubusercontent.com/manuelVo/foundryvtt-socketlib/master/module.json",
-      "type": "module"
-    }
-  ],
+  "relationships": {
+    "systems": [{ "id": "ose" }, { "id": "ose-dev" }],
+    "requires": [
+      {
+        "id": "compendium-folders",
+        "manifest": "https://raw.githubusercontent.com/earlSt1/vtt-compendium-folders/0.1.1/module.json",
+        "type": "module"
+      },
+      {
+        "id": "dice-so-nice",
+        "manifest": "https://gitlab.com/riccisi/foundryvtt-dice-so-nice/-/raw/master/module/module.json",
+        "type": "module"
+      },
+      {
+        "id": "socketlib",
+        "manifest": "https://raw.githubusercontent.com/manuelVo/foundryvtt-socketlib/master/module.json",
+        "type": "module"
+      }
+    ]
+  },
   "url": "https://github.com/RabidOwlbear/osr-helper",
   "manifest": "https://raw.githubusercontent.com/RabidOwlbear/osr-helper/master/module.json",
   "download": "https://github.com/RabidOwlbear/osr-helper/archive/refs/heads/master.zip",

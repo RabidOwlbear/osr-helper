@@ -151,7 +151,8 @@ lightType: {
       secondaryColor: '#fa9924',
       lightAlpha: 0.5,
       warn: 4,
-      alert: 2
+      alert: 2,
+      animation: 'flame'
     },
     oglTorch: {
       name: 'Torch',
@@ -162,7 +163,8 @@ lightType: {
       secondaryColor: '#fa9924',
       lightAlpha: 0.5,
       warn: 3,
-      alert: 1
+      alert: 1,
+      animation: 'flame'
     },
     torch: {
       name: 'Torches (6)',
@@ -173,7 +175,8 @@ lightType: {
       secondaryColor: '#fa9924',
       lightAlpha: 0.5,
       warn: 3,
-      alert: 1
+      alert: 1,
+      animation: 'flame'
     },
     lanternOil: {
       name: 'Oil (1 flask)',
@@ -184,7 +187,8 @@ lightType: {
       secondaryColor: '#fa9924',
       lightAlpha: 0.5,
       warn: 4,
-      alert: 2
+      alert: 2,
+      animation: 'flame'
     },
     blueMossTorch: {
       name: 'Blue Moss Torch (3)',
@@ -195,7 +199,8 @@ lightType: {
       secondaryColor: '#33aaaf',
       lightAlpha: 0.5,
       warn: 2,
-      alert: 1
+      alert: 1,
+      animation: 'flickering light'
     },
     purpleMossTorch: {
       name: 'Purple Moss Torch (3)',
@@ -206,7 +211,8 @@ lightType: {
       secondaryColor: '#8877ff',
       lightAlpha: 0.5,
       warn: 2,
-      alert: 1
+      alert: 1,
+      animation: 'flickering light'
     },
     greenMossTorch: {
       name: 'Green Moss Torch (3)',
@@ -217,7 +223,8 @@ lightType: {
       secondaryColor: '#33f355',
       lightAlpha: 0.5,
       warn: 2,
-      alert: 1
+      alert: 1,
+      animation: 'flickering light'
     },
     improvisedTorch: {
       name: 'Improvised Torch (1)',
@@ -228,7 +235,8 @@ lightType: {
       secondaryColor: '#a3bb2b',
       lightAlpha: 0.5,
       warn: 2,
-      alert: 1
+      alert: 1,
+      animation: 'flickering light'
     },
     lowQualOil: {
       name: 'Low Quality Oil (1 flask)',
@@ -239,7 +247,8 @@ lightType: {
       secondaryColor: '#cccf2b',
       lightAlpha: 0.5,
       warn: 4,
-      alert: 2
+      alert: 2,
+      animation: 'flickering light'
     },
     standardQualOil: {
       name: 'Standard Quality Oil (1 flask)',
@@ -250,7 +259,8 @@ lightType: {
       secondaryColor: '#fa9924',
       lightAlpha: 0.5,
       warn: 4,
-      alert: 2
+      alert: 2,
+      animation: 'flame'
     },
     highQualOil: {
       name: 'High Quality Oil (1 flask)',
@@ -261,7 +271,8 @@ lightType: {
       secondaryColor: '#fa9924',
       lightAlpha: 0.11,
       warn: 4,
-      alert: 2
+      alert: 2,
+      animation: 'flame'
     },
     standardTorch: {
       name: 'Standard Torches (6)',
@@ -272,7 +283,8 @@ lightType: {
       secondaryColor: '#fa9924',
       lightAlpha: 0.5,
       warn: 3,
-      alert: 1
+      alert: 1,
+      animation: 'flame'
     },
     CCcandles: {
       name: 'Candles (10)',
@@ -283,7 +295,8 @@ lightType: {
       secondaryColor: '#fa9924',
       lightAlpha: 0.5,
       warn: 3,
-      alert: 1
+      alert: 1,
+      animation: 'flame'
     }
   };
 

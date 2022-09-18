@@ -20,10 +20,10 @@ export const registerReports = () => {
 
     for (let name of Rations) {
       let actorItem = '';
-      let ration = actor.data.items.getName(OSRH.data.food[name]);
+      let ration = actor.items.getName(OSRH.data.food[name]);
 
       if (ration) {
-        const qty = ration.data.data.quantity.value;
+        const qty = ration.system.quantity.value;
 
         totalRations += qty;
         style = 'color: green';
@@ -36,14 +36,14 @@ export const registerReports = () => {
     for (let name of Lights) {
       let actorItem = '';
 
-      let light = actor.data.items.getName(OSRH.data.lightSource[name].name);
+      let light = actor.items.getName(OSRH.data.lightSource[name].name);
       if (light) {
-        const qty = light.data.data.quantity.value;
+        const qty = light.system.quantity.value;
 
         let style = 'color: green';
         if (qty <= 2) style = 'color: orangered';
         if (qty <= 1) style = 'color: red';
-        actorItem += `<li><span style="${style}">${OSRH.data.lightSource[name].name}: ${light.data.data.quantity.value}</span></li>`;
+        actorItem += `<li><span style="${style}">${OSRH.data.lightSource[name].name}: ${light.system.quantity.value}</span></li>`;
         msgData.light += `<div><p> ${OSRH.data.lightSource[name].name}:</p><ul>` + actorItem + `</ul></div>`;
       }
     }
@@ -99,10 +99,10 @@ export const registerReports = () => {
         for (let type of Rations) {
           let ration = partyMember.data.items.getName(type);
           if (ration) {
-            const qty = ration.data.data.quantity.value;
+            const qty = ration.system.quantity.value;
             const rStyle = style(qty);
             totalRations += qty;
-            actorRations += `<li style="margin-left:10px;"><span style="${rStyle} ">${type}: ${ration.data.data.quantity.value}</span></li>`;
+            actorRations += `<li style="margin-left:10px;"><span style="${rStyle} ">${type}: ${ration.system.quantity.value}</span></li>`;
           }
         }
 
@@ -145,7 +145,7 @@ export const registerReports = () => {
         templateData += `
         <div class="actor-div fx sb plr5">
             <div class="of-hide w140">${nameStr}</div>
-            <div>${Math.floor((actor.data.data.movement.base / 5) * mod)} mi</div>
+            <div>${Math.floor((actor.system.movement.base / 5) * mod)} mi</div>
         </div>`;
       }
 
@@ -161,10 +161,10 @@ export const registerReports = () => {
 
       let encBtnHtml = oseActive ? encButtonTemplate : `<div style="height: 125px"></div>`;
       const partyObj = OSRH.util.getPartyActors();
-      let slowest = partyObj.party[0]?.data.data.movement.base;
+      let slowest = partyObj.party[0]?.system.movement.base;
       //find slowest rate
       partyObj.party.forEach((a) => {
-        let rate = a.data.data.movement.base;
+        let rate = a.system.movement.base;
         if (slowest > rate) slowest = rate;
       });
       //convert to miles
@@ -275,7 +275,7 @@ export const registerReports = () => {
       async lostRoll() {
         const radio = document.querySelector(`[name=terrain]:checked`).value;
         const bonus = document.querySelector(`#nav-bonus`);
-        const gm = game.users.contents.filter((u) => u.data.role == 4).map((u) => u.id);
+        const gm = game.users.contents.filter((u) => u.role == 4).map((u) => u.id);
         if (radio == 'road' || radio == 'trail') {
           ui.notifications.warn('Cannot get lost on roads or trails');
           return;
@@ -315,7 +315,7 @@ export const registerReports = () => {
         const modEl = document.getElementById('forage-bonus');
         const mod = parseInt(modEl.value);
         const terrain = document.querySelector(`[name=terrain]:checked`).value;
-        const gm = game.users.contents.filter((u) => u.data.role == 4).map((u) => u.id);
+        const gm = game.users.contents.filter((u) => u.role == 4).map((u) => u.id);
         let roll = await new Roll(`1d6 + ${mod}`).roll({ async: true });
         console.log(roll);
         if (roll.total <= 3) {

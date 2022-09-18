@@ -263,7 +263,7 @@ export const registerEffectModule = async function () {
   OSRH.effect.clearExpired = async function () {
     let activeEffects = deepClone(await game.settings.get(`${OSRH.moduleName}`, 'effectData'));
     for (let e of activeEffects) {
-      let type = await game.actors.get(e.targetActorId).data.type;
+      let type = await game.actors.get(e.targetActorId).type;
       if (type == `monster`) {
         for (let scene of game.scenes) {
           let actor = await scene.tokens.get(e.targetToken).actor;
@@ -380,7 +380,7 @@ export const registerEffectModule = async function () {
 
     let targetActor = await game.actors.get(effectData.targetActorId);
 
-    if (targetActor?.data?.type == 'monster') {
+    if (targetActor?.type == 'monster') {
       let tokenArr = [];
       game.scenes.map((s) => {
         let token = s.tokens.get(effectData.targetToken);
@@ -415,7 +415,7 @@ export const registerEffectModule = async function () {
     if (actor.collectionName == 'tokens') actor = actor.actor;
     // let actor = await game.actors.getName("Sara Penn");
     // actor = canvas.tokens.controlled[0].actor
-    for (let effect of actor.data.effects.contents) {
+    for (let effect of actor.effects.contents) {
       await effect.delete();
     }
   };
@@ -490,25 +490,25 @@ export const registerEffectModule = async function () {
         let isInf = e.isInf;
         tActor = tActor.collectionName == 'tokens' ? (tActor = tActor.actor) : tActor;
         let effect = await tActor.getEmbeddedDocument('ActiveEffect', e.effectId);
-        let durObj = effect.data.duration;
+        let durObj = effect.duration;
         let entryData = {};
-        entryData.name = effect.data.label;
+        entryData.name = effect.label;
         entryData.effectId = e.effectId;
         entryData.target =
           type == 'self' ? tActor.name : type == 'other' ? eCreator.name : type == 'gm' ? eCreator.name : tActor.name;
 
-        entryData.durType = isInf ? '' : effect.data.flags['data'].interval == 'minutes' ? 'min.' : 'sec.';
+        entryData.durType = isInf ? '' : effect.flags['data'].interval == 'minutes' ? 'min.' : 'sec.';
         let elapsed = game.time.worldTime - durObj.startTime;
-        let interval = effect.data.flags['data'].interval;
+        let interval = effect.flags['data'].interval;
         let timeLeft = isInf
           ? 'inf'
           : interval == 'minutes'
           ? Math.floor((durObj.seconds - elapsed) / 60)
           : Math.floor(durObj.seconds - elapsed);
         entryData.duration = timeLeft;
-        entryData.descrip = effect.data.flags['data'].details;
+        entryData.descrip = effect.flags['data'].details;
         entryData.list = ``;
-        for (let change of effect.data.changes) {
+        for (let change of effect.changes) {
           let keyData = change.key.split('.');
           let type = keyData[1] == 'thac0' && keyData[2] == 'mod' ? `attack mod` : keyData[1];
           let attrib = keyData[1] == 'thac0' && keyData[2] == 'mod' ? keyData[3] : keyData[2];
@@ -536,15 +536,15 @@ export const registerEffectModule = async function () {
 
     effectObj.name = nameEl.value;
     effectObj.icon = icon
-    effectObj.data = {};
+    // effectObj.data = {};
     for (let input of numInputs) {
-      effectObj.data[input.id] = parseInt(input.value);
+      effectObj[input.id] = parseInt(input.value);
     }
-    effectObj.data[nameEl.id] = nameEl.value;
-    effectObj.data[descripEl.id] = descripEl.value;
-    effectObj.data.target = target.id;
-    effectObj.data.durInt = durInt.id;
-    effectObj.data.icon = icon;
+    effectObj[nameEl.id] = nameEl.value;
+    effectObj[descripEl.id] = descripEl.value;
+    effectObj.target = target.id;
+    effectObj.durInt = durInt.id;
+    effectObj.icon = icon;
     let savedFx = await deepClone(game.settings.get(OSRH.moduleName, 'savedEffects'));
     savedFx[effectObj.id] = effectObj;
     await game.settings.set(OSRH.moduleName, 'savedEffects', savedFx);
