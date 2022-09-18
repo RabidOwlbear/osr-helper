@@ -94,10 +94,10 @@ export const registerReports = () => {
     };
 
     for(let partyMember of actorObj.party){
-      let type = partyMember.data.data.retainer.enabled ? 'retainers' : 'characters';
+      let type = partyMember.system.retainer.enabled ? 'retainers' : 'characters';
       let actorRations = '';
         for (let type of Rations) {
-          let ration = partyMember.data.items.getName(type);
+          let ration = partyMemberitems.getName(type);
           if (ration) {
             const qty = ration.system.quantity.value;
             const rStyle = style(qty);
