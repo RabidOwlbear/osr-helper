@@ -306,7 +306,9 @@ export const registerUtil = () => {
   };
 
   OSRH.util.getPartyActors = function () {
-    const allParty = game.actors.filter((a) => a.flags?.ose?.party == true);
+    const systemName = game.system.id == 'ose' ?game.system.id : 'ose-dev';
+    console.log(systemName)
+    const allParty = game.actors.filter((a) => a?.flags?.[systemName]?.party) ;
     const retObj = {
       party: allParty,
       characters: [],

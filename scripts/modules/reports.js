@@ -77,6 +77,7 @@ export const registerReports = () => {
 
   OSRH.report.ration = async function () {
     let actorObj = OSRH.util.getPartyActors();
+    console.log(actorObj)
     const Rations = [];
     for (let key in OSRH.data.food) {
       Rations.push(OSRH.data.food[key]);
@@ -97,7 +98,7 @@ export const registerReports = () => {
       let type = partyMember.system.retainer.enabled ? 'retainers' : 'characters';
       let actorRations = '';
         for (let type of Rations) {
-          let ration = partyMemberitems.getName(type);
+          let ration = partyMember.items.getName(type);
           if (ration) {
             const qty = ration.system.quantity.value;
             const rStyle = style(qty);
