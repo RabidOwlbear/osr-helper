@@ -47,9 +47,9 @@ data: {
     const actor = await game.actors.find((a) => a.id == actorId);
     let rationOptions = '';
     for (let type in OSRH.data.food) {
-      const item = actor.data.items.getName(OSRH.data.food[type]);
+      const item = actor.items.getName(OSRH.data.food[type]);
       if (item) {
-        rationOptions += `<option value="${item.name}">${item.name}: ${item.data.data.quantity.value}</option>`;
+        rationOptions += `<option value="${item.name}">${item.name}: ${item.system.quantity.value}</option>`;
       }
     }
 
@@ -66,7 +66,7 @@ data: {
           label: 'Eat Ration',
           callback: async (html) => {
             let item = actor.items.getName(html.find('#ration')[0].value);
-            let itemQty = item.data.data.quantity.value - 1;
+            let itemQty = item.system.quantity.value - 1;
             if (itemQty <= 0) {
               await item.delete();
             } else {

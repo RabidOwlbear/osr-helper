@@ -44,8 +44,8 @@ export const registerUtil = () => {
                 // if duration <= 0 run lightOff function, and delete light type object
                 if (data.light[actorId][lightType].duration <= 0) {
                   const actor = await game.actors.contents.find((a) => a.id == actorId);
-                  const item = await actor.data.items.getName(OSRH.data.lightSource[lightType].name);
-                  const newCount = item.data.data.quantity.value - 1;
+                  const item = await actor.items.getName(OSRH.data.lightSource[lightType].name);
+                  const newCount = item.system.quantity.value - 1;
                   if (newCount <= 0) {
                     await item.delete();
                   } else {
@@ -89,7 +89,7 @@ export const registerUtil = () => {
           if (effect.duration <= 0) {
             const msgData = `<h3 style="color: red;"> Custom Effect Expired</h3>
     <div>Custom effect ${effectData[effectId].name} has expired!.`;
-            OSRH.util.ChatMessage(effectData[effectId], effectData[effectId].data.userId, msgData);
+            OSRH.util.ChatMessage(effectData[effectId], effectData[effectId].userId, msgData);
             delete effectData[effectId];
           }
         }
@@ -137,7 +137,7 @@ export const registerUtil = () => {
   OSRH.util.unSetLightFlag = function (data) {
     const { actor, actorId } = data;
     const journal = game.journal.getName(game.settings.get(`${OSRH.moduleName}`, 'timeJournalName'));
-    let flags = journal.data.flags.world.osrLights;
+    let flags = journal.flags.world.osrLights;
     delete flags[actorId];
     journal.unsetFlag('world', 'osrLights');
     journal.setFlag('world', 'osrLights', flags);
@@ -154,9 +154,9 @@ export const registerUtil = () => {
     for (let combatant of game.combats.active.combatants.contents) {
       const actor = combatant.actor;
       if (actor.type == 'monster') {
-        for (let item of actor.data.items.contents) {
+        for (let item of actor.items.contents) {
           if (item.type == 'weapon') {
-            let count = item.data.data.counter.max;
+            let count = item.system.counter.max;
             await item.update({ data: { counter: { value: count } } });
           }
         }
@@ -184,8 +184,8 @@ export const registerUtil = () => {
 
   OSRH.util.ChatMessage = function (effectData, userId, msgContent) {
     const whisperArray = [userId];
-    if (effectData.data.whisperTarget) {
-      const targetId = OSRH.util.getActorId(effectData.data.target);
+    if (effectData.whisperTarget) {
+      const targetId = OSRH.util.getActorId(effectData.target);
       const targetUserId = OSRH.util.UserAssigned(targetId);
       // if target is a user controlled character
       if (targetUserId) {
@@ -219,10 +219,11 @@ export const registerUtil = () => {
   };
 
   OSRH.util.updateTokens = async function (actorId, lightData, lastTurn = false) {
+    console.log('fired')
     //loop through active game scenes
     for (let scene of game.scenes.contents) {
       //loop through tokens contaioned in scene
-      scene.data.tokens.contents.forEach(async (t) => {
+      scene.tokens.contents.forEach(async (t) => {
         //if token actorId == actorId set light settings to off
 
         if (t?.actor?.id == actorId) {
@@ -256,6 +257,7 @@ export const registerUtil = () => {
           }
 
           //end version check
+          console.log(t);
           await t.update(data);
         }
       });
@@ -267,10 +269,14 @@ export const registerUtil = () => {
 
     if (!entry) {
       entry = await JournalEntry.create({
-        content: ``,
         name: `${journalName}`
       });
-
+      awaitentry.createEmbeddedDocuments('JournalEntryPage', [
+        {
+          name: `${journalName}`,
+          type: 'text'
+        }
+      ]);
       OSRH.turn.updateJournal();
       console.log(`OSR-helper: no count journal found.
       Journal entry named ${journalName} created.`);
@@ -300,14 +306,14 @@ export const registerUtil = () => {
   };
 
   OSRH.util.getPartyActors = function () {
-    const allParty = game.actors.filter((a) => a.data.flags?.ose?.party == true);
+    const allParty = game.actors.filter((a) => a.flags?.ose?.party == true);
     const retObj = {
       party: allParty,
       characters: [],
       retainers: []
     };
     for (let actor of allParty) {
-      if (actor.data.data.retainer.enabled) {
+      if (actor.system.retainer.enabled) {
         retObj.retainers.push(actor);
       } else {
         retObj.characters.push(actor);
@@ -323,8 +329,8 @@ export const registerUtil = () => {
     }
     const selectedActor = canvas.tokens.controlled[0].actor;
     // Select Weapon
-    let actorWeapons = selectedActor?.data.items.filter((item) => item.type == 'weapon');
-    let actorSpells = selectedActor?.data.items.filter((item) => {
+    let actorWeapons = selectedActor?.items.filter((item) => item.type == 'weapon');
+    let actorSpells = selectedActor?.items.filter((item) => {
       if (item.type == 'spell') return true;
     });
     if (actorWeapons.length == 0 && actorSpells.length == 0) {
@@ -333,11 +339,11 @@ export const registerUtil = () => {
     }
     let atkOptions = '';
     for (let item of actorWeapons) {
-      atkOptions += `<option value=${item.id}>${item.name} | ATK: ${item.data.data.damage}</option>`;
+      atkOptions += `<option value=${item.id}>${item.name} | ATK: ${item.system.damage}</option>`;
     }
     for (let item of actorSpells) {
-      if (item.data.data.roll != '') {
-        atkOptions += `<option value=${item.id}>${item.name} | ATK: ${item.data.data.roll}</option>`;
+      if (item.system.roll != '') {
+        atkOptions += `<option value=${item.id}>${item.name} | ATK: ${item.system.roll}</option>`;
       }
     }
 
@@ -378,7 +384,7 @@ export const registerUtil = () => {
             let ammo, ammoQty;
             if (ammoObj && ammoCheck) {
               ammo = selectedActor.items.find((i) => i.name == ammoObj.ammoType);
-              ammoQty = ammo?.data.data.quantity.value;
+              ammoQty = ammo?.system.quantity.value;
               if (ammoQty > 0) {
                 await weapon.roll({ skipDialog: skipCheck });
                 //delete ammo object if quantity is 0 or less
@@ -411,7 +417,7 @@ export const registerUtil = () => {
       const cData = {
         name: char?.name,
         id: char?.id,
-        bonus: char?.data.data.scores.cha.mod
+        bonus: char?.system.scores.cha.mod
       };
       if (cData.name) {
         characterList += `<option value="${cData.bonus}">${cData.name}: CHA bonus:${cData.bonus}</option>`;
@@ -603,37 +609,37 @@ export const registerUtil = () => {
   };
 
   OSRH.util.getCurrencyItems = async function (actor) {
-    let items = actor.data.items;
+    let items = actor.items;
     let currencyList = [];
     items.forEach((i) => {
-      let tags = i.data.data.manualTags;
+      let tags = i.system.manualTags;
       let tag = tags && tags.find((t) => t.title == 'Currency') ? true : null;
       if (tag) currencyList.push(i);
     });
     return currencyList;
   };
   OSRH.util.curConvert = async function (amt, curCur, newCur, actor) {
-    const curItems = actor.data.items;
+    const curItems = actor.items;
     const curCheck = async (type) => {
-      let itemExists = actor.data.items.getName(type);
+      let itemExists = actor.items.getName(type);
       let pack = game.packs.get(`${OSRH.moduleName}.${OSRH.moduleName}-items`);
       if (!itemExists) {
         let curItm = await pack.getDocument(pack.index.getName(type)._id);
-        let itemData = curItm.clone().data;
+        let itemData = curItm.clone();
         await actor.createEmbeddedDocuments('Item', [itemData]);
-        return await actor.data.items.getName(type);
+        return await actor.items.getName(type);
       } else {
         return itemExists;
       }
     };
     const curItem = await curCheck(curCur);
     const newItem = await curCheck(newCur);
-    if (curItem.data.data.quantity.value < amt) {
+    if (curItem.system.quantity.value < amt) {
       ui.notifications.warn(`Not enough ${curCur}`);
       OSRH.util.curConDiag(actor, amt);
       return;
     }
-    let newVal = (curItem.data.data.cost * amt) / newItem.data.data.cost;
+    let newVal = (curItem.system.cost * amt) / newItem.system.cost;
     if (newVal % 1 != 0) {
       ui.notifications.warn(`Can't Convert To Fractional Amounts. Please Select A Different Amount To Convert`);
       curConDiag(actor, amt);
@@ -642,14 +648,14 @@ export const registerUtil = () => {
     await curItem.update({
       data: {
         quantity: {
-          value: curItem.data.data.quantity.value - amt
+          value: curItem.system.quantity.value - amt
         }
       }
     });
     await newItem.update({
       data: {
         quantity: {
-          value: newItem.data.data.quantity.value + newVal
+          value: newItem.system.quantity.value + newVal
         }
       }
     });
@@ -718,7 +724,6 @@ export const registerUtil = () => {
     };
   };
 
-  
   OSRH.util.setting = async function (setting, value, type) {
     if (type == 'set') {
       await game.settings.set(`${OSRH.moduleName}`, setting, value);
@@ -750,9 +755,9 @@ export const registerUtil = () => {
   };
 
   OSRH.util.dropContainer = async function (actor, html) {
-    let containers = actor.data.items.filter((i) => i.type == 'container');
+    let containers = actor.items.filter((i) => i.type == 'container');
     for (let container of containers) {
-      let contItems = container.data.data.itemIds;
+      let contItems = container.system.itemIds;
       let isEquipped = await container.getFlag('world', 'equipped');
       if (isEquipped == undefined) {
         await container.setFlag('world', 'equipped', true);
@@ -762,31 +767,31 @@ export const registerUtil = () => {
       let title = html.find(`[data-item-id ="${container.id}"] h4[title="${container.name}"]`);
       let element = title[0].parentNode.querySelector(`.item-header .item-controls`);
       let btnEl = document.createElement('a');
-      btnEl.classList.add(`item-control`,`item-toggle`,`${eqpTag}`);
+      btnEl.classList.add(`item-control`, `item-toggle`, `${eqpTag}`);
       btnEl.title = 'Equip';
       btnEl.innerHTML = `<i class="fas fa-tshirt"></i>`;
-      element.prepend(btnEl)
+      element.prepend(btnEl);
       let eqpBtn = element.querySelector(`[title="Equip"]`);
       eqpBtn.addEventListener('click', async (ev) => {
         let flag = await container.getFlag('world', 'equipped');
         if (flag) {
           eqpBtn.classList.replace(`item-equipped`, `item-unequipped`);
           await container.setFlag('world', 'equipped', false);
-          for(let item of contItems){
+          for (let item of contItems) {
             let itemObj = await actor.items.get(item.id);
-            await itemObj.setFlag('world', `weight`, itemObj.data.data.weight)
-            await itemObj.update({data: {weight: 0}})
+            await itemObj.setFlag('world', `weight`, itemObj.system.weight);
+            await itemObj.update({ data: { weight: 0 } });
           }
         }
         if (!flag) {
-          eqpBtn.classList.replace(`item-unequipped`, `item-equipped`); 
-          for(let item of contItems){
+          eqpBtn.classList.replace(`item-unequipped`, `item-equipped`);
+          for (let item of contItems) {
             let itemObj = await actor.items.get(item.id);
             let weight = await itemObj.getFlag('world', `weight`);
-            await itemObj.update({data: {weight: weight}})
-            await itemObj.unsetFlag(`world`, `weight`)
+            await itemObj.update({ data: { weight: weight } });
+            await itemObj.unsetFlag(`world`, `weight`);
           }
-          await container.setFlag('world', 'equipped',  true);
+          await container.setFlag('world', 'equipped', true);
         }
       });
     }
