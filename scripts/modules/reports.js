@@ -40,7 +40,7 @@ export const registerReports = () => {
       if (light) {
         const qty = light.system.quantity.value;
 
-        style = 'color: green';
+        let style = 'color: green';
         if (qty <= 2) style = 'color: orangered';
         if (qty <= 1) style = 'color: red';
         actorItem += `<li><span style="${style}">${OSRH.data.lightSource[name].name}: ${light.system.quantity.value}</span></li>`;
@@ -77,28 +77,28 @@ export const registerReports = () => {
 
   OSRH.report.ration = async function () {
     let actorObj = OSRH.util.getPartyActors();
+    console.log(actorObj)
     const Rations = [];
     for (let key in OSRH.data.food) {
       Rations.push(OSRH.data.food[key]);
     }
 
     let totalRations = 0;
-    const { characters, retainer } = actorObj;
 
     const msgData = {
       characters: '',
       retainers: ''
     };
     const style = (qty) => {
-      if (qty <= 1) return 'color: red';
-      if (qty <= 2) return 'color: orangered';
-      return 'color: green';
+      let color = qty <=2 ? 'color: orangered' : qty <= 1 ? 'color: red' : 'color: green'
+      return color
     };
-    for (let key in actorObj) {
-      for (let actor of actorObj[key]) {
-        let actorRations = '';
+
+    for(let partyMember of actorObj.party){
+      let type = partyMember.system.retainer.enabled ? 'retainers' : 'characters';
+      let actorRations = '';
         for (let type of Rations) {
-          let ration = actor.items.getName(type);
+          let ration = partyMember.items.getName(type);
           if (ration) {
             const qty = ration.system.quantity.value;
             const rStyle = style(qty);
@@ -109,10 +109,10 @@ export const registerReports = () => {
 
         if (actorRations == '') actorRations = '<span style="color: red">None</span>';
 
-        msgData[key] += `<div style="margin-left: 10px;"><p><b> ${actor.name}</b>:</p><ul> ${actorRations} </ul></div>`;
-      }
+        msgData[type] += `<div style="margin-left: 10px;"><p><b> ${partyMember.name}</b>:</p><ul> ${actorRations} </ul></div>`;
     }
-    const daysLeft = Math.floor(totalRations / characters.length);
+
+    const daysLeft = Math.floor(totalRations / actorObj.party.length);
     let contents = `
   <details >
     <summary><strong>Ration Report</strong></summary>
