@@ -9,7 +9,7 @@
       "url": "https://github.com/RabidOwlbear"
     }
   ],
-  "version": "0.3.14",
+  "version": "0.3.15",
   "minimumCoreVersion": "0.8.6",
   "compatibleCoreVersion": "10",
   "compatibility": {
@@ -29,7 +29,7 @@
       "path": "packs/items.db",
       "entity": "Item",
       "module": "osr-helper",
-      "system": ["ose"]
+      "system": "ose"
     },
     {
       "name": "osr-helper-patch-notes",
@@ -37,7 +37,7 @@
       "path": "packs/patch-notes.db",
       "type": "JournalEntry",
       "module": "osr-helper",
-      "system": ["ose"]
+      "system": "ose"
     
       
     },
@@ -47,7 +47,7 @@
       "path": "packs/macros.db",
       "type": "Macro",
       "module": "osr-helper",
-      "system": ["ose"]
+      "system": "ose"
     
       
     }
