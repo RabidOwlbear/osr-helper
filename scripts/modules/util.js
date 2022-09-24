@@ -271,7 +271,7 @@ export const registerUtil = () => {
       entry = await JournalEntry.create({
         name: `${journalName}`
       });
-      awaitentry.createEmbeddedDocuments('JournalEntryPage', [
+      await entry.createEmbeddedDocuments('JournalEntryPage', [
         {
           name: `${journalName}`,
           type: 'text'
