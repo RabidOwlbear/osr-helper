@@ -29,7 +29,7 @@
       "path": "packs/items.db",
       "entity": "Item",
       "module": "osr-helper",
-      "system": "ose-dev"
+      "system": "ose"
     },
     {
       "name": "osr-helper-patch-notes",
@@ -37,7 +37,7 @@
       "path": "packs/patch-notes.db",
       "type": "JournalEntry",
       "module": "osr-helper",
-      "system": "ose-dev"
+      "system": "ose"
     
       
     },
@@ -47,7 +47,7 @@
       "path": "packs/macros.db",
       "type": "Macro",
       "module": "osr-helper",
-      "system": "ose-dev"
+      "system": "ose"
     
       
     }
