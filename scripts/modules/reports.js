@@ -77,7 +77,6 @@ export const registerReports = () => {
 
   OSRH.report.ration = async function () {
     let actorObj = OSRH.util.getPartyActors();
-    console.log(actorObj)
     const Rations = [];
     for (let key in OSRH.data.food) {
       Rations.push(OSRH.data.food[key]);
@@ -318,7 +317,6 @@ export const registerReports = () => {
         const terrain = document.querySelector(`[name=terrain]:checked`).value;
         const gm = game.users.contents.filter((u) => u.role == 4).map((u) => u.id);
         let roll = await new Roll(`1d6 + ${mod}`).roll({ async: true });
-        console.log(roll);
         if (roll.total <= 3) {
           let cData = {
             user: game.user,

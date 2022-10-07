@@ -9,12 +9,12 @@
       "url": "https://github.com/RabidOwlbear"
     }
   ],
-  "version": "0.3.17",
+  "version": "0.3.18",
   "minimumCoreVersion": "0.8.6",
   "compatibleCoreVersion": "10",
   "compatibility": {
     "minimum": "10",
-    "verified": "10.284",
+    "verified": "10.287",
     "maximum": "10"
   },
   "styles": ["./styles/main.css"],

@@ -101,7 +101,9 @@ export const registerLightModule = async function () {
               let itemObj = actorLightData.lights.find((i) => i.itemId == item.id);
               itemObj.isOn = true;
               actorLightData.lightLit = true;
+              itemObj.duration = Math.floor(game.time.worldTime - itemObj.start);
               itemObj.start = game.time.worldTime;
+              
               let settingData = {
                 setting: 'lightData',
                 value: lightData,
@@ -209,7 +211,7 @@ export const registerLightModule = async function () {
   OSRH.light.decrementLightItem = async function (uuid, itemId) {
     let actor = await fromUuid(uuid);
     actor = actor.collectionName === 'tokens' ? actor.actor : actor;
-    let item = await actor.data.items.get(itemId);
+    let item = await actor.items.get(itemId);
 
     if (item.system.quantity.value > 0) {
       let qty = item.system.quantity.value - 1;

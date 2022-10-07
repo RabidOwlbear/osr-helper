@@ -2,7 +2,6 @@ export const registerLight = () => {
   OSRH.light = OSRH.light || {};
 
   OSRH.light.lightOn = async function (actorId) {
-    console.log('usususususususususuus');
     let lightData = null;
     let userObj;
     //check for actors in all non gm user slots before writing flag to gm user
@@ -56,7 +55,6 @@ export const registerLight = () => {
   <div style="display:flex">
     <div  style="flex:1"><select id="lightType">${lightOptions}</select></div>
     </div>`;
-    console.log(lightData);
     new Dialog({
       title: 'Light on',
       content: dialogTemplate,
@@ -66,7 +64,6 @@ export const registerLight = () => {
           callback: async (html) => {
             const itemType = html.find('#lightType')[0].value;
             const item = actor.items.getName(OSRH.data.lightSource[itemType].name);
-            console.log(itemType, lightData);
             if (lightData?.[actorId]?.[itemType]?.isOn == false) {
               //if data contains actorId.type.isOn = false set isOn to true
               lightData[actorId].lightLit = true;
