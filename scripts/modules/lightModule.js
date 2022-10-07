@@ -63,7 +63,6 @@ export const registerLightModule = async function () {
             const itemID = await html.find('#lightType')[0].value;
             const item = await actor.items.get(itemID);
             const lightItemData = await item.getFlag(`${OSRH.moduleName}`, 'lightItemData');
-            console.log(lightItemData)
             //if no actorId found, creat actor id and light type
             if (!actorLightData) {
               lightData[actor.id] = {
@@ -266,7 +265,10 @@ export const registerLightModule = async function () {
       const updateBtn = html.find('#update-btn')[0];
       const closeBtn = html.find('#close-btn')[0];
       let inputsA = html.find('.light-config-input.type-a');
-      let inputsB = html.find('.light-config-input.type-b');
+      let inputsB = html.find('.light-config-input.type-b')
+      let animation = html.find('#animation');
+      
+      
       closeBtn.addEventListener('click', (ev) => {
         this.close();
       });
@@ -290,10 +292,11 @@ export const registerLightModule = async function () {
               ? i.value
               : parseInt(i.value);
           formData[i.id] = value;
+          if(i.id == 'animation' && i.value == 'none') value = null;
+
         }
         ev.preventDefault();
         updateBtn.blur();
-        console.log(formData);
         await this.item.setFlag(`${OSRH.moduleName}`, 'lightItemData', formData);
         ui.notifications.info('Light Item Data Updated');
         this.close();
@@ -321,7 +324,7 @@ export const registerLightModule = async function () {
   };
 
   OSRH.light.updateTokens = async function (uuid, lightData, lastTurn = false) {
-    console.log('ding',lightData.animation)
+
     let actor = await fromUuid(uuid);
     game.scenes.map((s) => {
       if (s.tokens.size) {
