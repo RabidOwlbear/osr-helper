@@ -99,7 +99,7 @@ export const registerTurn =  () => {
         turnData.procCount = 0; //resest number of turns since last random check
         await game.settings.set(`${OSRH.moduleName}`, 'turnData', {});
         await game.settings.set(`${OSRH.moduleName}`, 'turnData', turnData); //update settings data <--------
-        const theRoll = await new Roll('1d6').roll();
+        const theRoll = await new Roll('1d6').evaluate({async: true});
         const gm = game.users.contents.filter((u) => u.role == 4).map((u) => u.id);
 
         if (theRoll.result > data.rollTarget) {
@@ -112,31 +112,26 @@ export const registerTurn =  () => {
             ChatMessage.create(content);
           });
         } else {
-          const roll = await encTable.roll(encTable);
+          const roll = await encTable.roll({async: true});
           const message = {
             flavor: `<span style='color: red'>${OSRH.util.tableFlavor()}</span>`,
             user: game.user.id,
-            roll: roll,
+            roll: roll.roll,
             speaker: ChatMessage.getSpeaker(),
-            content: `<br/>${roll?.results[0]?.data?.text}<br/><br/>`,
+            content: `<br/>${roll?.results[0]?.text}<br/><br/>`,
             whisper: gm
           };
-
-          if (data.rollReact) {
-            
-            if (parseInt(OSRH.gameVersion) < 9) {
-              reactTable = game.tables.entities.find((t) => t.name === data.rTable);
-            } else {
-             
-            }
-
-            let reactRoll = await reactTable.roll();
-            let rollResult = `They look ${reactRoll.results[0].data.text}.`;
-            message.content += rollResult;
-          }
           await game.dice3d.showForRoll(theRoll, game.user, false, gm, false).then(() => {
             ChatMessage.create(message);
           });
+          if (data.rollReact) {            
+            reactTable = game.tables.find((t) => t.name === data.rTable);          
+            let reactRoll = await reactTable.roll({async: true});
+            let rollResult = `They look ${reactRoll.results[0].text}.`;
+            message.content += rollResult;
+            await game.dice3d.showForRoll(reactRoll.roll, game.user, false, gm, false)
+          }
+          
         }
       }
     }
