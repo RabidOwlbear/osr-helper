@@ -171,7 +171,7 @@ Hooks.on('updateCombat', (combat) => {
 
 // //effect report
 // Hooks.on('renderuserEffectReport', ())
-Hooks.on('renderOseActorSheet', async (actor, html) => {
+Hooks.on('renderActorSheet', async (actor, html) => {
   const modBox = html.find(`[class="modifiers-btn"]`);
   modBox.append(
     `<a class="ose-effect-list ose-icon" id ="ose-effect-list" title="Show Active Effects"><i class="fas fa-list"></i></a>`
