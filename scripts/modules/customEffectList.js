@@ -41,7 +41,7 @@ export const registerCustomEffectList = () => {
     }
 
     async renderEffectList(html) {
-      const effectListDiv = html.find('#effectList')[0];
+            const effectListDiv = html.find('#effectList')[0];
       const effectObj = this.user.getFlag(`${OSRH.moduleName}`, 'effectData');
       const keys = Object.keys(effectObj);
       if (keys.length) {

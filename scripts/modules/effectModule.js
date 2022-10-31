@@ -173,7 +173,7 @@ export const registerEffectModule = async function () {
           // effectData.tint = '#a03300';
           let aac = await game.settings.get('ose', 'ascendingAC');
           effectData.changes.push({
-            key: aac ? `data.thac0.bba` : `data.thac0.value`,
+            key: aac ? `system.thac0.bba` : `system.thac0.value`,
             value: aac ? parseInt(value) : parseInt(value * -1),
             priority: 1
           });
@@ -186,7 +186,7 @@ export const registerEffectModule = async function () {
           // effectData.icon = `icons/svg/combat.svg`;
           // effectData.tint = '#aa5000';
           effectData.changes.push({
-            key: `data.thac0.mod.${attrib}`,
+            key: `system.thac0.mod.${attrib}`,
             value: parseInt(value),
             priority: 1
           });
@@ -197,10 +197,10 @@ export const registerEffectModule = async function () {
         }
         if (type == 'ac' && value != 0) {
           let aac = await game.settings.get('ose', 'ascendingAC');
-          // effectData.icon = `icons/svg/combat.svg`;
+                    // effectData.icon = `icons/svg/combat.svg`;
           // effectData.tint = '#aa5000';
           effectData.changes.push({
-            key: aac ? `data.aac.mod` : `data.ac.mod` * -1,
+            key: aac ? `system.aac.mod` : `system.ac.mod`,
             value: parseInt(value),
             priority: 1
           });
@@ -209,7 +209,7 @@ export const registerEffectModule = async function () {
           // effectData.icon = `icons/svg/heal.svg`;
           // effectData.tint = '#aa0000';
           effectData.changes.push({
-            key: `data.hp.${attrib}`,
+            key: `system.hp.${attrib}`,
             value: parseInt(value),
             priority: 1
           });
@@ -222,7 +222,7 @@ export const registerEffectModule = async function () {
           // effectData.icon = `icons/svg/book.svg`;
           // effectData.tint = '#005bbf';
           effectData.changes.push({
-            key: `data.scores.${attrib}.value`,
+            key: `system.scores.${attrib}.value`,
             value: parseInt(value),
             priority: 1
           });
@@ -235,7 +235,7 @@ export const registerEffectModule = async function () {
           // effectData.icon = `icons/svg/dice-target.svg`;
           // effectData.tint = '#ccaa4a';
           effectData.changes.push({
-            key: `data.saves.${attrib}.value`,
+            key: `system.saves.${attrib}.value`,
             value: parseInt(value) * -1,
             priority: 1
           });
@@ -467,8 +467,7 @@ export const registerEffectModule = async function () {
   OSRH.effect.gmCreateEffect = async function (target, effectData, creatorId) {
     let actor = await fromUuid(target);
     if (actor.collectionName == 'tokens') actor = actor.actor;
-
-    let e = await ActiveEffect.create(effectData, { parent: actor });
+        let e = await ActiveEffect.create(effectData, { parent: actor });
 
     let activeEffectData = deepClone(await game.settings.get(`${OSRH.moduleName}`, 'effectData'));
     activeEffectData.push({
@@ -558,23 +557,23 @@ export const registerEffectModule = async function () {
     const savedFx = await deepClone(game.settings.get(OSRH.moduleName, 'savedEffects'));
     let fxData = savedFx[ev.srcElement.value];
     let iconObj = OSRH.data.effectIcons.find(i => i.name == fxData.name)
-    if(fxData){
-      let inputKeys = Object.keys(fxData.data).filter((k) => {
+        if(fxData){
+      let inputKeys = Object.keys(fxData).filter((k) => {
         let discard = ['target', 'durInt', 'icon'];
         if (!discard.includes(k)) {
           return k;
         }
       });
       for (let key of inputKeys) {
-        let el = this.element[0].querySelector(`#${key}`);
-        el.value = fxData?.data[key];
+                let el = this.element[0].querySelector(`#${key}`);
+        if(el)el.value = fxData?.[key];
       }
     
-    const targetInp = this.element[0].querySelector(`#${fxData.data.target}`);
+    const targetInp = this.element[0].querySelector(`#${fxData.target}`);
     targetInp.checked = true;
     const iconInp = this.element[0].querySelector(`#icon-select [value="${fxData.icon}"]`);
     iconInp.selected = true;
-    const durIntInp = this.element[0].querySelector(`input#${fxData.data.durInt}`);
+    const durIntInp = this.element[0].querySelector(`input#${fxData.durInt}`);
     durIntInp.checked = true;
     }
   };

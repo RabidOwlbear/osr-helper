@@ -219,8 +219,7 @@ export const registerUtil = () => {
   };
 
   OSRH.util.updateTokens = async function (actorId, lightData, lastTurn = false) {
-    console.log('fired')
-    //loop through active game scenes
+        //loop through active game scenes
     for (let scene of game.scenes.contents) {
       //loop through tokens contaioned in scene
       scene.tokens.contents.forEach(async (t) => {
@@ -257,8 +256,7 @@ export const registerUtil = () => {
           }
 
           //end version check
-          console.log(t);
-          await t.update(data);
+                    await t.update(data);
         }
       });
     }
@@ -307,8 +305,7 @@ export const registerUtil = () => {
 
   OSRH.util.getPartyActors = function () {
     const systemName = game.system.id == 'ose' ?game.system.id : 'ose-dev';
-    console.log(systemName)
-    const allParty = game.actors.filter((a) => a?.flags?.[systemName]?.party) ;
+        const allParty = game.actors.filter((a) => a?.flags?.[systemName]?.party) ;
     const retObj = {
       party: allParty,
       characters: [],

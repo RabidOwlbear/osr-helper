@@ -26,8 +26,7 @@ Hooks.once('init', async function () {
   //add settings
   registerData();
   registerUtil();
-  console.log('init');
-  await registerSettings();
+    await registerSettings();
 
   // import modules
   registerLight();
@@ -343,7 +342,7 @@ Hooks.on('renderNewActiveEffectForm', (form, html)=>{
     btn.title = `Manage Custom Effects`
     btn.innerHTML = `<i class="fa fa-bars fa-xs"></i>`;
     btn.classList.add('manage-effects-btn');
-    header.insertBefore(btn, closeBtn)
+    header?.insertBefore(btn, closeBtn);
     btn.addEventListener('click', e=>{
       e.preventDefault();
       new OSRH.effect.manageCustomPresets().render(true)
