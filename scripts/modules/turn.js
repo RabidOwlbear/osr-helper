@@ -122,7 +122,7 @@ export const registerTurn =  () => {
             whisper: gm
           };
           await game.dice3d.showForRoll(theRoll, game.user, false, gm, false).then(() => {
-            ChatMessage.create(message);
+            
           });
           if (data.rollReact) {            
             reactTable = game.tables.find((t) => t.name === data.rTable);          
@@ -131,7 +131,7 @@ export const registerTurn =  () => {
             message.content += rollResult;
             await game.dice3d.showForRoll(reactRoll.roll, game.user, false, gm, false)
           }
-          
+          ChatMessage.create(message);
         }
       }
     }
@@ -145,12 +145,10 @@ export const registerTurn =  () => {
     const journalName = await game.settings.get(`${OSRH.moduleName}`, 'timeJournalName');
     const entry = await game.journal.getName(journalName) || (await OSRH.util.countJournalInit(journalName));
     const page = await entry.pages.find(p=>p.name == journalName);
-    console.log(entry, page)
-    if (turnData.rest > 5) {
+        if (turnData.rest > 5) {
       let jContent = `<br><p>Session Count: ${turnData.session}</p><p> Total Count: ${turnData.total}</p><p>Turns Since Last Rest: <span style="color: red">${turnData.rest}</span></p>`;
       await page.update({ text:{content: jContent }});
-      console.log(page)
-      return;
+            return;
     } else if (turnData.rest > 3) {
       let jContent = `<br><p>Session Count: ${turnData.session}</p><p> Total Count: ${turnData.total}</p><p>Turns Since Last Rest: <span style="color: orangered">${turnData.rest}</span></p>`;
       await page.update({ text:{content: jContent }});
