@@ -408,57 +408,6 @@ export const registerUtil = () => {
     }).render(true);
   };
 
-  OSRH.util.charMonReact = async function (data) {
-    const { tableName } = data;
-    const characters = await OSRH.util.getPartyActors().party;
-    let characterList = ``;
-    for (let char of characters) {
-      const cData = {
-        name: char?.name,
-        id: char?.id,
-        bonus: char?.system.scores.cha.mod
-      };
-      if (cData.name) {
-        characterList += `<option value="${cData.bonus}">${cData.name}: CHA bonus:${cData.bonus}</option>`;
-      }
-    }
-    let dialogTemplate = `
-  <h1> Pick A Character </h1>
-  <div style="display:flex">
-    <div  style="flex:1">
-        <select id="character">${characterList}</select>
-    </div>
-  </div>`;
-
-    new Dialog({
-      title: 'Character vs. Monster Reaction Roll',
-      content: dialogTemplate,
-      buttons: {
-        roll: {
-          label: 'Roll',
-          callback: async (html) => {
-            let bonus = html.find('#character')[0].value;
-            const table = await game.tables.find((t) => t.name == tableName);
-            let roll = new Roll(`2d6 + @mod`, { mod: bonus });
-            let result = await table.roll({ roll });
-            const gm = game.users.find((u) => u.isGM)[0];
-            const message = {
-              flavor: `
-                    <span style='color: red'>Reaction Roll Results</span>
-                    <br/>${result?.results[0]?.data?.text}<br/></br>
-                    `,
-              user: game.user.id,
-              roll: result,
-              speaker: ChatMessage.getSpeaker(),
-              // content: ``,
-              whisper: [gm]
-            };
-            result.roll.toMessage(message);
-          }
-        }
-      }
-    }).render(true);
-  };
 
   OSRH.util.randomName = function (type = null, gender = null) {
     function getRandomItem(arr) {

@@ -332,7 +332,7 @@ export const registerReports = () => {
           });
         } else {
           let cData = {
-            user: game.user,
+            user: game.user.id,
             whisper: gm,
             roll: roll,
             flavor: `
