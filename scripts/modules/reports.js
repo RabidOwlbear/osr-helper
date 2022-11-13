@@ -319,7 +319,7 @@ export const registerReports = () => {
         let roll = await new Roll(`1d6 + ${mod}`).roll({ async: true });
         if (roll.total <= 3) {
           let cData = {
-            user: game.user,
+            user: game.user.id,
             whisper: gm,
             roll: roll,
             flavor: `
