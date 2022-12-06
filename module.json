@@ -9,7 +9,7 @@
       "url": "https://github.com/RabidOwlbear"
     }
   ],
-  "version": "0.3.25",
+  "version": "0.3.26",
   "minimumCoreVersion": "0.8.6",
   "compatibleCoreVersion": "10",
   "compatibility": {
@@ -38,8 +38,6 @@
       "type": "JournalEntry",
       "module": "osr-helper",
       "system": "ose"
-    
-      
     },
     {
       "name": "osr-helper-macros",
@@ -48,8 +46,6 @@
       "type": "Macro",
       "module": "osr-helper",
       "system": "ose"
-    
-      
     }
   ],
   "relationships": {

@@ -491,46 +491,66 @@ export const registerUtil = () => {
                 picker.render();
                 return;
               }
-              let fullName = await getName(nameType, gender);
-              let cData = {
-                type: 1,
-                user: game.user.id,
-                content: `${getRandomItem(prefix)} ${fullName}`
-              };
-              if (whisper) {
-                cData.whisper = [game.user];
-              }
-              ChatMessage.create(cData);
-              if (canvas.tokens.controlled.length && canvas.tokens.controlled.length == 1) {
+              if (tokens.length && tokens.length == 1) {
                 let token = canvas.tokens.controlled[0];
                 let actor = token.actor;
+                let fullName = await getName(nameType, gender);
+                // chat message
+                let cData = {
+                  type: 1,
+                  user: game.user.id,
+                  content: `${getRandomItem(prefix)} ${fullName}`
+                };
+                if (whisper) {
+                  cData.whisper = [game.user];
+                }
+                ChatMessage.create(cData);
                 await actor.update({
                   name: fullName,
-                  token: {
+                  prototypeToken: {
                     name: fullName
                   }
                 });
                 await token.document.update({ name: fullName });
                 ui.notifications.info('Token and Actor names updated.');
+                return
               }
-              if (tokens.length) {
+              if (tokens.length > 1) {
                 tokens.forEach(async (t) => {
                   let token = t;
                   let actor = t.actor;
                   let newName = await getName(nameType, gender);
 
                   if (actor.type == 'character') {
+                    
                     await actor.update({
                       name: newName,
-                      token: {
+                      prototypeToken: {
                         name: newName
                       }
                     });
                   }
 
                   await token.document.update({ name: newName });
+                  let cData = {
+                    type: 1,
+                    user: game.user.id,
+                    content: `${getRandomItem(prefix)} ${newName}`
+                  };
+                  if (whisper) {
+                    cData.whisper = [game.user];
+                  }
+                  ChatMessage.create(cData);
+                  await actor.update({
+                    name: newName,
+                    prototypeToken: {
+                      name: newName
+                    }
+                  });
+                  await token.document.update({ name: newName });
+                  ui.notifications.info('Token and Actor names updated.');
                 });
-                ui.notifications.info('Token and Actor names updated.');
+                return
               }
               if (!canvas.tokens.controlled.length && focusedSheet) {
                 const charSheet = focusedSheet; //document.querySelector('.ose.sheet.actor.character');
