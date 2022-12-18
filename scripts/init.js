@@ -126,7 +126,7 @@ Hooks.once('ready', async () => {
   }
 
   Hooks.on('createActor', async (actor) => {
-    if (game.settings.get(`${OSRH.moduleName}`, 'tokenLightDefault') && game.user.role >= 4) {
+    if (game.settings.get(`${OSRH.moduleName}`, 'tokenLightDefault') && game.user.isGM) {
       if (actor.type == 'character') {
         //const actor = game.actors.getName(sheet.object.name);
         await actor.update({
