@@ -742,11 +742,11 @@ export const registerUtil = () => {
       let eqpBtn = element.querySelector(`[title="Equip"]`);
       eqpBtn.addEventListener('click', async (ev) => {
         let flag = await container.getFlag('world', 'equipped');
-        if (flag) {
+        if (flag && contItems.length) {
           eqpBtn.classList.replace(`item-equipped`, `item-unequipped`);
           await container.setFlag('world', 'equipped', false);
           for (let item of contItems) {
-            let itemObj = await actor.items.get(item.id);
+            let itemObj = await actor.items.get(item);
             await itemObj.setFlag('world', `weight`, itemObj.system.weight);
             await itemObj.update({ data: { weight: 0 } });
           }
@@ -754,7 +754,7 @@ export const registerUtil = () => {
         if (!flag) {
           eqpBtn.classList.replace(`item-unequipped`, `item-equipped`);
           for (let item of contItems) {
-            let itemObj = await actor.items.get(item.id);
+            let itemObj = await actor.items.get(item);
             let weight = await itemObj.getFlag('world', `weight`);
             await itemObj.update({ data: { weight: weight } });
             await itemObj.unsetFlag(`world`, `weight`);
