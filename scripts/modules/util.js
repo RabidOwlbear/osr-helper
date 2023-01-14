@@ -157,7 +157,7 @@ export const registerUtil = () => {
         for (let item of actor.items.contents) {
           if (item.type == 'weapon') {
             let count = item.system.counter.max;
-            await item.update({ data: { counter: { value: count } } });
+            await item.update({ system: { counter: { value: count } } });
           }
         }
       }
@@ -219,7 +219,7 @@ export const registerUtil = () => {
   };
 
   OSRH.util.updateTokens = async function (actorId, lightData, lastTurn = false) {
-        //loop through active game scenes
+    //loop through active game scenes
     for (let scene of game.scenes.contents) {
       //loop through tokens contaioned in scene
       scene.tokens.contents.forEach(async (t) => {
@@ -256,7 +256,7 @@ export const registerUtil = () => {
           }
 
           //end version check
-                    await t.update(data);
+          await t.update(data);
         }
       });
     }
@@ -304,8 +304,8 @@ export const registerUtil = () => {
   };
 
   OSRH.util.getPartyActors = function () {
-    const systemName = game.system.id == 'ose' ?game.system.id : 'ose-dev';
-        const allParty = game.actors.filter((a) => a?.flags?.[systemName]?.party) ;
+    const systemName = game.system.id == 'ose' ? game.system.id : 'ose-dev';
+    const allParty = game.actors.filter((a) => a?.flags?.[systemName]?.party);
     const retObj = {
       party: allParty,
       characters: [],
@@ -390,7 +390,7 @@ export const registerUtil = () => {
                 if (ammoQty - 1 == 0) {
                   ammo.delete();
                 } else {
-                  await ammo.update({ data: { quantity: { value: ammoQty - 1 } } });
+                  await ammo.update({ system: { quantity: { value: ammoQty - 1 } } });
                 }
               } else {
                 ui.notifications.warn('No ammo');
@@ -407,7 +407,6 @@ export const registerUtil = () => {
       }
     }).render(true);
   };
-
 
   OSRH.util.randomName = function (type = null, gender = null) {
     function getRandomItem(arr) {
@@ -513,7 +512,7 @@ export const registerUtil = () => {
                 });
                 await token.document.update({ name: fullName });
                 ui.notifications.info('Token and Actor names updated.');
-                return
+                return;
               }
               if (tokens.length > 1) {
                 tokens.forEach(async (t) => {
@@ -522,7 +521,6 @@ export const registerUtil = () => {
                   let newName = await getName(nameType, gender);
 
                   if (actor.type == 'character') {
-                    
                     await actor.update({
                       name: newName,
                       prototypeToken: {
@@ -550,7 +548,7 @@ export const registerUtil = () => {
                   await token.document.update({ name: newName });
                   ui.notifications.info('Token and Actor names updated.');
                 });
-                return
+                return;
               }
               if (!canvas.tokens.controlled.length && focusedSheet) {
                 const charSheet = focusedSheet; //document.querySelector('.ose.sheet.actor.character');
@@ -722,7 +720,79 @@ export const registerUtil = () => {
     root.style.setProperty('--el-button-glow', themeData.glow);
   };
 
+  OSRH.util.addContainerControls = async function (actor, html) {
+    let containers = actor.items.filter((i) => i.type == 'container');
+
+    for (let container of containers) {
+      let flag = await container.getFlag('world', 'equipped');
+      console.log(container.name, flag)
+      if (flag == undefined) {
+        await container.setFlag('world', 'equipped', true);
+        flag = true;
+      }
+      let isEquipped = flag;
+      let eqpTag = isEquipped ? `item-equipped` : `item-unequipped`;
+      let titleEl = html.find(`[data-item-id ="${container.id}"] h4[title="${container.name}"]`);
+      let element = titleEl[0].parentNode.querySelector(`.item-header .item-controls`);
+      let btnEl = document.createElement('a');
+      btnEl.classList.add(`item-control`, `item-toggle`, `${eqpTag}`);
+      btnEl.title = 'Equip';
+      btnEl.innerHTML = `<i class="fas fa-tshirt"></i>`;
+      element.prepend(btnEl);
+      let eqpBtn = element.querySelector(`[title="Equip"]`);
+      console.log(eqpBtn)
+      eqpBtn.addEventListener('click', async e=> {
+        e.preventDefault()
+        console.log('clicked')
+        OSRH.util.dropContainer(container.uuid, element, actor)
+      });
+    }
+  };
+  OSRH.util.dropContainer = async function (containerUuid, element, actor) {
+    const sleep = (ms) => new Promise((res) => setTimeout(res, ms));
+    let container = await fromUuid(containerUuid);
+    let contItems = container.system.itemIds;
+    let isEquipped = await container.getFlag('world', 'equipped');
+    let eqpBtn = element.querySelector(`[title="Equip"]`);
+    console.log(container, isEquipped)
+    // if container equipped, and contains items
+    if (isEquipped && contItems.length) {
+      console.log('items')
+      eqpBtn.classList.replace(`item-equipped`, `item-unequipped`);
+      // disable equip button
+      eqpBtn.disabled = true;
+      await container.setFlag('world', 'equipped', false);
+      for (let itemId of container.system.itemIds) {
+        const item = await actor.items.get(itemId);
+        let itemFlag = item.getFlag('world', 'weight');
+        // if no weight flag add one
+        if (itemFlag == undefined) {
+          itemFlag = itemObj.system.weight;
+          await item.setFlag('world', 'weight', itemFlag);
+        }
+        await item.update({ system: { weight: 0 } });
+        await sleep(250);
+      }
+    }
+    // if container not equipped
+    if (isEquipped == false) {
+      console.log('unequipped')
+      eqpBtn.classList.replace(`item-unequipped`, `item-equipped`);
+      for (let itemId of contItems) {
+        const item = await actor.items.get(itemId);
+        console.log(item)
+        let itemFlag = item.getFlag('world', 'weight');
+        console.log(item, itemFlag)
+        await item.update({ system: { weight: itemFlag } });
+        await sleep(250);
+      }
+      await await container.setFlag('world', 'equipped', true)
+    }
+    // reenable equip button
+    eqpBtn.disabled = false;
+  };
   OSRH.util.dropContainer = async function (actor, html) {
+    const sleep = (ms) => new Promise((res) => setTimeout(res, ms));
     let containers = actor.items.filter((i) => i.type == 'container');
     for (let container of containers) {
       let contItems = container.system.itemIds;
@@ -741,26 +811,39 @@ export const registerUtil = () => {
       element.prepend(btnEl);
       let eqpBtn = element.querySelector(`[title="Equip"]`);
       eqpBtn.addEventListener('click', async (ev) => {
+        eqpBtn.disabled = true;
+        console.log('disabled?', eqpBtn.disabled);
         let flag = await container.getFlag('world', 'equipped');
         if (flag && contItems.length) {
+          console.log('flag', flag);
           eqpBtn.classList.replace(`item-equipped`, `item-unequipped`);
           await container.setFlag('world', 'equipped', false);
           for (let item of contItems) {
             let itemObj = await actor.items.get(item);
-            await itemObj.setFlag('world', `weight`, itemObj.system.weight);
-            await itemObj.update({ data: { weight: 0 } });
+            let itemFlag = itemObj.getFlag('world', `weight`);
+            if (itemFlag == undefined) {
+              await itemObj.setFlag('world', `weight`, itemObj.system.weight);
+            }
+
+            await itemObj.update({ system: { weight: 0 } });
+            await sleep(250);
           }
         }
         if (!flag) {
           eqpBtn.classList.replace(`item-unequipped`, `item-equipped`);
+          console.log('noflag');
           for (let item of contItems) {
             let itemObj = await actor.items.get(item);
             let weight = await itemObj.getFlag('world', `weight`);
-            await itemObj.update({ data: { weight: weight } });
-            await itemObj.unsetFlag(`world`, `weight`);
+            console.log('weight', weight)
+            await itemObj.update({ system: { weight: weight } });
+            await sleep(250);
+            // await itemObj.unsetFlag(`world`, `weight`);
           }
           await container.setFlag('world', 'equipped', true);
         }
+        eqpBtn.disabled = false;
+        console.log('disabled?', eqpBtn.disabled);
       });
     }
   };

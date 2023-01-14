@@ -228,6 +228,7 @@ Hooks.on('renderActorSheet', async (actor, html) => {
     }
   }
   if( await game.settings.get(OSRH.moduleName, `enableEquippableContainers`)){
+    // OSRH.util.dropContainer(actor.object, html)
     OSRH.util.dropContainer(actor.object, html)
   }
   
