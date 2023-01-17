@@ -101,9 +101,9 @@ export const registerLightModule = async function () {
               let itemObj = actorLightData.lights.find((i) => i.itemId == item.id);
               itemObj.isOn = true;
               actorLightData.lightLit = true;
-              console.log('dur before', itemObj.duration)
+
               itemObj.duration = itemObj.duration - Math.floor(game.time.worldTime - itemObj.start);
-              console.log('dur after', itemObj.duration)
+
               itemObj.start = game.time.worldTime;
               
               let settingData = {
