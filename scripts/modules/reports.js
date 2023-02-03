@@ -26,7 +26,7 @@ export const registerReports = () => {
         const qty = ration.system.quantity.value;
 
         totalRations += qty;
-        style = 'color: green';
+        let style = 'color: green';
         if (qty <= 2) style = 'color: orangered';
         if (qty <= 1) style = 'color: red';
         actorItem += `<li><span style="${style}">${OSRH.data.food[name]}: ${qty}</span></li>`;
