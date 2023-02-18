@@ -725,7 +725,7 @@ export const registerUtil = () => {
 
     for (let container of containers) {
       let flag = await container.getFlag('world', 'equipped');
-      console.log(container.name, flag)
+      console.log(container.name, flag);
       if (flag == undefined) {
         await container.setFlag('world', 'equipped', true);
         flag = true;
@@ -740,83 +740,48 @@ export const registerUtil = () => {
       btnEl.innerHTML = `<i class="fas fa-tshirt"></i>`;
       element.prepend(btnEl);
       let eqpBtn = element.querySelector(`[title="Equip"]`);
-      console.log(eqpBtn)
-      eqpBtn.addEventListener('click', async e=> {
-        e.preventDefault()
-        console.log('clicked')
-        OSRH.util.dropContainer(container.uuid, element, actor)
+      console.log(eqpBtn);
+      eqpBtn.addEventListener('click', async (e) => {
+        e.preventDefault();
+        console.log('clicked');
+        OSRH.util.dropContainer(container.uuid, element, actor);
       });
     }
   };
-  OSRH.util.dropContainer = async function (containerUuid, element, actor) {
-    const sleep = (ms) => new Promise((res) => setTimeout(res, ms));
-    let container = await fromUuid(containerUuid);
-    let contItems = container.system.itemIds;
-    let isEquipped = await container.getFlag('world', 'equipped');
-    let eqpBtn = element.querySelector(`[title="Equip"]`);
-    console.log(container, isEquipped)
-    // if container equipped, and contains items
-    if (isEquipped && contItems.length) {
-      console.log('items')
-      eqpBtn.classList.replace(`item-equipped`, `item-unequipped`);
-      // disable equip button
-      eqpBtn.disabled = true;
-      await container.setFlag('world', 'equipped', false);
-      for (let itemId of container.system.itemIds) {
-        const item = await actor.items.get(itemId);
-        let itemFlag = item.getFlag('world', 'weight');
-        // if no weight flag add one
-        if (itemFlag == undefined) {
-          itemFlag = itemObj.system.weight;
-          await item.setFlag('world', 'weight', itemFlag);
-        }
-        await item.update({ system: { weight: 0 } });
-        await sleep(250);
-      }
-    }
-    // if container not equipped
-    if (isEquipped == false) {
-      console.log('unequipped')
-      eqpBtn.classList.replace(`item-unequipped`, `item-equipped`);
-      for (let itemId of contItems) {
-        const item = await actor.items.get(itemId);
-        console.log(item)
-        let itemFlag = item.getFlag('world', 'weight');
-        console.log(item, itemFlag)
-        await item.update({ system: { weight: itemFlag } });
-        await sleep(250);
-      }
-      await await container.setFlag('world', 'equipped', true)
-    }
-    // reenable equip button
-    eqpBtn.disabled = false;
-  };
   OSRH.util.dropContainer = async function (actor, html) {
     const sleep = (ms) => new Promise((res) => setTimeout(res, ms));
+    // get containers
     let containers = actor.items.filter((i) => i.type == 'container');
+    // loop containers
     for (let container of containers) {
+      // get contents
       let contItems = container.system.itemIds;
+      // get is equipped flag
       let isEquipped = await container.getFlag('world', 'equipped');
+      // if no flag, create one
       if (isEquipped == undefined) {
         await container.setFlag('world', 'equipped', true);
         isEquipped = true;
       }
       let eqpTag = isEquipped ? `item-equipped` : `item-unequipped`;
+      // get htnml elements
       let title = html.find(`[data-item-id ="${container.id}"] h4[title="${container.name}"]`);
       let element = title[0].parentNode.querySelector(`.item-header .item-controls`);
+      // create equip button
       let btnEl = document.createElement('a');
+      btnEl.dataset.containerId = container.id;
       btnEl.classList.add(`item-control`, `item-toggle`, `${eqpTag}`);
       btnEl.title = 'Equip';
       btnEl.innerHTML = `<i class="fas fa-tshirt"></i>`;
       element.prepend(btnEl);
-      let eqpBtn = element.querySelector(`[title="Equip"]`);
-      eqpBtn.addEventListener('click', async (ev) => {
-        eqpBtn.disabled = true;
-        console.log('disabled?', eqpBtn.disabled);
+      // let eqpBtn = element.querySelector(`[title="Equip"]`);
+      btnEl.addEventListener('click', async (ev) => {
+        btnEl.disabled = true;
+        console.log('button disabled?', btnEl.disabled);
         let flag = await container.getFlag('world', 'equipped');
         if (flag && contItems.length) {
-          console.log('flag', flag);
-          eqpBtn.classList.replace(`item-equipped`, `item-unequipped`);
+          console.log('equipped');
+          btnEl.classList.replace(`item-equipped`, `item-unequipped`);
           await container.setFlag('world', 'equipped', false);
           for (let item of contItems) {
             let itemObj = await actor.items.get(item);
@@ -829,22 +794,83 @@ export const registerUtil = () => {
             await sleep(250);
           }
         }
-        if (!flag) {
-          eqpBtn.classList.replace(`item-unequipped`, `item-equipped`);
+        if (flag === false) {
+          btnEl.classList.replace(`item-unequipped`, `item-equipped`);
           console.log('noflag');
           for (let item of contItems) {
             let itemObj = await actor.items.get(item);
             let weight = await itemObj.getFlag('world', `weight`);
-            console.log('weight', weight)
+            console.log('weight', weight);
             await itemObj.update({ system: { weight: weight } });
             await sleep(250);
             // await itemObj.unsetFlag(`world`, `weight`);
           }
           await container.setFlag('world', 'equipped', true);
         }
-        eqpBtn.disabled = false;
+        btnEl.disabled = false;
         console.log('disabled?', eqpBtn.disabled);
       });
     }
+  };
+  OSRH.util.initializeDroppableContainers = async function (actor, html) {
+    // get containers
+    let containers = actor.items.filter((i) => i.type == 'container');
+    // loop containers
+    for (let container of containers) {
+      // get contents
+      let contItems = container.system.itemIds;
+      // get is equipped flag
+      let isEquipped = await container.getFlag('world', 'equipped');
+      // if no flag, create one
+      if (isEquipped == undefined) {
+        await container.setFlag('world', 'equipped', true);
+        isEquipped = true;
+      }
+      let eqpTag = isEquipped ? `item-equipped` : `item-unequipped`;
+      let title = html.find(`[data-item-id ="${container.id}"] h4[title="${container.name}"]`);
+      let element = title[0].parentNode.querySelector(`.item-header .item-controls`);
+      // create equip button
+      let btnEl = document.createElement('a');
+      btnEl.dataset.containerId = container.id;
+      btnEl.classList.add(`item-control`, `item-toggle`, `${eqpTag}`);
+      btnEl.title = 'Equip';
+      btnEl.innerHTML = `<i class="fas fa-tshirt"></i>`;
+      element.prepend(btnEl);
+
+      // add listener
+      btnEl.addEventListener('click', (e) => {
+        OSRH.util.handleEquipableContainer(actor, btnEl, container);
+      });
+    }
+  };
+  OSRH.util.handleEquipableContainer = async function (actor, btnEl, container) {
+    console.log('clicked');
+    btnEl.disabled = true;
+    console.log('button disabled?', btnEl.disabled);
+    let isEquipped = await container.getFlag('world', 'equipped');
+    const containerItems = actor.items.filter(i=>container.system.itemIds.includes(i.id));
+    console.log(containerItems, 'equipped', isEquipped);
+    if (isEquipped && containerItems.length) {
+      console.log('equipped');
+      btnEl.classList.replace(`item-equipped`, `item-unequipped`);
+      await container.setFlag('world', 'equipped', false);
+      for (let item of containerItems) {
+        item.setFlag('world', `weight`, item.system.weight);
+        await item.update({ system: { weight: 0 } });
+      }
+    }
+    if (isEquipped === false) {
+      btnEl.classList.replace(`item-unequipped`, `item-equipped`);
+      console.log('Not Equipped');
+      for (let item of containerItems) {
+        
+        let weight = await item.getFlag('world', `weight`);
+        console.log('weight', weight);
+        await item.update({ system: { weight: weight } });
+      }
+      await container.setFlag('world', 'equipped', true);
+    }
+    btnEl.disabled = false;
+    console.log('button disabled?', btnEl.disabled);
   };
 };
