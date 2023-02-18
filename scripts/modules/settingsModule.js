@@ -97,7 +97,14 @@ export const registerSettings = async function () {
     config: true,
     restricted: true
   });
-
+  game.settings.register(`${OSRH.moduleName}`, 'dungeonTurnNoticiation', {
+    name: 'Display a UI notification when dungeon turn is advanced.',
+    hint: 'Displays a UI notification when the Dungeon Turn macro is used.',
+    scope: 'world',
+    type: Boolean,
+    default: true,
+    config: true
+  });
   //stores world time after last turn advance
   game.settings.register(`${OSRH.moduleName}`, 'lastTick', {
     name: 'lastTick',
@@ -254,12 +261,14 @@ export const registerSettings = async function () {
       2: OSRH.data.themeData[2].name,
       3: OSRH.data.themeData[3].name,
       4: OSRH.data.themeData[4].name,
-      5: OSRH.data.themeData[5].name,
+      5: OSRH.data.themeData[5].name
     },
     default: 'none',
     scope: 'client',
     config: true,
-    onChange: ()=>{OSRH.util.setTheme()}
+    onChange: () => {
+      OSRH.util.setTheme();
+    }
   });
 
   game.settings.register(`${OSRH.moduleName}`, 'enableEquippableContainers', {
