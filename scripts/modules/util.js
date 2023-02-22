@@ -493,7 +493,7 @@ export const registerUtil = () => {
               if (tokens.length && tokens.length == 1) {
                 let token = canvas.tokens.controlled[0];
                 let actor = token.actor;
-                let fullName = await getName(nameType, gender);
+                let fullName = getName(nameType, gender);
                 // chat message
                 let cData = {
                   type: 1,
@@ -554,13 +554,25 @@ export const registerUtil = () => {
                 const charSheet = focusedSheet; //document.querySelector('.ose.sheet.actor.character');
                 const name = charSheet ? charSheet.querySelector('.ose.sheet.actor .window-title').innerText : 'none';
                 const actor = game.actors.getName(name);
+                let fullName = getName(nameType, gender);
                 await actor.update({
                   name: fullName,
                   token: {
                     name: fullName
                   }
                 });
+                return
               }
+              let fullName = getName(nameType, gender);
+              let cData = {
+                type: 1,
+                user: game.user.id,
+                content: `${getRandomItem(prefix)} ${fullName}`
+              };
+              if (whisper) {
+                cData.whisper = [game.user];
+              }
+              ChatMessage.create(cData);
             }
           }
         }
