@@ -2,8 +2,7 @@
 
 Created by RabidOwlbear.
 
-Supprted via patreon:
-https://patreon.com/owlbear_aviary
+Supprted via patreon: https://patreon.com/RabidOwlbear
 
 An unimaginatively named module that aims to assist with light, time, and resource management. For use in games using the Foundry Vtt implementation of the 'Old School Essentials' system.
 This module provides several macros found in a compendium named "OSR-helper Macros".
