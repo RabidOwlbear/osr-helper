@@ -1,17 +1,19 @@
 export const registerUtil = () => {
   OSRH.util = OSRH.util || {};
   //tick: manages light duration, turn count
+// used
   OSRH.util.osrTick = async function () {
     if (game.user.role >= 4) {
       let lastTick = await game.settings.get(`${OSRH.moduleName}`, 'lastTick');
-      await OSRH.util.osrLightTick(lastTick);
-      await OSRH.util.osrEffectTick(lastTick);
+      // await OSRH.util.osrLightTick(lastTick);
+      OSRH.util.osrEffectTick(lastTick);
 
       //update lightTick
 
-      await game.settings.set(`${OSRH.moduleName}`, 'lastTick', game.time.worldTime);
+      game.settings.set(`${OSRH.moduleName}`, 'lastTick', game.time.worldTime);
     }
   };
+// used
   OSRH.util.osrLightTick = async function (lastTick) {
     if (game.user.role >= 4) {
       //get data
@@ -22,7 +24,7 @@ export const registerUtil = () => {
       const elapsed = (curTime - lastTick) / 60;
       //manage light duration
       for (let user of game.users.contents) {
-        data.light = await user.getFlag(`${OSRH.moduleName}`, 'lightData');
+        data.light = user.getFlag(`${OSRH.moduleName}`, 'lightData');
         //loop through actorIds in light flag
         for (let actorId in data.light) {
           //If actor does not have light lit...
@@ -43,7 +45,8 @@ export const registerUtil = () => {
                 }
                 // if duration <= 0 run lightOff function, and delete light type object
                 if (data.light[actorId][lightType].duration <= 0) {
-                  const actor = await game.actors.contents.find((a) => a.id == actorId);
+                  // const actor = await game.actors.contents.find((a) => a.id == actorId);
+                  const actor = await game.actors.get(actorId)
                   const item = await actor.items.getName(OSRH.data.lightSource[lightType].name);
                   const newCount = item.system.quantity.value - 1;
                   if (newCount <= 0) {
@@ -70,17 +73,19 @@ export const registerUtil = () => {
             }
           }
         }
-        await user.unsetFlag(`${OSRH.moduleName}`, 'lightData');
-        await user.setFlag(`${OSRH.moduleName}`, 'lightData', data.light);
+        user.unsetFlag(`${OSRH.moduleName}`, 'lightData');
+        user.setFlag(`${OSRH.moduleName}`, 'lightData', data.light);
       }
     }
   };
-  OSRH.util.osrEffectTick = async function (lastTick) {
-    if (game.user.role >= 4) {
+// used
+  OSRH.util.osrEffectTick = function (lastTick) {
+    const singleGM = game.users.filter(u=>u.active && u.isGM)[0]
+    if (game.user.id === singleGM.id) {
       const curTime = game.time.worldTime;
       const elapsed = (curTime - lastTick) / 60;
       for (let user of game.users.contents) {
-        let effectData = await user.getFlag(`${OSRH.moduleName}`, 'effectData');
+        let effectData =  user.getFlag(`${OSRH.moduleName}`, 'effectData');
 
         for (let effectId in effectData) {
           let effect = effectData[effectId];
@@ -88,14 +93,14 @@ export const registerUtil = () => {
 
           if (effect.duration <= 0) {
             const msgData = `<h3 style="color: red;"> Custom Effect Expired</h3>
-    <div>Custom effect ${effectData[effectId].name} has expired!.`;
+              <div>Custom effect ${effectData[effectId].name} has expired!.`;
             OSRH.util.ChatMessage(effectData[effectId], effectData[effectId].userId, msgData);
             delete effectData[effectId];
           }
         }
 
-        await user.unsetFlag(`${OSRH.moduleName}`, 'effectData');
-        await user.setFlag(`${OSRH.moduleName}`, 'effectData', effectData);
+         user.unsetFlag(`${OSRH.moduleName}`, 'effectData');
+         user.setFlag(`${OSRH.moduleName}`, 'effectData', effectData);
       }
     }
   };
@@ -149,7 +154,7 @@ export const registerUtil = () => {
     await user.unsetFlag(scope, flagname);
     if (reset) await user.setFlag(scope, flagname, {});
   };
-
+// used
   OSRH.util.resetMonsterAttacks = async function () {
     for (let combatant of game.combats.active.combatants.contents) {
       const actor = combatant.actor;
@@ -181,7 +186,7 @@ export const registerUtil = () => {
       }
     }
   };
-
+// used
   OSRH.util.ChatMessage = function (effectData, userId, msgContent) {
     const whisperArray = [userId];
     if (effectData.whisperTarget) {
@@ -195,7 +200,7 @@ export const registerUtil = () => {
 
     ChatMessage.create({ content: msgContent, whisper: whisperArray });
   };
-
+// used
   OSRH.util.centerHotbar = function () {
     let hotbar = document.getElementById('hotbar');
     if (game.settings.get(`${OSRH.moduleName}`, 'centerHotbar')) {
@@ -206,7 +211,7 @@ export const registerUtil = () => {
       // document.documentElement.style.setProperty('--hotbar-center', ''); //'220px'
     }
   };
-
+// used
   OSRH.util.osrHook = function (hookName, args = []) {
     Hooks.callAll(hookName, ...args);
   };
@@ -261,7 +266,7 @@ export const registerUtil = () => {
       });
     }
   };
-
+// used
   OSRH.util.countJournalInit = async function (journalName) {
     let entry = game.journal.getName(journalName);
 
@@ -275,13 +280,13 @@ export const registerUtil = () => {
           type: 'text'
         }
       ]);
-      OSRH.turn.updateJournal();
+      await OSRH.turn.updateJournal(entry);
       console.log(`OSR-helper: no count journal found.
       Journal entry named ${journalName} created.`);
     }
     return entry;
   };
-
+// used
   OSRH.util.singleSelected = function () {
     if (canvas.tokens.controlled.length == 0 || canvas.tokens.controlled.length > 1) {
       ui.notifications.error('Please select a single token');
@@ -291,6 +296,7 @@ export const registerUtil = () => {
   };
 
   //random text generator
+// used
   OSRH.util.tableFlavor = function () {
     let flavorArr = [
       '<span style="color: DeepPink">What is THIS!!!</span>',
@@ -302,7 +308,7 @@ export const registerUtil = () => {
     let index = Math.floor(Math.random() * flavorArr.length);
     return flavorArr[index];
   };
-
+// used
   OSRH.util.getPartyActors = function () {
     const systemName = game.system.id == 'ose' ? game.system.id : 'ose-dev';
     const allParty = game.actors.filter((a) => a?.flags?.[systemName]?.party);
@@ -320,7 +326,7 @@ export const registerUtil = () => {
     }
     return retObj;
   };
-
+// used
   OSRH.util.attack = async function () {
     // Get Selected
     if (!OSRH.util.singleSelected()) {
@@ -407,7 +413,7 @@ export const registerUtil = () => {
       }
     }).render(true);
   };
-
+// used
   OSRH.util.randomName = function (type = null, gender = null) {
     function getRandomItem(arr) {
       return arr[Math.floor(Math.random() * arr.length)];
@@ -638,7 +644,7 @@ export const registerUtil = () => {
       }
     });
   };
-
+// used
   OSRH.util.curConDiag = async function (actor, amt = 0) {
     let content = `
     <div style="display: flex; height: 75px; align-items: center; justify-content: space-around;">
@@ -701,7 +707,7 @@ export const registerUtil = () => {
       }, wait);
     };
   };
-
+// used
   OSRH.util.setting = async function (setting, value, type) {
     if (type == 'set') {
       await game.settings.set(`${OSRH.moduleName}`, setting, value);
@@ -710,6 +716,7 @@ export const registerUtil = () => {
       return await game.settings.get(`${OSRH.moduleName}`, setting);
     }
   };
+// used
   OSRH.util.createActiveEffectOnTarget = async function (data, target) {
     let id = target._id ? target._id : target.id;
     if (id) {
@@ -718,6 +725,7 @@ export const registerUtil = () => {
       return effect;
     }
   };
+// used
   OSRH.util.setTheme = async function () {
     let index = await game.settings.get(OSRH.moduleName, 'theme');
     index = index == 'none' ? 0 : index;
@@ -731,7 +739,7 @@ export const registerUtil = () => {
     root.style.setProperty('--theme-btn-color', themeData.btnColor);
     root.style.setProperty('--el-button-glow', themeData.glow);
   };
-
+// used
   OSRH.util.addContainerControls = async function (actor, html) {
     let containers = actor.items.filter((i) => i.type == 'container');
 
@@ -824,6 +832,7 @@ export const registerUtil = () => {
       });
     }
   };
+  // used
   OSRH.util.initializeDroppableContainers = async function (actor, html) {
     // get containers
     let containers = actor.items.filter((i) => i.type == 'container');

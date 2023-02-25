@@ -80,7 +80,7 @@ export const registerTurn = () => {
     }
     let roll = new Roll('2d6+@mod', { mod: rollMod }).evaluate({ async: false });
     //  game.dice3d.showForRoll(roll)
-    console.log(roll);
+
     let tRoll = roll.total; //Math.floor(Math.random() * 6 + 1) +  Math.floor(Math.random() * 6 + 1) + rollMod;
     let tables = {
       monster: [
@@ -98,13 +98,10 @@ export const registerTurn = () => {
     };
     let getResultText = (res, table) => {
       let result;
-      console.log(table[table.length - 1].val, res);
       if (res >= table[table.length - 1].val) {
-        console.log('gt');
         result = table[table.length - 1];
       } else {
         let results = table.filter((i) => i.val <= res);
-        console.log(results);
         result = results[results.length - 1];
       }
 
@@ -123,7 +120,6 @@ export const registerTurn = () => {
     </div>
   `;
 
-    console.log(result, roll.result);
     let chatData = {
       user: game.user._id,
       speaker: ChatMessage.getSpeaker(),
@@ -203,10 +199,12 @@ export const registerTurn = () => {
   };
 
   //write to journal
-  OSRH.turn.updateJournal = async function () {
-    const turnData = await game.settings.get(`${OSRH.moduleName}`, 'turnData');
-    const journalName = await game.settings.get(`${OSRH.moduleName}`, 'timeJournalName');
-    const entry = (await game.journal.getName(journalName)) || (await OSRH.util.countJournalInit(journalName));
+  OSRH.turn.updateJournal = async function (entry=null) {
+    const turnData =  game.settings.get(`${OSRH.moduleName}`, 'turnData');
+    const journalName = game.settings.get(`${OSRH.moduleName}`, 'timeJournalName');
+    if(!entry) {
+      entry = await game.journal.getName(journalName) || await OSRH.util.countJournalInit(journalName);
+    }
     const page = await entry.pages.find((p) => p.name == journalName);
     if (turnData.rest > 5) {
       let jContent = `<br><p>Session Count: ${turnData.session}</p><p> Total Count: ${turnData.total}</p><p>Turns Since Last Rest: <span style="color: red">${turnData.rest}</span></p>`;
@@ -223,10 +221,10 @@ export const registerTurn = () => {
     }
   };
 
-  OSRH.turn.restMsg = async function (rc) {
+  OSRH.turn.restMsg = function (rc) {
     const gm = game.users.contents.filter((u) => u.role == 4).map((u) => u.id);
-    const whisper = await game.settings.get(`${OSRH.moduleName}`, 'whisperRest');
-    const turnData = await game.settings.get(`${OSRH.moduleName}`, 'turnData');
+    const whisper = game.settings.get(`${OSRH.moduleName}`, 'whisperRest');
+    const turnData = game.settings.get(`${OSRH.moduleName}`, 'turnData');
     let chatData = {
       user: game.user.id,
       content: ''
@@ -259,7 +257,7 @@ export const registerTurn = () => {
   };
 
   //rest function
-  OSRH.turn.rest = async function () {
+  OSRH.turn.rest = function () {
     const whisper = game.settings.get(`${OSRH.moduleName}`, 'whisperRest');
     const data = game.settings.get(`${OSRH.moduleName}`, 'turnData');
     const gm = game.users.contents.filter((u) => u.role == 4).map((u) => u.id);
@@ -267,7 +265,7 @@ export const registerTurn = () => {
     data.restWarnCount = 0;
     data.session++;
     data.total++;
-    await game.settings.set(`${OSRH.moduleName}`, 'turnData', data);
+    game.settings.set(`${OSRH.moduleName}`, 'turnData', data);
     OSRH.turn.updateJournal();
     const chatData = {
       content: '<span style="color: green"> You Feel Rested! </span>'
@@ -280,8 +278,8 @@ export const registerTurn = () => {
     OSRH.turn.timePlus(10, 'minute');
   };
   //function calls
-  OSRH.turn.showTurnCount = async function () {
-    const data = await game.settings.get(`${OSRH.moduleName}`, 'turnData');
+  OSRH.turn.showTurnCount =  function () {
+    const data =  game.settings.get(`${OSRH.moduleName}`, 'turnData');
     let style = '';
     let chatData = {
       user: game.user.id,
@@ -299,11 +297,11 @@ export const registerTurn = () => {
     ChatMessage.create(chatData);
   };
 
-  OSRH.turn.lightTurnRemaining = async function (actorId) {
+  OSRH.turn.lightTurnRemaining =  function (actorId) {
     let lightData;
     for (let user of game.users.contents) {
       if (user.flags[`${OSRH.moduleName}`].lightData[actorId]) {
-        let flag = await user.getFlag(`${OSRH.moduleName}`, 'lightData');
+        let flag =  user.getFlag(`${OSRH.moduleName}`, 'lightData');
         lightData = flag;
       }
     }

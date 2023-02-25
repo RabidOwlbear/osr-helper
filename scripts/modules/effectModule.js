@@ -48,7 +48,7 @@ export const registerEffectModule = async function () {
           retObj.effectPresets.push({
             name: effectData.name,
             duration: effectData.duration,
-            id: effectData.id,
+            id: effectData.id
           });
         }
       }
@@ -77,21 +77,22 @@ export const registerEffectModule = async function () {
         ev.preventDefault();
         OSRH.effect.applyEffectPreset.call(this, ev);
       });
-      if(saveBtn) saveBtn.addEventListener('click', async (ev, data) => {
-        ev.preventDefault();
-        if (nameField.value == '') {
-          ui.notifications.warn('Please Enter An Effect Name');
-          return;
-        }
-        let savedFx = await game.settings.get(OSRH.moduleName, 'savedEffects');
-        for (let key in savedFx) {
-          if (savedFx[key].name == nameField.value) {
-            ui.notifications.warn('Name Already In Use. Select Another');
+      if (saveBtn)
+        saveBtn.addEventListener('click', async (ev, data) => {
+          ev.preventDefault();
+          if (nameField.value == '') {
+            ui.notifications.warn('Please Enter An Effect Name');
             return;
           }
-        }
-        OSRH.effect.saveEffect.call(this, ev, data);
-      });
+          let savedFx = await game.settings.get(OSRH.moduleName, 'savedEffects');
+          for (let key in savedFx) {
+            if (savedFx[key].name == nameField.value) {
+              ui.notifications.warn('Name Already In Use. Select Another');
+              return;
+            }
+          }
+          OSRH.effect.saveEffect.call(this, ev, data);
+        });
 
       createBtn.addEventListener('click', (ev) => {
         let userTargets = game.user.targets;
@@ -197,7 +198,7 @@ export const registerEffectModule = async function () {
         }
         if (type == 'ac' && value != 0) {
           let aac = await game.settings.get('ose', 'ascendingAC');
-                    // effectData.icon = `icons/svg/combat.svg`;
+          // effectData.icon = `icons/svg/combat.svg`;
           // effectData.tint = '#aa5000';
           effectData.changes.push({
             key: aac ? `system.aac.mod` : `system.ac.mod`,
@@ -333,7 +334,7 @@ export const registerEffectModule = async function () {
       return {
         gmList: gmEffectsTemplate,
         selfEffects: selfEffectsTemplate,
-        otherEffects: otherEffectsTemplate,
+        otherEffects: otherEffectsTemplate
       };
     }
     activateListeners(html) {
@@ -467,7 +468,7 @@ export const registerEffectModule = async function () {
   OSRH.effect.gmCreateEffect = async function (target, effectData, creatorId) {
     let actor = await fromUuid(target);
     if (actor.collectionName == 'tokens') actor = actor.actor;
-        let e = await ActiveEffect.create(effectData, { parent: actor });
+    let e = await ActiveEffect.create(effectData, { parent: actor });
 
     let activeEffectData = deepClone(await game.settings.get(`${OSRH.moduleName}`, 'effectData'));
     activeEffectData.push({
@@ -486,36 +487,38 @@ export const registerEffectModule = async function () {
       data.forEach(async (e) => {
         let tActor = await fromUuid(e.target);
         let eCreator = await game.actors.get(e.createdBy);
-        let isInf = e.isInf;
-        tActor = tActor.collectionName == 'tokens' ? (tActor = tActor.actor) : tActor;
-        let effect = await tActor.getEmbeddedDocument('ActiveEffect', e.effectId);
-        let durObj = effect.duration;
-        let entryData = {};
-        entryData.name = effect.label;
-        entryData.effectId = e.effectId;
-        entryData.target =
-          type == 'self' ? tActor.name : type == 'other' ? eCreator.name : type == 'gm' ? eCreator.name : tActor.name;
+        if (eCreator) {
+          let isInf = e.isInf;
+          tActor = tActor.collectionName == 'tokens' ? (tActor = tActor.actor) : tActor;
+          let effect = await tActor.getEmbeddedDocument('ActiveEffect', e.effectId);
+          let durObj = effect.duration;
+          let entryData = {};
+          entryData.name = effect.label;
+          entryData.effectId = e.effectId;
+          entryData.target =
+            type == 'self' ? tActor.name : type == 'other' ? eCreator.name : type == 'gm' ? eCreator.name : tActor.name;
 
-        entryData.durType = isInf ? '' : effect.flags['data'].interval == 'minutes' ? 'min.' : 'sec.';
-        let elapsed = game.time.worldTime - durObj.startTime;
-        let interval = effect.flags['data'].interval;
-        let timeLeft = isInf
-          ? 'inf'
-          : interval == 'minutes'
-          ? Math.floor((durObj.seconds - elapsed) / 60)
-          : Math.floor(durObj.seconds - elapsed);
-        entryData.duration = timeLeft;
-        entryData.descrip = effect.flags['data'].details;
-        entryData.list = ``;
-        for (let change of effect.changes) {
-          let keyData = change.key.split('.');
-          let type = keyData[1] == 'thac0' && keyData[2] == 'mod' ? `attack mod` : keyData[1];
-          let attrib = keyData[1] == 'thac0' && keyData[2] == 'mod' ? keyData[3] : keyData[2];
-          let listItem = `<li>${type} - ${attrib}: ${change.value}</li>`;
-          entryData.list += listItem;
+          entryData.durType = isInf ? '' : effect.flags['data'].interval == 'minutes' ? 'min.' : 'sec.';
+          let elapsed = game.time.worldTime - durObj.startTime;
+          let interval = effect.flags['data'].interval;
+          let timeLeft = isInf
+            ? 'inf'
+            : interval == 'minutes'
+            ? Math.floor((durObj.seconds - elapsed) / 60)
+            : Math.floor(durObj.seconds - elapsed);
+          entryData.duration = timeLeft;
+          entryData.descrip = effect.flags['data'].details;
+          entryData.list = ``;
+          for (let change of effect.changes) {
+            let keyData = change.key.split('.');
+            let type = keyData[1] == 'thac0' && keyData[2] == 'mod' ? `attack mod` : keyData[1];
+            let attrib = keyData[1] == 'thac0' && keyData[2] == 'mod' ? keyData[3] : keyData[2];
+            let listItem = `<li>${type} - ${attrib}: ${change.value}</li>`;
+            entryData.list += listItem;
+          }
+
+          retArr.push(entryData);
         }
-
-        retArr.push(entryData);
       });
     }
     return retArr;
@@ -534,7 +537,7 @@ export const registerEffectModule = async function () {
     let presetSel = this.element[0].querySelector('#preset-select');
 
     effectObj.name = nameEl.value;
-    effectObj.icon = icon
+    effectObj.icon = icon;
     // effectObj.data = {};
     for (let input of numInputs) {
       effectObj[input.id] = parseInt(input.value);
@@ -556,8 +559,8 @@ export const registerEffectModule = async function () {
   OSRH.effect.applyEffectPreset = async function (ev) {
     const savedFx = await deepClone(game.settings.get(OSRH.moduleName, 'savedEffects'));
     let fxData = savedFx[ev.srcElement.value];
-    let iconObj = OSRH.data.effectIcons.find(i => i.name == fxData.name)
-        if(fxData){
+    let iconObj = OSRH.data.effectIcons.find((i) => i.name == fxData.name);
+    if (fxData) {
       let inputKeys = Object.keys(fxData).filter((k) => {
         let discard = ['target', 'durInt', 'icon'];
         if (!discard.includes(k)) {
@@ -565,16 +568,16 @@ export const registerEffectModule = async function () {
         }
       });
       for (let key of inputKeys) {
-                let el = this.element[0].querySelector(`#${key}`);
-        if(el)el.value = fxData?.[key];
+        let el = this.element[0].querySelector(`#${key}`);
+        if (el) el.value = fxData?.[key];
       }
-    
-    const targetInp = this.element[0].querySelector(`#${fxData.target}`);
-    targetInp.checked = true;
-    const iconInp = this.element[0].querySelector(`#icon-select [value="${fxData.icon}"]`);
-    iconInp.selected = true;
-    const durIntInp = this.element[0].querySelector(`input#${fxData.durInt}`);
-    durIntInp.checked = true;
+
+      const targetInp = this.element[0].querySelector(`#${fxData.target}`);
+      targetInp.checked = true;
+      const iconInp = this.element[0].querySelector(`#icon-select [value="${fxData.icon}"]`);
+      iconInp.selected = true;
+      const durIntInp = this.element[0].querySelector(`input#${fxData.durInt}`);
+      durIntInp.checked = true;
     }
   };
 
@@ -608,61 +611,65 @@ export const registerEffectModule = async function () {
       let effectDelBtns = html.find(`a[class="delete-btn"]`);
       let xprtBtn = html.find('#xprt')[0];
       let imprtBtn = html.find('#imprt')[0];
-      xprtBtn.addEventListener('click',async (e)=>{
+      xprtBtn.addEventListener('click', async (e) => {
         e.preventDefault();
-        let setting = await game.settings.get(OSRH.moduleName, `savedEffects`)
-        let data = JSON.stringify(setting)
+        let setting = await game.settings.get(OSRH.moduleName, `savedEffects`);
+        let data = JSON.stringify(setting);
         let xport = 'data:export/plain;charset=utf-8, ' + encodeURIComponent(data);
         let filename = 'saved-effects.json';
-        let alink = document.createElement('a')
+        let alink = document.createElement('a');
         alink.href = xport;
         alink.setAttribute('download', filename);
-        alink.click()
-      })
+        alink.click();
+      });
 
-      imprtBtn.addEventListener('click',async (e)=>{
-        const input = document.createElement('input')
-        const form = this
-        input.type = 'file'
-        input.addEventListener('change', async  function (e){
+      imprtBtn.addEventListener('click', async (e) => {
+        const input = document.createElement('input');
+        const form = this;
+        input.type = 'file';
+        input.addEventListener('change', async function (e) {
           let file = this.files[0];
-          if(file.type != "application/json"){
+          if (file.type != 'application/json') {
             ui.notifications.warn('Please select a valid JSON file.');
-            return
+            return;
           }
-          let fr = new FileReader()
-          fr.onload = async function(e){
+          let fr = new FileReader();
+          fr.onload = async function (e) {
             let content = e.target.result;
             let parsed = JSON.parse(content);
+            if(!parsed){
+              ui.notifications.warn('Invalid JSON object.');
+              return
+            }
             new Dialog({
               title: 'Import Type',
-              content:``,
+              content: ``,
               buttons: {
                 replace: {
                   label: 'Replace',
-                  callback:async ()=>{
-                    await game.settings.set(OSRH.moduleName, 'savedEffects', parsed)
-                    new OSRH.effect.manageCustomPresets().render(true)
+                  callback: async () => {
+                    await game.settings.set(OSRH.moduleName, 'savedEffects', parsed);
+                    new OSRH.effect.manageCustomPresets().render(true);
                   }
                 },
                 merge: {
                   label: 'Merge',
-                  callback:async ()=>{
+                  callback: async () => {
                     const orig = await deepClone(game.settings.get(OSRH.moduleName, `savedEffects`));
                     let merged = mergeObject(orig, parsed);
-                    await game.settings.set(OSRH.moduleName, 'savedEffects', merged)
-                    new OSRH.effect.manageCustomPresets().render(true)
+                    await game.settings.set(OSRH.moduleName, 'savedEffects', merged);
+                    new OSRH.effect.manageCustomPresets().render(true);
                   }
                 }
               }
-            }).render(true)
-            form.render()
-            return 'settings updated'
-          }
-          fr.readAsText(file)
-        })
+            }).render(true);
+            form.render();
+            return 'settings updated';
+          };
+          fr.readAsText(file);
+        });
         input.click();
-      })
+      });
       for (let btn of effectDelBtns) {
         btn.addEventListener(`click`, async (ev) => {
           ev.preventDefault();

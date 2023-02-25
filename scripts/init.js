@@ -1,4 +1,4 @@
-import { registerLight } from './modules/light.js';
+// import { registerLight } from './modules/light.js';
 import { registerLightModule } from './modules/lightModule.js';
 import { registerTurn } from './modules/turn.js';
 import { registerRations } from './modules/rations.js';
@@ -29,7 +29,7 @@ Hooks.once('init', async function () {
     await registerSettings();
 
   // import modules
-  registerLight();
+  // registerLight();
   registerTurn();
   registerRations();
   
