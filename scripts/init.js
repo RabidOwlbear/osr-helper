@@ -98,6 +98,7 @@ Hooks.once('ready', async () => {
 
   //set hook to update light timer durations
   Hooks.on('updateWorldTime', async () => {
+    console.log('time update')
     await OSRH.util.osrTick();
     OSRH.socket.executeAsGM('lightCheck');
     // OSRH.socket.executeAsGM('clearExpiredEffects')

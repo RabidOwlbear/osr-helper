@@ -97,7 +97,7 @@ export const registerSettings = async function () {
     config: true,
     restricted: true
   });
-  game.settings.register(`${OSRH.moduleName}`, 'dungeonTurnNoticiation', {
+  game.settings.register(`${OSRH.moduleName}`, 'dungeonTurnNotificiation', {
     name: 'Display a UI notification when dungeon turn is advanced.',
     hint: 'Displays a UI notification when the Dungeon Turn macro is used.',
     scope: 'world',

@@ -1,9 +1,13 @@
 export const registerUtil = () => {
+  OSRH.util.singleGM = function (){
+    return game.users.filter(u=>u.active && u.isGM)[0];
+  }
   OSRH.util = OSRH.util || {};
   //tick: manages light duration, turn count
 // used
   OSRH.util.osrTick = async function () {
-    if (game.user.role >= 4) {
+    const singleGM = OSRH.util.singleGM()
+    if (singleGM && game.user.id === singleGM.id) {
       let lastTick = await game.settings.get(`${OSRH.moduleName}`, 'lastTick');
       // await OSRH.util.osrLightTick(lastTick);
       OSRH.util.osrEffectTick(lastTick);
@@ -15,7 +19,8 @@ export const registerUtil = () => {
   };
 // used
   OSRH.util.osrLightTick = async function (lastTick) {
-    if (game.user.role >= 4) {
+    const singleGM = OSRH.util.singleGM()
+    if (singleGM && game.user.id === singleGM.id) {
       //get data
       const data = {
         light: null
@@ -80,8 +85,8 @@ export const registerUtil = () => {
   };
 // used
   OSRH.util.osrEffectTick = function (lastTick) {
-    const singleGM = game.users.filter(u=>u.active && u.isGM)[0]
-    if (game.user.id === singleGM.id) {
+    const singleGM = OSRH.util.singleGM()
+    if (singleGM && game.user.id === singleGM.id) {
       const curTime = game.time.worldTime;
       const elapsed = (curTime - lastTick) / 60;
       for (let user of game.users.contents) {

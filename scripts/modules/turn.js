@@ -131,8 +131,8 @@ export const registerTurn = () => {
     ChatMessage.create(chatData);
   };
   OSRH.turn.dungeonTurn = async function () {
-    let turnMsg = game.settings.get(`${OSRH.moduleName}`, 'dungeonTurnNoticiation');
-    const data = await game.settings.get(`${OSRH.moduleName}`, 'dungeonTurnData');
+    let turnMsg = game.settings.get(`${OSRH.moduleName}`, 'dungeonTurnNotificiation');
+    const data =  game.settings.get(`${OSRH.moduleName}`, 'dungeonTurnData');
     const encTable = game.tables.getName(data.eTable);
     let reactTable = await game.tables.getName(data.rTable);
     // checks
@@ -194,7 +194,7 @@ export const registerTurn = () => {
       }
     }
     OSRH.turn.timePlus(10, 'minute'); //increment ganme time
-    OSRH.turn.updateJournal(); //update turn count journal
+    await OSRH.turn.updateJournal(); //update turn count journal
     if(turnMsg)ui.notifications.notify('Dungeon turn Advanced.');
   };
 
