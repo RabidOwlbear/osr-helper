@@ -290,9 +290,8 @@ export const registerReports = () => {
             <h3>Navigation Check: ${radio}</h3>
             <span style="color: red">The party got lost.</span>`
           };
-          game.dice3d.showForRoll(roll, game.user, false, gm, false).then(() => {
-            ChatMessage.create(data);
-          });
+          await game?.dice3d?.showForRoll(roll, game.user, false, gm, false);
+          ChatMessage.create(data);
         } else {
           let data = {
             whisper: [game.user],
@@ -301,9 +300,8 @@ export const registerReports = () => {
             The party found their way.
             `
           };
-          game.dice3d.showForRoll(roll, game.user, false, gm, false).then(() => {
-            ChatMessage.create(data);
-          });
+          await game?.dice3d?.showForRoll(roll, game.user, false, gm, false);
+          ChatMessage.create(data);
         }
 
         bonus.value = 0;
@@ -327,9 +325,8 @@ export const registerReports = () => {
             <div><span style="color: red"><b>Foraging unsuccessful.</b></span></div>
             `
           };
-          game.dice3d.showForRoll(roll, game.user, false, gm, false).then(() => {
-            ChatMessage.create(cData);
-          });
+          await game?.dice3d?.showForRoll(roll, game.user, false, gm, false)
+          ChatMessage.create(cData)
         } else {
           let cData = {
             user: game.user.id,
@@ -340,9 +337,8 @@ export const registerReports = () => {
             <div><span style="color: green"><b>Foraging successful.</b></span></div>
             `
           };
-          game.dice3d.showForRoll(roll, game.user, false, gm, false).then(() => {
-            ChatMessage.create(cData);
-          });
+          await game?.dice3d?.showForRoll(roll, game.user, false, gm, false);
+          ChatMessage.create(cData);
         }
         modEl.value = 0;
       }

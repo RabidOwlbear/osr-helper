@@ -8,7 +8,7 @@ export const registerSettings = async function () {
       options.baseApplication = 'dungeonTurnConfig';
       options.id = 'dungTurnConfig';
       options.template = `modules/${OSRH.moduleName}/templates/dungeon-turn-config.html`;
-      options.height = 300;
+      options.height = 330;
       options.width = 400;
       // options.left = 500;
       // options.top = 100;
@@ -27,7 +27,7 @@ export const registerSettings = async function () {
       });
     }
 
-    async _onSubmit(event) {
+    _onSubmit(event) {
       super._onSubmit(event, { preventRefresh: true });
       let data = {
         proc: parseInt(event.target[2].value),
@@ -38,10 +38,10 @@ export const registerSettings = async function () {
         rollReact: event.target[5].checked
       };
 
-      await game.settings.set(`${OSRH.moduleName}`, 'dungeonTurnData', data);
+       game.settings.set(`${OSRH.moduleName}`, 'dungeonTurnData', data);
     }
 
-    async _updateObject() {}
+     _updateObject() {}
   }
 
   game.settings.register(`${OSRH.moduleName}`, 'timeJournalName', {

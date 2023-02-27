@@ -42,30 +42,30 @@ export const registerTurn = () => {
     game.settings.set(`${OSRH.moduleName}`, `${name}`, data);
   };
 
-  OSRH.turn.resetSessionCount = async function () {
-    const data = await game.settings.get(`${OSRH.moduleName}`, 'turnData');
+  OSRH.turn.resetSessionCount = function () {
+    const data = game.settings.get(`${OSRH.moduleName}`, 'turnData');
     data.session = 0;
-    await game.settings.set(`${OSRH.moduleName}`, 'turnData', data);
+    game.settings.set(`${OSRH.moduleName}`, 'turnData', data);
     OSRH.turn.updateJournal();
   };
 
-  OSRH.turn.resetAllCounts = async function () {
-    const data = await game.settings.get(`${OSRH.moduleName}`, 'turnData');
+  OSRH.turn.resetAllCounts = function () {
+    const data = game.settings.get(`${OSRH.moduleName}`, 'turnData');
     data.session = 0;
     data.procCount = 0;
     data.rest = 0;
     data.total = 0;
-    await game.settings.set(`${OSRH.moduleName}`, 'turnData', data);
+    game.settings.set(`${OSRH.moduleName}`, 'turnData', data);
     OSRH.turn.updateJournal();
   };
   //increments turn data and updates setting
-  OSRH.turn.incrementTurnData = async function () {
-    const data = await game.settings.get(`${OSRH.moduleName}`, 'turnData');
+  OSRH.turn.incrementTurnData = function () {
+    const data = game.settings.get(`${OSRH.moduleName}`, 'turnData');
     data.rest++;
     data.session++;
     data.total++;
     data.procCount++;
-    await game.settings.set(`${OSRH.moduleName}`, 'turnData', data);
+    game.settings.set(`${OSRH.moduleName}`, 'turnData', data);
     return game.settings.get(`${OSRH.moduleName}`, 'turnData');
   };
   OSRH.turn.rollReact = async function (type, mod = false, cMod = null) {
@@ -145,8 +145,7 @@ export const registerTurn = () => {
       return;
     }
 
-    const turnData = await OSRH.turn.incrementTurnData();
-    turnData.proc = data.proc;
+    const turnData = OSRH.turn.incrementTurnData();
     if (game.settings.get(`${OSRH.moduleName}`, 'restMessage')) {
       OSRH.turn.restMsg(turnData.rest); //generate chat message regarding rest status
     }
@@ -157,8 +156,7 @@ export const registerTurn = () => {
       if (turnData.procCount >= data.proc) {
         //if number of turns since last random monster roll is greater than or equal to the random check interval
         turnData.procCount = 0; //resest number of turns since last random check
-        await game.settings.set(`${OSRH.moduleName}`, 'turnData', {});
-        await game.settings.set(`${OSRH.moduleName}`, 'turnData', turnData); //update settings data <--------
+        game.settings.set(`${OSRH.moduleName}`, 'turnData', turnData); //update settings data <--------
         const theRoll = await new Roll('1d6').evaluate({ async: true });
         const gm = game.users.contents.filter((u) => u.role == 4).map((u) => u.id);
 
@@ -168,28 +166,31 @@ export const registerTurn = () => {
             whisper: gm
           };
 
-          await game.dice3d.showForRoll(theRoll, game.user, false, gm, false).then(() => {
-            ChatMessage.create(content);
-          });
+          await game?.dice3d?.showForRoll(theRoll, game.user, false, gm, false)
+          ChatMessage.create(content)
         } else {
           const roll = await encTable.roll({ async: true });
-          const message = {
-            flavor: `<span style='color: red'>${OSRH.util.tableFlavor()}</span>`,
-            user: game.user.id,
-            roll: roll.roll,
-            speaker: ChatMessage.getSpeaker(),
-            content: `<br/>${roll?.results[0]?.text}<br/><br/>`,
-            whisper: gm
-          };
-          await game.dice3d.showForRoll(theRoll, game.user, false, gm, false).then(() => {});
-          if (data.rollReact) {
-            reactTable = game.tables.find((t) => t.name === data.rTable);
-            let reactRoll = await reactTable.roll({ async: true });
-            let rollResult = `They look ${reactRoll.results[0].text}.`;
-            message.content += rollResult;
-            await game.dice3d.showForRoll(reactRoll.roll, game.user, false, gm, false);
+          if(roll.roll._evaluated){
+            const message = {
+              flavor: `<span style='color: red'>${OSRH.util.tableFlavor()}</span>`,
+              user: game.user.id,
+              roll: roll.roll,
+              speaker: ChatMessage.getSpeaker(),
+              content: `<br/>${roll?.results[0]?.text}<br/><br/>`,
+              whisper: gm
+            };
+            
+            await game?.dice3d?.showForRoll(theRoll, game.user, false, gm, false);
+            if (data.rollReact) {
+              reactTable = game.tables.find((t) => t.name === data.rTable);
+              let reactRoll = await reactTable.roll({ async: true });
+              let rollResult = `They look ${reactRoll.results[0].text}.`;
+              message.content += rollResult;
+              await game?.dice3d?.showForRoll(reactRoll.roll, game.user, false, gm, false);
+            }
+            ChatMessage.create(message);
           }
-          ChatMessage.create(message);
+
         }
       }
     }

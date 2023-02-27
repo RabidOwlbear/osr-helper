@@ -8,7 +8,7 @@ export const registerLightModule = async function () {
       let tags = i.system.manualTags;
       if (tags && tags.find((t) => t.value == 'Light')) return i;
     });
-    const lightData = deepClone(await game.settings.get(`${OSRH.moduleName}`, 'lightData'));
+    const lightData = deepClone(game.settings.get(`${OSRH.moduleName}`, 'lightData'));
     let actorLightData = lightData[actor.id];
 
     // check for light already lit
@@ -87,7 +87,7 @@ export const registerLightModule = async function () {
               };
               actorLightData = lightData[actor.id];
 
-              // await game.settings.set(`${OSRH.moduleName}`, 'lightData', lightData);
+              // game.settings.set(`${OSRH.moduleName}`, 'lightData', lightData);
               let settingData = {
                 setting: 'lightData',
                 value: lightData,
@@ -114,7 +114,7 @@ export const registerLightModule = async function () {
                 type: 'set'
               };
               await OSRH.socket.executeAsGM('setting', 'lightData', lightData, 'set');
-              // await game.settings.set(`${OSRH.moduleName}`, 'lightData', lightData);
+              // game.settings.set(`${OSRH.moduleName}`, 'lightData', lightData);
               await OSRH.light.updateTokens(actor.uuid, lightItemData);
               return;
             }
@@ -139,7 +139,7 @@ export const registerLightModule = async function () {
                 type: 'set'
               };
               await OSRH.socket.executeAsGM('setting', 'lightData', lightData, 'set');
-              // await game.settings.set(`${OSRH.moduleName}`, 'lightData', lightData);
+              // game.settings.set(`${OSRH.moduleName}`, 'lightData', lightData);
               await OSRH.light.updateTokens(actor.uuid, lightItemData);
               return;
             }
