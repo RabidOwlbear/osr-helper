@@ -158,7 +158,7 @@ export const uiControls = {
       id: 'rationReport',
       label: 'Ration Report',
       gm: true,
-      function: 'ration.report',
+      function: 'report.ration',
       img: 'icons/sundries/scrolls/scroll-writing-beige.webp'
     },
     {
