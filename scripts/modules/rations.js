@@ -43,7 +43,14 @@ data: {
 
 
 
-  OSRH.ration.eat = async function (actorId) {
+  OSRH.ration.eat = async function (actorId=null) {
+    if(!actorId){
+      if(OSRH.util.singleSelected()){
+        actorId = canvas.tokens.controlled[0].actor.id
+      }else{
+        return
+      }
+    }
     const actor = await game.actors.find((a) => a.id == actorId);
     let rationOptions = '';
     for (let type in OSRH.data.food) {

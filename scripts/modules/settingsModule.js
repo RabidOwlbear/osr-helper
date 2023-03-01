@@ -43,6 +43,7 @@ export const registerSettings = async function () {
 
      _updateObject() {}
   }
+  
 
   game.settings.register(`${OSRH.moduleName}`, 'timeJournalName', {
     name: 'Name Of Journal Entry',
@@ -50,6 +51,15 @@ export const registerSettings = async function () {
     scope: 'world',
     type: String,
     default: 'Turn Count',
+    config: true
+  });
+
+  game.settings.register(`${OSRH.moduleName}`, 'displayControlUi', {
+    name: 'Display UI button tray.',
+    hint: 'Adds a collapseable group of module control buttons above the macro hotbar.',
+    scope: 'client',
+    type: Boolean,
+    default: true,
     config: true
   });
 
@@ -80,7 +90,7 @@ export const registerSettings = async function () {
     config: true
   });
   game.settings.register(`${OSRH.moduleName}`, 'combatTimeAdvance', {
-    name: 'Advance game time 10 seconds each combat round.',
+    name: 'Combat Time Advance.',
     hint: 'Advances the game time 10 seconds each time a combat round advances',
     scope: 'world',
     type: Boolean,
@@ -98,7 +108,7 @@ export const registerSettings = async function () {
     restricted: true
   });
   game.settings.register(`${OSRH.moduleName}`, 'dungeonTurnNotificiation', {
-    name: 'Display a UI notification when dungeon turn is advanced.',
+    name: 'Dungeon Turn Notification',
     hint: 'Displays a UI notification when the Dungeon Turn macro is used.',
     scope: 'world',
     type: Boolean,
@@ -236,7 +246,7 @@ export const registerSettings = async function () {
   });
 
   game.settings.register(`${OSRH.moduleName}`, 'enableLightConfig', {
-    name: 'Enable Light Item Settings Config.',
+    name: 'Enable Light Item Config.',
     hint: 'Adds icon to Items tagged with "Light" that allows for configuration of custom light options.',
     scope: 'world',
     type: Boolean,

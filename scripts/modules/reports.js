@@ -1,7 +1,14 @@
 export const registerReports = () => {
   OSRH.report = OSRH.report || {};
 
-  OSRH.report.actorItem = async function (actor) {
+  OSRH.report.actorItem = async function (actor=null) {
+    if(!actor){
+      if(OSRH.util.singleSelected()){
+        actor = canvas.tokens.controlled[0].actor
+      }else{
+        return
+      }
+    }
     const Rations = [];
     const Lights = [];
     let totalRations = 0;
@@ -89,26 +96,28 @@ export const registerReports = () => {
       retainers: ''
     };
     const style = (qty) => {
-      let color = qty <=2 ? 'color: orangered' : qty <= 1 ? 'color: red' : 'color: green'
-      return color
+      let color = qty <= 2 ? 'color: orangered' : qty <= 1 ? 'color: red' : 'color: green';
+      return color;
     };
 
-    for(let partyMember of actorObj.party){
+    for (let partyMember of actorObj.party) {
       let type = partyMember.system.retainer.enabled ? 'retainers' : 'characters';
       let actorRations = '';
-        for (let type of Rations) {
-          let ration = partyMember.items.getName(type);
-          if (ration) {
-            const qty = ration.system.quantity.value;
-            const rStyle = style(qty);
-            totalRations += qty;
-            actorRations += `<li style="margin-left:10px;"><span style="${rStyle} ">${type}: ${ration.system.quantity.value}</span></li>`;
-          }
+      for (let type of Rations) {
+        let ration = partyMember.items.getName(type);
+        if (ration) {
+          const qty = ration.system.quantity.value;
+          const rStyle = style(qty);
+          totalRations += qty;
+          actorRations += `<li style="margin-left:10px;"><span style="${rStyle} ">${type}: ${ration.system.quantity.value}</span></li>`;
         }
+      }
 
-        if (actorRations == '') actorRations = '<span style="color: red">None</span>';
+      if (actorRations == '') actorRations = '<span style="color: red">None</span>';
 
-        msgData[type] += `<div style="margin-left: 10px;"><p><b> ${partyMember.name}</b>:</p><ul> ${actorRations} </ul></div>`;
+      msgData[
+        type
+      ] += `<div style="margin-left: 10px;"><p><b> ${partyMember.name}</b>:</p><ul> ${actorRations} </ul></div>`;
     }
 
     const daysLeft = Math.floor(totalRations / actorObj.party.length);
@@ -133,33 +142,193 @@ export const registerReports = () => {
     ChatMessage.create({ content: contents, whisper: [game.user.id] });
   };
 
-  OSRH.report.travelCalc = async function () {
-    const initMod = 1;
+  OSRH.report.TravelReport = class travelReport extends Application {
+    constructor() {
+      super();
+      this.terrainMod = {
+        trail: 1.5,
+        road: 1.5,
+        clear: 1,
+        city: 1,
+        grassland: 1,
+        forest: 0.6,
+        mud: 0.6,
+        snow: 0.6,
+        hill: 0.6,
+        desert: 0.6,
+        brokenLand: 0.6,
+        mountain: 0.5,
+        swamp: 0.5,
+        jungle: 0.5,
+        ice: 0.5,
+        glacier: 0.5
+      };
+      this.lostMod = {
+        grassland: 1,
+        clear: 1,
+        swamp: 3,
+        jungle: 3,
+        desert: 3,
+        allElse: 2
+      };
+    }
+    static get defaultOptions() {
+      return mergeObject(super.defaultOptions, {
+        classes: ['application', 'testApp'],
+        popOut: true,
+        template: `modules/${OSRH.moduleName}/templates/travel-report.hbs`,
+        id: 'osrTravelReport',
+        title: 'Adventure ahoy!',
+        width: 400
+      });
+    }
+    getData() {
+      const context = super.getData();
+      // Send data to the template
+      const partyObj = OSRH.util.getPartyActors();
+      // get slowest
+      let slowest;
+      if (partyObj.party.length) {
+        slowest = partyObj.party[0].system.movement.base;
+        partyObj.party.forEach((a) => {
+          let rate = a.system.movement.base;
+          if (slowest > rate) slowest = rate;
+        });
+      }
+      //convert to miles
+      context.baseRate = Math.floor(slowest / 5);
 
-    function partyHtml(actorObj, mod = 1) {
-      // type == 'characters' ? type : type == 'retainers' ? type : null;
-      let templateData = ``;
+      context.ose = game.modules.get('old-school-essentials')?.active || false;
+      context.characters = this.partyData(partyObj.characters);
+      context.retainers = this.partyData(partyObj.retainers);
+      context.retainer = partyObj.retainers;
 
+      return context; //this.data.tData;
+    }
+    activateListeners(html) {
+      super.activateListeners(html);
+      const terrain = html.find(`[type="radio"][checked]`)[0].value;
+
+      const radioInputs = html.find('[name="terrain"]');
+      const lostBtn = html.find('#nav-check')[0];
+      const forageBtn = html.find('#forage-check')[0];
+      const encBtn = html.find('#enc-btn')[0];
+      const closeBtn = html.find('#close-btn')[0];
+      closeBtn.addEventListener('click', () => {
+        this.close();
+      });
+      if (encBtn) {
+        encBtn.addEventListener('click', (ev) => {
+          this.rollEnc();
+        });
+      }
+      lostBtn.addEventListener('click', (ev) => {
+        this.lostRoll();
+      });
+      forageBtn.addEventListener('click', (ev) => {
+        this.forageCheck();
+      });
+      for (let input of radioInputs) {
+        input.addEventListener('input', (ev) => {
+          const html = document.querySelector('[type="radio][checked]');
+          const mod = this.terrainMod[ev.srcElement.value];
+          // const modRate = Math.floor(this.data.baseRate * this.terrainMod[ev.srcElement.value]);
+          this.updatePartyDist(mod);
+        });
+      }
+    }
+    partyData(actorObj, mod = 1) {
+      let data = [];
       for (let actor of actorObj) {
-        let nameStr = actor.name.length >= 20 ? actor.name.slice(0, 19) + `...` : actor.name;
-        templateData += `
-        <div class="actor-div fx sb plr5">
-            <div class="of-hide w140">${nameStr}</div>
-            <div>${Math.floor((actor.system.movement.base / 5) * mod)} mi</div>
-        </div>`;
+        data.push({
+          name: actor.name.length >= 20 ? actor.name.slice(0, 19) + `...` : actor.name,
+          distance: Math.floor((actor.system.movement.base / 5) * mod)
+        });
+      }
+      return data;
+    }
+    async lostRoll() {
+      const radio = document.querySelector(`[name=terrain]:checked`).value;
+      const bonus = document.querySelector(`#nav-bonus`);
+      const gm = game.users.contents.filter((u) => u.role == 4).map((u) => u.id);
+      if (radio == 'road' || radio == 'trail') {
+        ui.notifications.warn('Cannot get lost on roads or trails');
+        return;
+      }
+      let roll = await new Roll(`1d6 + ${bonus.value}`).evaluate({ async: true });
+      let target = this.lostMod[radio] || 2;
+
+      if (roll.total <= target) {
+        let data = {
+          whisper: [game.user],
+          flavor: `
+          <h3>Navigation Check: ${radio}</h3>
+          <span style="color: red">The party got lost.</span>`
+        };
+        await game?.dice3d?.showForRoll(roll, game.user, false, gm, false);
+        ChatMessage.create(data);
+      } else {
+        let data = {
+          whisper: [game.user],
+          flavor: `
+          <h3>Navigation Check: ${radio}</h3>
+          The party found their way.
+          `
+        };
+        await game?.dice3d?.showForRoll(roll, game.user, false, gm, false);
+        ChatMessage.create(data);
       }
 
-      return templateData;
+      bonus.value = 0;
     }
-    function getTravelData(mod) {
-      let oseActive = game.modules.get('old-school-essentials')?.active;
+    rollEnc() {
+      OSE.util.wildEncounter();
+    }
+    async forageCheck() {
+      const modEl = document.getElementById('forage-bonus');
+      const mod = parseInt(modEl.value);
+      const terrain = document.querySelector(`[name=terrain]:checked`).value;
+      const gm = game.users.contents.filter((u) => u.role == 4).map((u) => u.id);
+      let roll = await new Roll(`1d6 + ${mod}`).roll({ async: true });
+      if (roll.total <= 3) {
+        let cData = {
+          user: game.user.id,
+          whisper: gm,
+          roll: roll,
+          flavor: `
+          <h3>Forage check: ${terrain}</h3>
+          <div><span style="color: red"><b>Foraging unsuccessful.</b></span></div>
+          `
+        };
+        await game?.dice3d?.showForRoll(roll, game.user, false, gm, false);
+        ChatMessage.create(cData);
+      } else {
+        let cData = {
+          user: game.user.id,
+          whisper: gm,
+          roll: roll,
+          flavor: `
+          <h3>Forage check: ${terrain}</h3>
+          <div><span style="color: green"><b>Foraging successful.</b></span></div>
+          `
+        };
+        await game?.dice3d?.showForRoll(roll, game.user, false, gm, false);
+        ChatMessage.create(cData);
+      }
+      modEl.value = 0;
+    }
 
-      let encButtonTemplate = `    
-        <h4>Encounter Roll</h4>
-        <div class="btn-spcr"></div>
-        <button type="button" id="enc-btn">Roll</button>`;
+    async updatePartyDist(mod) {
+      const rateEl = document.getElementById('BTR');
+      const charEl = document.getElementById('character-list');
+      const retEl = document.getElementById('retainer-list');
+      const upData = await this.getTravelData(mod);
 
-      let encBtnHtml = oseActive ? encButtonTemplate : `<div style="height: 125px"></div>`;
+      rateEl.innerText = upData.baseRate;
+      charEl.innerHTML = upData.html.characters;
+      retEl.innerHTML = upData.html.retainers;
+    }
+    async getTravelData(mod) {
       const partyObj = OSRH.util.getPartyActors();
       let slowest = partyObj.party[0]?.system.movement.base;
       //find slowest rate
@@ -169,192 +338,20 @@ export const registerReports = () => {
       });
       //convert to miles
       const convertedRate = Math.floor((slowest / 5) * mod);
-      return {
+      let retData = {
         baseRate: convertedRate,
-        html: {
-          encButton: encBtnHtml,
-          characters: partyHtml(partyObj.characters, mod),
-          retainers: partyHtml(partyObj.retainers, mod)
-        }
-      };
-    }
-
-    class travelReport extends Application {
-      constructor(data) {
-        /* 
         data: {
-          baseRate: rate,
-          templateData: 
-        }
-        
-        */
-        super();
-        this.data = {
-          baseRate: data.baseRate,
-          tData: {
-            baseRate: data.baseRate,
-            characters: data.html.characters,
-            retainers: data.html.retainers,
-            encButton: data.html.encButton
-          }
-        };
-        this.terrainMod = {
-          trail: 1.5,
-          road: 1.5,
-          clear: 1,
-          city: 1,
-          grassland: 1,
-          forest: 0.6,
-          mud: 0.6,
-          snow: 0.6,
-          hill: 0.6,
-          desert: 0.6,
-          brokenLand: 0.6,
-          mountain: 0.5,
-          swamp: 0.5,
-          jungle: 0.5,
-          ice: 0.5,
-          glacier: 0.5
-        };
-        this.lostMod = {
-          grassland: 1,
-          clear: 1,
-          swamp: 3,
-          jungle: 3,
-          desert: 3,
-          allElse: 2
-        };
-      }
-      static get defaultOptions() {
-        return mergeObject(super.defaultOptions, {
-          classes: ['application', 'testApp'],
-          popOut: true,
-          template: `modules/${OSRH.moduleName}/templates/travel-report.html`,
-          id: 'osrTravelReport',
-          title: 'Adventure ahoy!',
-          width: 400
-        });
-      }
-      getData() {
-        // Send data to the template
-        return this.data.tData;
-      }
-      activateListeners(html) {
-        super.activateListeners(html);
-        const terrain = html.find(`[type="radio"][checked]`)[0].value;
-
-        const radioInputs = html.find('[name="terrain"]');
-        const lostBtn = html.find('#nav-check')[0];
-        const forageBtn = html.find('#forage-check')[0];
-        const encBtn = html.find('#enc-btn')[0];
-        const closeBtn = html.find('#close-btn')[0];
-        closeBtn.addEventListener('click', () => {
-          this.close();
-        });
-        if (encBtn) {
-          encBtn.addEventListener('click', (ev) => {
-            this.rollEnc();
-          });
-        }
-        lostBtn.addEventListener('click', (ev) => {
-          this.lostRoll();
-        });
-        forageBtn.addEventListener('click', (ev) => {
-          this.forageCheck();
-        });
-        for (let input of radioInputs) {
-          input.addEventListener('input', (ev) => {
-            const html = document.querySelector('[type="radio][checked]');
-            const mod = this.terrainMod[ev.srcElement.value];
-            // const modRate = Math.floor(this.data.baseRate * this.terrainMod[ev.srcElement.value]);
-            this.updatePartyDist(mod);
-          });
-        }
-      }
-
-      async lostRoll() {
-        const radio = document.querySelector(`[name=terrain]:checked`).value;
-        const bonus = document.querySelector(`#nav-bonus`);
-        const gm = game.users.contents.filter((u) => u.role == 4).map((u) => u.id);
-        if (radio == 'road' || radio == 'trail') {
-          ui.notifications.warn('Cannot get lost on roads or trails');
-          return;
-        }
-        let roll = await new Roll(`1d6 + ${bonus.value}`).evaluate({ async: true });
-        let target = this.lostMod[radio] || 2;
-
-        if (roll.total <= target) {
-          let data = {
-            whisper: [game.user],
-            flavor: `
-            <h3>Navigation Check: ${radio}</h3>
-            <span style="color: red">The party got lost.</span>`
-          };
-          await game?.dice3d?.showForRoll(roll, game.user, false, gm, false);
-          ChatMessage.create(data);
-        } else {
-          let data = {
-            whisper: [game.user],
-            flavor: `
-            <h3>Navigation Check: ${radio}</h3>
-            The party found their way.
-            `
-          };
-          await game?.dice3d?.showForRoll(roll, game.user, false, gm, false);
-          ChatMessage.create(data);
-        }
-
-        bonus.value = 0;
-      }
-      rollEnc() {
-        OSE.util.wildEncounter();
-      }
-      async forageCheck() {
-        const modEl = document.getElementById('forage-bonus');
-        const mod = parseInt(modEl.value);
-        const terrain = document.querySelector(`[name=terrain]:checked`).value;
-        const gm = game.users.contents.filter((u) => u.role == 4).map((u) => u.id);
-        let roll = await new Roll(`1d6 + ${mod}`).roll({ async: true });
-        if (roll.total <= 3) {
-          let cData = {
-            user: game.user.id,
-            whisper: gm,
-            roll: roll,
-            flavor: `
-            <h3>Forage check: ${terrain}</h3>
-            <div><span style="color: red"><b>Foraging unsuccessful.</b></span></div>
-            `
-          };
-          await game?.dice3d?.showForRoll(roll, game.user, false, gm, false)
-          ChatMessage.create(cData)
-        } else {
-          let cData = {
-            user: game.user.id,
-            whisper: gm,
-            roll: roll,
-            flavor: `
-            <h3>Forage check: ${terrain}</h3>
-            <div><span style="color: green"><b>Foraging successful.</b></span></div>
-            `
-          };
-          await game?.dice3d?.showForRoll(roll, game.user, false, gm, false);
-          ChatMessage.create(cData);
-        }
-        modEl.value = 0;
-      }
-
-      updatePartyDist(mod) {
-        const rateEl = document.getElementById('BTR');
-        const charEl = document.getElementById('character-list');
-        const retEl = document.getElementById('retainer-list');
-        const upData = getTravelData(mod);
-
-        rateEl.innerText = upData.baseRate;
-        charEl.innerHTML = upData.html.characters;
-        retEl.innerHTML = upData.html.retainers;
-      }
+          characters: this.partyData(partyObj.characters, mod),
+          retainers: this.partyData(partyObj.retainers, mod)
+        },
+        html: {}
+      };
+      retData.html.characters = await renderTemplate('modules/osr-helper/templates/travel-report-character-list.hbs', {actors: retData.data.characters});
+      retData.html.retainers = await renderTemplate('modules/osr-helper/templates/travel-report-character-list.hbs', {actors: retData.data.retainers});
+      return retData; 
     }
-
-    new travelReport(getTravelData(initMod)).render(true);
   };
+  OSRH.report.travelCalc = function(){
+    new OSRH.report.TravelReport().render(true)
+  }
 };

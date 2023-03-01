@@ -24,10 +24,22 @@
 </section>
   <section class="fx" id="party-list">
     <div class="actor-list w200 br2" id="character-list">
-      {{{characters}}}
+      {{#each characters as |character idx|}}
+      <div class="actor-div fx sb plr5">
+        <div class="of-hide w140">{{character.name}}</div>
+        <div>{{character.distance}} mi</div>
+      </div>
+      {{/each}}
+      {{!-- {{{characters}}} --}}
     </div>
     <div class="actor-list w200" id="retainer-list">
-      {{{retainers}}}
+      {{#each retainers as |retainer idx|}}
+      <div class="actor-div fx sb plr5">
+        <div class="of-hide w140">{{retainer.name}}</div>
+        <div>{{retainer.distance}} mi</div>
+      </div>
+      {{/each}}
+      {{!-- {{{retainers}}} --}}
     </div>
   </section>
   <section>
@@ -124,7 +136,12 @@
       <button type="button" id="nav-check">Roll</button>
     </div>
     <div class="button-container" id="enc-roll-cont">
-    {{{encButton}}}
+      {{#if ose}}
+        <h4>Encounter Roll</h4>
+        <div class="btn-spcr"></div>
+        <button type="button" id="enc-btn">Roll</button>
+      {{/if}}
+    {{!-- {{{encButton}}} --}}
     </div>
     <div class="button-container">
       <h4>Forage Check</h4>

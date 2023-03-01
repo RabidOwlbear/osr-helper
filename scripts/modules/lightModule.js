@@ -1,6 +1,13 @@
 export const registerLightModule = async function () {
 
-  OSRH.light.lightToggle = async function (uuid, tokenId) {
+  OSRH.light.lightToggle = async function (uuid =null, tokenId) {
+    if(!uuid){
+      if(OSRH.util.singleSelected()){
+        uuid = canvas.tokens.controlled[0]?.actor.uuid
+      }else{
+        return
+      }
+    }
     let actor = await fromUuid(uuid);
     actor = actor.collectionName === 'tokens' ? actor.actor : actor;
 
@@ -371,6 +378,13 @@ export const registerLightModule = async function () {
   };
 
   OSRH.light.turnsRemaining =  function (actorId) {
+    if(!actorId){
+      if(OSRH.util.singleSelected()){
+        actorId = canvas.tokens.controlled[0]?.actor.id
+      }else{
+        return
+      }
+    }
     let lightData = game.settings.get(`${OSRH.moduleName}`, 'lightData')?.[actorId]?.lights.filter((i) => i.isOn)?.[0];
     if (lightData) {
       let elapsed = game.time.worldTime - lightData.start;

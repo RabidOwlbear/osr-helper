@@ -9,6 +9,7 @@ import { registerReports } from './modules/reports.js';
 import { registerNameData } from './data/nameData.js';
 import { registerSettings } from './modules/settingsModule.js';
 import { registerEffectModule } from './modules/effectModule.js';
+import { uiControls } from './modules/ui-controls.mjs';
 //namespace
 window.OSRH = window.OSRH || {
   moduleName: `osr-helper`,
@@ -19,6 +20,7 @@ window.OSRH = window.OSRH || {
   report: {},
   turn: {},
   util: {},
+  ui: uiControls,
   socket: undefined
 };
 
@@ -40,7 +42,7 @@ Hooks.once('init', async function () {
   registerLightModule();
   registerEffectModule();
   OSRH.gameVersion = game.version ? game.version : game.version;
-  Hooks.call(`${OSRH.moduleName}.registered`);
+  Hooks.callAll(`${OSRH.moduleName}.registered`);
   
 });
 Hooks.once('socketlib.ready', () => {
@@ -83,8 +85,17 @@ Hooks.on('updateSetting', async () => {
 
   // }
 });
-
+Hooks.once(`${OSRH.moduleName}.registered`, ()=>{
+  
+})
+Hooks.on('renderHotbar', ()=>{
+  
+  OSRH.ui.addUiControls()
+})
 Hooks.once('ready', async () => {
+  
+  
+
   OSRH.util.setTheme()
   //const lightData = game.settings.get(`${OSRH.moduleName}`, 'lightData');
   const turnData = game.settings.get(`${OSRH.moduleName}`, 'turnData');
