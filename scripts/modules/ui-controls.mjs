@@ -48,6 +48,10 @@ export const uiControls = {
       } else {
         if (!option.gm) {
           btnCont.appendChild(btn);
+          btn.addEventListener('click', (e) => {
+            let path = option.function.split('.');
+            OSRH[path[0]][path[1]]();
+          });
         }
       }
     }

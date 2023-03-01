@@ -209,7 +209,7 @@ export const registerUtil = () => {
   OSRH.util.centerHotbar = function () {
     let hotbar = document.getElementById('hotbar');
     if (game.settings.get(`${OSRH.moduleName}`, 'centerHotbar')) {
-      document.documentElement.style.setProperty('--hotbar-center', `${window.innerWidth / 2 - 289}px`);
+      document.documentElement.style.setProperty('--hotbar-center', `${window.innerWidth / 2 - 578}px`);
       hotbar.classList.add('center-hotbar');
     } else {
       hotbar.classList.remove('center-hotbar');
