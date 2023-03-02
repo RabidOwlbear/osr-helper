@@ -7,11 +7,12 @@ export const uiControls = {
     const animationOut = [{ transform: 'translateX(0)' }, { transform: 'translateX(435px)' }];
     const animationIn = [{ transform: 'translateX(0)' }, { transform: 'translateX(-435px)' }];
     const animOptions = {
-      duration: 200,
-      iterations: 1
+      duration: 250,
+      iterations: 1,
+      easing: 'ease-out'
     };
     // get bottom ui element
-    const element = document.querySelector('#hotbar');
+    const element = document.querySelector('#hotbar');  
     element.style.position = 'relative';
     // create control container
     const uiEl = document.createElement('div');
@@ -62,13 +63,18 @@ export const uiControls = {
     controlBtn.addEventListener('click', async (e) => {
       if (btnCont.classList.contains('osrh-control-closed')) {
         let finished = await btnCont.animate(animationOut, animOptions).finished;
+        
         if (finished.playState === 'finished') {
+          game.user.setFlag('osr-helper', 'uiControlOpen', true)
           btnCont.classList.remove('osrh-control-closed');
+          controlBtn.classList.add('osrh-controls-open')
         }
       } else {
         let finished = await btnCont.animate(animationIn, animOptions).finished;
         if (finished.playState === 'finished') {
+          game.user.setFlag('osr-helper', 'uiControlOpen', false)
           btnCont.classList.add('osrh-control-closed');
+          controlBtn.classList.remove('osrh-controls-open')
         }
       }
     });
@@ -82,23 +88,38 @@ export const uiControls = {
         btnMask.style.top = `-${amt}px`;
       }
       
-      pageNum.addEventListener('click', async (e) => {        
+      pageNum.addEventListener('click', async (e) => {
+        console.log(amt)
         const animationUp = [{ transform: 'translateY(0)' }, { transform: `translateY(-${amt}px)` }];
         const animationDown = [{ transform: 'translateY(0)' }, { transform: `translateY(${amt}px)` }];
+        let options = {
+          duration: 200,
+          iterations: 1,
+          easing: 'ease-out'
+        }
         if (!hotbarPage.classList.contains('collapsed')) {
-          let finished = await btnCont.animate(animationDown, animOptions).finished;
+
+          let finished = await uiEl.animate(animationDown, options).finished;
           if (finished.playState === 'finished') {
             controlBtn.style.top = `0px`;
             btnMask.style.top = `0px`;
           }
         } else {
-          let finished = await btnCont.animate(animationUp, animOptions).finished;
+
+          let finished = await uiEl.animate(animationUp, options).finished;
           if (finished.playState === 'finished') {
             controlBtn.style.top = `-${amt}px`;
             btnMask.style.top = `-${amt}px`;
           }
         }
       });
+    }
+
+    // if already open
+    if(game.user.getFlag('osr-helper', 'uiControlOpen')){
+      console.log('true', )
+      btnCont.classList.remove('osrh-control-closed');
+      controlBtn.classList.add('osrh-controls-open')
     }
   },
   controlOptions: [
@@ -107,77 +128,78 @@ export const uiControls = {
       label: 'Dungeon Turn',
       gm: true,
       function: 'turn.dungeonTurn',
-      img: 'icons/magic/time/clock-stopwatch-white-blue.webp'
+      img: 'modules/osr-helper/images/icons/clock-64.png'
+      // img: 'icons/magic/time/clock-stopwatch-white-blue.webp'
     },
     {
       id: 'dungeonRest',
       label: 'Rest',
       gm: true,
       function: 'turn.rest',
-      img: 'icons/environment/wilderness/camp-improvised.webp'
+      img: 'modules/osr-helper/images/icons/tent-64.png'
     },
     {
       id: 'showTurnCount',
       label: 'Show Turn Count',
       gm: true,
       function: 'turn.showTurnCount',
-      img: 'icons/sundries/books/book-embossed-jewel-gold-green.webp'
+      img: 'modules/osr-helper/images/icons/show-turn-64.png'
     },
     {
       id: 'resetSessionCount',
       label: 'Reset Session Count',
       gm: true,
       function: 'turn.resetSessionCount',
-      img: 'icons/magic/time/arrows-circling-pink.webp'
+      img: 'modules/osr-helper/images/icons/reset-session-64.png'
     },
     {
       id: 'actorItemReport',
-      label: 'ActorItemReport',
+      label: 'Actor Item Report',
       gm: true,
       function: 'report.actorItem',
-      img: 'icons/sundries/scrolls/scroll-writing-beige.webp'
+      img: 'modules/osr-helper/images/icons/actor-item-report-64.png'
     },
     {
       id: 'light',
       label: 'Light Toggle',
       gm: false,
       function: 'light.lightToggle',
-      img: 'icons/sundries/lights/candle-unlit-yellow.webp'
+      img: 'modules/osr-helper/images/icons/torch-64.png'
     },
     {
       id: 'lightTurnsRemaining',
       label: 'Light Turns Remaining',
       gm: false,
       function: 'light.turnsRemaining',
-      img: 'icons/sundries/scrolls/scroll-writing-beige.webp'
+      img: 'modules/osr-helper/images/icons/light-time-64.png'
     },
     {
       id: 'eatRation',
       label: 'Eat Ration',
       gm: false,
       function: 'ration.eat',
-      img: 'icons/consumables/food/cooked-chicken-turkey-leg-brown.webp'
+      img: 'modules/osr-helper/images/icons/turkey-leg-64.png'
     },
     {
       id: 'rationReport',
       label: 'Ration Report',
       gm: true,
       function: 'report.ration',
-      img: 'icons/sundries/scrolls/scroll-writing-beige.webp'
+      img: 'modules/osr-helper/images/icons/ration-report-64.png'
     },
     {
       id: 'travelCalc',
       label: 'Travel Calculator',
       gm: true,
       function: 'report.travelCalc',
-      img: 'icons/tools/navigation/map-marked-green.webp'
+      img: 'modules/osr-helper/images/icons/travel-calc-64.png'
     },
     {
       id: 'attack',
       label: 'Attack',
       gm: false,
       function: 'util.attack',
-      img: 'icons/skills/melee/weapons-crossed-poleaxes-white.webp'
+      img: 'modules/osr-helper/images/icons/attack-64.png'
     }
   ]
 };

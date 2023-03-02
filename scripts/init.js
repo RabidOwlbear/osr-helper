@@ -88,10 +88,6 @@ Hooks.on('updateSetting', async () => {
 Hooks.once(`${OSRH.moduleName}.registered`, ()=>{
   
 })
-Hooks.on('renderHotbar', ()=>{
-  
-  OSRH.ui.addUiControls()
-})
 Hooks.once('ready', async () => {
   
   
@@ -346,6 +342,7 @@ Hooks.on('updateCombat', async (combat, details) => {
 Hooks.on('renderHotbar', ()=>{
 
   OSRH.util.centerHotbar()
+  OSRH.ui.addUiControls()
 })
 Hooks.on('renderNewActiveEffectForm', (form, html)=>{
   if(game.user.role == 4){

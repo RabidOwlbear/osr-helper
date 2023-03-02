@@ -23,6 +23,10 @@
   /* theme 3 */
   --a: #11e233;
   --theme-btn-color: #fff;
+  --osrh-ui-btn: #253b41;
+  --osrh-ui-btn-open: #236577;
+  --osrh-ui-control: #32383a;
+  --osrh-ui-control-hover: #314d57;
 }
 /* custom effect form */
 #customEffectForm .effectDesc {
@@ -586,26 +590,36 @@
   height: 35px;
   width: 35px;
   border-radius: 8px;
-  background-color: #253b41;
+  background-color: var(--osrh-ui-btn);
   display: flex;
   justify-content: center;
   align-items: center;
   
   position: relative;
 }
+.osrh-controls-open{
+  background-color: var(--osrh-ui-btn-open) !important;
+}
 .osrh-control-btn{
   cursor:pointer;
   height: 35px;
   width: 35px;
   border-radius: 8px;
-  background-color: #32383a;
+  background-color: var(--osrh-ui-control);
   overflow: hidden;
   margin-right: 5px;
+  
+}
+.osrh-control-btn:hover{
+  background-color: var(--osrh-ui-control-hover);
 }
 .osrh-control-btn-img{
   height: 35px;
   width: 35px;
-  background-size: cover;
+  background-size: 30PX;
+  background-position: center;
+  background-repeat: no-repeat;
+  opacity: .65;
 }
 #osrh-ui-display-btn::before{
   content: "";
