@@ -28,14 +28,13 @@ Hooks.once('init', async function () {
   //add settings
   registerData();
   registerUtil();
-    await registerSettings();
+  await registerSettings();
 
   // import modules
   // registerLight();
   registerTurn();
   registerRations();
-  
-  
+
   registerCustomEffectList();
   registerReports();
   registerNameData();
@@ -43,7 +42,6 @@ Hooks.once('init', async function () {
   registerEffectModule();
   OSRH.gameVersion = game.version ? game.version : game.version;
   Hooks.callAll(`${OSRH.moduleName}.registered`);
-  
 });
 Hooks.once('socketlib.ready', () => {
   console.log('SL ready');
@@ -68,7 +66,6 @@ Hooks.once('socketlib.ready', () => {
 //update proc data if changed
 Hooks.on('updateSetting', async () => {
   const turnData = game.settings.get(`${OSRH.moduleName}`, 'turnData');
-
   const newName = game.settings.get(`${OSRH.moduleName}`, 'timeJournalName');
   const oldName = turnData?.journalName;
   const journal = await game.journal.getName(oldName);
@@ -80,19 +77,15 @@ Hooks.on('updateSetting', async () => {
   }
   //turn journal update
   OSRH.socket.executeAsGM('setting', 'turnData', turnData, 'set');
+
   // if (game.user.role >= 4) {
   //   game.settings.set(`${OSRH.moduleName}`, 'turnData', turnData);
 
   // }
 });
-Hooks.once(`${OSRH.moduleName}.registered`, ()=>{
-  
-})
+Hooks.once(`${OSRH.moduleName}.registered`, () => {});
 Hooks.once('ready', async () => {
-  
-  
-
-  OSRH.util.setTheme()
+  OSRH.util.setTheme();
   //const lightData = game.settings.get(`${OSRH.moduleName}`, 'lightData');
   const turnData = game.settings.get(`${OSRH.moduleName}`, 'turnData');
   const jName = game.settings.get(`${OSRH.moduleName}`, 'timeJournalName');
@@ -105,7 +98,7 @@ Hooks.once('ready', async () => {
 
   //set hook to update light timer durations
   Hooks.on('updateWorldTime', async () => {
-    console.log('time update')
+    console.log('time update');
     await OSRH.util.osrTick();
     OSRH.socket.executeAsGM('lightCheck');
     // OSRH.socket.executeAsGM('clearExpiredEffects')
@@ -161,9 +154,9 @@ Hooks.once('ready', async () => {
   });
   //check center hotbar
   OSRH.util.centerHotbar();
-  window.addEventListener('resize', ()=>{
+  window.addEventListener('resize', () => {
     OSRH.util.centerHotbar();
-  })
+  });
 });
 
 //reset monster actions hook
@@ -179,69 +172,71 @@ Hooks.on('updateCombat', (combat) => {
 // //effect report
 // Hooks.on('renderuserEffectReport', ())
 Hooks.on('renderActorSheet', async (actor, html) => {
-  const modBox = html.find(`[class="modifiers-btn"]`);
-  modBox.append(
-    `<a class="ose-effect-list ose-icon" id ="ose-effect-list" title="Show Active Effects"><i class="fas fa-list"></i></a>`
-  );
+  // itemPiles accomodation
+  let itemPiles = actor.flags?.['item-piles']?.data?.enabled || null;
+  if (!itemPiles) {
+    const modBox = html.find(`[class="modifiers-btn"]`);
+    modBox.append(
+      `<a class="ose-effect-list ose-icon" id ="ose-effect-list" title="Show Active Effects"><i class="fas fa-list"></i></a>`
+    );
 
-  modBox.on('click', '.ose-effect-list', (e) => {
-    // active effects button
-    // OSRH.ce.effectList(actor.object);
-    let pos = { x: e.pageX + 100, y: e.pageY - 200 };
-    // check window for instances of form
-    if (Object.values(ui.windows).filter((i) => i.id == `activeEffectList.${actor.object.id}`).length == 0) {
-      new OSRH.effect.ActiveEffectList(actor.object, pos).render(true);
-    }
-  });
-
-  //currency converter
-  let linkCont = html.find(`#treasure .item-controls`)[0];
-  let el = document.createElement('a');
-  let iEl = document.createElement('i');
-  el.classList = 'item-control';
-  el.title = 'Currency Converter';
-  iEl.classList = 'fa fa-coins';
-  iEl.style['margin-right'] = '5px';
-  el.appendChild(iEl);
-  if (linkCont) linkCont.prepend(el);
-  el.addEventListener('click', (ev) => {
-    ev.preventDefault();
-    actor.render();
-    OSRH.util.curConDiag(actor.object);
-  });
-
-  //  lightItemSettings
-  if (await game.settings.get(`${OSRH.moduleName}`, 'enableLightConfig')) {
-    let lightItems = actor.object.items.filter((i) => {
-      let tags = i.system.manualTags;
-      if (tags && tags.find((t) => t.value == 'Light')) return i;
+    modBox.on('click', '.ose-effect-list', (e) => {
+      // active effects button
+      // OSRH.ce.effectList(actor.object);
+      let pos = { x: e.pageX + 100, y: e.pageY - 200 };
+      // check window for instances of form
+      if (Object.values(ui.windows).filter((i) => i.id == `activeEffectList.${actor.object.id}`).length == 0) {
+        new OSRH.effect.ActiveEffectList(actor.object, pos).render(true);
+      }
     });
-    for (let item of lightItems) {
-      let targetEl = html.find(`[data-item-id="${item.id}"] .item-controls`);
-      let el = document.createElement('a');
-      let iEl = document.createElement('i');
-      el.classList = 'light-config'; //'item-control'
-      el.title = 'Light Config';
-      iEl.classList = 'fa fa-wrench';
-      iEl.style['margin-right'] = '5px';
-      el.appendChild(iEl);
-      targetEl.prepend(el);
-      el.addEventListener('click', async (ev) => {
-        ev.preventDefault();
-        let itemConfig = await item.getFlag(`${OSRH.moduleName}`, 'lightItemData');
-        if (Object.values(ui.windows).filter((i) => i.id.includes(`light-item-config.${item.id}`)).length == 0) {
-          new OSRH.light.ItemSettingsForm(item).render(true);
-        }
+
+    //currency converter
+    let linkCont = html.find(`#treasure .item-controls`)[0];
+    let el = document.createElement('a');
+    let iEl = document.createElement('i');
+    el.classList = 'item-control';
+    el.title = 'Currency Converter';
+    iEl.classList = 'fa fa-coins';
+    iEl.style['margin-right'] = '5px';
+    el.appendChild(iEl);
+    if (linkCont) linkCont.prepend(el);
+    el.addEventListener('click', (ev) => {
+      ev.preventDefault();
+      actor.render();
+      OSRH.util.curConDiag(actor.object);
+    });
+
+    //  lightItemSettings
+    if (await game.settings.get(`${OSRH.moduleName}`, 'enableLightConfig')) {
+      let lightItems = actor.object.items.filter((i) => {
+        let tags = i.system.manualTags;
+        if (tags && tags.find((t) => t.value == 'Light')) return i;
       });
+      for (let item of lightItems) {
+        let targetEl = html.find(`[data-item-id="${item.id}"] .item-controls`);
+        let el = document.createElement('a');
+        let iEl = document.createElement('i');
+        el.classList = 'light-config'; //'item-control'
+        el.title = 'Light Config';
+        iEl.classList = 'fa fa-wrench';
+        iEl.style['margin-right'] = '5px';
+        el.appendChild(iEl);
+        targetEl.prepend(el);
+        el.addEventListener('click', async (ev) => {
+          ev.preventDefault();
+          let itemConfig = await item.getFlag(`${OSRH.moduleName}`, 'lightItemData');
+          if (Object.values(ui.windows).filter((i) => i.id.includes(`light-item-config.${item.id}`)).length == 0) {
+            new OSRH.light.ItemSettingsForm(item).render(true);
+          }
+        });
+      }
+    }
+    if (await game.settings.get(OSRH.moduleName, `enableEquippableContainers`)) {
+      // OSRH.util.dropContainer(actor.object, html)
+      // OSRH.util.dropContainer(actor.object, html)
+      OSRH.util.initializeDroppableContainers(actor.object, html);
     }
   }
-  if( await game.settings.get(OSRH.moduleName, `enableEquippableContainers`)){
-    // OSRH.util.dropContainer(actor.object, html)
-    // OSRH.util.dropContainer(actor.object, html)
-    OSRH.util.initializeDroppableContainers(actor.object, html)
-  }
-  
-  
 });
 
 /* 
@@ -317,7 +312,7 @@ Hooks.on('renderItemSheet', async (sheetObj, html) => {
 });
 // remove once ose combat time advancement fixed
 Hooks.on('deleteCombat', () => {
-  OSRH.socket.executeAsGM('setting','lastRound', 0, 'set');
+  OSRH.socket.executeAsGM('setting', 'lastRound', 0, 'set');
   // if(game.user.isGM){
   //   game.settings.set(`${OSRH.moduleName}`, 'lastRound', 0)
   // }
@@ -339,25 +334,23 @@ Hooks.on('updateCombat', async (combat, details) => {
     }
   }
 });
-Hooks.on('renderHotbar', ()=>{
-
-  OSRH.util.centerHotbar()
-  OSRH.ui.addUiControls()
-})
-Hooks.on('renderNewActiveEffectForm', (form, html)=>{
-  if(game.user.role == 4){
-    let header = html.find('header')[0]
-    let closeBtn = html.find(`header a.close`)[0]
+Hooks.on('renderHotbar', () => {
+  OSRH.util.centerHotbar();
+  OSRH.ui.addUiControls();
+});
+Hooks.on('renderNewActiveEffectForm', (form, html) => {
+  if (game.user.role == 4) {
+    let header = html.find('header')[0];
+    let closeBtn = html.find(`header a.close`)[0];
     // <a class="light-config" title="Light Config"><i class="fa fa-wrench" style="margin-right: 5px;"></i></a>
     let btn = document.createElement('a');
-    btn.title = `Manage Custom Effects`
+    btn.title = `Manage Custom Effects`;
     btn.innerHTML = `<i class="fa fa-bars fa-xs"></i>`;
     btn.classList.add('manage-effects-btn');
     header?.insertBefore(btn, closeBtn);
-    btn.addEventListener('click', e=>{
+    btn.addEventListener('click', (e) => {
       e.preventDefault();
-      new OSRH.effect.manageCustomPresets().render(true)
-    })
+      new OSRH.effect.manageCustomPresets().render(true);
+    });
   }
-
-})
+});
