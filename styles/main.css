@@ -577,7 +577,7 @@
   /* top: calc(100vh - 100px); */
   top: -40px;
   height:40px;
-  width: 475px;
+  width: 600px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -606,8 +606,8 @@
   width: 35px;
   border-radius: 8px;
   background-color: var(--osrh-ui-control);
-  overflow: hidden;
-  margin-right: 5px;
+  
+  margin-left:5px;
   
 }
 .osrh-control-btn:hover{
@@ -643,7 +643,7 @@
   
 }
 #osrh-control-mask{
-  width: 435px;
+  width: 600px;
   height: 40px;
   overflow: hidden;
   position: relative;
@@ -660,8 +660,214 @@
 }
 
 .osrh-control-closed{
-  left: -435px;
+  left: -600px;
 }
 .osrh-control-open{
   left: 0;
+}
+
+
+/* side control */
+
+
+/* turn tracker */
+.osrh.turn-tracker section.window-content{
+  padding: 0;
+  background-color: #e9e6d9;
+  background-image: none;
+}
+
+.osrh.turn-tracker form{
+  height: 100%;
+  width: 100%;
+  display: grid;
+  z-index: 5;
+}
+.osrh.turn-tracker h2{
+  border: none;
+  text-align: center;
+  font-weight: 600;
+}
+.osrh.turn-tracker section.main{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.osrh.turn-tracker .nav-tab,
+.osrh.turn-tracker i, 
+.osrh.turn-tracker .title{
+  color: #e9e6d9;
+}
+.osrh.turn-tracker .title{
+  
+  color: #e9e6d9;
+  font-weight: 600;
+  font-size: 1.2rem;
+}
+.osrh.turn-tracker .sheet-tabs{
+  display: flex;
+  justify-content: space-evenly;
+  font-weight: 600;
+  z-index:  5;
+}
+.osrh.turn-tracker .sheet-tabs a {
+  flex: 1;
+  text-align: center;
+}
+.osrh.turn-tracker .nav-tab.active{
+ background-color: #3e345a;
+}
+.osrh.turn-tracker .main-tab,
+.osrh.turn-tracker .config-tab,
+.osrh.turn-tracker .tab,
+.osrh.turn-tracker .tab-content{
+  position: relative;
+  height: 100%;
+  width: 100%;
+}
+.osrh.turn-tracker .tab-content::before {    
+  content: "";
+  background-image: url('../images/trackerbg.jpg');
+  background-size: cover;
+  background-repeat: no-repeat;
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  bottom: 0px;
+  left: 0px;
+  opacity: 0.75;
+}
+.osrh.turn-tracker .config-tab{
+  display: flex;
+  flex-direction: column;
+  background-color: #ffffff88;
+  z-index: 10;
+}
+.osrh.turn-tracker .main-tab{
+  display: grid;
+  place-items: center;
+  z-index: 10;
+}
+
+.osrh.turn-tracker footer{
+  display: flex;
+  height: 2.5rem;
+  justify-content: space-between;
+  padding: 0 1em;
+  align-items: center;
+  background-color: #221e2e;
+}
+.osrh.turn-tracker footer i{
+  font-size: 1.5rem;
+}
+.osrh.turn-tracker header{
+  background-color: #221e2e;
+}
+.osrh.turn-tracker .count-cont{
+  padding: .5rem;
+  border-radius: 5px;
+  background-color: #ffffff77;
+  display: flex;
+  /* width: 100%; */
+  flex-direction: column;
+  align-items: center;
+}
+.osrh.turn-tracker .count-cont .row{
+  width: 100%;
+  justify-content: space-between;
+
+}
+.osrh.turn-tracker .config-tab label{
+  font-weight: 600;
+}
+.osrh.turn-tracker .tracker-header{
+  display: flex;
+  flex-direction: column;
+}
+.osrh.turn-tracker header .btn-div{
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+}
+.osrh.turn-tracker .btn-div i{
+  font-size: 1rem
+}
+.osrh.turn-tracker .count-label{
+  font-size: 1.5em;
+  font-weight: 600;
+}
+.osrh.turn-tracker  .count-value{
+  font-size: 1.8em;
+  font-weight: 600;
+}
+.osrh.turn-tracker .row{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 .2rem;
+}
+.osrh.turn-tracker .half-row{
+  width: 50%;
+}
+.osrh.turn-tracker .num-inp{
+  width: 3em;
+  margin-right: .2em;
+  text-align: center;
+  font-weight: 600;
+  border: none;
+  border-style: none;
+}
+.osrh.turn-tracker .d-level-row{
+  margin-top: 1rem;
+}
+.osrh.turn-tracker .row.dungeon-lvl{
+  justify-content: center;
+  width: 100%;
+}
+.osrh.turn-tracker .dungeon-lvl i{
+  font-size: 1.5rem;
+  color: #221e2e;
+}
+
+.osrh.turn-tracker input#d-level{
+  margin: 0 .3em;
+  font-weight: 800;
+  font-size: 25px;
+}
+/* BG image sprites */
+.bg-img-cont{
+  position: absolute;
+  height: 100%; 
+  width: 100%;
+  top: 0;
+  left: 0;
+  z-index: 0;
+}
+.sprite{
+  position: absolute;
+  border: none;
+}
+#bg-0{
+  top: -5px;
+  left: 55px;
+}
+#bg-1{
+  top: 0px;
+  left: 55px;
+}
+#bg-2{
+  top: 140px;
+  left: 5px;
+}
+#bg-3{
+  top: 260px;
+  left: 100px;
+}
+#bg-4{
+  top: 135px;
+  left: 225px;
+}
+#bg-5{
+  top: 0px;
+  left: 185px;
 }

@@ -33,21 +33,28 @@ The provided "OSR-helper Rest" macro will reset the turns since last rest count 
 
 ---
 
-### Using the OSR-helper Dungeon Turn Macro
+### Turn Tracker
+![turn tracker image](./images/doc/turn-tracker-doc-01.webp)
 
-To set the options for the dungeon turn macro navigate to the OSE helper settings in module settings.
-Clicking the dungeon tirn settings button will open a settings window with the following options:
+On the main tab of the tracker the current dungeon turn counts  and dungeon level is desplayed. 
+The dungeon level may be increased by pressing one of the arrow buttons on either side. 
+The party may rest my using the rest button located in the bottom left corner of the application. 
+The dungeon turn may be advanced by clicking the button in the bottom right corner.
+The session turn count may be reset using the button in the upper left corner of the application.
+The total turn count may be reset by clicking the button in the top right corner. This will open a dialog warning that this change cannot be undone. Click the reset button to reset or close to return to the tracker.
 
-- Encounter Table Name: Enter the name of the encounter table you wish to roll on here, case sensitive.
-- Reaction Table Name: Enter the name of the reaction table you wish to roll on here, case sensitive.
-- How often to roll for encounter: How often to roll for encounter. Example: if set to 2 a an encounter check would be rolled every 2nd turn.
-- Target to roll below to trigger table roll: Target number to roll under to trigger a table roll.
-- Roll For Encounters: If checked encounter rolls will be made using the defined options.
-- Roll for Reaction: If checked, when an encounter table is rolled, a roll will be made on the provided reaction table.
+On the config tab (only visible to GM users) The GM may alter the dungeon turn settings. This replaces the dungeon turn settings in the game options. 
+- Checking the roll encounters box will roll for encounters based on the frequency determined in the field below.
+- The frequency (in turns) determines how often an encounter roll will be performed.
+- Checking the Roll for reaction checkbox will roll on the determined reaction table whenever an encounter roll is rolled.
+- The roll target input determines the success chance for an encounter roll. The encounter roll is a 1d6 roll under roll.
+- The reaction table inout is used to select a table for reaction rolls. The select will list the name of all tables in the game world.
+- The Lvl inputs are used to set the encounter table per dungeon level. When an encounter is rolled it will use the current dungeon level to find the correct encounter table. If the dungeon level is 9 or greater the level 8 encounter table will be used.
 
-When used, the Dungeon Turn macro will advance the game time by 10 minutes and update the turn counts by one. It will then check the rest count,. At 3 turns since last rest a chat message will be created warning the players that they need to rest, at +5 turns the worning becomes red. If the players progress beyond 1 hour without rest, the chat message will then include the relevant penalties, repeating this added text every 5 subsequent turns.
 
-The macro will also check to see if random encounter rolls are active, if so itt will check to see if the number of turns since the last roll is greater than the proc interval (see above), if it is, the macro will roll on the provided table, and if set, roll for reaction on the provided table.
+When the advance dungeon turn button is used, the Turn Tracker will advance the game time by 10 minutes and update the turn counts by one. It will then check the rest count. At 3 turns since last rest a chat message will be created warning the players that they need to rest, at +5 turns the warning becomes red. If the players progress beyond 1 hour without rest, the chat message will then include the relevant penalties, repeating this added text every 5 subsequent turns.
+
+The Tracker will roll any encounter and reaction tables as defined in the config tab.
 
 ---
 

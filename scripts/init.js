@@ -10,6 +10,7 @@ import { registerNameData } from './data/nameData.js';
 import { registerSettings } from './modules/settingsModule.js';
 import { registerEffectModule } from './modules/effectModule.js';
 import { uiControls } from './modules/ui-controls.mjs';
+import { OSRHTurnTracker } from './modules/turn-tracker.mjs';
 //namespace
 window.OSRH = window.OSRH || {
   moduleName: `osr-helper`,
@@ -41,6 +42,7 @@ Hooks.once('init', async function () {
   registerLightModule();
   registerEffectModule();
   OSRH.gameVersion = game.version ? game.version : game.version;
+  OSRH.TurnTracker = OSRHTurnTracker;
   Hooks.callAll(`${OSRH.moduleName}.registered`);
 });
 Hooks.once('socketlib.ready', () => {
@@ -61,6 +63,7 @@ Hooks.once('socketlib.ready', () => {
     OSRH.socket.register('gmCreateEffect', OSRH.effect.gmCreateEffect);
     OSRH.socket.register('deleteEffect', OSRH.effect.delete);
     OSRH.socket.register('refreshEffectLists', OSRH.effect.refreshEffectLists);
+    OSRH.socket.register('refreshTurnTracker', OSRH.turn.refreshTurnTracker);
   });
 });
 //update proc data if changed
@@ -85,6 +88,7 @@ Hooks.on('updateSetting', async () => {
 });
 Hooks.once(`${OSRH.moduleName}.registered`, () => {});
 Hooks.once('ready', async () => {
+
   OSRH.util.setTheme();
   //const lightData = game.settings.get(`${OSRH.moduleName}`, 'lightData');
   const turnData = game.settings.get(`${OSRH.moduleName}`, 'turnData');
@@ -92,10 +96,15 @@ Hooks.once('ready', async () => {
 
   //update turn proc
 
-  turnData.journalName = jName;
+  if(!turnData.journalName && jName)turnData.journalName = jName;
+  
   // game.settings.set(`${OSRH.moduleName}`, 'turnData', turnData);
-  OSRH.socket.executeAsGM('setting', 'turnData', turnData, 'set');
-
+  await OSRH.socket.executeAsGM('setting', 'turnData', turnData, 'set');
+  // migrate turn data
+  console.log('turndata',turnData, !turnData.rSprite)
+  if(!turnData.lvl || !turnData.walkCount || !turnData.rSprite){ 
+    if(game.user.id === OSRH.util.singleGM().id) await migrateTurnData();
+  }
   //set hook to update light timer durations
   Hooks.on('updateWorldTime', async () => {
     console.log('time update');
@@ -115,14 +124,16 @@ Hooks.once('ready', async () => {
 
   //check for userflags
 
-  for (let user of game.users.contents) {
-    const lightFlag = await user.getFlag(`${OSRH.moduleName}`, 'lightData');
-    const effectFlag = await user.getFlag(`${OSRH.moduleName}`, 'effectData');
-    if (!lightFlag) {
-      await user.setFlag(`${OSRH.moduleName}`, 'lightData', {});
-    }
-    if (!effectFlag) {
-      await user.setFlag(`${OSRH.moduleName}`, 'effectData', {});
+  if (game.user.id === OSRH.util.singleGM().id) {
+    for (let user of game.users.contents) {
+      const lightFlag = await user.getFlag(`${OSRH.moduleName}`, 'lightData');
+      const effectFlag = await user.getFlag(`${OSRH.moduleName}`, 'effectData');
+      if (!lightFlag) {
+        await user.setFlag(`${OSRH.moduleName}`, 'lightData', {});
+      }
+      if (!effectFlag) {
+        await user.setFlag(`${OSRH.moduleName}`, 'effectData', {});
+      }
     }
   }
 
@@ -354,3 +365,15 @@ Hooks.on('renderNewActiveEffectForm', (form, html) => {
     });
   }
 });
+// migrate turn data
+async function migrateTurnData(){
+  const turnData = deepClone(await game.settings.get('osr-helper', 'turnData'));
+  const dungeonTurnData = deepClone(await game.settings.get('osr-helper', 'dungeonTurnData'));
+  turnData.eTables = [dungeonTurnData.eTable, 'none','none','none','none','none','none','none'];
+  turnData.lvl = 1;
+  turnData.walkCount = 1;
+  turnData.rSprite = false;
+  let merged = mergeObject(turnData, dungeonTurnData);
+  await game.settings.set('osr-helper', 'turnData', merged);
+  ui.notifications.notify('TurnData Migration Complete.');
+}

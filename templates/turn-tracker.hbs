@@ -1,0 +1,181 @@
+<form id=" turn-tracker">
+  <section class="main">
+    <header class="tracker-header">
+      <div class="btn-div">
+        {{#if isGM}}<a id="reset-session-btn" title="Reset Session Count"><i class="fa-solid fa-clock-rotate-left"></i></a>{{/if}}
+        <p class="title">Turn Tracker</p>
+        {{#if isGM}}<a id="reset-total-btn" title="Reset Total Count"><i class="fa-regular fa-calendar-xmark"></i></a></div>{{/if}}
+      </div>
+      
+      <div class="sheet-tabs" data-group="primary">
+        <a class="nav-tab" data-tab="main">Main</a>
+        {{#if isGM}}<a class="nav-tab" data-tab="config">Config</a> {{/if}}
+      </div>
+     
+    </header>
+    <section class="tab-content" id="tab-content">
+      <div class="tab main" data-group="primary" data-tab="main">
+        <div class="main-tab">
+          
+          <div class="count-cont">
+            <h2>Dungeon Turn Counts</h2>
+            <div class="row">
+              <div class="count-label session">Session:</div> 
+              <div class="count-value" id="sesion-count">{{turnData.session}}</div>
+            </div>
+            <div class="row">
+              <div class="count-label total">Total :</div> 
+              <div class="count-value" id="total-count">{{turnData.total}}</div>
+            </div>
+            <div class="row">
+              <div class="count-label current">Since Rest:</div> 
+              <div class="count-value" id="current-count">{{turnData.rest}}</div>
+            </div>
+            <div class="d-level-row">
+              <label class="count-label"for="d-level">Dungeon Level</label>
+              <div class="row dungeon-lvl">
+                {{#if isGM}}
+                <a id="d-lvl-dn">
+                  <i class="fa-solid fa-up"></i>
+                </a>
+                {{/if}}
+                <input class="num-inp"type="text" name="d-level" id="d-level" data-dtype="number" min="1" max="8" value="{{turnData.lvl}}" {{#if isGM}}{{else}}disabled{{/if}}>
+                {{#if isGM}}
+                <a id="d-lvl-up">
+                  <i class="fa-solid fa-down"></i>
+                </a>
+                {{/if}}
+              </div>
+            </div>
+          </div>
+
+
+        </div>
+      </div>
+      <div class="tab config" data-group="primary" data-tab="config">
+        <div class="config-tab">
+          <h2>Dungeon Turn Options</h2>
+          <div class="row">
+            <div class="row">
+              <input type="checkbox" name="encounter-roll" id="encounter-roll" title="Roll For Encounters?"{{#if turnData.rollEnc}}checked{{/if}}>
+              <label for="encounter-roll" >Roll Encounters</label>
+            </div>
+            <div class="row">
+              <input type="checkbox" name="react-roll" id="react-roll" title="Roll For Reaction?"{{#if turnData.rollReact}}checked{{/if}}>
+              <label for="encounter-roll" >Roll Reaction</label>
+            </div>
+          </div>
+          <div class="row">
+            <div class="row">
+              <input type="text" class="num-inp" data-dtype="number" name="encounter-freq" id="encounter-freq" title="Encounter Roll Frequency(In Turns)" value="{{turnData.proc}}">
+              <label for="encounter-freq" >Frequency</label>
+            </div>
+            <div class="row">
+              <input type="text" class="num-inp" data-dtype="number" name="encounter-target" id="encounter-target" title="Encounter Roll Target(Roll Under)" value="{{turnData.rollTarget}}">
+              <label for="encounter-target" >Roll Target</label>
+            </div>
+          </div>
+          <div class="row">
+            <label for="react-table">Reaction Table: </label>
+                <select class="react-select" name="react-table" id="react-table" value="{{turnData.rTable}}">
+                  <option value="none">None</option>
+                  {{#each tableNames as |name idx|}}
+                    <option value="{{name}}">{{name}}</option>
+                  {{/each}}
+                </select>
+          </div>
+            <div class="encounter-tables">
+              <div class="row">
+                <label for="lvl-1">Lvl 1: </label>
+                <select class="enc-select" name="lvl-1" id="lvl-1" data-lvl="1">
+                  <option value="none">None</option>
+                  {{#each tableNames as |name idx|}}
+                    <option value="{{name}}">{{name}}</option>
+                  {{/each}}
+                </select>
+              </div>
+              <div class="row">
+                <label for="lvl-2">Lvl 2: </label>
+                <select class="enc-select" name="lvl-2" id="lvl-2" data-lvl="2">
+                  <option value="none">None</option>
+                  {{#each tableNames as |name idx|}}
+                    <option value="{{name}}">{{name}}</option>
+                  {{/each}}
+                </select>
+              </div>
+              <div class="row">
+                <label for="lvl-3">Lvl 3: </label>
+                <select class="enc-select" name="lvl-3" id="lvl-3" data-lvl="3">
+                  <option value="none">None</option>
+                  {{#each tableNames as |name idx|}}
+                    <option value="{{name}}">{{name}}</option>
+                  {{/each}}
+                </select>
+              </div>
+              <div class="row">
+                <label for="lvl-4">Lvl 4: </label>
+                <select class="enc-select" name="lvl-4" id="lvl-4" data-lvl="4">
+                  <option value="none">None</option>
+                  {{#each tableNames as |name idx|}}
+                    <option value="{{name}}">{{name}}</option>
+                  {{/each}}
+                </select>
+              </div>
+              <div class="row">
+                <label for="lvl-5">Lvl 5: </label>
+                <select class="enc-select" name="lvl-5" id="lvl-5" data-lvl="5">
+                  <option value="none">None</option>
+                  {{#each tableNames as |name idx|}}
+                    <option value="{{name}}">{{name}}</option>
+                  {{/each}}
+                </select>
+              </div>
+              <div class="row">
+                <label for="lvl-6">Lvl 6: </label>
+                <select class="enc-select" name="lvl-6" id="lvl-6" data-lvl="6">
+                  <option value="none">None</option>
+                  {{#each tableNames as |name idx|}}
+                    <option value="{{name}}">{{name}}</option>
+                  {{/each}}
+                </select>
+              </div>
+              <div class="row">
+                <label for="lvl-7">Lvl 7: </label>
+                <select class="enc-select" name="lvl-7" id="lvl-7" data-lvl="7">
+                  <option value="none">None</option>
+                  {{#each tableNames as |name idx|}}
+                    <option value="{{name}}">{{name}}</option>
+                  {{/each}}
+                </select>
+              </div>
+              <div class="row">
+                <label for="lvl-8">Lvl 8+: </label>
+                <select class="enc-select" name="lvl-8" id="lvl-8" data-lvl="8">
+                  <option value="none">None</option>
+                  {{#each tableNames as |name idx|}}
+                    <option value="{{name}}">{{name}}</option>
+                  {{/each}}
+                </select>
+              </div>
+            </div>
+        </div>
+      </div>
+      <section class="bg-img-cont">
+        <img id="bg-0"src="modules/osr-helper/images/tts-0.webp" class="sprite hidden">
+        <img id="bg-1"src="modules/osr-helper/images/tts-1.webp" class="sprite hidden">
+        <img id="bg-2"src="modules/osr-helper/images/tts-2.webp" class="sprite hidden">
+        <img id="bg-3"src="modules/osr-helper/images/tts-3.webp" class="sprite hidden">
+        <img id="bg-4"src="modules/osr-helper/images/tts-4.webp" class="sprite hidden">
+        <img id="bg-5"src="modules/osr-helper/images/tts-5.webp" class="sprite hidden">
+      </section>
+    </section>
+    <footer>
+      {{#if isGM}}
+      <a id="rest-btn" title="Rest"><i class="fa-solid fa-campground"></i></a>
+      <a id="save-settings"class="hidden"><i class="fa-solid fa-floppy-disk"></i></a>
+      <a id="turn-advance-btn" title="Advance Dungeon Turn"><i class="fa-solid fa-forward"></i></a>
+      {{/if}}
+    </footer>
+  </section>
+
+</form>

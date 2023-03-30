@@ -124,6 +124,14 @@ export const uiControls = {
   },
   controlOptions: [
     {
+      id: 'turnTracker',
+      label: 'Turn Tracker',
+      gm: false,
+      function: 'util.renderTurnTracker',
+      img: 'modules/osr-helper/images/icons/turn-tracker-64.png'
+      // img: 'icons/magic/time/clock-stopwatch-white-blue.webp'
+    },
+    {
       id: 'dungeonTurn',
       label: 'Dungeon Turn',
       gm: true,

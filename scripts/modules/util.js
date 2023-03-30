@@ -899,4 +899,8 @@ export const registerUtil = () => {
     btnEl.disabled = false;
     
   };
+  OSRH.util.renderTurnTracker = function (){
+    new OSRH.TurnTracker().render(true)
+     
+   }
 };
