@@ -78,7 +78,7 @@ export const uiControls = {
         }
       }
     });
-    if (game.modules.get('monks-hotbar-expansion').active) {
+    if (game.modules.get('monks-hotbar-expansion')?.active) {
       const rowCount = game.settings.get('monks-hotbar-expansion', 'number-rows');
       let amt = rowCount * 50 + 20;
       const pageNum = document.querySelector('#hotbar-page-controls span.page-number');

@@ -1,0 +1,11 @@
+<div class="actor-list" id="character-list">
+<div class="char-list-header">{{header}}</div>
+{{#each actors as |character idx|}}
+<div class="actor-div">
+  <div class="actor-name">{{character.name}}</div>
+  <div class="actor-controls">
+    <div>{{character.distance}} mi</div>
+  </div>
+</div>
+{{/each}}
+

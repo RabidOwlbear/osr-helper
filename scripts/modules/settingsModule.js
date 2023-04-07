@@ -104,7 +104,7 @@ export const registerSettings = async function () {
     icon: 'fas fa-wrench',
     scope: 'world',
     type: DungTurnConfig,
-    config: true,
+    config: false,
     restricted: true
   });
   game.settings.register(`${OSRH.moduleName}`, 'dungeonTurnNotificiation', {
@@ -167,13 +167,39 @@ export const registerSettings = async function () {
     scope: 'world',
     type: Object,
     default: {
-      proc: 0,
-      procCount: 0,
-      rest: 0,
-      restWarnCount: 0,
-      session: 0,
-      total: 0,
-      journalName: game.settings.get(`${OSRH.moduleName}`, 'timeJournalName')
+      journalName: game.settings.get(`${OSRH.moduleName}`, 'timeJournalName'),
+      dungeon: {  
+        eTables: ['none', 'none', 'none', 'none', 'none', 'none', 'none', 'none'],
+        rTable: 'none',
+        lvl: 1,
+        walkCount: 1,
+        rSprite: false,
+        proc: 0,
+        procCount: 0,
+        rollEnc: false,
+        rollReact: false,
+        rollTarget: 0,
+        rest: 0,
+        restWarnCount: 0,
+        session: 0,
+        total: 0,
+      },
+      travel: {
+        session: 0,
+        total: 0,
+        rest: 0,
+        rollEnc: false,
+        rollReact: false,
+        rTable: 'none',
+        eTable: 'none',
+        proc: 0,
+        procCount: 0,
+        rollTarget: 2,
+        restWarnCount: 0,
+        terrain: 'clear',
+        duration: 24
+      }
+      
     },
     config: false
   });

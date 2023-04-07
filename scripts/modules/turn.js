@@ -3,14 +3,14 @@ export const registerTurn = () => {
 
   const osrTime = {};
   //increments game-worldtime by input amount
-  OSRH.turn.timePlus = async function (amt, inc, turn = false) {
+  OSRH.turn.timePlus = async function (amt, inc, turn = false, turnType = null) {
     const increments = {
       minute: 60,
       hour: 3600,
       turn: 600
     };
-    if (turn) {
-      await OSRH.turn.incrementTurnData();
+    if (turn && turnType) {
+      await OSRH.turn.incrementTurnData(turnType);
     }
     game.time.advance(amt * increments[inc]);
   };
@@ -42,36 +42,58 @@ export const registerTurn = () => {
     game.settings.set(`${OSRH.moduleName}`, `${name}`, data);
   };
 
-  OSRH.turn.resetSessionCount = async function () {
+  OSRH.turn.resetSessionCount = async function (type = null) {
     const data = game.settings.get(`${OSRH.moduleName}`, 'turnData');
-    data.session = 0;
+    if (type) {
+      data[type].session = 0;
+    }
     await game.settings.set(`${OSRH.moduleName}`, 'turnData', data);
     OSRH.turn.updateJournal();
   };
 
-  OSRH.turn.resetAllCounts = async function () {
+  OSRH.turn.resetAllCounts = async function (type = null) {
     const data = game.settings.get(`${OSRH.moduleName}`, 'turnData');
-    data.session = 0;
-    data.procCount = 0;
-    data.rest = 0;
-    data.total = 0;
+    if (type) {
+      data[type].session = 0;
+      data[type].procCount = 0;
+      data[type].rest = 0;
+      data[type].total = 0;
+    }else{
+      data.dungeon.session = 0;
+      data.dungeon.procCount = 0;
+      data.dungeon.rest = 0;
+      data.dungeon.total = 0;
+      data.travel.session = 0;
+      data.travel.procCount = 0;
+      data.travel.rest = 0;
+      data.travel.total = 0;
+    }
     await game.settings.set(`${OSRH.moduleName}`, 'turnData', data);
     await OSRH.turn.updateJournal();
     return true;
   };
   //increments turn data and updates setting
-  OSRH.turn.incrementTurnData = async function () {
-    const data = game.settings.get(`${OSRH.moduleName}`, 'turnData');
-    data.rest++;
-    data.session++;
-    data.total++;
-    data.procCount++;
-    // tracker animation count
-    data.walkCount ++;
-    data.rSprite = false;
-    if(data.walkCount>5)data.walkCount = 1
+  OSRH.turn.incrementTurnData = async function (type) {
+    const data = deepClone(game.settings.get(`${OSRH.moduleName}`, 'turnData'));
+    if (type == 'dungeon') {
+      data.dungeon.rest++;
+      data.dungeon.session++;
+      data.dungeon.total++;
+      data.dungeon.procCount++;
+      // tracker animation count
+      data.dungeon.walkCount++;
+      data.dungeon.rSprite = false;
+      // reset walk count
+      if (data.dungeon.walkCount > 5) data.dungeon.walkCount = 1;
+    }
+    if (type == 'travel') {
+      data.travel.session++;
+      data.travel.total++;
+      data.travel.rest++;
+      data.travel.procCount++;
+    }
     await game.settings.set(`${OSRH.moduleName}`, 'turnData', data);
-    return game.settings.get(`${OSRH.moduleName}`, 'turnData');
+    return data;
   };
   OSRH.turn.rollReact = async function (type, mod = false, cMod = null) {
     let rollMod = 0;
@@ -138,45 +160,43 @@ export const registerTurn = () => {
   OSRH.turn.dungeonTurn = async function () {
     let turnMsg = game.settings.get(`${OSRH.moduleName}`, 'dungeonTurnNotificiation');
     const data = game.settings.get(`${OSRH.moduleName}`, 'turnData');
-    // const encTable = game.tables.getName(data.eTable);
-    console.log(data.walkCount)
-    const encTableName = data.eTables[data.lvl - 1];
-    console.log('enc table name', encTableName);
+    const encTableName = data.dungeon.eTables[data.dungeon.lvl - 1];
     let encTable = null;
     let reactTable = null;
 
-    if (data.lvl > data.eTables.length) encTableName = data.eTables[data.eTables.length - 1];
+    if (data.dungeon.lvl > data.dungeon.eTables.length)
+      encTableName = data.dungeon.eTables[data.dungeon.eTables.length - 1];
     if (encTableName === 'none') {
     } else {
       encTable = game.tables.getName(encTableName);
-      reactTable = await game.tables.getName(data.rTable);
+      reactTable = await game.tables.getName(data.dungeon.rTable);
       // checks
-      if (data.rollEnc && !encTable) {
+      if (data.dungeon.rollEnc && !encTable) {
         ui.notifications.error('Encounter Table Not Found');
         return;
       }
-      if (data.rollReact && !reactTable) {
+      if (data.dungeon.rollReact && !reactTable) {
         ui.notifications.error('Reaction Table Not Found');
         return;
       }
     }
-    
-    const turnData = await OSRH.turn.incrementTurnData();
+
+    const turnData = await OSRH.turn.incrementTurnData('dungeon');
     if (game.settings.get(`${OSRH.moduleName}`, 'restMessage')) {
-      OSRH.turn.restMsg(turnData.rest); //generate chat message regarding rest status
+      OSRH.turn.restMsg(turnData.dungeon.rest, 'dungeon'); //generate chat message regarding rest status
     }
 
-    if (data.rollEnc && encTableName!=='none') {
+    if (data.dungeon.rollEnc && encTableName !== 'none') {
       //if tableRoll is true
       //and random monsters are active
-      if (turnData.procCount >= data.proc) {
+      if (turnData.procCount >= data.dungeon.proc) {
         //if number of turns since last random monster roll is greater than or equal to the random check interval
         turnData.procCount = 0; //resest number of turns since last random check
         await game.settings.set(`${OSRH.moduleName}`, 'turnData', turnData); //update settings data <--------
         const theRoll = await new Roll('1d6').evaluate({ async: true });
         const gm = game.users.contents.filter((u) => u.role == 4).map((u) => u.id);
 
-        if (theRoll.result > data.rollTarget) {
+        if (theRoll.result > data.dungeon.rollTarget) {
           const content = {
             flavor: "<span style='color: green'>No Monsters!</span>",
             whisper: gm
@@ -197,7 +217,7 @@ export const registerTurn = () => {
             };
 
             await game?.dice3d?.showForRoll(theRoll, game.user, false, gm, false);
-            if (data.rollReact) {
+            if (data.dungeon.rollReact) {
               reactTable = game.tables.find((t) => t.name === data.rTable);
               let reactRoll = await reactTable.roll({ async: true });
               let rollResult = `They look ${reactRoll.results[0].text}.`;
@@ -209,14 +229,91 @@ export const registerTurn = () => {
         }
       }
     }
-    OSRH.turn.timePlus(10, 'minute'); //increment ganme time
+    OSRH.turn.timePlus(10, 'minute'); //increment game time
     await OSRH.turn.updateJournal(); //update turn count journal
     if (turnMsg) ui.notifications.notify('Dungeon turn Advanced.');
     OSRH.turn.refreshTurnTracker();
     return true;
   };
+
+  OSRH.turn.travelTurn = async function () {
+    let turnMsg = game.settings.get(`${OSRH.moduleName}`, 'dungeonTurnNotificiation');
+    const turnData = game.settings.get(`${OSRH.moduleName}`, 'turnData');
+    const travelData = turnData.travel;
+    const encTableName = travelData.eTable;
+    let encTable
+    let reactTable
+    if (encTableName === 'none') {
+    } else {
+      encTable = await game.tables.getName(encTableName);
+      reactTable = await game.tables.getName(travelData.rTable);
+      // checks
+      if (travelData.rollEnc && !encTable) {
+        ui.notifications.error('Encounter Table Not Found');
+        return;
+      }
+      if (travelData.rollReact && !reactTable) {
+        ui.notifications.error('Reaction Table Not Found');
+        return;
+      }
+    }
+
+    await OSRH.turn.incrementTurnData('travel');
+    if (game.settings.get(`${OSRH.moduleName}`, 'restMessage')) {
+      OSRH.turn.restMsg(turnData.travel.rest, 'travel'); //generate chat message regarding rest status
+    }
+    if (travelData.rollEnc && encTableName !== 'none') {
+      console.log('ttttt')
+      if (travelData.procCount >= travelData.proc) {
+        console.log('chance hit')
+        travelData.procCount = 0; //resest number of turns since last random check
+        await game.settings.set(`${OSRH.moduleName}`, 'turnData', turnData); //update settings data <--------
+        const theRoll = await new Roll('1d6').evaluate({ async: true });
+        const gm = game.users.contents.filter((u) => u.role == 4).map((u) => u.id);
+        console.log('therol', theRoll.result)
+        if (theRoll.result > travelData.rollTarget) {
+          const content = {
+            flavor: "<span style='color: green'>No Monsters!</span>",
+            whisper: gm
+          };
+
+          await game?.dice3d?.showForRoll(theRoll, game.user, false, gm, false);
+          ChatMessage.create(content);
+        } else {
+          const roll = await encTable.roll({ async: true });
+          if (roll.roll._evaluated) {
+            const message = {
+              flavor: `<span style='color: red'>${OSRH.util.tableFlavor()}</span>`,
+              user: game.user.id,
+              roll: roll.roll,
+              speaker: ChatMessage.getSpeaker(),
+              content: `<br/>${roll?.results[0]?.text}<br/><br/>`,
+              whisper: gm
+            };
+
+            await game?.dice3d?.showForRoll(theRoll, game.user, false, gm, false);
+            if (travelData.rollReact) {
+              reactTable = await game.tables.getName(travelData.rTable)//game.tables.find((t) => t.name === data.rTable);
+              let reactRoll = await reactTable.roll({ async: true });
+              let rollResult = `They look ${reactRoll.results[0].text}.`;
+              message.content += rollResult;
+              await game?.dice3d?.showForRoll(reactRoll.roll, game.user, false, gm, false);
+            }
+            ChatMessage.create(message);
+          }
+        }
+      }
+    }
+
+
+
+    OSRH.turn.timePlus(travelData.duration, 'hour'); //increment game time
+    await OSRH.turn.updateJournal(); //update turn count journal
+    if (turnMsg) ui.notifications.notify('Travel turn Advanced.');
+    OSRH.turn.refreshTurnTracker();
+    return true;
+  };
   OSRH.turn.refreshTurnTracker = function () {
-    console.log('tracker found')
     Object.keys(ui.windows).map((i) => {
       let app = ui.windows[i];
       if (app.options.id === 'turn-tracker') {
@@ -232,22 +329,54 @@ export const registerTurn = () => {
       entry = (await game.journal.getName(journalName)) || (await OSRH.util.countJournalInit(journalName));
     }
     const page = await entry.pages.find((p) => p.name == journalName);
-    if (turnData.rest > 5) {
-      let jContent = `<br><p>Session Count: ${turnData.session}</p><p> Total Count: ${turnData.total}</p><p>Turns Since Last Rest: <span style="color: red">${turnData.rest}</span></p>`;
-      await page.update({ text: { content: jContent } });
-      return;
-    } else if (turnData.rest > 3) {
-      let jContent = `<br><p>Session Count: ${turnData.session}</p><p> Total Count: ${turnData.total}</p><p>Turns Since Last Rest: <span style="color: orangered">${turnData.rest}</span></p>`;
-      await page.update({ text: { content: jContent } });
-      return;
+    let jContent= ``
+    if (turnData.dungeon.rest > 5) {
+      jContent += `
+      <h2>Dungeon Turns</h2>
+      <br>
+      <p>Session Count: ${turnData.dungeon.session}</p>
+      <p> Total Count: ${turnData.dungeon.total}</p>
+      <p>Turns Since Last Rest: <span style="color: red">${turnData.dungeon.rest}</span></p>`;
+    } else if (turnData.dungeon.rest > 3) {
+      jContent += ` <h2>Dungeon Turns</h2>
+      <br>
+      <p>Session Count: ${turnData.dungeon.session}</p>
+      <p> Total Count: ${turnData.dungeon.total}</p>
+      <p>Turns Since Last Rest: <span style="color: orangered">${turnData.dungeon.rest}</span></p>`;
     } else {
-      let jContent = `<br><p>Session Count: ${turnData.session}</p><p> Total Count: ${turnData.total}</p><p>Turns Since Last Rest: ${turnData.rest}</p>`;
-      await page.update({ text: { content: jContent } });
-      return;
+      jContent += ` 
+      <h2>Dungeon Turns</h2>
+      <br>
+      <p>Session Count: ${turnData.dungeon.session}</p>
+      <p> Total Count: ${turnData.dungeon.total}</p>
+      <p>Turns Since Last Rest: ${turnData.dungeon.rest}</p>`;
     }
+    if (turnData.travel.rest > 5) {
+      jContent += `
+      <h2>Travel Turns</h2>
+      <br>
+      <p>Session Count: ${turnData.travel.session}</p>
+      <p> Total Count: ${turnData.travel.total}</p>
+      <p>Turns Since Last Rest: <span style="color: red">${turnData.travel.rest}</span></p>`;
+    } else if (turnData.travel.rest > 3) {
+      jContent += `
+      <h2>Travel Turns</h2>
+      <br>
+      <p>Session Count: ${turnData.travel.session}</p>
+      <p> Total Count: ${turnData.travel.total}</p>
+      <p>Turns Since Last Rest: <span style="color: orangered">${turnData.travel.rest}</span></p>`;
+    } else {
+      jContent += `
+      <h2>Travel Turns</h2>
+      <br><p>Session Count: ${turnData.travel.session}</p>
+      <p> Total Count: ${turnData.travel.total}</p>
+      <p>Turns Since Last Rest: ${turnData.travel.rest}</p>`;
+    }
+    await page.update({ text: { content: jContent } });
+      return;
   };
 
-  OSRH.turn.restMsg = function (rc) {
+  OSRH.turn.restMsg = function (count, type) {
     const gm = game.users.contents.filter((u) => u.role == 4).map((u) => u.id);
     const whisper = game.settings.get(`${OSRH.moduleName}`, 'whisperRest');
     const turnData = game.settings.get(`${OSRH.moduleName}`, 'turnData');
@@ -258,24 +387,24 @@ export const registerTurn = () => {
     if (whisper) {
       chatData.whisper = gm;
     }
-    if (rc > 5) {
+    if (count > 5) {
       let content = '<p style="color: red">You Must Rest!</p>';
       let penalty = `<p style ="color: firebrick">All Players suffer a penalty of -1 to hit and damage rolls until they have rested for one turn.</p>`;
-      turnData.restWarnCount++;
+      turnData[type].restWarnCount++;
 
-      if (rc == 6) {
+      if (count == 6) {
         content += penalty;
       }
-      if (turnData.restWarnCount >= 5) {
+      if (turnData[type].restWarnCount >= 5) {
         content += penalty;
-        turnData.restWarnCount = 0;
+        turnData[type].restWarnCount = 0;
       }
       game.settings.set(`${OSRH.moduleName}`, 'turnData', turnData);
       chatData.content = content;
       ChatMessage.create(chatData);
       return;
     }
-    if (rc > 3) {
+    if (count > 3) {
       chatData.content = '<p style="color: orangered">You Must Rest Soon!</p>';
       ChatMessage.create(chatData);
       return;
@@ -283,15 +412,23 @@ export const registerTurn = () => {
   };
 
   //rest function
-  OSRH.turn.rest = async function () {
+  OSRH.turn.rest = async function (type = 'dungeon') {
     const whisper = game.settings.get(`${OSRH.moduleName}`, 'whisperRest');
     const data = game.settings.get(`${OSRH.moduleName}`, 'turnData');
     const gm = game.users.contents.filter((u) => u.role == 4).map((u) => u.id);
-    data.rest = 0;
-    data.restWarnCount = 0;
-    data.session++;
-    data.total++;
-    data.rSprite = true;
+    if (type === 'dungeon') {
+      data.dungeon.rest = 0;
+      data.dungeon.restWarnCount = 0;
+      data.dungeon.session++;
+      data.dungeon.total++;
+      data.dungeon.rSprite = true;
+    }
+    if(type === 'travel'){
+      data.travel.rest = 0;
+      data.travel.restWarnCount = 0;
+      data.travel.session++;
+      data.travel.total++;
+    }
     await game.settings.set(`${OSRH.moduleName}`, 'turnData', data);
     await OSRH.turn.updateJournal();
     const chatData = {
@@ -302,25 +439,43 @@ export const registerTurn = () => {
     }
 
     await ChatMessage.create(chatData);
-    OSRH.turn.timePlus(10, 'minute');
+    let dur = type == 'travel' ? data.travel.duration : 10;
+    let inc = type == 'travel' ? 'hour' : 'minute';
+    OSRH.turn.timePlus(dur, inc);
   };
   //function calls
-  OSRH.turn.showTurnCount = function () {
+  OSRH.turn.showTurnCount = function (type = null) {
     const data = game.settings.get(`${OSRH.moduleName}`, 'turnData');
-    let style = '';
+    let dStyle = '';
+    let tStyle = '';
     let chatData = {
       user: game.user.id,
       speaker: ChatMessage.getSpeaker(),
       content: ''
     };
-    if (data.rest > 5) {
-      style = '<span style ="color: red">';
-    } else if (data.rest > 3) {
-      style = '<span style ="color: orangered">';
-    } else {
-      style = '<span>';
-    }
-    chatData.content = `<h1>Turn Count</h1><br><p>Session Count: ${data.session}</p><p> Total Count: ${data.total}</p><p>Turns Since Last Rest: ${style}${data.rest}</span></p>`;
+    dStyle =
+      data.dungeon.rest > 5
+        ? 'style = "color: red"'
+        : data.dungeon.rest > 3
+        ? 'style = "color: orangered"'
+        : '';
+    tStyle =
+      data.travel.rest > 5
+        ? 'style = "color: red"'
+        : data.travel.rest > 3
+        ? 'style = "color: orangered"'
+        : '';
+
+
+
+
+    chatData.content = ``
+    if(type == 'dungeon' || type === null){
+      chatData.content += `<h2>Dungeon Turn Count</h2><br><p>Session Count: ${data.dungeon.session}</p><p> Total Count: ${data.dungeon.total}</p><p>Turns Since Last Rest: <span ${dStyle}>${data.dungeon.rest}</span></p>
+    <br>`}
+    if(type == 'travel' || type === null){
+      chatData.content += `<h2>Travel Turn Count</h2><br><p>Session Count: ${data.travel.session}</p><p> Total Count: ${data.travel.total}</p><p>Turns Since Last Rest: <span ${tStyle}>${data.travel.rest}</span></p>`
+    };
     ChatMessage.create(chatData);
   };
 

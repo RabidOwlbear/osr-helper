@@ -197,12 +197,11 @@ export const registerReports = () => {
       }
       //convert to miles
       context.baseRate = Math.floor(slowest / 5);
-
       context.ose = game.modules.get('old-school-essentials')?.active || false;
       context.characters = this.partyData(partyObj.characters);
       context.retainers = this.partyData(partyObj.retainers);
       context.retainer = partyObj.retainers;
-
+      
       return context; //this.data.tData;
     }
     activateListeners(html) {
