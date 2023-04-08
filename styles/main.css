@@ -973,7 +973,7 @@
   font-size: .8em;
   margin-right: .2em;
 }
-.actor-controls{
+.osrh.turn-tracker .actor-controls{
   display: flex; 
   justify-content: space-evenly;
 }
@@ -1006,11 +1006,11 @@
 .osrh.turn-tracker .travel-tab #party-list::-webkit-scrollbar{
   display: none;
 }
-.check-label{
+.osrh.turn-tracker .check-label{
   font-weight: 700;
   text-align: center;
 }
-.char-list-header{
+.osrh.turn-tracker .char-list-header{
   font-weight: 700;
   width: 100%;
   border-bottom: 2px solid #222;
@@ -1027,38 +1027,42 @@
 .osrh.turn-tracker .travel-tab .party-list.lg-list{
   height: 265px;
 }
-.actor-list{
+.osrh.turn-tracker .actor-list{
   width: 100%;
 }
-.travel-checks{
+.osrh.turn-tracker .travel-checks{
   width: 100%;
   display: flex;
   justify-content: space-evenly;
 }
-.travel-checks input{
+.osrh.turn-tracker .travel-checks input{
   background-color: #ffffff88;
   text-align: center;
 }
-.input-block{
+.osrh.turn-tracker .input-block{
   display: flex;
   flex-direction: column;
   width: 35%;
 }
-.flex-row{
+.osrh.turn-tracker .flex-row{
   display: flex;
   justify-content: space-evenly;
 }
-.input-block input{
+.osrh.turn-tracker .input-block input{
   width: 2em;
 }
 .osrh.turn-tracker .travel-tab  .input-block i{
   color: #221e2e;
   font-size: 1.5rem
 }
-.terrain-type{
+.osrh.turn-tracker .terrain-type{
   font-weight: 700;
   color: #221e2e;
 }
-.travel-rest-count{
+.osrh.turn-tracker .travel-rest-count{
   font-size: 1.2em
+}
+.osrh.turn-tracker .travel-config-tab select,
+.osrh.turn-tracker .dungeon-config-tab select{
+  width: 150px
 }
