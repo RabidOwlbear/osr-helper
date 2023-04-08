@@ -24,7 +24,7 @@ export class OSRHTurnTracker extends FormApplication {
   getData() {
     const context = super.getData();
     const partyObj = OSRH.util.getPartyActors();
-    console.log(partyObj)
+    
     const tMod = this.terrainMod[this.turnData.travel.terrain]; 
     context.baseRate = Math.floor(this.getBaseRate(partyObj) * tMod);
     context.characters = this.partyData(partyObj.characters, tMod);
@@ -80,7 +80,7 @@ export class OSRHTurnTracker extends FormApplication {
         const chance = this.getTerrainChance(html);
         this.turnData.travel.rollTarget = chance;
         tRollTarget.value = chance;
-        console.log(this.turnData)
+        
         this.showSaveBtn(saveSettings);
       });
       dEncRoll.addEventListener('change', (e) => {
@@ -217,7 +217,7 @@ export class OSRHTurnTracker extends FormApplication {
     const terrain = html.find('#terrain')[0].value;
     const terrainEls = [...html.find('option.terrainOpt')]
     const data = terrainEls.find(i=>i.value === terrain).dataset;
-    console.log(terrain, terrainEls);
+    
     return parseInt(data.target)
   }
   getActiveTab(html) {
@@ -253,7 +253,8 @@ export class OSRHTurnTracker extends FormApplication {
     const tEncTable = html.find('#travel-enc-table')[0];
     const tReactTable = html.find('#travel-react-table')[0];
     const dReactTable = html.find('#d-react-table')[0];
-    const encFreq = html.find('#d-encounter-freq')[0];
+    const dEncFreq = html.find('#d-encounter-freq')[0];
+    const tEncFreq = html.find('#t-encounter-freq')[0];
     const tRollTarget = html.find('#t-encounter-target')[0];
     const dRollTarget = html.find('#d-encounter-target')[0];
     const dungeonLvl = html.find('#d-level')[0];
@@ -266,14 +267,14 @@ export class OSRHTurnTracker extends FormApplication {
     this.turnData.travel.rollEnc = tEncRoll.checked;
     this.turnData.travel.rollReact = tReactRoll.checked;
     this.turnData.travel.rTable = tReactTable.value;
-    this.turnData.travel.proc = parseInt(encFreq.value);
+    this.turnData.travel.proc = parseInt(tEncFreq.value);
     this.turnData.travel.rollTarget = parseInt(tRollTarget.value);
 
     this.turnData.dungeon.eTables = encTables;
     this.turnData.dungeon.rollEnc = dEncRoll.checked;
     this.turnData.dungeon.rollReact = dReactRoll.checked;
     this.turnData.dungeon.rTable = dReactTable.value;
-    this.turnData.dungeon.proc = parseInt(encFreq.value);
+    this.turnData.dungeon.proc = parseInt(dEncFreq.value);
     this.turnData.dungeon.rollTarget = parseInt(dRollTarget.value);
     this.turnData.dungeon.lvl = parseInt(dungeonLvl.value);
 
@@ -314,11 +315,11 @@ export class OSRHTurnTracker extends FormApplication {
       slowest = partyObj.party[0].system.movement.base;
       partyObj.party.forEach((a) => {
         let rate = a.system.movement.base;
-        console.log('rate', rate)
+        
         if (slowest > rate) slowest = rate;
       });
     }
-    console.log(slowest)
+    
     return Math.floor(slowest / 5);
   }
   partyData(actorObj, mod = 1) {
