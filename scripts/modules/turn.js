@@ -186,17 +186,19 @@ export const registerTurn = () => {
       OSRH.turn.restMsg(turnData.dungeon.rest, 'dungeon'); //generate chat message regarding rest status
     }
 
-    if (data.dungeon.rollEnc && encTableName !== 'none') {
+    if (turnData.dungeon.rollEnc && encTableName !== 'none') {
+      console.log('rollenc', turnData)
       //if tableRoll is true
       //and random monsters are active
-      if (turnData.procCount >= data.dungeon.proc) {
+      console.log(turnData.dungeon.procCount >= turnData.dungeon.proc)
+      if (turnData.dungeon.procCount >= turnData.dungeon.proc) {
         //if number of turns since last random monster roll is greater than or equal to the random check interval
-        turnData.procCount = 0; //resest number of turns since last random check
+        turnData.dungeon.procCount = 0; //resest number of turns since last random check
         await game.settings.set(`${OSRH.moduleName}`, 'turnData', turnData); //update settings data <--------
         const theRoll = await new Roll('1d6').evaluate({ async: true });
         const gm = game.users.contents.filter((u) => u.role == 4).map((u) => u.id);
 
-        if (theRoll.result > data.dungeon.rollTarget) {
+        if (theRoll.result > turnData.dungeon.rollTarget) {
           const content = {
             flavor: "<span style='color: green'>No Monsters!</span>",
             whisper: gm
@@ -206,19 +208,29 @@ export const registerTurn = () => {
           ChatMessage.create(content);
         } else {
           const roll = await encTable.roll({ async: true });
+          let content = ``
+          for(let res of roll.results){
+            if(!res.documentCollection.length){
+              content += `<br/>${res.text}<br/>`;
+            }else{
+              content += `<br/>@${res.documentCollection}[${res.text}]<br/>`;
+            }
+            content+=`<br>`;
+            
+          }
           if (roll.roll._evaluated) {
             const message = {
               flavor: `<span style='color: red'>${OSRH.util.tableFlavor()}</span>`,
               user: game.user.id,
               roll: roll.roll,
               speaker: ChatMessage.getSpeaker(),
-              content: `<br/>${roll?.results[0]?.text}<br/><br/>`,
+              content: content,
               whisper: gm
             };
 
             await game?.dice3d?.showForRoll(theRoll, game.user, false, gm, false);
-            if (data.dungeon.rollReact) {
-              reactTable = game.tables.find((t) => t.name === data.rTable);
+            if (turnData.dungeon.rollReact) {
+              reactTable = game.tables.getName(turnData.dungeon.rTable);
               let reactRoll = await reactTable.roll({ async: true });
               let rollResult = `They look ${reactRoll.results[0].text}.`;
               message.content += rollResult;
@@ -285,12 +297,21 @@ export const registerTurn = () => {
           } else {
             const roll = await encTable.roll({ async: true });
             if (roll.roll._evaluated) {
+              let content = ``
+              for(let res of roll.results){
+                if(!res.documentCollection.length){
+                  content += `<br/>${res.text}<br/>`;
+                }else{
+                  content += `<br/>@${res.documentCollection}[${res.text}]<br/>`;
+                }
+                content+=`<br>`
+              }
               const message = {
                 flavor: `<h3>Encounter ${i + 1}</h3><span style='color: red'>${OSRH.util.tableFlavor()}</span>`,
                 user: game.user.id,
                 roll: roll.roll,
                 speaker: ChatMessage.getSpeaker(),
-                content: `<br/>${roll?.results[0]?.text}<br/><br/>`,
+                content: content,
                 whisper: gm
               };
 

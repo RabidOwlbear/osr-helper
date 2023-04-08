@@ -16,7 +16,7 @@ export class OSRHTurnTracker extends FormApplication {
       template: `modules/${OSRH.moduleName}/templates/turn-tracker.hbs`,
       id: `turn-tracker`,
       title: `Turn Tracker`,
-      tabs: [{ navSelector: '.sheet-tabs', contentSelector: '.tab-content', initial: 'travel' }],
+      tabs: [{ navSelector: '.sheet-tabs', contentSelector: '.tab-content', initial: 'dungeon' }],
       width: 300,
       height: 470
     });
