@@ -8,13 +8,13 @@ export const registerUtil = () => {
   OSRH.util.osrTick = async function () {
     const singleGM = OSRH.util.singleGM()
     if (singleGM && game.user.id === singleGM.id) {
-      let lastTick = game.settings.get(`${OSRH.moduleName}`, 'lastTick');
+      let lastTick = await game.settings.get(`${OSRH.moduleName}`, 'lastTick');
       // await OSRH.util.osrLightTick(lastTick);
       OSRH.util.osrEffectTick(lastTick);
 
       //update lightTick
 
-      game.settings.set(`${OSRH.moduleName}`, 'lastTick', game.time.worldTime);
+      await game.settings.set(`${OSRH.moduleName}`, 'lastTick', game.time.worldTime);
     }
   };
 // used
@@ -109,9 +109,9 @@ export const registerUtil = () => {
       }
     }
   };
-  OSRH.util.setLightFlag = function (data) {
+  OSRH.util.setLightFlag = async function (data) {
     const { actor, actorId, type, duration } = data;
-    const journal = game.journal.getName(game.settings.get(`${OSRH.moduleName}`, 'timeJournalName'));
+    const journal = game.journal.getName(await game.settings.get(`${OSRH.moduleName}`, 'timeJournalName'));
     const flagObj = {
       [actorId]: {
         [type]: {
@@ -144,9 +144,9 @@ export const registerUtil = () => {
     return game.actors.find((a) => a.id == canvas.tokens.controlled[0].actor.id);
   };
 
-  OSRH.util.unSetLightFlag = function (data) {
+  OSRH.util.unSetLightFlag = async function (data) {
     const { actor, actorId } = data;
-    const journal = game.journal.getName(game.settings.get(`${OSRH.moduleName}`, 'timeJournalName'));
+    const journal = game.journal.getName(await game.settings.get(`${OSRH.moduleName}`, 'timeJournalName'));
     let flags = journal.flags.world.osrLights;
     delete flags[actorId];
     journal.unsetFlag('world', 'osrLights');
@@ -206,9 +206,9 @@ export const registerUtil = () => {
     ChatMessage.create({ content: msgContent, whisper: whisperArray });
   };
 // used
-  OSRH.util.centerHotbar = function () {
+  OSRH.util.centerHotbar = async function () {
     let hotbar = document.getElementById('hotbar');
-    if (game.settings.get(`${OSRH.moduleName}`, 'centerHotbar')) {
+    if (await game.settings.get(`${OSRH.moduleName}`, 'centerHotbar')) {
       document.documentElement.style.setProperty('--hotbar-center', `${window.innerWidth / 2 - 578}px`);
       hotbar.classList.add('center-hotbar');
     } else {
@@ -715,10 +715,10 @@ export const registerUtil = () => {
 // used
   OSRH.util.setting = async function (setting, value, type) {
     if (type == 'set') {
-      game.settings.set(`${OSRH.moduleName}`, setting, value);
+      await game.settings.set(`${OSRH.moduleName}`, setting, value);
     }
     if (type == 'get') {
-      return game.settings.get(`${OSRH.moduleName}`, setting);
+      return await game.settings.get(`${OSRH.moduleName}`, setting);
     }
   };
 // used
@@ -732,7 +732,7 @@ export const registerUtil = () => {
   };
 // used
   OSRH.util.setTheme = async function () {
-    let index = game.settings.get(OSRH.moduleName, 'theme');
+    let index = await game.settings.get(OSRH.moduleName, 'theme');
     index = index == 'none' ? 0 : index;
     let themeData = OSRH.data.themeData[index];
     let root = document.documentElement;

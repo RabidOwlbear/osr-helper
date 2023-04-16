@@ -70,8 +70,8 @@ Hooks.once('socketlib.ready', () => {
 });
 //update proc data if changed
 Hooks.on('updateSetting', async () => {
-  const turnData = game.settings.get(`${OSRH.moduleName}`, 'turnData');
-  const newName = game.settings.get(`${OSRH.moduleName}`, 'timeJournalName');
+  const turnData = await game.settings.get(`${OSRH.moduleName}`, 'turnData');
+  const newName = await game.settings.get(`${OSRH.moduleName}`, 'timeJournalName');
   const oldName = turnData?.journalName;
   const journal = await game.journal.getName(oldName);
 
@@ -81,25 +81,19 @@ Hooks.on('updateSetting', async () => {
     await journal.update({ name: newName });
   }
   //turn journal update
-  OSRH.socket.executeAsGM('setting', 'turnData', turnData, 'set');
+  await OSRH.socket.executeAsGM('setting', 'turnData', turnData, 'set');
 
-  // if (game.user.role >= 4) {
-  //   game.settings.set(`${OSRH.moduleName}`, 'turnData', turnData);
-
-  // }
 });
 Hooks.once(`${OSRH.moduleName}.registered`, () => {});
 Hooks.once('ready', async () => {
   OSRH.util.setTheme();
-  //const lightData = game.settings.get(`${OSRH.moduleName}`, 'lightData');
-  const turnData = game.settings.get(`${OSRH.moduleName}`, 'turnData');
-  const jName = game.settings.get(`${OSRH.moduleName}`, 'timeJournalName');
+  const turnData = await game.settings.get(`${OSRH.moduleName}`, 'turnData');
+  const jName = await game.settings.get(`${OSRH.moduleName}`, 'timeJournalName');
 
   //update turn proc
 
   if (!turnData.journalName && jName) turnData.journalName = jName;
 
-  // game.settings.set(`${OSRH.moduleName}`, 'turnData', turnData);
   await OSRH.socket.executeAsGM('setting', 'turnData', turnData, 'set');
   // migrate turn data
   migrateTurnData()
@@ -107,12 +101,12 @@ Hooks.once('ready', async () => {
   Hooks.on('updateWorldTime', async () => {
     console.log('time update');
     await OSRH.util.osrTick();
-    OSRH.socket.executeAsGM('lightCheck');
+    await OSRH.socket.executeAsGM('lightCheck');
     OSRH.util.osrHook(`${OSRH.moduleName} Time Updated`);
   });
 
-  Hooks.on(`${OSRH.moduleName} Time Updated`, () => {
-    if (game.user.isGM) OSRH.socket.executeAsGM('effectHousekeeping');
+  Hooks.on(`${OSRH.moduleName} Time Updated`, async () => {
+    if (game.user.isGM) await OSRH.socket.executeAsGM('effectHousekeeping');
   });
   //check for count journal
   await OSRH.util.countJournalInit(jName);
@@ -134,7 +128,7 @@ Hooks.once('ready', async () => {
   }
 
   Hooks.on('createActor', async (actor) => {
-    if (game.settings.get(`${OSRH.moduleName}`, 'tokenLightDefault') && game.user.isGM) {
+    if (await game.settings.get(`${OSRH.moduleName}`, 'tokenLightDefault') && game.user.isGM) {
       if (actor.type == 'character') {
         //const actor = game.actors.getName(sheet.object.name);
         await actor.update({
@@ -160,9 +154,9 @@ Hooks.once('ready', async () => {
     }
   });
   //check center hotbar
-  OSRH.util.centerHotbar();
-  window.addEventListener('resize', () => {
-    OSRH.util.centerHotbar();
+  await OSRH.util.centerHotbar();
+  window.addEventListener('resize', async () => {
+    await OSRH.util.centerHotbar();
   });
 });
 
@@ -313,15 +307,14 @@ Hooks.on('renderItemSheet', async (sheetObj, html) => {
   }
 });
 // remove once ose combat time advancement fixed
-Hooks.on('deleteCombat', () => {
-  OSRH.socket.executeAsGM('setting', 'lastRound', 0, 'set');
-  // if(game.user.isGM){
-  //   game.settings.set(`${OSRH.moduleName}`, 'lastRound', 0)
-  // }
+Hooks.on('deleteCombat', async () => {
+  await OSRH.socket.executeAsGM('setting', 'lastRound', 0, 'set');
+  
 });
 
 Hooks.on('updateCombat', async (combat, details) => {
-  if (game.user.isGM && (await game.settings.get(`${OSRH.moduleName}`, 'combatTimeAdvance'))) {
+  const singleGM = OSRH.util.singleGM()
+    if (game.user.id === singleGM.id && (await game.settings.get(`${OSRH.moduleName}`, 'combatTimeAdvance'))) {
     let lastRound = await game.settings.get(`${OSRH.moduleName}`, 'lastRound');
     let round = details.round;
     if (round && round > lastRound) {
@@ -336,8 +329,8 @@ Hooks.on('updateCombat', async (combat, details) => {
     }
   }
 });
-Hooks.on('renderHotbar', () => {
-  OSRH.util.centerHotbar();
+Hooks.on('renderHotbar', async () => {
+  await OSRH.util.centerHotbar();
   OSRH.ui.addUiControls();
 });
 Hooks.on('renderNewActiveEffectForm', (form, html) => {
@@ -425,4 +418,4 @@ async function migrateTurnData() {
   
   
 }
-OSRH.MTD= migrateTurnData
+OSRH.MTD = migrateTurnData

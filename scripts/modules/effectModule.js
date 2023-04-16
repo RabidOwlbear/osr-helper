@@ -36,7 +36,7 @@ export const registerEffectModule = async function () {
     }
     async getData() {
       let isGM = game.user.isGM;
-      let savedEffects = game.settings.get(OSRH.moduleName, 'savedEffects');
+      let savedEffects = await game.settings.get(OSRH.moduleName, 'savedEffects');
       let retObj = {
         effectPresets: [],
         iconList: OSRH.data.effectIcons,
@@ -84,7 +84,7 @@ export const registerEffectModule = async function () {
             ui.notifications.warn('Please Enter An Effect Name');
             return;
           }
-          let savedFx = game.settings.get(OSRH.moduleName, 'savedEffects');
+          let savedFx = await game.settings.get(OSRH.moduleName, 'savedEffects');
           for (let key in savedFx) {
             if (savedFx[key].name == nameField.value) {
               ui.notifications.warn('Name Already In Use. Select Another');
@@ -172,7 +172,7 @@ export const registerEffectModule = async function () {
         if (type == 'thac0' && value != 0) {
           // effectData.icon = `icons/svg/sword.svg`;
           // effectData.tint = '#a03300';
-          let aac = game.settings.get('ose', 'ascendingAC');
+          let aac = await game.settings.get('ose', 'ascendingAC');
           effectData.changes.push({
             key: aac ? `system.thac0.bba` : `system.thac0.value`,
             value: aac ? parseInt(value) : parseInt(value * -1),
@@ -197,7 +197,7 @@ export const registerEffectModule = async function () {
           });
         }
         if (type == 'ac' && value != 0) {
-          let aac = game.settings.get('ose', 'ascendingAC');
+          let aac = await game.settings.get('ose', 'ascendingAC');
           // effectData.icon = `icons/svg/combat.svg`;
           // effectData.tint = '#aa5000';
           effectData.changes.push({
@@ -262,7 +262,7 @@ export const registerEffectModule = async function () {
   };
 
   OSRH.effect.clearExpired = async function () {
-    let activeEffects = deepClone(game.settings.get(`${OSRH.moduleName}`, 'effectData'));
+    let activeEffects = deepClone(await game.settings.get(`${OSRH.moduleName}`, 'effectData'));
     for (let e of activeEffects) {
       let type = await game.actors.get(e.targetActorId).type;
       if (type == `monster`) {
@@ -283,8 +283,8 @@ export const registerEffectModule = async function () {
         }
       }
     }
-    // game.settings.set(`${OSRH.moduleName}`, 'effectData', activeEffects);
-    OSRH.socket.executeAsGM('setting', 'effectData', activeEffects, 'set');
+    
+    await OSRH.socket.executeAsGM('setting', 'effectData', activeEffects, 'set');
   };
 
   OSRH.effect.ActiveEffectList = class ActiveEffectList extends FormApplication {
@@ -375,7 +375,7 @@ export const registerEffectModule = async function () {
   };
 
   OSRH.effect.deleteEffect = async function (activeEffectId, effectList) {
-    let activeEffectData = game.settings.get(`${OSRH.moduleName}`, 'effectData');
+    let activeEffectData = await game.settings.get(`${OSRH.moduleName}`, 'effectData');
 
     let effectData = activeEffectData.filter((e) => e.effectId == activeEffectId)[0];
 
@@ -421,7 +421,7 @@ export const registerEffectModule = async function () {
     }
   };
   OSRH.effect.delete = async function (effectId) {
-    let effectData = await deepClone(game.settings.get(`${OSRH.moduleName}`, 'effectData')).filter(
+    let effectData =  deepClone(await game.settings.get(`${OSRH.moduleName}`, 'effectData')).filter(
       (e) => e.effectId == effectId
     )[0];
 
@@ -429,15 +429,15 @@ export const registerEffectModule = async function () {
     if (actor.collectionName == 'tokens') actor = actor.actor;
     let effect = await actor.effects.get(effectId);
     effect.delete();
-    let activeEffectData = await deepClone(game.settings.get(`${OSRH.moduleName}`, 'effectData')).filter(
+    let activeEffectData = deepClone(await game.settings.get(`${OSRH.moduleName}`, 'effectData')).filter(
       (e) => e.effectId != effectId
     );
-    game.settings.set(`${OSRH.moduleName}`, 'effectData', activeEffectData);
+    await game.settings.set(`${OSRH.moduleName}`, 'effectData', activeEffectData);
     OSRH.socket.executeForEveryone('refreshEffectLists');
   };
 
   OSRH.effect.housekeeping = async function () {
-    let effectData = await deepClone(game.settings.get(`${OSRH.moduleName}`, 'effectData'));
+    let effectData = deepClone(await game.settings.get(`${OSRH.moduleName}`, 'effectData'));
 
     for (let effect of effectData) {
       if (!effect?.isInf) {
@@ -456,7 +456,7 @@ export const registerEffectModule = async function () {
         }
       }
     }
-    game.settings.set(`${OSRH.moduleName}`, 'effectData', effectData);
+    await game.settings.set(`${OSRH.moduleName}`, 'effectData', effectData);
     OSRH.socket.executeForEveryone('refreshEffectLists');
   };
   OSRH.effect.refreshEffectLists = async function () {
@@ -470,7 +470,7 @@ export const registerEffectModule = async function () {
     if (actor.collectionName == 'tokens') actor = actor.actor;
     let e = await ActiveEffect.create(effectData, { parent: actor });
 
-    let activeEffectData = deepClone(game.settings.get(`${OSRH.moduleName}`, 'effectData'));
+    let activeEffectData = deepClone(await game.settings.get(`${OSRH.moduleName}`, 'effectData'));
     activeEffectData.push({
       isInf: effectData.flags['data'].isInf,
       effectId: e.id,
@@ -478,7 +478,7 @@ export const registerEffectModule = async function () {
       createdBy: creatorId,
       target: target
     });
-    game.settings.set(`${OSRH.moduleName}`, 'effectData', activeEffectData);
+    await game.settings.set(`${OSRH.moduleName}`, 'effectData', activeEffectData);
   };
 
   OSRH.effect.effectListGetData = async function (data, type) {
@@ -547,9 +547,9 @@ export const registerEffectModule = async function () {
     effectObj.target = target.id;
     effectObj.durInt = durInt.id;
     effectObj.icon = icon;
-    let savedFx = await deepClone(game.settings.get(OSRH.moduleName, 'savedEffects'));
+    let savedFx = deepClone(await game.settings.get(OSRH.moduleName, 'savedEffects'));
     savedFx[effectObj.id] = effectObj;
-    game.settings.set(OSRH.moduleName, 'savedEffects', savedFx);
+    await game.settings.set(OSRH.moduleName, 'savedEffects', savedFx);
     presetSel.innerHTML += `
     <option value="">${effectObj.name}</option>
     `;
@@ -557,7 +557,7 @@ export const registerEffectModule = async function () {
     this.render();
   };
   OSRH.effect.applyEffectPreset = async function (ev) {
-    const savedFx = await deepClone(game.settings.get(OSRH.moduleName, 'savedEffects'));
+    const savedFx = deepClone(await game.settings.get(OSRH.moduleName, 'savedEffects'));
     let fxData = savedFx[ev.srcElement.value];
     let iconObj = OSRH.data.effectIcons.find((i) => i.name == fxData.name);
     if (fxData) {
@@ -598,7 +598,7 @@ export const registerEffectModule = async function () {
       });
     }
     async getData() {
-      let savedFx = game.settings.get(OSRH.moduleName, 'savedEffects');
+      let savedFx = await game.settings.get(OSRH.moduleName, 'savedEffects');
       let retObj = {
         effectList: []
       };
@@ -613,7 +613,7 @@ export const registerEffectModule = async function () {
       let imprtBtn = html.find('#imprt')[0];
       xprtBtn.addEventListener('click', async (e) => {
         e.preventDefault();
-        let setting = game.settings.get(OSRH.moduleName, `savedEffects`);
+        let setting = await game.settings.get(OSRH.moduleName, `savedEffects`);
         let data = JSON.stringify(setting);
         let xport = 'data:export/plain;charset=utf-8, ' + encodeURIComponent(data);
         let filename = 'saved-effects.json';
@@ -648,16 +648,16 @@ export const registerEffectModule = async function () {
                 replace: {
                   label: 'Replace',
                   callback: async () => {
-                    game.settings.set(OSRH.moduleName, 'savedEffects', parsed);
+                    await game.settings.set(OSRH.moduleName, 'savedEffects', parsed);
                     new OSRH.effect.manageCustomPresets().render(true);
                   }
                 },
                 merge: {
                   label: 'Merge',
                   callback: async () => {
-                    const orig = await deepClone(game.settings.get(OSRH.moduleName, `savedEffects`));
+                    const orig = deepClone(await game.settings.get(OSRH.moduleName, `savedEffects`));
                     let merged = mergeObject(orig, parsed);
-                    game.settings.set(OSRH.moduleName, 'savedEffects', merged);
+                    await game.settings.set(OSRH.moduleName, 'savedEffects', merged);
                     new OSRH.effect.manageCustomPresets().render(true);
                   }
                 }
@@ -673,9 +673,9 @@ export const registerEffectModule = async function () {
       for (let btn of effectDelBtns) {
         btn.addEventListener(`click`, async (ev) => {
           ev.preventDefault();
-          const savedFx = await deepClone(game.settings.get(OSRH.moduleName, 'savedEffects'));
+          const savedFx = deepClone(await game.settings.get(OSRH.moduleName, 'savedEffects'));
           delete savedFx[btn.id];
-          game.settings.set(OSRH.moduleName, 'savedEffects', savedFx);
+          await game.settings.set(OSRH.moduleName, 'savedEffects', savedFx);
           this.render();
         });
       }

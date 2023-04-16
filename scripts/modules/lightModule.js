@@ -15,7 +15,7 @@ export const registerLightModule = async function () {
       let tags = i.system.manualTags;
       if (tags && tags.find((t) => t.value == 'Light')) return i;
     });
-    const lightData = deepClone(game.settings.get(`${OSRH.moduleName}`, 'lightData'));
+    const lightData = deepClone(await game.settings.get(`${OSRH.moduleName}`, 'lightData'));
     let actorLightData = lightData[actor.id];
 
     // check for light already lit
@@ -94,7 +94,7 @@ export const registerLightModule = async function () {
               };
               actorLightData = lightData[actor.id];
 
-              // game.settings.set(`${OSRH.moduleName}`, 'lightData', lightData);
+             
               let settingData = {
                 setting: 'lightData',
                 value: lightData,
@@ -121,7 +121,6 @@ export const registerLightModule = async function () {
                 type: 'set'
               };
               await OSRH.socket.executeAsGM('setting', 'lightData', lightData, 'set');
-              // game.settings.set(`${OSRH.moduleName}`, 'lightData', lightData);
               await OSRH.light.updateTokens(actor.uuid, lightItemData);
               return;
             }
@@ -146,7 +145,6 @@ export const registerLightModule = async function () {
                 type: 'set'
               };
               await OSRH.socket.executeAsGM('setting', 'lightData', lightData, 'set');
-              // game.settings.set(`${OSRH.moduleName}`, 'lightData', lightData);
               await OSRH.light.updateTokens(actor.uuid, lightItemData);
               return;
             }
@@ -159,8 +157,8 @@ export const registerLightModule = async function () {
     }).render(true);
   };
 
-  OSRH.light.lightCheck =  function () {
-    let lightData = deepClone( game.settings.get(`${OSRH.moduleName}`, 'lightData'));
+  OSRH.light.lightCheck =  async function () {
+    let lightData = deepClone( await game.settings.get(`${OSRH.moduleName}`, 'lightData'));
     let curTime = game.time.worldTime;
     let expired = [];
     for (let actorId in lightData) {
@@ -187,7 +185,7 @@ export const registerLightModule = async function () {
             bgShadow: data.bgShadow,
             coloration: data.coloration,
             intensity: data.intensity,
-            luminosity: data.liminosity,
+            luminosity: data.luminosity,
             speed: data.speed
           };
            OSRH.light.updateTokens(dataObj.uuid, lData);
@@ -206,7 +204,7 @@ export const registerLightModule = async function () {
             bgShadow: data.bgShadow,
             coloration: data.coloration,
             intensity: data.intensity,
-            luminosity: data.liminosity,
+            luminosity: data.luminosity,
             speed: data.speed
           };
            OSRH.light.updateTokens(dataObj.uuid, lData);
@@ -216,7 +214,7 @@ export const registerLightModule = async function () {
         }
       }
     }
-     game.settings.set(`${OSRH.moduleName}`, 'lightData', lightData);
+     await game.settings.set(`${OSRH.moduleName}`, 'lightData', lightData);
   };
 
   OSRH.light.decrementLightItem = async function (uuid, itemId) {
@@ -377,7 +375,7 @@ export const registerLightModule = async function () {
     });
   };
 
-  OSRH.light.turnsRemaining =  function (actorId) {
+  OSRH.light.turnsRemaining =  async function (actorId) {
     if(!actorId){
       if(OSRH.util.singleSelected()){
         actorId = canvas.tokens.controlled[0]?.actor.id
@@ -385,7 +383,7 @@ export const registerLightModule = async function () {
         return
       }
     }
-    let lightData = game.settings.get(`${OSRH.moduleName}`, 'lightData')?.[actorId]?.lights.filter((i) => i.isOn)?.[0];
+    let lightData = await game.settings.get(`${OSRH.moduleName}`, 'lightData')?.[actorId]?.lights.filter((i) => i.isOn)?.[0];
     if (lightData) {
       let elapsed = game.time.worldTime - lightData.start;
       let remaining = lightData.duration - elapsed;

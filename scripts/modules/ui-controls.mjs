@@ -1,6 +1,7 @@
 export const uiControls = {
   async addUiControls() {
-    if(!game.settings.get(OSRH.moduleName, 'displayControlUi')){
+    const setting = await game.settings.get(OSRH.moduleName, 'displayControlUi')
+    if( !setting ){
       return
     }
     // animations
@@ -79,7 +80,7 @@ export const uiControls = {
       }
     });
     if (game.modules.get('monks-hotbar-expansion')?.active) {
-      const rowCount = game.settings.get('monks-hotbar-expansion', 'number-rows');
+      const rowCount = await game.settings.get('monks-hotbar-expansion', 'number-rows');
       let amt = rowCount * 50 + 20;
       const pageNum = document.querySelector('#hotbar-page-controls span.page-number');
       const hotbarPage = document.querySelector('#hotbar-page');

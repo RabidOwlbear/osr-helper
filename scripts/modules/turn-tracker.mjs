@@ -1,7 +1,7 @@
 export class OSRHTurnTracker extends FormApplication {
-  constructor() {
+  constructor (){
     super();
-    this.turnData = deepClone(game.settings.get('osr-helper', 'turnData'));
+    
     this.tableNames = game.tables.contents.map((i) => i.name);
     // this.dungeonTurnData = game.settings.get('osr-helper', 'dungeonTurnData');
     this.isGM = game.user.isGM;
@@ -21,7 +21,8 @@ export class OSRHTurnTracker extends FormApplication {
       height: 470
     });
   }
-  getData() {
+  async getData() {
+    this.turnData = deepClone(await game.settings.get('osr-helper', 'turnData'));
     const context = super.getData();
     const partyObj = OSRH.util.getPartyActors();
     
@@ -35,7 +36,7 @@ export class OSRHTurnTracker extends FormApplication {
     context.DTData = this.dungeonTurnData;
     return context;
   }
- 
+  
   // dungeon turn
   activateListeners(html) {
     const advanceDungeonTurn = html.find('#dungeon-turn-advance-btn')[0];
