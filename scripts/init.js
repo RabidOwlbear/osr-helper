@@ -69,20 +69,29 @@ Hooks.once('socketlib.ready', () => {
   });
 });
 //update proc data if changed
-Hooks.on('updateSetting', async () => {
-  const turnData = await game.settings.get(`${OSRH.moduleName}`, 'turnData');
-  const newName = await game.settings.get(`${OSRH.moduleName}`, 'timeJournalName');
-  const oldName = turnData?.journalName;
-  const journal = await game.journal.getName(oldName);
+Hooks.on('updateSetting', async (a, b, c) => {
 
-  if (oldName && newName != oldName) {
-    console.log('journal name changed');
-    turnData.journalName = newName;
-    await journal.update({ name: newName });
+  if (a.key ==="osr-helper.timeJournalName") {
+    const newName = await game.settings.get(`${OSRH.moduleName}`, 'timeJournalName');
+    const oldName = turnData?.journalName;
+    const journal = await game.journal.getName(oldName);
+     //turn journal update
+    if (oldName && newName != oldName) {
+      console.log('journal name changed');
+      turnData.journalName = newName;
+      await journal.update({ name: newName });
+    }
+
   }
-  //turn journal update
-  await OSRH.socket.executeAsGM('setting', 'turnData', turnData, 'set');
 
+  if (a.key === 'osr-helper.turnData') {
+   
+    const turnData = await game.settings.get(`${OSRH.moduleName}`, 'turnData');
+    
+   
+    console.log('Update Setting hook');
+    await OSRH.socket.executeAsGM('setting', 'turnData', turnData, 'set');
+  }
 });
 Hooks.once(`${OSRH.moduleName}.registered`, () => {});
 Hooks.once('ready', async () => {
@@ -93,10 +102,10 @@ Hooks.once('ready', async () => {
   //update turn proc
 
   if (!turnData.journalName && jName) turnData.journalName = jName;
-
+  console.log('ready hook');
   await OSRH.socket.executeAsGM('setting', 'turnData', turnData, 'set');
   // migrate turn data
-  migrateTurnData()
+  migrateTurnData();
   //set hook to update light timer durations
   Hooks.on('updateWorldTime', async () => {
     console.log('time update');
@@ -128,7 +137,7 @@ Hooks.once('ready', async () => {
   }
 
   Hooks.on('createActor', async (actor) => {
-    if (await game.settings.get(`${OSRH.moduleName}`, 'tokenLightDefault') && game.user.isGM) {
+    if ((await game.settings.get(`${OSRH.moduleName}`, 'tokenLightDefault')) && game.user.isGM) {
       if (actor.type == 'character') {
         //const actor = game.actors.getName(sheet.object.name);
         await actor.update({
@@ -309,12 +318,11 @@ Hooks.on('renderItemSheet', async (sheetObj, html) => {
 // remove once ose combat time advancement fixed
 Hooks.on('deleteCombat', async () => {
   await OSRH.socket.executeAsGM('setting', 'lastRound', 0, 'set');
-  
 });
 
 Hooks.on('updateCombat', async (combat, details) => {
-  const singleGM = OSRH.util.singleGM()
-    if (game.user.id === singleGM.id && (await game.settings.get(`${OSRH.moduleName}`, 'combatTimeAdvance'))) {
+  const singleGM = OSRH.util.singleGM();
+  if (game.user.id === singleGM.id && (await game.settings.get(`${OSRH.moduleName}`, 'combatTimeAdvance'))) {
     let lastRound = await game.settings.get(`${OSRH.moduleName}`, 'lastRound');
     let round = details.round;
     if (round && round > lastRound) {
@@ -350,23 +358,22 @@ Hooks.on('renderNewActiveEffectForm', (form, html) => {
   }
 });
 
-
 async function migrateTurnData() {
   let turnData = deepClone(await game.settings.get('osr-helper', 'turnData'));
-  const dungeonTurnData= await game.settings.get('osr-helper', 'dungeonTurnData')
+  const dungeonTurnData = await game.settings.get('osr-helper', 'dungeonTurnData');
   let hasDungeon = turnData.hasOwnProperty('dungeon');
   let hasTravel = turnData.hasOwnProperty('travel');
-  let hasEncTable = turnData.hasOwnProperty('eTable')
+  let hasEncTable = turnData.hasOwnProperty('eTable');
   let hasEncTables = turnData.hasOwnProperty('eTables');
-  let newData 
-  console.log(hasDungeon,
-    hasTravel,
-    hasEncTable,
-    hasEncTables)
-  if(hasDungeon && hasTravel){
-    return
+  let newData;
+  // console.log(hasDungeon,
+  //   hasTravel,
+  //   hasEncTable,
+  //   hasEncTables)
+  if (hasDungeon && hasTravel) {
+    return;
   }
-  if(!hasEncTable){
+  if (!hasEncTable) {
     turnData = mergeObject(turnData, dungeonTurnData);
     turnData.eTables = [dungeonTurnData.eTable, 'none', 'none', 'none', 'none', 'none', 'none', 'none'];
     turnData.lvl = 1;
@@ -376,7 +383,7 @@ async function migrateTurnData() {
     hasEncTables = true;
   }
 
-  if(!hasDungeon && hasEncTables){
+  if (!hasDungeon && hasEncTables) {
     newData = {
       journalName: turnData.journalName,
       dungeon: {
@@ -393,7 +400,7 @@ async function migrateTurnData() {
         rollTarget: turnData.rollTarget,
         session: turnData.session,
         total: turnData.total,
-        walkCount: 1,
+        walkCount: 1
       },
       travel: {
         session: 0,
@@ -409,13 +416,10 @@ async function migrateTurnData() {
         restWarnCount: 0,
         terrain: 'clear',
         duration: 24
-    }
+      }
     };
     await game.settings.set('osr-helper', 'turnData', newData);
     ui.notifications.notify('Turn Data Successcully Migrated.');
-  } 
-    
-  
-  
+  }
 }
-OSRH.MTD = migrateTurnData
+OSRH.MTD = migrateTurnData;

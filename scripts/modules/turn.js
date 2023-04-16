@@ -10,7 +10,7 @@ export const registerTurn = () => {
       turn: 600
     };
     if (turn && turnType) {
-      await OSRH.turn.incrementTurnData(turnType);
+      await OSRH.turn.incrementTurnData(turnType, true);
     }
     game.time.advance(amt * increments[inc]);
   };
@@ -43,7 +43,7 @@ export const registerTurn = () => {
   };
 
   OSRH.turn.resetSessionCount = async function (type = null) {
-    const data = await game.settings.get(`${OSRH.moduleName}`, 'turnData');
+    const data = deepClone(await game.settings.get(`${OSRH.moduleName}`, 'turnData'));
     if (type) {
       data[type].session = 0;
     }
@@ -52,7 +52,7 @@ export const registerTurn = () => {
   };
 
   OSRH.turn.resetAllCounts = async function (type = null) {
-    const data = await game.settings.get(`${OSRH.moduleName}`, 'turnData');
+    const data = deepClone(await game.settings.get(`${OSRH.moduleName}`, 'turnData'));
     if (type) {
       data[type].session = 0;
       data[type].procCount = 0;
@@ -73,8 +73,8 @@ export const registerTurn = () => {
     return true;
   };
   //increments turn data and updates setting
-  OSRH.turn.incrementTurnData = async function (type) {
-    const data = deepClone(await game.settings.get(`${OSRH.moduleName}`, 'turnData'));
+  OSRH.turn.incrementTurnData = async function (type, set = false) {
+    let data = await deepClone(game.settings.get(`${OSRH.moduleName}`, 'turnData'));
     if (type == 'dungeon') {
       data.dungeon.rest++;
       data.dungeon.session++;
@@ -92,7 +92,10 @@ export const registerTurn = () => {
       data.travel.rest++;
       data.travel.procCount++;
     }
-    await game.settings.set(`${OSRH.moduleName}`, 'turnData', data);
+
+    if (set) {
+      await game.settings.set(`${OSRH.moduleName}`, 'turnData', data);
+    }
     return data;
   };
   OSRH.turn.rollReact = async function (type, mod = false, cMod = null) {
@@ -159,7 +162,7 @@ export const registerTurn = () => {
   };
   OSRH.turn.dungeonTurn = async function () {
     let turnMsg = await game.settings.get(`${OSRH.moduleName}`, 'dungeonTurnNotificiation');
-    const data = await game.settings.get(`${OSRH.moduleName}`, 'turnData');
+    const data = deepClone(await game.settings.get(`${OSRH.moduleName}`, 'turnData'));
     const encTableName = data.dungeon.eTables[data.dungeon.lvl - 1];
     let encTable = null;
     let reactTable = null;
@@ -187,14 +190,14 @@ export const registerTurn = () => {
     }
 
     if (turnData.dungeon.rollEnc && encTableName !== 'none') {
-      console.log('rollenc', turnData)
       //if tableRoll is true
       //and random monsters are active
-      console.log(turnData.dungeon.procCount >= turnData.dungeon.proc)
+
       if (turnData.dungeon.procCount >= turnData.dungeon.proc) {
         //if number of turns since last random monster roll is greater than or equal to the random check interval
         turnData.dungeon.procCount = 0; //resest number of turns since last random check
-        await game.settings.set(`${OSRH.moduleName}`, 'turnData', turnData); //update settings data <--------
+
+        // await game.settings.set(`${OSRH.moduleName}`, 'turnData', turnData); //update settings data <--------
         const theRoll = await new Roll('1d6').evaluate({ async: true });
         const gm = game.users.contents.filter((u) => u.role == 4).map((u) => u.id);
 
@@ -208,15 +211,14 @@ export const registerTurn = () => {
           ChatMessage.create(content);
         } else {
           const roll = await encTable.roll({ async: true });
-          let content = ``
-          for(let res of roll.results){
-            if(!res.documentCollection.length){
+          let content = ``;
+          for (let res of roll.results) {
+            if (!res.documentCollection.length) {
               content += `<br/>${res.text}<br/>`;
-            }else{
+            } else {
               content += `<br/>@${res.documentCollection}[${res.text}]<br/>`;
             }
-            content+=`<br>`;
-            
+            content += `<br>`;
           }
           if (roll.roll._evaluated) {
             const message = {
@@ -242,16 +244,16 @@ export const registerTurn = () => {
       }
     }
     OSRH.turn.timePlus(10, 'minute'); //increment game time
+    await game.settings.set(`${OSRH.moduleName}`, 'turnData', turnData); //update settings data <--------
     await OSRH.turn.updateJournal(); //update turn count journal
     if (turnMsg) ui.notifications.notify('Dungeon turn Advanced.');
-    OSRH.turn.refreshTurnTracker();
+    OSRH.turn.refreshTurnTracker(turnData);
     return true;
   };
 
   OSRH.turn.travelTurn = async function () {
-    
     let turnMsg = await game.settings.get(`${OSRH.moduleName}`, 'dungeonTurnNotificiation');
-    const turnData = await game.settings.get(`${OSRH.moduleName}`, 'turnData');
+    const turnData = deepClone(await game.settings.get(`${OSRH.moduleName}`, 'turnData'));
     const travelData = turnData.travel;
     const encTableName = travelData.eTable;
     let encTable;
@@ -277,15 +279,10 @@ export const registerTurn = () => {
     }
     if (travelData.rollEnc && encTableName !== 'none') {
       if (travelData.proc && travelData.proc > 0) {
-        //if (travelData.procCount >= travelData.proc) {
-        
-        // travelData.procCount = 0; //resest number of turns since last random check
-        // await game.settings.set(`${OSRH.moduleName}`, 'turnData', turnData); //update settings data <--------
         const gm = game.users.contents.filter((u) => u.role == 4).map((u) => u.id);
         for (let i = 0; i < travelData.proc; i++) {
           const theRoll = await new Roll('1d6').evaluate({ async: true });
 
-          
           if (theRoll.result > travelData.rollTarget) {
             const content = {
               flavor: `<h3>Encounter ${i + 1}</h3><span style='color: green'>No Monsters!</span>`,
@@ -297,14 +294,14 @@ export const registerTurn = () => {
           } else {
             const roll = await encTable.roll({ async: true });
             if (roll.roll._evaluated) {
-              let content = ``
-              for(let res of roll.results){
-                if(!res.documentCollection.length){
+              let content = ``;
+              for (let res of roll.results) {
+                if (!res.documentCollection.length) {
                   content += `<br/>${res.text}<br/>`;
-                }else{
+                } else {
                   content += `<br/>@${res.documentCollection}[${res.text}]<br/>`;
                 }
-                content+=`<br>`
+                content += `<br>`;
               }
               const message = {
                 flavor: `<h3>Encounter ${i + 1}</h3><span style='color: red'>${OSRH.util.tableFlavor()}</span>`,
@@ -336,6 +333,7 @@ export const registerTurn = () => {
     OSRH.turn.refreshTurnTracker();
     return true;
   };
+
   OSRH.turn.refreshTurnTracker = function () {
     Object.keys(ui.windows).map((i) => {
       let app = ui.windows[i];
@@ -344,9 +342,10 @@ export const registerTurn = () => {
       }
     });
   };
+
   //write to journal
   OSRH.turn.updateJournal = async function (entry = null) {
-    const turnData = await game.settings.get(`${OSRH.moduleName}`, 'turnData');
+    const turnData = deepClone(await game.settings.get(`${OSRH.moduleName}`, 'turnData'));
     const journalName = await game.settings.get(`${OSRH.moduleName}`, 'timeJournalName');
     if (!entry) {
       entry = (await game.journal.getName(journalName)) || (await OSRH.util.countJournalInit(journalName));
@@ -402,7 +401,7 @@ export const registerTurn = () => {
   OSRH.turn.restMsg = async function (count, type) {
     const gm = game.users.contents.filter((u) => u.role == 4).map((u) => u.id);
     const whisper = await game.settings.get(`${OSRH.moduleName}`, 'whisperRest');
-    const turnData = await game.settings.get(`${OSRH.moduleName}`, 'turnData');
+    const turnData = deepClone(await game.settings.get(`${OSRH.moduleName}`, 'turnData'));
     let chatData = {
       user: game.user.id,
       content: ''
@@ -422,6 +421,7 @@ export const registerTurn = () => {
         content += penalty;
         turnData[type].restWarnCount = 0;
       }
+      
       await game.settings.set(`${OSRH.moduleName}`, 'turnData', turnData);
       chatData.content = content;
       ChatMessage.create(chatData);
@@ -437,7 +437,7 @@ export const registerTurn = () => {
   //rest function
   OSRH.turn.rest = async function (type = 'dungeon') {
     const whisper = await game.settings.get(`${OSRH.moduleName}`, 'whisperRest');
-    const data = await game.settings.get(`${OSRH.moduleName}`, 'turnData');
+    const data = deepClone(await game.settings.get(`${OSRH.moduleName}`, 'turnData'));
     const gm = game.users.contents.filter((u) => u.role == 4).map((u) => u.id);
     if (type === 'dungeon') {
       data.dungeon.rest = 0;
@@ -452,6 +452,7 @@ export const registerTurn = () => {
       data.travel.session++;
       data.travel.total++;
     }
+    
     await game.settings.set(`${OSRH.moduleName}`, 'turnData', data);
     await OSRH.turn.updateJournal();
     const chatData = {
@@ -466,9 +467,10 @@ export const registerTurn = () => {
     let inc = type == 'travel' ? 'hour' : 'minute';
     OSRH.turn.timePlus(dur, inc);
   };
+
   //function calls
   OSRH.turn.showTurnCount = async function (type = null) {
-    const data = await game.settings.get(`${OSRH.moduleName}`, 'turnData');
+    const data = deepClone(await game.settings.get(`${OSRH.moduleName}`, 'turnData'));
     let dStyle = '';
     let tStyle = '';
     let chatData = {

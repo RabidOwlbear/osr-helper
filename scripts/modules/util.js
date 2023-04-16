@@ -13,7 +13,7 @@ export const registerUtil = () => {
       OSRH.util.osrEffectTick(lastTick);
 
       //update lightTick
-
+      
       await game.settings.set(`${OSRH.moduleName}`, 'lastTick', game.time.worldTime);
     }
   };
@@ -715,6 +715,7 @@ export const registerUtil = () => {
 // used
   OSRH.util.setting = async function (setting, value, type) {
     if (type == 'set') {
+      console.log(`${setting} set`);
       await game.settings.set(`${OSRH.moduleName}`, setting, value);
     }
     if (type == 'get') {

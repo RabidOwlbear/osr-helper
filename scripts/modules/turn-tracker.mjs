@@ -1,7 +1,7 @@
 export class OSRHTurnTracker extends FormApplication {
-  constructor (){
+  constructor() {
     super();
-    
+
     this.tableNames = game.tables.contents.map((i) => i.name);
     // this.dungeonTurnData = game.settings.get('osr-helper', 'dungeonTurnData');
     this.isGM = game.user.isGM;
@@ -25,8 +25,8 @@ export class OSRHTurnTracker extends FormApplication {
     this.turnData = deepClone(await game.settings.get('osr-helper', 'turnData'));
     const context = super.getData();
     const partyObj = OSRH.util.getPartyActors();
-    
-    const tMod = this.terrainMod[this.turnData.travel.terrain]; 
+
+    const tMod = this.terrainMod[this.turnData.travel.terrain];
     context.baseRate = Math.floor(this.getBaseRate(partyObj) * tMod);
     context.characters = this.partyData(partyObj.characters, tMod);
     context.retainers = this.partyData(partyObj.retainers, tMod);
@@ -36,7 +36,7 @@ export class OSRHTurnTracker extends FormApplication {
     context.DTData = this.dungeonTurnData;
     return context;
   }
-  
+
   // dungeon turn
   activateListeners(html) {
     const advanceDungeonTurn = html.find('#dungeon-turn-advance-btn')[0];
@@ -66,7 +66,7 @@ export class OSRHTurnTracker extends FormApplication {
     if (this.isGM) {
       terrainSelect.value = this.turnData.travel.terrain;
       // this.updatePartyDist(html, this.terrainMod[terrainSelect.value]);
-      
+
       for (let i = 0; i < encSelectEls.length; i++) {
         const el = encSelectEls[i];
         el.value = this.turnData.dungeon.eTables[i];
@@ -81,7 +81,7 @@ export class OSRHTurnTracker extends FormApplication {
         const chance = this.getTerrainChance(html);
         this.turnData.travel.rollTarget = chance;
         tRollTarget.value = chance;
-        
+
         this.showSaveBtn(saveSettings);
       });
       dEncRoll.addEventListener('change', (e) => {
@@ -92,7 +92,7 @@ export class OSRHTurnTracker extends FormApplication {
       });
       dReactTable.value = this.turnData.dungeon.rTable;
       tReactTable.value = this.turnData.travel.rTable;
-      tEncTable.value = this.turnData.travel.eTable
+      tEncTable.value = this.turnData.travel.eTable;
       dReactTable.addEventListener('change', (e) => {
         this.showSaveBtn(saveSettings);
       });
@@ -145,18 +145,18 @@ export class OSRHTurnTracker extends FormApplication {
         this.render(true);
         OSRH.socket.executeForEveryone('refreshTurnTracker');
       });
-      advanceTravelTurn.addEventListener('click', async e=>{
+      advanceTravelTurn.addEventListener('click', async (e) => {
         await OSRH.turn.travelTurn();
         this.turnData = await game.settings.get('osr-helper', 'turnData');
         this.render(true);
         OSRH.socket.executeForEveryone('refreshTurnTracker');
-      })
+      });
       resetSession.addEventListener('click', async (e) => {
         let tab = this.getActiveTab(html);
 
         if (tab === 'dungeon') await OSRH.turn.resetSessionCount('dungeon');
-        if (tab === 'travel')await OSRH.turn.resetSessionCount('travel');
-        
+        if (tab === 'travel') await OSRH.turn.resetSessionCount('travel');
+
         this.turnData = await game.settings.get('osr-helper', 'turnData');
         OSRH.socket.executeForEveryone('refreshTurnTracker');
       });
@@ -214,12 +214,12 @@ export class OSRHTurnTracker extends FormApplication {
     }
   }
 
-  getTerrainChance(html){
+  getTerrainChance(html) {
     const terrain = html.find('#terrain')[0].value;
-    const terrainEls = [...html.find('option.terrainOpt')]
-    const data = terrainEls.find(i=>i.value === terrain).dataset;
-    
-    return parseInt(data.target)
+    const terrainEls = [...html.find('option.terrainOpt')];
+    const data = terrainEls.find((i) => i.value === terrain).dataset;
+
+    return parseInt(data.target);
   }
   getActiveTab(html) {
     let a = html.find('.nav-tab.active')[0];
@@ -262,7 +262,7 @@ export class OSRHTurnTracker extends FormApplication {
     const encTables = this.getEncounterTables(html);
     const saveSettings = html.find('.save-settings');
     const terrainSelect = html.find('#terrain')[0];
-
+    this.turnData = deepClone(await game.settings.get('osr-helper', 'turnData'));
     this.turnData.travel.terrain = terrainSelect.value;
     this.turnData.travel.eTable = tEncTable.value;
     this.turnData.travel.rollEnc = tEncRoll.checked;
@@ -316,11 +316,11 @@ export class OSRHTurnTracker extends FormApplication {
       slowest = partyObj.party[0].system.movement.base;
       partyObj.party.forEach((a) => {
         let rate = a.system.movement.base;
-        
+
         if (slowest > rate) slowest = rate;
       });
     }
-    
+
     return Math.floor(slowest / 5);
   }
   partyData(actorObj, mod = 1) {

@@ -90,7 +90,7 @@ export const uiControls = {
       }
       
       pageNum.addEventListener('click', async (e) => {
-        console.log(amt)
+        
         const animationUp = [{ transform: 'translateY(0)' }, { transform: `translateY(-${amt}px)` }];
         const animationDown = [{ transform: 'translateY(0)' }, { transform: `translateY(${amt}px)` }];
         let options = {
@@ -118,7 +118,7 @@ export const uiControls = {
 
     // if already open
     if(game.user.getFlag('osr-helper', 'uiControlOpen')){
-      console.log('true', )
+      
       btnCont.classList.remove('osrh-control-closed');
       controlBtn.classList.add('osrh-controls-open')
     }
