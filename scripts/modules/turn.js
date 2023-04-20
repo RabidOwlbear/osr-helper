@@ -73,8 +73,8 @@ export const registerTurn = () => {
     return true;
   };
   //increments turn data and updates setting
-  OSRH.turn.incrementTurnData = async function (type, set = false) {
-    let data = await deepClone(game.settings.get(`${OSRH.moduleName}`, 'turnData'));
+  OSRH.turn.incrementTurnData = async function (type, set = false, turnData = false) {
+    let data = turnData ? turnData : await deepClone(game.settings.get(`${OSRH.moduleName}`, 'turnData'));
     if (type == 'dungeon') {
       data.dungeon.rest++;
       data.dungeon.session++;
@@ -183,12 +183,10 @@ export const registerTurn = () => {
         return;
       }
     }
-
-    const turnData = await OSRH.turn.incrementTurnData('dungeon');
+    const turnData = await OSRH.turn.incrementTurnData('dungeon', false, data);
     if (await game.settings.get(`${OSRH.moduleName}`, 'restMessage')) {
-      OSRH.turn.restMsg(turnData.dungeon.rest, 'dungeon'); //generate chat message regarding rest status
+      OSRH.turn.restMsg(turnData.dungeon.rest, 'dungeon', data); //generate chat message regarding rest status
     }
-
     if (turnData.dungeon.rollEnc && encTableName !== 'none') {
       //if tableRoll is true
       //and random monsters are active
@@ -398,10 +396,10 @@ export const registerTurn = () => {
     return;
   };
 
-  OSRH.turn.restMsg = async function (count, type) {
+  OSRH.turn.restMsg = async function (count, type, data = false) {
     const gm = game.users.contents.filter((u) => u.role == 4).map((u) => u.id);
     const whisper = await game.settings.get(`${OSRH.moduleName}`, 'whisperRest');
-    const turnData = deepClone(await game.settings.get(`${OSRH.moduleName}`, 'turnData'));
+    const turnData = data ? data : deepClone(await game.settings.get(`${OSRH.moduleName}`, 'turnData'));
     let chatData = {
       user: game.user.id,
       content: ''
@@ -466,6 +464,7 @@ export const registerTurn = () => {
     let dur = type == 'travel' ? data.travel.duration : 10;
     let inc = type == 'travel' ? 'hour' : 'minute';
     OSRH.turn.timePlus(dur, inc);
+    OSRH.socket.executeForEveryone('refreshTurnTracker')
   };
 
   //function calls
