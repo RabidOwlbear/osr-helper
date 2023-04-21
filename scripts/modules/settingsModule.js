@@ -1,49 +1,4 @@
 export const registerSettings = async function () {
-  class DungTurnConfig extends FormApplication {
-    constructor() {
-      super();
-    }
-    static get defaultOptions() {
-      const options = super.defaultOptions;
-      options.baseApplication = 'dungeonTurnConfig';
-      options.id = 'dungTurnConfig';
-      options.template = `modules/${OSRH.moduleName}/templates/dungeon-turn-config.html`;
-      options.height = 330;
-      options.width = 400;
-      // options.left = 500;
-      // options.top = 100;
-      options.baseApplication = FormApplication;
-      return options;
-    }
-    // async getData(options) {
-    //   return {}
-    // }
-    activateListeners(html) {
-      super.activateListeners(html);
-      let close = html.find('#submit');
-
-      close.on('click', () => {
-        this.close(true);
-      });
-    }
-
-    _onSubmit(event) {
-      super._onSubmit(event, { preventRefresh: true });
-      let data = {
-        proc: parseInt(event.target[2].value),
-        rTable: event.target[1].value,
-        eTable: event.target[0].value,
-        rollTarget: parseInt(event.target[3].value),
-        rollEnc: event.target[4].checked,
-        rollReact: event.target[5].checked
-      };
-
-       game.settings.set(`${OSRH.moduleName}`, 'dungeonTurnData', data);
-    }
-
-     _updateObject() {}
-  }
-  
 
   game.settings.register(`${OSRH.moduleName}`, 'timeJournalName', {
     name: 'Name Of Journal Entry',
@@ -98,15 +53,6 @@ export const registerSettings = async function () {
     config: true
   });
 
-  game.settings.registerMenu(`${OSRH.moduleName}`, 'dungeonTurnSettings', {
-    name: 'Dungeon Turn Settings.',
-    label: 'Dungeon Turn Settings',
-    icon: 'fas fa-wrench',
-    scope: 'world',
-    type: DungTurnConfig,
-    config: false,
-    restricted: true
-  });
   game.settings.register(`${OSRH.moduleName}`, 'dungeonTurnNotificiation', {
     name: 'Dungeon Turn Notification',
     hint: 'Displays a UI notification when the Dungeon Turn macro is used.',
@@ -152,6 +98,7 @@ export const registerSettings = async function () {
     default: {},
     config: false
   });
+  
   game.settings.register(`${OSRH.moduleName}`, 'effectData', {
     name: 'effectData',
     scope: 'world',
