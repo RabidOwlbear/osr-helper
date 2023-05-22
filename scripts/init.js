@@ -373,7 +373,7 @@ async function migrateTurnData() {
   if (hasDungeon && hasTravel) {
     return;
   }
-  if (!hasEncTable) {
+  if (!hasEncTable && dungeonTurnData) {
     turnData = mergeObject(turnData, dungeonTurnData);
     turnData.eTables = [dungeonTurnData.eTable, 'none', 'none', 'none', 'none', 'none', 'none', 'none'];
     turnData.lvl = 1;

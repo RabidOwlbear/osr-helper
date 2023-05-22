@@ -73,7 +73,7 @@ export class OSRHTurnTracker extends FormApplication {
         el.addEventListener('change', (e) => {
           this.settingsChanged = true;
           this.turnData.dungeon.eTables = this.getEncounterTables(html);
-          this.showSaveBtn(saveSettings);
+          this.showSaveBtn(html);
         });
       }
       terrainSelect.addEventListener('change', (e) => {
@@ -82,40 +82,40 @@ export class OSRHTurnTracker extends FormApplication {
         this.turnData.travel.rollTarget = chance;
         tRollTarget.value = chance;
 
-        this.showSaveBtn(saveSettings);
+        this.showSaveBtn(html);
       });
       dEncRoll.addEventListener('change', (e) => {
-        this.showSaveBtn(saveSettings);
+        this.showSaveBtn(html);
       });
       dReactRoll.addEventListener('change', (e) => {
-        this.showSaveBtn(saveSettings);
+        this.showSaveBtn(html);
       });
       dReactTable.value = this.turnData.dungeon.rTable;
       tReactTable.value = this.turnData.travel.rTable;
       tEncTable.value = this.turnData.travel.eTable;
       dReactTable.addEventListener('change', (e) => {
-        this.showSaveBtn(saveSettings);
+        this.showSaveBtn(html);
       });
       tReactTable.addEventListener('change', (e) => {
-        this.showSaveBtn(saveSettings);
+        this.showSaveBtn(html);
       });
       tEncTable.addEventListener('change', (e) => {
-        this.showSaveBtn(saveSettings);
+        this.showSaveBtn(html);
       });
       dEncFreq.addEventListener('change', (e) => {
-        this.showSaveBtn(saveSettings);
+        this.showSaveBtn(html);
       });
       dRollTarget.addEventListener('change', (e) => {
-        this.showSaveBtn(saveSettings);
+        this.showSaveBtn(html);
       });
       tEncFreq.addEventListener('change', (e) => {
-        this.showSaveBtn(saveSettings);
+        this.showSaveBtn(html);
       });
       tRollTarget.addEventListener('change', (e) => {
-        this.showSaveBtn(saveSettings);
+        this.showSaveBtn(html);
       });
       dungeonLvl.addEventListener('change', (e) => {
-        this.showSaveBtn(saveSettings);
+        this.showSaveBtn(html);
       });
       dRestBtn.addEventListener('click', async (e) => {
         e.preventDefault();
@@ -130,13 +130,13 @@ export class OSRHTurnTracker extends FormApplication {
       dLvlUp.addEventListener('click', (e) => {
         this.turnData.dungeon.lvl++;
         dungeonLvl.value = this.turnData.dungeon.lvl;
-        this.showSaveBtn(saveSettings);
+        this.showSaveBtn(html);
       });
       dLvlDn.addEventListener('click', (e) => {
         this.turnData.dungeon.lvl--;
         if (this.turnData.dungeon.lvl <= 0) this.turnData.dungeon.lvl = 1;
         dungeonLvl.value = this.turnData.dungeon.lvl;
-        this.showSaveBtn(saveSettings);
+        this.showSaveBtn(html);
       });
       advanceDungeonTurn.addEventListener('click', async (e) => {
         e.preventDefault();
@@ -225,7 +225,8 @@ export class OSRHTurnTracker extends FormApplication {
     let a = html.find('.nav-tab.active')[0];
     return a?.dataset.tab;
   }
-  showSaveBtn(btnArr) {
+  showSaveBtn(html) {
+    const btnArr = html.find('.save-settings');
     this.settingsChanged = true;
     for (let btn of btnArr) {
       if (btn.classList.contains('hidden')) btn.classList.remove('hidden');
