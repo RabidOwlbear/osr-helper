@@ -9,10 +9,11 @@
       "flags": {}
     }
   ],
-  "version": "0.4.9",
+  "version": "0.4.10",
   "compatibility": {
     "minimum": "10",
-    "verified": "10.291"
+    "verified": "11.299",
+    "maximum": "11"
   },
   "styles": [
     "styles/main.css"
@@ -64,12 +65,7 @@
       }
     ],
     "requires": [
-      {
-        "id": "compendium-folders",
-        "manifest": "https://raw.githubusercontent.com/earlSt1/vtt-compendium-folders/0.1.1/module.json",
-        "type": "module",
-        "compatibility": {}
-      },
+      
       {
         "id": "socketlib",
         "manifest": "https://raw.githubusercontent.com/manuelVo/foundryvtt-socketlib/master/module.json",
