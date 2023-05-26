@@ -405,7 +405,6 @@ export const registerUtil = () => {
                 }
               } else {
                 ui.notifications.warn('No ammo');
-                main();
               }
             } else {
               await weapon.roll({ skipDialog: skipCheck });
