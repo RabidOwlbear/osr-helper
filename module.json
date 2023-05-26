@@ -9,7 +9,7 @@
       "flags": {}
     }
   ],
-  "version": "0.4.11",
+  "version": "0.4.12",
   "compatibility": {
     "minimum": "10",
     "verified": "11.299",
@@ -27,7 +27,7 @@
       "name": "osr-helper-items",
       "label": "OSR-helper Items",
       "type": "Item",
-      "path": "packs/items",
+      "path": "packs/items.db",
       "system": "ose",
       "private": false,
       "flags": {}
@@ -35,7 +35,7 @@
     {
       "name": "osr-helper-macros",
       "label": "OSR-helper Macros",
-      "path": "packs/macros",
+      "path": "packs/macros.db",
       "type": "Macro",
       "system": "ose",
       "private": false,
