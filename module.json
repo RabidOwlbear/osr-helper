@@ -12,8 +12,8 @@
   "version": "0.4.13",
   "compatibility": {
     "minimum": "10",
-    "verified": "10",
-    "maximum": "10"
+    "verified": "11.299",
+    "maximum": "11.299"
   },
   "styles": [
     "styles/main.css"
