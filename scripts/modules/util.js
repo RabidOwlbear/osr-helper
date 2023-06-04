@@ -97,8 +97,8 @@ export const registerUtil = () => {
           effect.duration -= elapsed;
 
           if (effect.duration <= 0) {
-            const msgData = `<h3 style="color: red;"> Custom Effect Expired</h3>
-              <div>Custom effect ${effectData[effectId].name} has expired!.`;
+            const msgData = `<h3 style="color: red;"> ${game.i18n.localize("OSRH.util.notification.effectExpired")}</h3>
+              <div>${game.i18n.localize("OSRH.util.notification.customEffect")} ${effectData[effectId].name} ${game.i18n.localize("OSRH.util.notification.hasExpired")}`;
             OSRH.util.ChatMessage(effectData[effectId], effectData[effectId].userId, msgData);
             delete effectData[effectId];
           }
@@ -138,7 +138,7 @@ export const registerUtil = () => {
 
   OSRH.util.getActor = function () {
     if (canvas.tokens.controlled.length > 1 || canvas.tokens.controlled.length == 0) {
-      ui.notifications.error('Please select a single token');
+      ui.notifications.error(game.i18n.localize("OSRH.util.notification.singleToken"));
       return;
     }
     return game.actors.find((a) => a.id == canvas.tokens.controlled[0].actor.id);
@@ -294,7 +294,7 @@ export const registerUtil = () => {
 // used
   OSRH.util.singleSelected = function () {
     if (canvas.tokens.controlled.length == 0 || canvas.tokens.controlled.length > 1) {
-      ui.notifications.error('Please select a single token');
+      ui.notifications.error(game.i18n.localize("OSRH.util.notification.singleToken"));
       return false;
     }
     return true;
@@ -304,11 +304,11 @@ export const registerUtil = () => {
 // used
   OSRH.util.tableFlavor = function () {
     let flavorArr = [
-      '<span style="color: DeepPink">What is THIS!!!</span>',
-      '<span style="color: DeepPink">What is that I hear?</span>',
-      '<span style="color: DeepPink">Something is Coming!</span>',
-      '<span style="color: DeepPink">What was THAT!?!</span>',
-      '<span style="color: DeepPink">LISTEN! Do you smell something?!?</span>'
+      `<span style="color: DeepPink">${game.i18n.localize("OSRH.util.tableFlavor.a")}</span>`,
+      `<span style="color: DeepPink">${game.i18n.localize("OSRH.util.tableFlavor.b")}</span>`,
+      `<span style="color: DeepPink">${game.i18n.localize("OSRH.util.tableFlavor.c")}</span>`,
+      `<span style="color: DeepPink">${game.i18n.localize("OSRH.util.tableFlavor.d")}</span>`,
+      `<span style="color: DeepPink">${game.i18n.localize("OSRH.util.tableFlavor.e")}</span>`
     ];
     let index = Math.floor(Math.random() * flavorArr.length);
     return flavorArr[index];
@@ -344,7 +344,7 @@ export const registerUtil = () => {
       if (item.type == 'spell') return true;
     });
     if (actorWeapons.length == 0 && actorSpells.length == 0) {
-      ui.notifications.error('No weapons found.');
+      ui.notifications.error(game.i18n.localize("OSRH.util.notification.noWeapon"));
       return;
     }
     let atkOptions = '';
@@ -360,7 +360,7 @@ export const registerUtil = () => {
     const ammoCheck = game.modules.get('osr-item-shop')?.active
       ? `
       <div style="width: 110px">
-      <input id="ammoCheck" type="checkbox" checked />Check Ammo
+      <input id="ammoCheck" type="checkbox" checked />${game.i18n.localize("OSRH.util.dialog.checkAmmo")}Check Ammo
       </div>
       `
       : `
@@ -375,7 +375,7 @@ export const registerUtil = () => {
        </div>
        ${ammoCheck}
        <div>
-       <input id="skip" type="checkbox" checked />Skip Dialog
+       <input id="skip" type="checkbox" checked />${game.i18n.localize("OSRH.util.dialog.skipDialog")}Skip Dialog
        </div>
        </div>
      `;
@@ -404,7 +404,7 @@ export const registerUtil = () => {
                   await ammo.update({ system: { quantity: { value: ammoQty - 1 } } });
                 }
               } else {
-                ui.notifications.warn('No ammo');
+                ui.notifications.warn( game.i18n.localize("OSRH.util.notification.noAmmo"));
               }
             } else {
               await weapon.roll({ skipDialog: skipCheck });
@@ -444,38 +444,38 @@ export const registerUtil = () => {
       }
 
       let diagTemplate = `
-    <h1> Pick Name Type</h1>
+    <h1> ${game.i18n.localize("OSRH.util.dialog.pickNameType")}</h1>
     <div style="display:flex; margin-bottom: 5px;">
       <div  style="flex:1">
         <select id="nameType">
-          <option value="none">-type-</option>
+          <option value="none">-${game.i18n.localize("OSRH.util.dialog.type")}-</option>
           ${options}
         </select>
       </div>
       <div  style="flex:1">
         <select id="gender">
-          <option value="all">-gender-</option>
-          <option value="male">male</option>
-          <option value="female">female</option>
-          <option value="all">all</option>
+          <option value="all">-${game.i18n.localize("OSRH.util.dialog.gender")}-</option>
+          <option value="male"${game.i18n.localize("OSRH.util.dialog.male")}></option>
+          <option value="female">${game.i18n.localize("OSRH.util.dialog.female")}</option>
+          <option value="all">${game.i18n.localize("OSRH.util.dialog.all")}</option>
         </select>
       </div>
       <div>
-        <label for="whisperCheck">whisper?</label>
+        <label for="whisperCheck">${game.i18n.localize("OSRH.util.dialog.whislper")}</label>
         <input type ="checkbox" id="whisperCheck" checked />
       </div>
     </div>
     `;
       let prefix = [
-        `Meet`,
-        `Presenting`,
-        `This old so and so right here is`,
-        `Look who it is, it's`,
-        `Hey, it's`,
-        `As I live and breath, it's`,
-        `Well I'll be damned, it's`,
-        `Look what the cat dragged in. This here is`,
-        `Introducing`
+        game.i18n.localize("OSRH.util.prefix.a"),
+        game.i18n.localize("OSRH.util.prefix.b"),
+        game.i18n.localize("OSRH.util.prefix.c"),
+        game.i18n.localize("OSRH.util.prefix.d"),
+        game.i18n.localize("OSRH.util.prefix.e"),
+        game.i18n.localize("OSRH.util.prefix.f"),
+        game.i18n.localize("OSRH.util.prefix.g"),
+        game.i18n.localize("OSRH.util.prefix.h"),
+        game.i18n.localize("OSRH.util.prefix.i")
       ];
       let picker = new Dialog({
         title: 'Random Name',
@@ -496,7 +496,7 @@ export const registerUtil = () => {
               }
               const tokens = canvas.tokens.controlled;
               if (nameType == 'none' || gender == 'none') {
-                ui.notifications.warn('Please select an option');
+                ui.notifications.warn(game.i18n.localize("OSRH.util.notification.selectOption"));
                 picker.render();
                 return;
               }
@@ -521,7 +521,7 @@ export const registerUtil = () => {
                   }
                 });
                 await token.document.update({ name: fullName });
-                ui.notifications.info('Token and Actor names updated.');
+                ui.notifications.info(game.i18n.localize("OSRH.util.notification.tokenActorNameUpdated"));
                 return;
               }
               if (tokens.length > 1) {
@@ -556,7 +556,7 @@ export const registerUtil = () => {
                     }
                   });
                   await token.document.update({ name: newName });
-                  ui.notifications.info('Token and Actor names updated.');
+                  ui.notifications.info(game.i18n.localize("OSRH.util.notification.tokenActorNameUpdated"));
                 });
                 return;
               }
@@ -623,13 +623,13 @@ export const registerUtil = () => {
     const curItem = await curCheck(curCur);
     const newItem = await curCheck(newCur);
     if (curItem.system.quantity.value < amt) {
-      ui.notifications.warn(`Not enough ${curCur}`);
+      ui.notifications.warn(`${game.i18n.localize("OSRH.util.notification.notEnough")} ${curCur}`);
       OSRH.util.curConDiag(actor, amt);
       return;
     }
     let newVal = (curItem.system.cost * amt) / newItem.system.cost;
     if (newVal % 1 != 0) {
-      ui.notifications.warn(`Can't Convert To Fractional Amounts. Please Select A Different Amount To Convert`);
+      ui.notifications.warn(game.i18n.localize("OSRH.util.notification.cantConvertFraction"));
       curConDiag(actor, amt);
       return;
     }
@@ -655,21 +655,21 @@ export const registerUtil = () => {
      
        
      
-     <div>Amount:</div>
+     <div>${game.i18n.localize("OSRH.util.dialog.amount")}:</div>
      
      <input id="amt" type="number" value="${amt}">
      <div><b> X </b></div>
      <select id="curCur">
-       <option value="null">Currency</option>
+       <option value="null">${game.i18n.localize("OSRH.util.dialog.currency")}</option>
        <option value='PP'>PP</option>
        <option value='GP'>GP</option>
        <option value='EP'>EP</option>
        <option value='SP'>SP</option>
        <option value='CP'>CP</option>
      </select>
-     <div> to:</div>
+     <div> ${game.i18n.localize("OSRH.util.dialog.to")}:</div>
      <select id="newCur">
-       <option value="null">Currency</option>
+       <option value="null">${game.i18n.localize("OSRH.util.dialog.currency")}</option>
        <option value='PP'>PP</option>
        <option value='GP'>GP</option>
        <option value='EP'>EP</option>
@@ -679,19 +679,19 @@ export const registerUtil = () => {
      </div>
     `;
     let diag = new Dialog({
-      title: 'Currency Converter',
+      title: game.i18n.localize("OSRH.util.dialog.curencyConverter"),
       content: content,
       buttons: {
         convert: {
-          label: 'convert',
+          label: game.i18n.localize("OSRH.util.dialog.convert"),
           callback: (html) => {
             // let actor = canvas.tokens.controlled[0]?.actor;
-            if (!actor) ui.notifications.warn('No token Selected');
+            if (!actor) ui.notifications.warn(game.i18n.localize("OSRH.util.notification.noTokenSelected"));
             let curCur = html.find('#curCur')[0].value;
             let newCur = html.find('#newCur')[0].value;
             let amt = parseInt(html.find('#amt')[0].value);
             if (curCur == 'null' || newCur == 'null') {
-              ui.notifications.warn('Please make sure both currencies are selected.');
+              ui.notifications.warn(game.i18n.localize("OSRH.util.notification.selectBothCurrency"));
               OSRH.util.curConDiag(actor, amt);
               return;
             }

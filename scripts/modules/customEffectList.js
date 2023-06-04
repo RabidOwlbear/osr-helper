@@ -19,9 +19,9 @@ export const registerCustomEffectList = () => {
         baseApplication: 'customEffectList',
         classes: ['form', 'custom-effect-list'],
         popOut: true,
-        template: `modules/${OSRH.moduleName}/templates/customEffectList.html`,
+        template: `modules/${OSRH.moduleName}/templates/customEffectList.hbs`,
         id: 'customEffectList',
-        title: 'Currently Active Effects',
+        title: game.i18n.localize("OSRH.customEffect.currentActiveEffects"),
         width: 650
       });
     }
@@ -59,7 +59,7 @@ export const registerCustomEffectList = () => {
         <div class="effect-list-div pl"><b>${effect.name}</b>:</div>
         <div class="fx sb pr" id="effect-item-dur">
           <div class="effect-time-div fx sb">
-            <div><b>Time Left: </b></div>
+            <div><b>${game.i18n.localize("OSRH.customEffect.timeLeft")}: </b></div>
             <div id='effect-duration'>${effect.duration}</div>
           </div>
           <input type="radio" name="effectList" id="${key}" value="${effect.name}" />
@@ -79,7 +79,7 @@ export const registerCustomEffectList = () => {
     }
     async renderEffectDesc(html, effect) {
       const detailContainer = html.find('#effectDetails')[0];
-      let descHtml = await renderTemplate(`modules/${OSRH.moduleName}/templates/customEffectListDescription.html`, {
+      let descHtml = await renderTemplate(`modules/${OSRH.moduleName}/templates/customEffectListDescription.hbs`, {
         name: effect.name,
         duration: effect.duration,
         description: effect.description,
@@ -124,15 +124,15 @@ export const registerCustomEffectList = () => {
         duration: html.find('#effectDuration')[0].value
       };
       if (formData.name == '') {
-        ui.notifications.warn('Please enter an effect name.');
+        ui.notifications.warn(game.i18n.localize("OSRH.util.notification.enterEffectName"));
         return;
       }
       if (formData.description == '') {
-        ui.notifications.warn('Please enter an effect description.');
+        ui.notifications.warn(game.i18n.localize("OSRH.util.notification.enterEffectDescrip"));
         return;
       }
       if (formData.duration <= 0) {
-        ui.notifications.warn('Please enter an effect duration.');
+        ui.notifications.warn(game.i18n.localize("OSRH.util.notification.enterEffectDuration"));
         return;
       }
       let effectData = await this.user.getFlag(`${OSRH.moduleName}`, 'effectData');
@@ -153,7 +153,7 @@ export const registerCustomEffectList = () => {
       containerDiv.innerHTML = '';
       this.render();
 
-      const msgTemplate = await renderTemplate(`modules/${OSRH.moduleName}/templates/customEffectChatMsgA.html`, {
+      const msgTemplate = await renderTemplate(`modules/${OSRH.moduleName}/templates/customEffectChatMsgA.hbs`, {
         name: formData.name,
         duration: formData.duration,
         description: formData.description,
@@ -167,7 +167,7 @@ export const registerCustomEffectList = () => {
       const newEffectBtn = html.find('#newEffect')[0];
 
       const containerDiv = html.find('#effectDetails')[0];
-      const template = await renderTemplate(`modules/${OSRH.moduleName}/templates/newEffectForm.html`, {});
+      const template = await renderTemplate(`modules/${OSRH.moduleName}/templates/newEffectForm.hbs`, {});
       containerDiv.innerHTML = template;
       const subBtn = html.find('#newEffectSub')[0];
       const cancelBtn = html.find('#newEffectCancel')[0];
@@ -234,7 +234,7 @@ export const registerCustomEffectList = () => {
     </div>`;
 
     new Dialog({
-      title: 'User Effect Select',
+      title: game.i18n.localize("OSRH.customEffect.userEffectSelect"),
       content: template,
       buttons: {
         getList: {

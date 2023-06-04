@@ -29,9 +29,9 @@ export const registerEffectModule = async function () {
         top: 0,
         left: 0,
         width: 310,
-        template: `modules/${OSRH.moduleName}/templates/new-active-effect-form.html`,
+        template: `modules/${OSRH.moduleName}/templates/new-active-effect-form.hbs`,
         id: 'new-active-effect',
-        title: 'OSRH New Active Effect'
+        title: game.i18n.localize("OSRH.effect.newEffectTitle")//'OSRH New Active Effect'
       });
     }
     async getData() {
@@ -81,13 +81,13 @@ export const registerEffectModule = async function () {
         saveBtn.addEventListener('click', async (ev, data) => {
           ev.preventDefault();
           if (nameField.value == '') {
-            ui.notifications.warn('Please Enter An Effect Name');
+            ui.notifications.warn(game.i18n.localize("OSRH.util.notification.enterEffectName"));
             return;
           }
           let savedFx = await game.settings.get(OSRH.moduleName, 'savedEffects');
           for (let key in savedFx) {
             if (savedFx[key].name == nameField.value) {
-              ui.notifications.warn('Name Already In Use. Select Another');
+              ui.notifications.warn(game.i18n.localize("OSRH.util.notification.nameInUse"));
               return;
             }
           }
@@ -101,16 +101,16 @@ export const registerEffectModule = async function () {
         if (targetInp == 'targeted' && userTargets.size != 1) {
           ev.preventDefault();
 
-          ui.notifications.warn('Please target one actor.');
+          ui.notifications.warn(game.i18n.localize("OSRH.util.notification.targetOneActor"));
         }
         if (nameField.value == '') {
           ev.preventDefault();
-          ui.notifications.warn('Please Enter An Efect Name');
+          ui.notifications.warn(game.i18n.localize("OSRH.util.notification.enterEffectName"));
         }
 
         if (parseInt(durationField.value) == 0 && interval != 'infinite') {
           ev.preventDefault();
-          ui.notifications.warn('Please Enter An Efect Duration');
+          ui.notifications.warn(game.i18n.localize("OSRH.util.notification.enterEffectDuration"));
         }
       });
       resetBtn.addEventListener('click', (ev) => {
@@ -302,9 +302,9 @@ export const registerEffectModule = async function () {
         width: 400,
         top: 0,
         left: 0,
-        template: `modules/${OSRH.moduleName}/templates/active-effect-list.html`,
+        template: `modules/${OSRH.moduleName}/templates/active-effect-list.hbs`,
         // id: 'activeEffectList',
-        title: 'OSRH Active Effect List'
+        title: game.i18n.localize("OSRH.effect.activeEffectListTitle")
       };
 
       return mergeObject(super.defaultOptions, options);
@@ -553,7 +553,7 @@ export const registerEffectModule = async function () {
     presetSel.innerHTML += `
     <option value="">${effectObj.name}</option>
     `;
-    ui.notifications.notify('Effect Preset Saved');
+    ui.notifications.notify(game.i18n.localize("OSRH.util.notification.effectPresetSaved"));
     this.render();
   };
   OSRH.effect.applyEffectPreset = async function (ev) {
@@ -592,9 +592,9 @@ export const registerEffectModule = async function () {
         popOut: true,
         height: 400,
         width: 300,
-        template: `modules/${OSRH.moduleName}/templates/manage-preset-form.html`,
+        template: `modules/${OSRH.moduleName}/templates/manage-preset-form.hbs`,
         id: 'manage-preset-form',
-        title: `Manage Presets`
+        title: game.i18n.localize("OSRH.effect.ManagePresets")
       });
     }
     async getData() {
@@ -630,7 +630,7 @@ export const registerEffectModule = async function () {
         input.addEventListener('change', async function (e) {
           let file = this.files[0];
           if (file.type != 'application/json') {
-            ui.notifications.warn('Please select a valid JSON file.');
+            ui.notifications.warn(game.i18n.localize("OSRH.util.notification.selectValidJsonFile"));
             return;
           }
           let fr = new FileReader();
@@ -638,7 +638,7 @@ export const registerEffectModule = async function () {
             let content = e.target.result;
             let parsed = JSON.parse(content);
             if(!parsed){
-              ui.notifications.warn('Invalid JSON object.');
+              ui.notifications.warn(game.i18n.localize("OSRH.util.notification.invalidJson"));
               return
             }
             new Dialog({
@@ -664,7 +664,7 @@ export const registerEffectModule = async function () {
               }
             }).render(true);
             form.render();
-            return 'settings updated';
+            return game.i18n.localize("OSRH.effect.settingsUpdated");
           };
           fr.readAsText(file);
         });

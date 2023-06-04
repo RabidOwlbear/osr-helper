@@ -164,7 +164,7 @@ export class OSRHTurnTracker extends FormApplication {
         btn.addEventListener('click', async (e) => {
           await this.updateTurnData(html);
           OSRH.socket.executeForEveryone('refreshTurnTracker');
-          ui.notifications.notify('Dungeon Turn Settings Updated.');
+          ui.notifications.notify(game.i18n.localize("OSRH.util.notification.dungeonTurnSettingsUpdated"));
         });
       }
       // saveSettings.addEventListener('click', async (e) => {
@@ -175,12 +175,12 @@ export class OSRHTurnTracker extends FormApplication {
       resetTotal.addEventListener('click', (e) => {
         let tab = this.getActiveTab(html);
         let app = new Dialog({
-          title: 'WARNING',
-          content: '<p>WARNING! This will reset all turn counts. This action cannot be undone.</p>',
+          title: game.i18n.localize("OSRH.turnTracker.warning"),
+          content: `<p>${game.i18n.localize("OSRH.turnTracker.turnResetWarning")}</p>`,
           buttons: {
             one: {
               icon: '<i class=`fas fa-check`></i>',
-              label: 'Reset',
+              label: game.i18n.localize("OSRH.newEffectForm.Reset"),
               callback: async () => {
                 await OSRH.turn.resetAllCounts(tab);
                 OSRH.socket.executeForEveryone('refreshTurnTracker');
@@ -188,7 +188,7 @@ export class OSRHTurnTracker extends FormApplication {
             },
             two: {
               icon: '<i class=`fas fa-times`></i>',
-              label: 'Close',
+              label: game.i18n.localize("OSRH.customEffect.close"),
               callback: function () {
                 app.close();
               }
@@ -341,7 +341,7 @@ export class OSRHTurnTracker extends FormApplication {
     const bonus = html.find(`#nav-bonus`)[0];
     const gm = game.users.contents.filter((u) => u.role == 4).map((u) => u.id);
     if (terrain == 'road' || terrain == 'trail') {
-      ui.notifications.warn('Cannot get lost on roads or trails');
+      ui.notifications.warn(game.i18n.localize("OSRH.report.cantGetLost"));
       return;
     }
     let roll = await new Roll(`1d6 + ${bonus.value}`).evaluate({ async: true });
@@ -351,8 +351,8 @@ export class OSRHTurnTracker extends FormApplication {
       let data = {
         whisper: [game.user],
         flavor: `
-        <h3>Navigation Check: ${terrain}</h3>
-        <span style="color: red">The party got lost.</span>`
+        <h3>${game.i18n.localize("OSRH.report.navCheck")}: ${terrain}</h3>
+        <span style="color: red">${game.i18n.localize("OSRH.report.navCheckFail")}</span>`
       };
       await game?.dice3d?.showForRoll(roll, game.user, false, gm, false);
       ChatMessage.create(data);
@@ -360,8 +360,8 @@ export class OSRHTurnTracker extends FormApplication {
       let data = {
         whisper: [game.user],
         flavor: `
-        <h3>Navigation Check: ${terrain}</h3>
-        The party found their way.
+        <h3>${game.i18n.localize("OSRH.report.navCheck")}: ${terrain}</h3>
+        ${game.i18n.localize("OSRH.report.navCheckSuccess")}
         `
       };
       await game?.dice3d?.showForRoll(roll, game.user, false, gm, false);
@@ -382,8 +382,8 @@ export class OSRHTurnTracker extends FormApplication {
         whisper: gm,
         roll: roll,
         flavor: `
-        <h3>Forage check: ${terrain}</h3>
-        <div><span style="color: red"><b>Foraging unsuccessful.</b></span></div>
+        <h3>${game.i18n.localize("OSRH.report.forageCheck")}: ${terrain}</h3>
+        <div><span style="color: red"><b>${game.i18n.localize("OSRH.report.forageFail")}</b></span></div>
         `
       };
       await game?.dice3d?.showForRoll(roll, game.user, false, gm, false);
@@ -394,8 +394,8 @@ export class OSRHTurnTracker extends FormApplication {
         whisper: gm,
         roll: roll,
         flavor: `
-        <h3>Forage check: ${terrain}</h3>
-        <div><span style="color: green"><b>Foraging successful.</b></span></div>
+        <h3>${game.i18n.localize("OSRH.report.forageCheck")}: ${terrain}</h3>
+        <div><span style="color: green"><b>${game.i18n.localize("OSRH.report.forageSuccess")}</b></span></div>
         `
       };
       await game?.dice3d?.showForRoll(roll, game.user, false, gm, false);

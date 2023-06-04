@@ -1,8 +1,8 @@
 export const registerSettings = async function () {
 
   game.settings.register(`${OSRH.moduleName}`, 'timeJournalName', {
-    name: 'Name Of Journal Entry',
-    hint: 'Name Of Journal Entry To Use For Time Keeping',
+    name: "OSRH.settings.timeJournal.name",
+    hint: "OSRH.settings.timeJournal.hint",
     scope: 'world',
     type: String,
     default: 'Turn Count',
@@ -10,8 +10,8 @@ export const registerSettings = async function () {
   });
 
   game.settings.register(`${OSRH.moduleName}`, 'displayControlUi', {
-    name: 'Display UI button tray.',
-    hint: 'Adds a collapseable group of module control buttons above the macro hotbar.',
+    name: "OSRH.settings.displayUI.name",
+    hint: "OSRH.settings.displayUI.hint",
     scope: 'client',
     type: Boolean,
     default: true,
@@ -19,8 +19,8 @@ export const registerSettings = async function () {
   });
 
   game.settings.register(`${OSRH.moduleName}`, 'restMessage', {
-    name: 'Enable rest status chat messages',
-    hint: 'Enables rest status chat messages',
+    name: "OSRH.settings.restMsg.name",
+    hint: "OSRH.settings.restMsg.name",
     scope: 'world',
     type: Boolean,
     default: true,
@@ -28,8 +28,8 @@ export const registerSettings = async function () {
   });
 
   game.settings.register(`${OSRH.moduleName}`, 'whisperRest', {
-    name: 'Whisper rest status messages',
-    hint: 'Whispers rest status messages',
+    name: "OSRH.settings.restMsg.whisper",
+    hint: "OSRH.settings.restMsg.whisper",
     scope: 'world',
     type: Boolean,
     default: true,
@@ -37,16 +37,16 @@ export const registerSettings = async function () {
   });
 
   game.settings.register(`${OSRH.moduleName}`, 'tokenLightDefault', {
-    name: 'Update default token settings on creation.',
-    hint: 'Enables Owlbear preferred default token light settings.',
+    name: "OSRH.settings.tokenLightDefault.name",
+    hint: "OSRH.settings.tokenLightDefault.hint",
     scope: 'world',
     type: Boolean,
     default: true,
     config: true
   });
   game.settings.register(`${OSRH.moduleName}`, 'combatTimeAdvance', {
-    name: 'Combat Time Advance.',
-    hint: 'Advances the game time 10 seconds each time a combat round advances',
+    name: "OSRH.settings.combatTime.name",
+    hint: "OSRH.settings.combatTime.hint",
     scope: 'world',
     type: Boolean,
     default: true,
@@ -54,8 +54,8 @@ export const registerSettings = async function () {
   });
 
   game.settings.register(`${OSRH.moduleName}`, 'dungeonTurnNotificiation', {
-    name: 'Dungeon Turn Notification',
-    hint: 'Displays a UI notification when the Dungeon Turn macro is used.',
+    name: "OSRH.settings.dungeonTurnNotify.name",
+    hint: "OSRH.settings.dungeonTurnNotify.hint",
     scope: 'world',
     type: Boolean,
     default: true,
@@ -160,12 +160,21 @@ export const registerSettings = async function () {
   });
 
   //ration settings
-  game.settings.register(`${OSRH.moduleName}`, 'trackRations', {
-    name: 'Track Rations Use',
-    hint: 'Track Rations Use',
+  // game.settings.register(`${OSRH.moduleName}`, 'trackRations', {
+  //   name: 'Track Rations Use',
+  //   hint: 'Track Rations Use',
+  //   scope: 'client',
+  //   type: Boolean,
+  //   default: false,
+  //   config: true
+  // });
+  // hide foreign language packs
+  game.settings.register(`${OSRH.moduleName}`, 'hideForeignPacks', {
+    name: "OSRH.settings.hideForeignPack.name",
+    hint: "OSRH.settings.hideForeignPack.hint",
     scope: 'client',
     type: Boolean,
-    default: false,
+    default: true,
     config: true
   });
 
@@ -186,8 +195,8 @@ export const registerSettings = async function () {
   });
 
   game.settings.register(`${OSRH.moduleName}`, 'centerHotbar', {
-    name: 'Center Hotbar',
-    hint: 'Center The macro Hotbar',
+    name: "OSRH.settings.centerHotbar.name",
+    hint: "OSRH.settings.centerHotbar.hint",
     scope: 'client',
     type: Boolean,
     default: true,
@@ -219,8 +228,8 @@ export const registerSettings = async function () {
   });
 
   game.settings.register(`${OSRH.moduleName}`, 'enableLightConfig', {
-    name: 'Enable Light Item Config.',
-    hint: 'Adds icon to Items tagged with "Light" that allows for configuration of custom light options.',
+    name: "OSRH.settings.showLightConfig.name",
+    hint: "OSRH.settings.showLightConfig.hint",
     scope: 'world',
     type: Boolean,
     default: false,
@@ -235,16 +244,16 @@ export const registerSettings = async function () {
   });
 
   game.settings.register(`${OSRH.moduleName}`, 'theme', {
-    name: 'Theme',
-    hint: 'Select theme for  effect forms',
+    name: "OSRH.settings.theme.name",
+    hint: "OSRH.settings.theme.hint",
     type: String,
     choices: {
-      0: OSRH.data.themeData[0].name,
-      1: OSRH.data.themeData[1].name,
-      2: OSRH.data.themeData[2].name,
-      3: OSRH.data.themeData[3].name,
-      4: OSRH.data.themeData[4].name,
-      5: OSRH.data.themeData[5].name
+      0: "OSRH.themes.purpleSlide",//OSRH.data.themeData[0].name,
+      1: "OSRH.themes.santaFe",//OSRH.data.themeData[1].name,
+      2: "OSRH.themes.deepBlue",//OSRH.data.themeData[2].name,
+      3: "OSRH.themes.greenSLime",//OSRH.data.themeData[3].name,
+      4: "OSRH.themes.cottonCandy",//OSRH.data.themeData[4].name,
+      5: "OSRH.themes.paleSunrise"//OSRH.data.themeData[5].name
     },
     default: 'none',
     scope: 'client',
@@ -255,8 +264,8 @@ export const registerSettings = async function () {
   });
 
   game.settings.register(`${OSRH.moduleName}`, 'enableEquippableContainers', {
-    name: 'Enable Equippable Containers',
-    hint: `When enabled container items are equippable. This feature only works if "complete" encumbrance is selected in game settings.`,
+    name: "OSRH.settings.equipContainers.name",
+    hint: "OSRH.settings.equipContainers.hint",
     scope: 'world',
     type: Boolean,
     default: false,

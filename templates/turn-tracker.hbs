@@ -2,16 +2,18 @@
   <section class="main">
     <header class="tracker-header">
       <div class="btn-div">
-        {{#if isGM}}<a id="reset-session-btn" class="light-icon" title="Reset Session Count"><i class="fa-solid fa-clock-rotate-left"></i></a>{{/if}}
-        <p class="title">Turn Tracker</p>
-        {{#if isGM}}<a id="reset-total-btn" class="light-icon" title="Reset Total Count"><i class="fa-regular fa-calendar-xmark"></i></a></div>{{/if}}
+        {{#if isGM}}<a id="reset-session-btn" class="light-icon" title="{{localize "OSRH.ui.resetSession"}}  "><i class="fa-solid fa-clock-rotate-left"></i></a>{{/if}}
+        <p class="title">{{localize "OSRH.turnTracker.appTitle"}} </p>
+        {{#if isGM}}<a id="reset-total-btn" class="light-icon" title="{{localize "OSRH.ui.resetTotal"}} "><i class="fa-regular fa-calendar-xmark"></i></a></div>{{/if}}
       </div>
       
       <div class="sheet-tabs" data-group="primary">
-        <a class="nav-tab" data-tab="dungeon">Dungeon</a>
-        <a class="nav-tab" data-tab="travel">Travel</a>
-        {{#if isGM}}<a class="nav-tab narrow-tab" data-tab="dungeon-config" title="Dungeon Turn Config"><i class="fa-solid fa-dungeon"></i></a> {{/if}}
-        {{#if isGM}}<a class="nav-tab narrow-tab" data-tab="travel-config" title="Travel Turn Config"><i class="fa-regular fa-compass"></i></a> {{/if}}
+        <a class="nav-tab" data-tab="dungeon">{{localize "OSRH.turnTracker.dungeon"}} </a>
+        <a class="nav-tab" data-tab="travel">{{localize "OSRH.turnTracker.travel"}} </a>
+        {{#if isGM}}
+        <a class="nav-tab narrow-tab" data-tab="dungeon-config" title="{{localize "OSRH.turnTracker.title.dunTurnConfig"}} "><i class="fa-solid fa-dungeon"></i></a> 
+        {{/if}}
+        {{#if isGM}}<a class="nav-tab narrow-tab" data-tab="travel-config" title="{{localize "OSRH.turnTracker.title.travTurnConfig"}} "><i class="fa-regular fa-compass"></i></a> {{/if}}
       </div>
      
     </header>
@@ -27,21 +29,21 @@
             <img id="bg-5"src="modules/osr-helper/images/tts-5.webp" class="sprite hidden">
           </section>
           <div class="count-cont">
-            <h2>Dungeon Turn Counts</h2>
+            <h2>{{localize "OSRH.turnTracker.dungeonTurncounts"}} </h2>
             <div class="row">
-              <div class="count-label session">Session:</div> 
+              <div class="count-label session">{{localize "OSRH.turnTracker.session"}} :</div> 
               <div class="count-value" id="sesion-count">{{turnData.dungeon.session}}</div>
             </div>
             <div class="row">
-              <div class="count-label total">Total :</div> 
+              <div class="count-label total">{{localize "OSRH.turnTracker.total"}}  :</div> 
               <div class="count-value" id="total-count">{{turnData.dungeon.total}}</div>
             </div>
             <div class="row">
-              <div class="count-label current">Since Rest:</div> 
+              <div class="count-label current">{{localize "OSRH.turnTracker.sinceRest"}} :</div> 
               <div class="count-value" id="current-count">{{turnData.dungeon.rest}}</div>
             </div>
             <div class="d-level-row">
-              <label class="count-label"for="d-level">Dungeon Level</label>
+              <label class="count-label"for="d-level">{{localize "OSRH.turnTracker.dungeonLevel"}} </label>
               <div class="row dungeon-lvl">
                 {{#if isGM}}
                 <a id="d-lvl-dn">
@@ -59,9 +61,9 @@
           </div>
         <footer class="dungeon">
         {{#if isGM}}
-          <a id="d-rest-btn" class="light-icon" title="Rest"><i class="fa-solid fa-campground"></i></a>
+          <a id="d-rest-btn" class="light-icon" title="{{localize "OSRH.turnTracker.title.rest"}} "><i class="fa-solid fa-campground"></i></a>
           <a id="save-settings"class="hidden save-settings light-icon"><i class="fa-solid fa-floppy-disk"></i></a>
-          <a id="dungeon-turn-advance-btn" class="light-icon" title="Advance Dungeon Turn"><i class="fa-solid fa-forward"></i></a>
+          <a id="dungeon-turn-advance-btn" class="light-icon" title="{{localize "OSRH.turnTracker.title.advDunTurn"}} "><i class="fa-solid fa-forward"></i></a>
         {{/if}}
         </footer>
 
@@ -71,45 +73,45 @@
        <div class="tab travel" data-group="primary" data-tab="travel">
         <div class="travel-tab">
           <div class="travel-session">
-            <label for="travel-session">Session</label>
-            <div id="travel-session" title="Session Travel Turn Count">{{turnData.travel.session}}</div>
+            <label for="travel-session">{{localize "OSRH.turnTracker.session"}} </label>
+            <div id="travel-session" title="{{localize "OSRH.turnTracker.title.travSessCount"}} ">{{turnData.travel.session}}</div>
           </div>
           <div class="travel-total">
-            <label for="travel-current">Total</label>
-            <div id="travel-total" title="Total Travel Turn Count">{{turnData.travel.total}}</div>
+            <label for="travel-current">{{localize "OSRH.turnTracker.total"}} </label>
+            <div id="travel-total" title="{{localize "OSRH.turnTracker.title.travTotCOunt"}} t">{{turnData.travel.total}}</div>
           </div>
-          <h2>Travel Turn</h2>
+          <h2>{{localize "OSRH.turnTracker.travelTurn"}} </h2>
            {{#if isGM}}
-            <select name="terrain" id="terrain" title="Terrain Type">
-            <option class="terrainOpt"data-target="1" value="clear">clear</option>
-            <option class="terrainOpt"data-target="1" value="trail">trail</option>
-            <option class="terrainOpt"data-target="1" value="road">road</option>
-            <option class="terrainOpt"data-target="1" value="city">city</option>
-            <option class="terrainOpt"data-target="1" value="grassland">grassland</option>
-            <option class="terrainOpt"data-target="2" value="forest">forest</option>
-            <option class="terrainOpt"data-target="2" value="mud">mud</option>
-            <option class="terrainOpt"data-target="2" value="snow">snow</option>
-            <option class="terrainOpt"data-target="2" value="hill">hill</option>
-            <option class="terrainOpt"data-target="2" value="desert">desert</option>
-            <option class="terrainOpt"data-target="2" value="brokenLand">brokenLand</option>
-            <option class="terrainOpt"data-target="3" value="mountain">mountain</option>
-            <option class="terrainOpt"data-target="3" value="swamp">swamp</option>
-            <option class="terrainOpt"data-target="3" value="jungle">jungle</option>
-            <option class="terrainOpt"data-target="2" value="ice">ice</option>
-            <option class="terrainOpt"data-target="2" value="glacier">glacier</option>
+            <select name="terrain" id="terrain" title="{{localize "OSRH.turnTracker.title.terrain"}} ">
+            <option class="terrainOpt"data-target="1" value="clear">{{localize "OSRH.report.clear"}} </option>
+            <option class="terrainOpt"data-target="1" value="trail">{{localize "OSRH.report.trail"}} </option>
+            <option class="terrainOpt"data-target="1" value="road">{{localize "OSRH.report.road"}} </option>
+            <option class="terrainOpt"data-target="1" value="city">{{localize "OSRH.report.city"}} </option>
+            <option class="terrainOpt"data-target="1" value="grassland">{{localize "OSRH.report.grassland"}} </option>
+            <option class="terrainOpt"data-target="2" value="forest">{{localize "OSRH.report.forest"}} </option>
+            <option class="terrainOpt"data-target="2" value="mud">{{localize "OSRH.report.mud"}} </option>
+            <option class="terrainOpt"data-target="2" value="snow">{{localize "OSRH.report.snow"}} </option>
+            <option class="terrainOpt"data-target="2" value="hill">{{localize "OSRH.report.hill"}} </option>
+            <option class="terrainOpt"data-target="2" value="desert">{{localize "OSRH.report.desert"}} </option>
+            <option class="terrainOpt"data-target="2" value="brokenLand">{{localize "OSRH.report.brokenLand"}} </option>
+            <option class="terrainOpt"data-target="3" value="mountain">{{localize "OSRH.report.mountain"}} </option>
+            <option class="terrainOpt"data-target="3" value="swamp">{{localize "OSRH.report.swamp"}} </option>
+            <option class="terrainOpt"data-target="3" value="jungle">{{localize "OSRH.report.jungle"}} </option>
+            <option class="terrainOpt"data-target="2" value="ice">{{localize "OSRH.report.ice"}} </option>
+            <option class="terrainOpt"data-target="2" value="glacier">{{localize "OSRH.report.glacier"}} </option>
             </select>
           {{else}}
           <div class="terrain-type">
-            Terrain: {{turnData.travel.terrain}}
+            {{localize "OSRH.turnTracker.terrain"}} : {{turnData.travel.terrain}}
           </div>{{/if}}
           <div class="base-rate">
-            <label for="base-travel-rate">Base Travel Rate:</label>
+            <label for="base-travel-rate">{{localize "OSRH.report.baseTravelRate"}} :</label>
             <div id="base-travel-rate">{{baseRate}} mi</div>
           </div>
           <section id="party-list" class="party-list {{#if isGM}}{{else}}{{/if}}">
             {{!-- {{{characters}}} --}}
             <div class="actor-list" id="character-list">
-              <div class="char-list-header">characters</div>
+              <div class="char-list-header">{{localize "OSRH.report.characters"}} </div>
               {{#each characters as |character idx|}}
               <div class="actor-div">
                 <div class="actor-name">{{character.name}}</div>
@@ -121,7 +123,7 @@
             </div>
             {{!-- {{{retainers}}} --}}
             <div class="actor-list" id="retainer-list">
-              <div class="char-list-header">retainers</div>
+              <div class="char-list-header">{{localize "OSRH.report.retainers"}} </div>
               {{#each retainers as |retainer idx|}}
               <div class="actor-div">
                 <div class="actor-name">{{retainer.name}}</div>
@@ -139,23 +141,23 @@
           <section class="travel-checks">
             {{#if isGM}}
             <div class="input-block">
-              <div class="check-label">Navigation</div>
+              <div class="check-label">{{localize "OSRH.turnTracker.navigation"}} </div>
               <div class="flex-row">
-                <a id="navigation-check" title="Navigation Check"><i class="fa-solid fa-compass"></i></a>
-                <input type="text" id="nav-bonus"data-dtype="Number" title="Navigation Check Bonus" value="0">
+                <a id="navigation-check" title="{{localize "OSRH.turnTracker.title.navCheck"}} "><i class="fa-solid fa-compass"></i></a>
+                <input type="text" id="nav-bonus"data-dtype="Number" title="{{localize "OSRH.turnTracker.title.navBonus"}} " value="0">
               </div>
             </div>
             {{/if}}
             <div class="input-block travel-rest-count">
-              <div class="check-label">Since Rest</div>
+              <div class="check-label">{{localize "OSRH.turnTracker.sinceRest"}} </div>
               <div class="check-label rest-turns">{{turnData.travel.rest}}</div>
             </div>
             {{#if isGM}}
             <div class="input-block">
-              <div class="check-label">Forage</div>  
+              <div class="check-label">{{localize "OSRH.turnTracker.forage"}}</div>  
               <div class="flex-row">
-                <input type="text" id="forage-bonus" data-dtype="Number" title="Forage Check Bonus" value="0">
-                <a id="forage-check" title="Forage Check"><i class="fa-solid fa-utensils"></i></a>
+                <input type="text" id="forage-bonus" data-dtype="Number" title="{{localize "OSRH.turnTracker.title.forBonus"}} " value="0">
+                <a id="forage-check" title="{{localize "OSRH.turnTracker.title.forCHeck"}} "><i class="fa-solid fa-utensils"></i></a>
                 
               </div>
             </div>
@@ -164,40 +166,40 @@
            
           <footer class="travel">
           {{#if isGM}}
-            <a id="t-rest-btn" class="light-icon" title="Rest"><i class="fa-solid fa-campground"></i></a>
+            <a id="t-rest-btn" class="light-icon" title="{{localize "OSRH.turnTracker.title.rest"}} "><i class="fa-solid fa-campground"></i></a>
             <a id="save-settings"class="hidden save-settings light-icon"><i class="fa-solid fa-floppy-disk"></i></a>
-            <a id="travel-turn-advance-btn" class="light-icon" title="Advance Travel Turn"><i class="fa-solid fa-forward"></i></a>
+            <a id="travel-turn-advance-btn" class="light-icon" title="{{localize "OSRH.turnTracker.title.advTravTurn"}} "><i class="fa-solid fa-forward"></i></a>
           {{/if}}
           </footer>
         </div>
       </div>
       <div class="tab dungeon-config" data-group="primary" data-tab="dungeon-config">
         <div class="dungeon-config-tab">
-          <h2>Dungeon Turn Options</h2>
+          <h2>{{localize "OSRH.turnTracker.dungeonOptions"}} </h2>
           <div class="row">
             <div class="row">
-              <input type="checkbox" name="d-encounter-roll" id="d-encounter-roll" title="Roll For Encounters?"{{#if turnData.dungeon.rollEnc}}checked{{/if}}>
-              <label for="encounter-roll" >Roll Encounters</label>
+              <input type="checkbox" name="d-encounter-roll" id="d-encounter-roll" title="{{localize "OSRH.turnTracker.title.rolEnc"}} "{{#if turnData.dungeon.rollEnc}}checked{{/if}}>
+              <label for="encounter-roll" >{{localize "OSRH.turnTracker.rollEnc"}} </label>
             </div>
             <div class="row">
-              <input type="checkbox" name="d-react-roll" id="d-react-roll" title="Roll For Reaction?"{{#if turnData.dungeon.rollReact}}checked{{/if}}>
-              <label for="encounter-roll" >Roll Reaction</label>
+              <input type="checkbox" name="d-react-roll" id="d-react-roll" title="{{localize "OSRH.turnTracker.title.rollReact"}} "{{#if turnData.dungeon.rollReact}}checked{{/if}}>
+              <label for="encounter-roll" >{{localize "OSRH.turnTracker.rollReact"}} </label>
             </div>
           </div>
           <div class="row">
             <div class="row">
-              <input type="text" class="num-inp" data-dtype="number" name="d-encounter-freq" id="d-encounter-freq" title="Encounter Roll Frequency(In Turns)" value="{{turnData.dungeon.proc}}">
-              <label for="d-encounter-freq" >Frequency</label>
+              <input type="text" class="num-inp" data-dtype="number" name="d-encounter-freq" id="d-encounter-freq" title="{{localize "OSRH.turnTracker.title.encFreq"}} " value="{{turnData.dungeon.proc}}">
+              <label for="d-encounter-freq" >{{localize "OSRH.turnTracker.freq"}} </label>
             </div>
             <div class="row">
-              <input type="text" class="num-inp" data-dtype="number" name="d-encounter-target" id="d-encounter-target" title="Encounter Roll Target(Roll Under)" value="{{turnData.dungeon.rollTarget}}">
-              <label for="d-encounter-target" >Roll Target</label>
+              <input type="text" class="num-inp" data-dtype="number" name="d-encounter-target" id="d-encounter-target" title="{{localize "OSRH.turnTracker.title.encTarget"}} " value="{{turnData.dungeon.rollTarget}}">
+              <label for="d-encounter-target" >{{localize "OSRH.turnTracker.rollTarget"}} </label>
             </div>
           </div>
           <div class="row">
-            <label for="d-react-table">Reaction Table: </label>
+            <label for="d-react-table">{{localize "OSRH.turnTracker.reactTable"}} : </label>
                 <select class="react-select" name="d-react-table" id="d-react-table" value="{{turnData.dungeon.rTable}}">
-                  <option value="none">None</option>
+                  <option value="none">{{localize "OSRH.turnTracker.none"}} </option>
                   {{#each tableNames as |name idx|}}
                     <option value="{{name}}">{{name}}</option>
                   {{/each}}
@@ -207,7 +209,7 @@
               <div class="row">
                 <label for="lvl-1">Lvl 1: </label>
                 <select class="d-enc-select" name="lvl-1" id="lvl-1" data-lvl="1">
-                  <option value="none">None</option>
+                  <option value="none">{{localize "OSRH.turnTracker.none"}} </option>
                   {{#each tableNames as |name idx|}}
                     <option value="{{name}}">{{name}}</option>
                   {{/each}}
@@ -216,7 +218,7 @@
               <div class="row">
                 <label for="lvl-2">Lvl 2: </label>
                 <select class="d-enc-select" name="lvl-2" id="lvl-2" data-lvl="2">
-                  <option value="none">None</option>
+                  <option value="none">{{localize "OSRH.turnTracker.none"}} </option>
                   {{#each tableNames as |name idx|}}
                     <option value="{{name}}">{{name}}</option>
                   {{/each}}
@@ -225,7 +227,7 @@
               <div class="row">
                 <label for="lvl-3">Lvl 3: </label>
                 <select class="d-enc-select" name="lvl-3" id="lvl-3" data-lvl="3">
-                  <option value="none">None</option>
+                  <option value="none">{{localize "OSRH.turnTracker.none"}} </option>
                   {{#each tableNames as |name idx|}}
                     <option value="{{name}}">{{name}}</option>
                   {{/each}}
@@ -234,7 +236,7 @@
               <div class="row">
                 <label for="lvl-4">Lvl 4: </label>
                 <select class="d-enc-select" name="lvl-4" id="lvl-4" data-lvl="4">
-                  <option value="none">None</option>
+                  <option value="none">{{localize "OSRH.turnTracker.none"}} </option>
                   {{#each tableNames as |name idx|}}
                     <option value="{{name}}">{{name}}</option>
                   {{/each}}
@@ -243,7 +245,7 @@
               <div class="row">
                 <label for="lvl-5">Lvl 5: </label>
                 <select class="d-enc-select" name="lvl-5" id="lvl-5" data-lvl="5">
-                  <option value="none">None</option>
+                  <option value="none">{{localize "OSRH.turnTracker.none"}} </option>
                   {{#each tableNames as |name idx|}}
                     <option value="{{name}}">{{name}}</option>
                   {{/each}}
@@ -252,7 +254,7 @@
               <div class="row">
                 <label for="lvl-6">Lvl 6: </label>
                 <select class="d-enc-select" name="lvl-6" id="lvl-6" data-lvl="6">
-                  <option value="none">None</option>
+                  <option value="none">{{localize "OSRH.turnTracker.none"}} </option>
                   {{#each tableNames as |name idx|}}
                     <option value="{{name}}">{{name}}</option>
                   {{/each}}
@@ -261,7 +263,7 @@
               <div class="row">
                 <label for="lvl-7">Lvl 7: </label>
                 <select class="d-enc-select" name="lvl-7" id="lvl-7" data-lvl="7">
-                  <option value="none">None</option>
+                  <option value="none">{{localize "OSRH.turnTracker.none"}} </option>
                   {{#each tableNames as |name idx|}}
                     <option value="{{name}}">{{name}}</option>
                   {{/each}}
@@ -270,7 +272,7 @@
               <div class="row">
                 <label for="lvl-8">Lvl 8+: </label>
                 <select class="d-enc-select" name="lvl-8" id="lvl-8" data-lvl="8">
-                  <option value="none">None</option>
+                  <option value="none">{{localize "OSRH.turnTracker.none"}} </option>
                   {{#each tableNames as |name idx|}}
                     <option value="{{name}}">{{name}}</option>
                   {{/each}}
@@ -289,41 +291,41 @@
       </div>
       <div class="tab travel-config"data-group="primary" data-tab="travel-config">
         <div class="travel-config-tab">
-          <h2>Travel Turn Options</h2>
+          <h2>{{localize "OSRH.turnTracker.travelTurnOpt"}} </h2>
           <div class="travel-options">
             <div class="row">
             <div class="row">
-              <input type="checkbox" name="t-encounter-roll" id="t-encounter-roll" title="Roll For Encounters?"{{#if turnData.travel.rollEnc}}checked{{/if}}>
-              <label for="encounter-roll" >Roll Encounters</label>
+              <input type="checkbox" name="t-encounter-roll" id="t-encounter-roll" title="{{localize "OSRH.turnTracker.title.rolEnc"}} "{{#if turnData.travel.rollEnc}}checked{{/if}}>
+              <label for="encounter-roll" >{{localize "OSRH.turnTracker.rollEnc"}} </label>
             </div>
             <div class="row">
-              <input type="checkbox" name="t-react-roll" id="t-react-roll" title="Roll For Reaction?"{{#if turnData.travel.rollReact}}checked{{/if}}>
-              <label for="encounter-roll" >Roll Reaction</label>
+              <input type="checkbox" name="t-react-roll" id="t-react-roll" title="{{localize "OSRH.turnTracker.title.rollReact"}} "{{#if turnData.travel.rollReact}}checked{{/if}}>
+              <label for="encounter-roll" >{{localize "OSRH.turnTracker.rollReact"}} </label>
             </div>
           </div>
           <div class="row">
             <div class="row">
-              <input type="text" class="num-inp" data-dtype="number" name="t-encounter-freq" id="t-encounter-freq" title="Number Of Encounter Rolls(Per Travel Turn)" value="{{turnData.travel.proc}}">
-              <label for="t-encounter-freq" >Encounters</label>
+              <input type="text" class="num-inp" data-dtype="number" name="t-encounter-freq" id="t-encounter-freq" title="{{localize "OSRH.turnTracker.title.encPerTurn"}} " value="{{turnData.travel.proc}}">
+              <label for="t-encounter-freq" >{{localize "OSRH.turnTracker.enc"}} </label>
             </div>
             <div class="row">
-              <input type="text" class="num-inp" data-dtype="number" name="t-encounter-target" id="t-encounter-target" title="Encounter Roll Target(Roll Under)" value="{{turnData.travel.rollTarget}}">
-              <label for="t-encounter-target" >Roll Target</label>
+              <input type="text" class="num-inp" data-dtype="number" name="t-encounter-target" id="t-encounter-target" title="{{localize "OSRH.turnTracker.title.encTarget"}} " value="{{turnData.travel.rollTarget}}">
+              <label for="t-encounter-target" >{{localize "OSRH.turnTracker.rollTarget"}} </label>
             </div>
           </div>
             <div class="row">
-              <label for="travel-react-table">Reaction Table: </label>
+              <label for="travel-react-table">{{localize "OSRH.turnTracker.reactTable"}} : </label>
               <select class="react-select" name="travel-react-table" id="travel-react-table" value="{{turnData.travel.rTable}}">
-                <option value="none">None</option>
+                <option value="none">{{localize "OSRH.turnTracker.none"}} </option>
                 {{#each tableNames as |name idx|}}
                 <option value="{{name}}">{{name}}</option>
                 {{/each}}
               </select>
             </div>
             <div class="row">
-              <label for="travel-enc-table">Encounter Table: </label>
+              <label for="travel-enc-table">{{localize "OSRH.turnTracker.encTable"}} : </label>
               <select class="react-select" name="travel-enc-table" id="travel-enc-table" value=" {{turnData.travel.encTable}}">
-                <option value="none">None</option>
+                <option value="none">{{localize "OSRH.turnTracker.none"}} </option>
                 {{#each tableNames as |name idx|}}
                 <option value="{{name}}">{{name}}</option>
                 {{/each}}

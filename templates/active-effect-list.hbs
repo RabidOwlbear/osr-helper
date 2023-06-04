@@ -1,13 +1,13 @@
 <form action="">
-  <h3><b>Active Effects:</b></h3>
+  <h3><b>{{localize "OSRH.effect.activeEffects"}}:</b></h3>
   
   <div class="effect-cont">
     {{#if selfEffects}}
     <div class="list-header fx sb w100p bgg05">
-      <div class="header-name"><b>Name</b></div>
-      <div class="header-name"><b>Target</b></div>
-      <div class="header-dur"><b>Duration</b></div>
-      <div class="header-del"><b>Delete</b></div>
+      <div class="header-name"><b>{{localize "OSRH.newEffectForm.name"}}</b></div>
+      <div class="header-name"><b>{{localize "OSRH.customEffect.target"}}</b></div>
+      <div class="header-dur"><b>{{localize "OSRH.newEffectForm.duration"}}</b></div>
+      <div class="header-del"><b>{{localize "OSRH.effect.delete"}}</b></div>
     </div>
     {{/if}}
     {{#each selfEffects}}
@@ -20,14 +20,14 @@
       </div>
       <div class="details-cont" style="display: none">
         <div class="effect-list-cont effect-details-section">
-          <h4>effects:</h4>
+          <h4>{{localize "OSRH.effect.effects"}}:</h4>
           <ul class="effect-list">
             {{{this.list}}}
             
           </ul>
         </div>
         <div class="descrip-cont effect-details-section">
-          <h4>description:</h4>
+          <h4>{{localize "OSRH.customEffect.descrip"}}:</h4>
           <p style="width: 170px;">{{this.descrip}}</p>
         </div>
       </div>
@@ -36,10 +36,10 @@
 
     {{#if otherEffects}}
     <div class="list-header fx sb w100p bgb05">
-      <div class="header-name"><b>Name</b></div>
-      <div class="header-name"><b>Created By</b></div>
-      <div class="header-dur"><b>Duration</b></div>
-      <div class="header-del">      </div>
+      <div class="header-name"><b>{{localize "OSRH.newEffectForm.name"}}</b></div>
+      <div class="header-name"><b>{{localize "OSRH.effect.createdBy"}}</b></div>
+      <div class="header-dur"><b>{{localize "OSRH.newEffectForm.duration"}}</b></div>
+      <div class="header-del">{{localize "OSRH.effect.delete"}}</div>
     </div>
     {{/if}}
     {{#each otherEffects}}
@@ -52,13 +52,13 @@
       </div>
       <div class="details-cont" style="display: none">
         <div class="effect-list-cont effect-details-section">
-          <h4>effects:</h4>
+          <h4>{{localize "OSRH.effect.effects"}}:</h4>
           <ul class="effect-list">
             {{{this.list}}}
           </ul>
         </div>
         <div class="descrip-cont effect-details-section">
-          <h4>description:</h4>
+          <h4>{{localize "OSRH.customEffect.descrip"}}:</h4>
           <p style="width: 170px;">{{this.descrip}}</p>
         </div>
       </div>
@@ -67,10 +67,10 @@
 
     {{#if gmList}}
     <div class="list-header fx sb w100p bgg05">
-      <div class="header-name"><b>Name</b></div>
-      <div class="header-name"><b>Created By</b></div>
-      <div class="header-dur"><b>Duration</b></div>
-      <div class="header-del"><b>Delete</b></div>
+      <div class="header-name"><b>{{localize "OSRH.newEffectForm.name"}}</b></div>
+      <div class="header-name"><b>{{localize "OSRH.effect.createdBy"}}</b></div>
+      <div class="header-dur"><b>{{localize "OSRH.newEffectForm.duration"}}</b></div>
+      <div class="header-del"><b>{{localize "OSRH.effect.delete"}}</b></div>
     </div>
     {{/if}}
     {{#each gmList}}
@@ -83,14 +83,14 @@
       </div>
       <div class="details-cont" style="display: none">
         <div class="effect-list-cont effect-details-section">
-          <h4>effects:</h4>
+          <h4>{{localize "OSRH.effect.effects"}}:</h4>
           <ul class="effect-list">
             {{{this.list}}}
             
           </ul>
         </div>
         <div class="descrip-cont effect-details-section">
-          <h4>description:</h4>
+          <h4>{{localize "OSRH.customEffect.descrip"}}:</h4>
           <p style="width: 170px;">{{this.descrip}}</p>
         </div>
       </div>
@@ -100,7 +100,7 @@
     
   </div>
   <div class="button-cont fx sb w100p">
-    <button id="close-btn">close</button>
-    <button id="new-btn">new</button>
+    <button id="close-btn">{{localize "OSRH.customEffect.close"}}</button>
+    <button id="new-btn">{{localize "OSRH.effect.new"}}</button>
   </div>
 </form>

@@ -58,21 +58,21 @@ export const registerReports = () => {
     if (totalRations <= 3) ratStyle = 'color: orangeRed;';
     if (totalRations <= 1) ratStyle = 'color: red;';
 
-    const rationText = totalRations <= 0 ? '<ul><li><span style="color: red;">None</span></li></ul>' : msgData.food;
-    const lightText = msgData.light == '' ? '<ul><li><span style="color: red;">None</span></li></ul>' : msgData.light;
+    const rationText = totalRations <= 0 ? `<ul><li><span style="color: red;">${game.i18n.localize("OSRH.report.none")}</span></li></ul>` : msgData.food;
+    const lightText = msgData.light == '' ? `<ul><li><span style="color: red;">${game.i18n.localize("OSRH.report.none")}</span></li></ul>` : msgData.light;
     let contents = `
       <details >
-      <summary><strong>Supplies Report</strong></summary>
+      <summary><strong>${game.i18n.localize("OSRH.report.suppliesReport")}</strong></summary>
       <br>
       <div >
         <br>
-        <div style="${ratStyle}">Total Days of Rations left: ${totalRations}</div>
+        <div style="${ratStyle}">${game.i18n.localize("OSRH.report.daysRations")}: ${totalRations}</div>
         <br>
-        <h3>Character Rations:</h3>
+        <h3>${game.i18n.localize("OSRH.report.charRations")}:</h3>
         <div>
           ${rationText}
         </div>
-        <h3>Character Light Sources:</h3>
+        <h3>${game.i18n.localize("OSRH.report.charLightSource")}:</h3>
         <div>
           ${lightText}
         </div>
@@ -101,7 +101,7 @@ export const registerReports = () => {
     };
 
     for (let partyMember of actorObj.party) {
-      let type = partyMember.system.retainer.enabled ? 'retainers' : 'characters';
+      let type = partyMember.system.retainer.enabled ? game.i18n.localize("OSRH.report.retainers") : game.i18n.localize("OSRH.report.characters");
       let actorRations = '';
       for (let type of Rations) {
         let ration = partyMember.items.getName(type);
@@ -123,17 +123,17 @@ export const registerReports = () => {
     const daysLeft = Math.floor(totalRations / actorObj.party.length);
     let contents = `
   <details >
-    <summary><strong>Ration Report</strong></summary>
+    <summary><strong>${game.i18n.localize("OSRH.report.rationReport")}</strong></summary>
     <br>
-    <div style="border-bottom: 2px solid black; padding-bottom: 10px;"><b>Total Days left</b>: <span style="padding-left: 10px; ${style(
+    <div style="border-bottom: 2px solid black; padding-bottom: 10px;"><b>${game.i18n.localize("OSRH.report.totaldaysleft")}</b>: <span style="padding-left: 10px; ${style(
       daysLeft
     )}"><b>${daysLeft}</b></span></div>
     <br>
-    <h3><b>Character Rations</b></h3>
+    <h3><b>${game.i18n.localize("OSRH.report.charRations")}</b></h3>
     <div>
       ${msgData.characters} 
     </div>
-    <h3><b>Retainer Rations</b></h3>
+    <h3><b>${game.i18n.localize("OSRH.report.retainerRations")}</b></h3>
     <div>
       ${msgData.retainers}
     </div>
@@ -178,7 +178,7 @@ export const registerReports = () => {
         popOut: true,
         template: `modules/${OSRH.moduleName}/templates/travel-report.hbs`,
         id: 'osrTravelReport',
-        title: 'Adventure ahoy!',
+        title: game.i18n.localize("OSRH.report.travelTitle"),
         width: 400
       });
     }
@@ -251,7 +251,7 @@ export const registerReports = () => {
       const bonus = document.querySelector(`#nav-bonus`);
       const gm = game.users.contents.filter((u) => u.role == 4).map((u) => u.id);
       if (radio == 'road' || radio == 'trail') {
-        ui.notifications.warn('Cannot get lost on roads or trails');
+        ui.notifications.warn(game.i18n.localize("OSRH.report.cantGetLost"));
         return;
       }
       let roll = await new Roll(`1d6 + ${bonus.value}`).evaluate({ async: true });
@@ -261,8 +261,8 @@ export const registerReports = () => {
         let data = {
           whisper: [game.user],
           flavor: `
-          <h3>Navigation Check: ${radio}</h3>
-          <span style="color: red">The party got lost.</span>`
+          <h3>${game.i18n.localize("OSRH.report.navCheck")}: ${radio}</h3>
+          <span style="color: red">${game.i18n.localize("OSRH.report.navCheckFail")}</span>`
         };
         await game?.dice3d?.showForRoll(roll, game.user, false, gm, false);
         ChatMessage.create(data);
@@ -270,8 +270,8 @@ export const registerReports = () => {
         let data = {
           whisper: [game.user],
           flavor: `
-          <h3>Navigation Check: ${radio}</h3>
-          The party found their way.
+          <h3>${game.i18n.localize("OSRH.report.navCheck")}: ${radio}</h3>
+          ${game.i18n.localize("OSRH.report.navCheckSuccess")}
           `
         };
         await game?.dice3d?.showForRoll(roll, game.user, false, gm, false);
@@ -295,8 +295,8 @@ export const registerReports = () => {
           whisper: gm,
           roll: roll,
           flavor: `
-          <h3>Forage check: ${terrain}</h3>
-          <div><span style="color: red"><b>Foraging unsuccessful.</b></span></div>
+          <h3>${game.i18n.localize("OSRH.report.forageCheck")}: ${terrain}</h3>
+          <div><span style="color: red"><b>${game.i18n.localize("OSRH.report.forageFail")}</b></span></div>
           `
         };
         await game?.dice3d?.showForRoll(roll, game.user, false, gm, false);
@@ -307,8 +307,8 @@ export const registerReports = () => {
           whisper: gm,
           roll: roll,
           flavor: `
-          <h3>Forage check: ${terrain}</h3>
-          <div><span style="color: green"><b>Foraging successful.</b></span></div>
+          <h3>${game.i18n.localize("OSRH.report.forageCheck")}: ${terrain}</h3>
+          <div><span style="color: green"><b>${game.i18n.localize("OSRH.report.forageSuccess")}</b></span></div>
           `
         };
         await game?.dice3d?.showForRoll(roll, game.user, false, gm, false);

@@ -114,16 +114,16 @@ export const registerTurn = () => {
     let tRoll = roll.total; //Math.floor(Math.random() * 6 + 1) +  Math.floor(Math.random() * 6 + 1) + rollMod;
     let tables = {
       monster: [
-        { val: 0, text: 'Monster Attacks!' },
-        { val: 4, text: 'Monster is aggressive! roll again in one round with a penalty of - 4 to the roll' },
-        { val: 8, text: 'Monster is cautious; roll again in one round' },
-        { val: 10, text: 'Monster is neutral; roll again in one round with a bonus of +4 to the roll' },
-        { val: 12, text: 'Monster is friendly!' }
+        { val: 0, text: game.i18n.localize("OSRH.turn.react.monster.a") },
+        { val: 4, text: game.i18n.localize("OSRH.turn.react.monster.b") },
+        { val: 8, text: game.i18n.localize("OSRH.turn.react.monster.c") },
+        { val: 10, text: game.i18n.localize("OSRH.turn.react.monster.d") },
+        { val: 12, text: game.i18n.localize("OSRH.turn.react.monster.e") }
       ],
       npc: [
-        { val: 0, text: 'Depart in anger!' },
-        { val: 6, text: 'Negotiate' },
-        { val: 9, text: 'Offer to buy or sell information.' }
+        { val: 0, text: game.i18n.localize("OSRH.turn.react.npc.a") },
+        { val: 6, text: game.i18n.localize("OSRH.turn.react.npc.b") },
+        { val: 9, text: game.i18n.localize("OSRH.turn.react.npc.c") }
       ]
     };
     let getResultText = (res, table) => {
@@ -141,11 +141,11 @@ export const registerTurn = () => {
     const tType = type == 'npc' ? 'NPC' : 'Monster';
     let modTxt = mod ? `+ ${rollMod}` : ``;
     let content = `
-    <h3 style="text-align: center;">Reaction Roll: ${tType}</h3>
+    <h3 style="text-align: center;">${game.i18n.localize("OSRH.turn.react.roll")}: ${tType}</h3>
     <div>
-    <div><b>Roll Formula:</b> 2d6 ${modTxt}</div>
-    <div><b>Roll Result:</b> ${roll.total}</div>
-    <div><b>${tType} Reaction:</b></div>
+    <div><b>${game.i18n.localize("OSRH.turn.react.formula")}:</b> 2d6 ${modTxt}</div>
+    <div><b>${game.i18n.localize("OSRH.turn.react.result")}:</b> ${roll.total}</div>
+    <div><b>${tType} ${game.i18n.localize("OSRH.turn.react.reaction")}:</b></div>
     <p>${result}</p>
     </div>
   `;
@@ -175,11 +175,11 @@ export const registerTurn = () => {
       reactTable = await game.tables.getName(data.dungeon.rTable);
       // checks
       if (data.dungeon.rollEnc && !encTable) {
-        ui.notifications.error('Encounter Table Not Found');
+        ui.notifications.error(game.i18n.localize("OSRH.util.notification.encTableNotFound"));
         return;
       }
       if (data.dungeon.rollReact && !reactTable) {
-        ui.notifications.error('Reaction Table Not Found');
+        ui.notifications.error(game.i18n.localize("OSRH.util.notification.reactTableNotFound"));
         return;
       }
     }
@@ -201,7 +201,7 @@ export const registerTurn = () => {
 
         if (theRoll.result > turnData.dungeon.rollTarget) {
           const content = {
-            flavor: "<span style='color: green'>No Monsters!</span>",
+            flavor: `<span style='color: green'>${game.i18n.localize("OSRH.turn.noMonster")}</span>`,
             whisper: gm
           };
 
@@ -262,11 +262,11 @@ export const registerTurn = () => {
       reactTable = await game.tables.getName(travelData.rTable);
       // checks
       if (travelData.rollEnc && !encTable) {
-        ui.notifications.error('Encounter Table Not Found');
+        ui.notifications.error(game.i18n.localize("OSRH.util.notification.encTableNotFound"));
         return;
       }
       if (travelData.rollReact && !reactTable) {
-        ui.notifications.error('Reaction Table Not Found');
+        ui.notifications.error(game.i18n.localize("OSRH.util.notification.reactTableNotFound"));
         return;
       }
     }
@@ -284,7 +284,7 @@ export const registerTurn = () => {
 
           if (theRoll.result > travelData.rollTarget) {
             const content = {
-              flavor: `<h3>Encounter ${i + 1}</h3><span style='color: green'>No Monsters!</span>`,
+              flavor: `<h3>Encounter ${i + 1}</h3><span style='color: green'>${game.i18n.localize("OSRH.turn.noMonster")}</span>`,
               whisper: gm
             };
 
@@ -328,7 +328,7 @@ export const registerTurn = () => {
 
     OSRH.turn.timePlus(travelData.duration, 'hour'); //increment game time
     await OSRH.turn.updateJournal(); //update turn count journal
-    if (turnMsg) ui.notifications.notify('Travel turn Advanced.');
+    if (turnMsg) ui.notifications.notify(game.i18n.localize("OSRH.util.notification.travelTurnAdvance"));
     OSRH.turn.refreshTurnTracker();
     return true;
   };
@@ -353,45 +353,45 @@ export const registerTurn = () => {
     let jContent = ``;
     if (turnData.dungeon.rest > 5) {
       jContent += `
-      <h2>Dungeon Turns</h2>
+      <h2>${game.i18n.localize("OSRH.turn.dungeon")}</h2>
       <br>
-      <p>Session Count: ${turnData.dungeon.session}</p>
-      <p> Total Count: ${turnData.dungeon.total}</p>
-      <p>Turns Since Last Rest: <span style="color: red">${turnData.dungeon.rest}</span></p>`;
+      <p>${game.i18n.localize("OSRH.turn.count.session")}: ${turnData.dungeon.session}</p>
+      <p> ${game.i18n.localize("OSRH.turn.count.total")}: ${turnData.dungeon.total}</p>
+      <p>${game.i18n.localize("OSRH.turn.count.sinceRest")}: <span style="color: red">${turnData.dungeon.rest}</span></p>`;
     } else if (turnData.dungeon.rest > 3) {
       jContent += ` <h2>Dungeon Turns</h2>
       <br>
-      <p>Session Count: ${turnData.dungeon.session}</p>
-      <p> Total Count: ${turnData.dungeon.total}</p>
-      <p>Turns Since Last Rest: <span style="color: orangered">${turnData.dungeon.rest}</span></p>`;
+      <p>${game.i18n.localize("OSRH.turn.count.session")}: ${turnData.dungeon.session}</p>
+      <p> ${game.i18n.localize("OSRH.turn.count.total")}: ${turnData.dungeon.total}</p>
+      <p>${game.i18n.localize("OSRH.turn.count.sinceRest")}: <span style="color: orangered">${turnData.dungeon.rest}</span></p>`;
     } else {
       jContent += ` 
-      <h2>Dungeon Turns</h2>
+      <h2>${game.i18n.localize("OSRH.turn.dungeon")}</h2>
       <br>
-      <p>Session Count: ${turnData.dungeon.session}</p>
-      <p> Total Count: ${turnData.dungeon.total}</p>
-      <p>Turns Since Last Rest: ${turnData.dungeon.rest}</p>`;
+      <p>${game.i18n.localize("OSRH.turn.count.session")}: ${turnData.dungeon.session}</p>
+      <p> ${game.i18n.localize("OSRH.turn.count.total")}: ${turnData.dungeon.total}</p>
+      <p>${game.i18n.localize("OSRH.turn.count.sinceRest")}: ${turnData.dungeon.rest}</p>`;
     }
     if (turnData.travel.rest > 5) {
       jContent += `
-      <h2>Travel Turns</h2>
+      <h2>${game.i18n.localize("OSRH.turn.travel")}</h2>
       <br>
-      <p>Session Count: ${turnData.travel.session}</p>
-      <p> Total Count: ${turnData.travel.total}</p>
-      <p>Turns Since Last Rest: <span style="color: red">${turnData.travel.rest}</span></p>`;
+      <p>${game.i18n.localize("OSRH.turn.count.session")}: ${turnData.travel.session}</p>
+      <p> ${game.i18n.localize("OSRH.turn.count.total")}: ${turnData.travel.total}</p>
+      <p>${game.i18n.localize("OSRH.turn.count.sinceRest")}: <span style="color: red">${turnData.travel.rest}</span></p>`;
     } else if (turnData.travel.rest > 3) {
       jContent += `
-      <h2>Travel Turns</h2>
+      <h2>${game.i18n.localize("OSRH.turn.travel")}</h2>
       <br>
-      <p>Session Count: ${turnData.travel.session}</p>
-      <p> Total Count: ${turnData.travel.total}</p>
-      <p>Turns Since Last Rest: <span style="color: orangered">${turnData.travel.rest}</span></p>`;
+      <p>${game.i18n.localize("OSRH.turn.count.session")}: ${turnData.travel.session}</p>
+      <p> ${game.i18n.localize("OSRH.turn.count.total")}: ${turnData.travel.total}</p>
+      <p>${game.i18n.localize("OSRH.turn.count.sinceRest")}: <span style="color: orangered">${turnData.travel.rest}</span></p>`;
     } else {
       jContent += `
-      <h2>Travel Turns</h2>
-      <br><p>Session Count: ${turnData.travel.session}</p>
-      <p> Total Count: ${turnData.travel.total}</p>
-      <p>Turns Since Last Rest: ${turnData.travel.rest}</p>`;
+      <h2>${game.i18n.localize("OSRH.turn.travel")}</h2>
+      <br><p>${game.i18n.localize("OSRH.turn.count.session")}: ${turnData.travel.session}</p>
+      <p> ${game.i18n.localize("OSRH.turn.count.total")}: ${turnData.travel.total}</p>
+      <p>${game.i18n.localize("OSRH.turn.count.sinceRest")}: ${turnData.travel.rest}</p>`;
     }
     await page.update({ text: { content: jContent } });
     return;
@@ -409,8 +409,8 @@ export const registerTurn = () => {
       chatData.whisper = gm;
     }
     if (count > 5) {
-      let content = '<p style="color: red">You Must Rest!</p>';
-      let penalty = `<p style ="color: firebrick">All Players suffer a penalty of -1 to hit and damage rolls until they have rested for one turn.</p>`;
+      let content = `<p style="color: red">${game.i18n.localize("OSRH.turn.mustRest")}</p>`;
+      let penalty = `<p style ="color: firebrick">${game.i18n.localize("OSRH.turn.restPenalty")}</p>`;
       turnData[type].restWarnCount++;
 
       if (count == 6) {
@@ -427,7 +427,7 @@ export const registerTurn = () => {
       return;
     }
     if (count > 3) {
-      chatData.content = '<p style="color: orangered">You Must Rest Soon!</p>';
+      chatData.content = `<p style="color: orangered">${game.i18n.localize("OSRH.turn.mustRestSoon")}</p>`;
       ChatMessage.create(chatData);
       return;
     }
@@ -455,7 +455,7 @@ export const registerTurn = () => {
     await game.settings.set(`${OSRH.moduleName}`, 'turnData', data);
     await OSRH.turn.updateJournal();
     const chatData = {
-      content: '<span style="color: green"> You Feel Rested! </span>'
+      content: `<span style="color: green"> ${game.i18n.localize("OSRH.turn.feelRested")} </span>`
     };
     if (whisper) {
       chatData.whisper = gm;
@@ -483,11 +483,11 @@ export const registerTurn = () => {
 
     chatData.content = ``;
     if (type == 'dungeon' || type === null) {
-      chatData.content += `<h2>Dungeon Turn Count</h2><br><p>Session Count: ${data.dungeon.session}</p><p> Total Count: ${data.dungeon.total}</p><p>Turns Since Last Rest: <span ${dStyle}>${data.dungeon.rest}</span></p>
+      chatData.content += `<h2>${game.i18n.localize("OSRH.turn.count.dungeon")}</h2><br><p>${game.i18n.localize("OSRH.turn.count.session")}: ${data.dungeon.session}</p><p> ${game.i18n.localize("OSRH.turn.count.total")}: ${data.dungeon.total}</p><p>${game.i18n.localize("OSRH.turn.count.sinceRest")}: <span ${dStyle}>${data.dungeon.rest}</span></p>
     <br>`;
     }
     if (type == 'travel' || type === null) {
-      chatData.content += `<h2>Travel Turn Count</h2><br><p>Session Count: ${data.travel.session}</p><p> Total Count: ${data.travel.total}</p><p>Turns Since Last Rest: <span ${tStyle}>${data.travel.rest}</span></p>`;
+      chatData.content += `<h2>${game.i18n.localize("OSRH.turn.count.travel")}</h2><br><p>${game.i18n.localize("OSRH.turn.count.session")}: ${data.travel.session}</p><p> ${game.i18n.localize("OSRH.turn.count.total")}: ${data.travel.total}</p><p>${game.i18n.localize("OSRH.turn.count.sinceRest")}: <span ${tStyle}>${data.travel.rest}</span></p>`;
     }
     ChatMessage.create(chatData);
   };
@@ -522,13 +522,13 @@ export const registerTurn = () => {
       if (turnsLeft <= OSRH.lightSource[type].alert) {
         color = 'red';
       }
-      const turn = turnsLeft == 1 ? 'turn' : 'turns';
+      const turn = turnsLeft == 1 ? game.i18n.localize("OSRH.light.chat.turn") : game.i18n.localize("OSRH.light.chat.turns");
       const typeCap = type.charAt(0).toUpperCase() + type.slice(1);
-      chatData.content = `<h3>${typeCap} Turns Left</h3><p style="color: ${color}">The ${type} has ${turnsLeft} ${turn} remaining</p>`;
+      chatData.content = `<h3>${typeCap} ${game.i18n.localize("OSRH.light.chat.turnsLeft")}</h3><p style="color: ${color}">${game.i18n.localize("OSRH.light.chat.the")} ${type} ${game.i18n.localize("OSRH.light.chat.has")} ${turnsLeft} ${turn} ${game.i18n.localize("OSRH.light.chat.remaining")}</p>`;
 
       ChatMessage.create(chatData);
       return;
     }
-    ui.notifications.error('No Light Lit!');
+    ui.notifications.error(game.i18n.localize("OSRH.util.notification.noLightLit"));
   };
 };

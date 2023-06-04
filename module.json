@@ -9,11 +9,11 @@
       "flags": {}
     }
   ],
-  "version": "0.4.13",
+  "version": "0.4.14",
   "compatibility": {
     "minimum": "10",
-    "verified": "11.299",
-    "maximum": "11.299"
+    "verified": "11.300",
+    "maximum": "11"
   },
   "styles": [
     "styles/main.css"
@@ -22,12 +22,33 @@
     "scripts/init.js"
   ],
   "socket": true,
+  "languages": [
+    {
+      "lang": "en",
+      "name": "English",
+      "path": "./lang/en.json"
+    },
+    {
+      "lang": "es",
+      "name": "Spanish",
+      "path": "./lang/es.json"
+    }
+  ],
   "packs": [
     {
       "name": "osr-helper-items",
-      "label": "OSR-helper Items",
+      "label": "OSR-helper Items (en)",
       "type": "Item",
       "path": "packs/items.db",
+      "system": "ose",
+      "private": false,
+      "flags": {}
+    },
+    {
+      "name": "osr-helper-items-es",
+      "label": "OSR-helper Items (es)",
+      "type": "Item",
+      "path": "packs/items-es.db",
       "system": "ose",
       "private": false,
       "flags": {}

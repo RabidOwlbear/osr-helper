@@ -389,20 +389,20 @@ export const registerLightModule = async function () {
       let remaining = lightData.duration - elapsed;
       let tRem = Math.floor(remaining / 600);
       let color = tRem <= lightData.data.alert ? 'red' : tRem <= lightData.data.warn ? 'orangeRed' : 'green';
-      let turn = tRem == 1 ? 'turn' : 'turns';
+      let turn = tRem == 1 ? game.i18n.localize("OSRH.light.chat.turn") : game.i18n.localize("OSRH.light.chat.turns");
       let chatData = {
         content: '',
         whisper: [game.user.id]
       };
-      chatData.content = `<h3>${lightData.name} Turns Left</h3>
-      <p style="color: ${color}">The ${lightData.name} has ${tRem} ${turn} remaining</p>`;
+      chatData.content = `<h3>${lightData.name} ${game.i18n.localize("OSRH.light.chat.turnsLeft")}</h3>
+      <p style="color: ${color}">${game.i18n.localize("OSRH.light.chat.the")} ${lightData.name} ${game.i18n.localize("OSRH.light.chat.has")} ${tRem} ${turn} ${game.i18n.localize("OSRH.light.chat.remaining")}</p>`;
 
       ChatMessage.create(chatData);
 
       return;
     }
 
-    ui.notifications.warn('No Lights Lit!');
+    ui.notifications.warn(game.i18n.localize("OSRH.util.notification.noLightLit"));
   };
 
   OSRH.light.osrLightOff = async function (actorId) {

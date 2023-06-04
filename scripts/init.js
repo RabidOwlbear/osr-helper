@@ -3,7 +3,7 @@ import { registerLightModule } from './modules/lightModule.js';
 import { registerTurn } from './modules/turn.js';
 import { registerRations } from './modules/rations.js';
 import { registerUtil } from './modules/util.js';
-import { registerData } from './data/osrHelperData.js';
+import { registerData, registerLocalizedData } from './data/osrHelperData.js';
 import { registerCustomEffectList } from './modules/customEffectList.js';
 import { registerReports } from './modules/reports.js';
 import { registerNameData } from './data/nameData.js';
@@ -11,6 +11,7 @@ import { registerSettings } from './modules/settingsModule.js';
 import { registerEffectModule } from './modules/effectModule.js';
 import { uiControls } from './modules/ui-controls.mjs';
 import { OSRHTurnTracker, registerTravelConstants } from './modules/turn-tracker.mjs';
+import { hideForeignPacks } from './modules/hide-foreign-packs.mjs';
 //namespace
 window.OSRH = window.OSRH || {
   moduleName: `osr-helper`,
@@ -22,7 +23,7 @@ window.OSRH = window.OSRH || {
   turn: {},
   util: {},
   CONST: {},
-  ui: uiControls,
+  ui,
   socket: undefined
 };
 
@@ -43,6 +44,7 @@ Hooks.once('init', async function () {
   registerLightModule();
   registerEffectModule();
   registerTravelConstants();
+  hideForeignPacks()
   OSRH.gameVersion = game.version ? game.version : game.version;
   OSRH.TurnTracker = OSRHTurnTracker;
   Hooks.callAll(`${OSRH.moduleName}.registered`);
@@ -95,10 +97,13 @@ Hooks.on('updateSetting', async (a, b, c) => {
 });
 Hooks.once(`${OSRH.moduleName}.registered`, () => {});
 Hooks.once('ready', async () => {
+  OSRH.ui = uiControls
+  registerLocalizedData();
+  OSRH.ui.addUiControls();
+  
   OSRH.util.setTheme();
   const turnData = await game.settings.get(`${OSRH.moduleName}`, 'turnData');
   const jName = await game.settings.get(`${OSRH.moduleName}`, 'timeJournalName');
-
   //update turn proc
 
   if (!turnData.journalName && jName) turnData.journalName = jName;
@@ -166,6 +171,11 @@ Hooks.once('ready', async () => {
   await OSRH.util.centerHotbar();
   window.addEventListener('resize', async () => {
     await OSRH.util.centerHotbar();
+  });
+  //add ui controls
+  Hooks.on('renderHotbar', async () => {
+    await OSRH.util.centerHotbar();
+    OSRH.ui.addUiControls();
   });
 });
 
@@ -337,10 +347,7 @@ Hooks.on('updateCombat', async (combat, details) => {
     }
   }
 });
-Hooks.on('renderHotbar', async () => {
-  await OSRH.util.centerHotbar();
-  OSRH.ui.addUiControls();
-});
+
 Hooks.on('renderNewActiveEffectForm', (form, html) => {
   if (game.user.role == 4) {
     let header = html.find('header')[0];
