@@ -360,7 +360,7 @@ export const registerUtil = () => {
     const ammoCheck = game.modules.get('osr-item-shop')?.active
       ? `
       <div style="width: 110px">
-      <input id="ammoCheck" type="checkbox" checked />${game.i18n.localize("OSRH.util.dialog.checkAmmo")}Check Ammo
+      <input id="ammoCheck" type="checkbox" checked />${game.i18n.localize("OSRH.util.dialog.checkAmmo")}
       </div>
       `
       : `
@@ -375,7 +375,7 @@ export const registerUtil = () => {
        </div>
        ${ammoCheck}
        <div>
-       <input id="skip" type="checkbox" checked />${game.i18n.localize("OSRH.util.dialog.skipDialog")}Skip Dialog
+       <input id="skip" type="checkbox" checked />${game.i18n.localize("OSRH.util.dialog.skipDialog")}
        </div>
        </div>
      `;
