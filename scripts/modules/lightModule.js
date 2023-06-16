@@ -208,7 +208,6 @@ export const registerLightModule = async function () {
             speed: data.speed
           };
            OSRH.light.updateTokens(dataObj.uuid, lData);
-
           OSRH.light.decrementLightItem(dataObj.uuid, light.itemId);
           if (!dataObj.lights.length) delete lightData[actorId];
         }
@@ -224,7 +223,7 @@ export const registerLightModule = async function () {
 
     if (item.system.quantity.value > 0) {
       let qty = item.system.quantity.value - 1;
-      await item.update({ data: { quantity: { value: qty } } });
+      await item.update({ system: { quantity: { value: qty } } });
     }
     if (item.system.quantity.value <= 0) {
       await actor.deleteEmbeddedDocuments('Item', [itemId]);
