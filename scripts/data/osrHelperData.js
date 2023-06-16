@@ -568,56 +568,52 @@ export const registerLocalizedData = () =>{
   // update localization after item shop/character builder
   OSRH.data.ammoData = [
     {
-      name: 'Shortbow',
-      ammoType: 'Arrows (quiver of 20)', 
+      name: game.i18n.localize("OSRH.ammunition.shortbow"),
+      ammoType: game.i18n.localize("OSRH.ammunition.arrows"), 
     },
     {
-      name: 'Longbow',
-      ammoType: 'Arrows (quiver of 20)', 
+      name: game.i18n.localize("OSRH.ammunition.longbow"),
+      ammoType: game.i18n.localize("OSRH.ammunition.arrows"), 
     },
     {
-      name: 'Crossbow',
-      ammoType: 'Crossbow bolts (case of 30)',
+      name: game.i18n.localize("OSRH.ammunition.crossbow"),
+      ammoType: game.i18n.localize("OSRH.ammunition.bolts"),
     },
     {
-      name: 'Sling',
-      ammoType: 'Sling Stones',
+      name: game.i18n.localize("OSRH.ammunition.sling"),
+      ammoType: game.i18n.localize("OSRH.ammunition.stones"),
     },
     {
-      name: 'Matchlock blunderbuss',
-      ammoType: 'Ammunition pouch',
+      name: game.i18n.localize("OSRH.ammunition.matchlock.blunderbus"),
+      ammoType: game.i18n.localize("OSRH.ammunition.pouch"),
     },
     {
-      name: 'Matchlock heavy musket',
-      ammoType: 'Ammunition pouch',
+      name: game.i18n.localize("OSRH.ammunition.matchlock.heavyMusket"),
+      ammoType: game.i18n.localize("OSRH.ammunition.pouch"),
     },
     {
-      name: 'Matchlock musket',
-      ammoType: 'Ammunition pouch',
+      name: game.i18n.localize("OSRH.ammunition.matchlock.musket"),
+      ammoType: game.i18n.localize("OSRH.ammunition.pouch"),
     },
     {
-      name: 'Matchlock pistol',
-      ammoType: 'Ammunition pouch',
+      name: game.i18n.localize("OSRH.ammunition.matchlock.pistol"),
+      ammoType: game.i18n.localize("OSRH.ammunition.pouch"),
     },
     {
-      name: 'Wheellock blunderbuss',
-      ammoType: 'Ammunition pouch',
+      name: game.i18n.localize("OSRH.ammunition.wheelLock.blunderbuss"),
+      ammoType: game.i18n.localize("OSRH.ammunition.pouch"),
     },
     {
-      name: 'Wheellock heavy musket',
-      ammoType: 'Ammunition pouch',
+      name: game.i18n.localize("OSRH.ammunition.wheelLock.heavyMusket"),
+      ammoType: game.i18n.localize("OSRH.ammunition.pouch"),
     },
     {
-      name: 'Wheellock pistol',
-      ammoType: 'Ammunition pouch',
+      name: game.i18n.localize("OSRH.ammunition.wheelLock.pistol"),
+      ammoType: game.i18n.localize("OSRH.ammunition.pouch"),
     },
     {
-      name: 'Wheellock blunderbuss',
-      ammoType: 'Ammunition pouch',
-    },
-    {
-      name: 'Wheellock musket',
-      ammoType: 'Ammunition pouch',
+      name: game.i18n.localize("OSRH.ammunition.wheelLock.musket"),
+      ammoType: game.i18n.localize("OSRH.ammunition.pouch"),
     },
 
     

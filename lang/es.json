@@ -55,6 +55,9 @@
   "OSRH.ammunition.longbow": "Arco largo",
   "OSRH.ammunition.crossbow": "Ballesta",
   "OSRH.ammunition.sling": "Honda",
+  "OSRH.ammunition.arrows": "Flechas (carcaj de 20)",
+  "OSRH.ammunition.bolts": "Saetas (estuche de 30)",
+  "OSRH.ammunition.stones": "Piedras de honda",
   "OSRH.ammunition.matchlock.blunderbus": "Trabuco de mecha",
   "OSRH.ammunition.matchlock.heavyMusket": "Mosquete pesado de mecha",
   "OSRH.ammunition.matchlock.musket": "Mosquete de mecha",
@@ -63,6 +66,7 @@
   "OSRH.ammunition.wheelLock.heavyMusket": "Mosquete pesado de rueda",
   "OSRH.ammunition.wheelLock.musket": "Mosquete de rueda",
   "OSRH.ammunition.wheelLock.pistol": "Pistola de rueda",
+  "OSRH.ammunition.pouch": "Bolsa de munición",
 
   "OSRH.themes.purpleSlide": "deslizamiento púrpura",
   "OSRH.themes.santaFe": "centro comercial santa fe",
@@ -311,8 +315,9 @@
   "OSRH.turn.mustRestSoon": "¡Debes descansar pronto!",
   "OSRH.turn.mustRest": "¡Debes descansar!",
   "OSRH.turn.restPenalty": "Todos los Jugadores sufren una penalización de -1 a las tiradas de impacto y daño hasta que hayan descansado un turno",
+  "OSRH.turn.dungeon":"Turnos de mazmorra",
+  "OSRH.turn.travel":"Turnos de viaje",
   "OSRH.turn.count.travel": "Recuento de turnos de viaje",  
-  
   "OSRH.turn.count.dungeon": "Recuento de turnos de mazmorra",
   "OSRH.turn.count.total": "Recuento total",
   "OSRH.turn.count.session": "Recuento de sesiones",

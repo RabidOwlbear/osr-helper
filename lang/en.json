@@ -55,6 +55,9 @@
   "OSRH.ammunition.longbow": "Longbow",
   "OSRH.ammunition.crossbow": "Crossbow",
   "OSRH.ammunition.sling": "Sling",
+  "OSRH.ammunition.arrows": "Arrows (quiver of 20)",
+  "OSRH.ammunition.bolts": "Crossbow bolts (case of 30)",
+  "OSRH.ammunition.stones": "Sling Stones",
   "OSRH.ammunition.matchlock.blunderbus": "Matchlock blunderbuss",
   "OSRH.ammunition.matchlock.heavyMusket": "Matchlock heavy musket",
   "OSRH.ammunition.matchlock.musket": "Matchlock musket",
@@ -63,6 +66,7 @@
   "OSRH.ammunition.wheelLock.heavyMusket": "Wheellock heavy musket",
   "OSRH.ammunition.wheelLock.musket": "Wheellock musket",
   "OSRH.ammunition.wheelLock.pistol": "Wheellock pistol",
+  "OSRH.ammunition.pouch": "Ammunition pouch",
 
   "OSRH.themes.purpleSlide": "purple slide",
   "OSRH.themes.santaFe": "sante fe mall",
@@ -363,4 +367,5 @@
   "OSRH.turnTracker.title.encTarget":"Encounter Roll Target(Roll Under)",
   "OSRH.turnTracker.title.rollReact":"Roll For Reaction?",
   "OSRH.turnTracker.title.encPerTurn":"Number Of Encounter Rolls(Per Travel Turn)"
+
 }
