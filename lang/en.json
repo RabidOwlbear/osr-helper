@@ -116,6 +116,7 @@
   "OSRH.util.notification.travelTurnAdvance": "Travel turn Advanced.",
   "OSRH.util.notification.dungeonTurnSettingsUpdated": "Dungeon Turn Settings Updated.",
   "OSRH.util.notification.travelTurnSettingsUpdated": "Travel Turn Settings Updated.",
+  "OSRH.notification.noGpFoundActor": "No GP Item Found In Actor",
 
 
   "OSRH.util.dialog.checkAmmo": "Check Ammo",
@@ -366,6 +367,12 @@
   "OSRH.turnTracker.title.encFreq":"Encounter Roll Frequency(In Turns)",
   "OSRH.turnTracker.title.encTarget":"Encounter Roll Target(Roll Under)",
   "OSRH.turnTracker.title.rollReact":"Roll For Reaction?",
-  "OSRH.turnTracker.title.encPerTurn":"Number Of Encounter Rolls(Per Travel Turn)"
+  "OSRH.turnTracker.title.encPerTurn":"Number Of Encounter Rolls(Per Travel Turn)",
+
+  "OSRH.curency.pp": "PP",
+  "OSRH.curency.gp": "GP",
+  "OSRH.curency.ep": "EP",
+  "OSRH.curency.sp": "SP",
+  "OSRH.curency.cp": "CP"
 
 }

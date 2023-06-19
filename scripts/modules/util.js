@@ -609,10 +609,18 @@ export const registerUtil = () => {
   OSRH.util.curConvert = async function (amt, curCur, newCur, actor) {
     const curItems = actor.items;
     const curCheck = async (type) => {
-      let itemExists = actor.items.getName(type);
-      let pack = game.packs.get(`${OSRH.moduleName}.${OSRH.moduleName}-items`);
+      let itemExists = await actor.items.getName(type);
+      const lang = game.i18n.lang;
+      const packName = lang === 'en' ? `${OSRH.moduleName}.${OSRH.moduleName}-items` : `${OSRH.moduleName}.${OSRH.moduleName}-items-${lang}`
+      let pack = await game.packs.get(packName);
+      console.log('SAZKERjhBFJHADSCBUYSDFHUDASHJI',lang, packName, pack)
       if (!itemExists) {
-        let curItm = await pack.getDocument(pack.index.getName(type)._id);
+        const itemId = await pack.index.getName(type)?._id;
+        if(!itemId) {
+          ui.notifications.warn(`${game.i18n.localize("OSRH.notification.noGpFoundActor")}`)
+          return
+      }
+        let curItm = await pack.getDocument();
         let itemData = curItm.clone();
         await actor.createEmbeddedDocuments('Item', [itemData]);
         return await actor.items.getName(type);
@@ -634,14 +642,14 @@ export const registerUtil = () => {
       return;
     }
     await curItem.update({
-      data: {
+      system: {
         quantity: {
           value: curItem.system.quantity.value - amt
         }
       }
     });
     await newItem.update({
-      data: {
+      system: {
         quantity: {
           value: newItem.system.quantity.value + newVal
         }
@@ -661,20 +669,20 @@ export const registerUtil = () => {
      <div><b> X </b></div>
      <select id="curCur">
        <option value="null">${game.i18n.localize("OSRH.util.dialog.currency")}</option>
-       <option value='PP'>PP</option>
-       <option value='GP'>GP</option>
-       <option value='EP'>EP</option>
-       <option value='SP'>SP</option>
-       <option value='CP'>CP</option>
+       <option value='${game.i18n.localize("OSRH.curency.pp")}'>${game.i18n.localize("OSRH.curency.pp")}</option>
+       <option value='${game.i18n.localize("OSRH.curency.gp")}'>${game.i18n.localize("OSRH.curency.gp")}</option>
+       <option value='${game.i18n.localize("OSRH.curency.ep")}'>${game.i18n.localize("OSRH.curency.ep")}</option>
+       <option value='${game.i18n.localize("OSRH.curency.sp")}'>${game.i18n.localize("OSRH.curency.sp")}</option>
+       <option value='${game.i18n.localize("OSRH.curency.cp")}'>${game.i18n.localize("OSRH.curency.cp")}</option>
      </select>
      <div> ${game.i18n.localize("OSRH.util.dialog.to")}:</div>
      <select id="newCur">
        <option value="null">${game.i18n.localize("OSRH.util.dialog.currency")}</option>
-       <option value='PP'>PP</option>
-       <option value='GP'>GP</option>
-       <option value='EP'>EP</option>
-       <option value='SP'>SP</option>
-       <option value='CP'>CP</option>
+       <option value='${game.i18n.localize("OSRH.curency.pp")}'>${game.i18n.localize("OSRH.curency.pp")}</option>
+       <option value='${game.i18n.localize("OSRH.curency.gp")}'>${game.i18n.localize("OSRH.curency.gp")}</option>
+       <option value='${game.i18n.localize("OSRH.curency.ep")}'>${game.i18n.localize("OSRH.curency.ep")}</option>
+       <option value='${game.i18n.localize("OSRH.curency.sp")}'>${game.i18n.localize("OSRH.curency.sp")}</option>
+       <option value='${game.i18n.localize("OSRH.curency.cp")}'>${game.i18n.localize("OSRH.curency.cp")}</option>
      </select>
      </div>
     `;
@@ -714,7 +722,6 @@ export const registerUtil = () => {
 // used
   OSRH.util.setting = async function (setting, value, type) {
     if (type == 'set') {
-      console.log(`${setting} set`);
       await game.settings.set(`${OSRH.moduleName}`, setting, value);
     }
     if (type == 'get') {

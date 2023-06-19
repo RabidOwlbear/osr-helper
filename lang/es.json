@@ -116,6 +116,7 @@
   "OSRH.util.notification.travelTurnAdvance": "Avanza un turno de viaje",
   "OSRH.util.notification.dungeonTurnSettingsUpdated": "Ajustes de turno de mazmorra actualizados",
   "OSRH.util.notification.travelTurnSettingsUpdated": "Ajustes de turno de viaje actualizados",
+  "OSRH.notification.noGpFoundActor": "No se encuentra el objeto MO en el Actor",
 
 
   "OSRH.util.dialog.checkAmmo": "Comprobar munición",
@@ -366,7 +367,13 @@
   "OSRH.turnTracker.title.encFreq": "Frecuencia de tiradas de encuentro (en turnos)",
   "OSRH.turnTracker.title.encTarget": "Objetivo de la tirada de encuentro (tirada por debajo)",
   "OSRH.turnTracker.title.rollReact": "¿Tirada de reacción?",
-  "OSRH.turnTracker.title.encPerTurn": "Número de tiradas de encuentro (por turno de viaje)."
+  "OSRH.turnTracker.title.encPerTurn": "Número de tiradas de encuentro (por turno de viaje).",
+
+  "OSRH.curency.pp": "MP",
+  "OSRH.curency.gp": "MO",
+  "OSRH.curency.ep": "ME",
+  "OSRH.curency.sp": "ML",
+  "OSRH.curency.cp": "MC"
 
 }
 
