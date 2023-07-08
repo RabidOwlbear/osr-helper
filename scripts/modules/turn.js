@@ -211,7 +211,7 @@ export const registerTurn = () => {
           const roll = await encTable.roll({ async: true });
           let content = ``;
           for (let res of roll.results) {
-            if (!res.documentCollection.length) {
+            if (!res?.documentCollection?.length) {
               content += `<br/>${res.text}<br/>`;
             } else {
               content += `<br/>@${res.documentCollection}[${res.text}]<br/>`;
