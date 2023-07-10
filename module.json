@@ -9,7 +9,7 @@
       "flags": {}
     }
   ],
-  "version": "0.4.20",
+  "version": "0.4.21",
   "compatibility": {
     "minimum": "10",
     "verified": "11.302",
@@ -61,12 +61,35 @@
       "system": "ose",
       "private": false,
       "flags": {}
+    },
+    {
+      "name": "osr-helper-items-hyperborea-en",
+      "label": "OSR-helper Items (en)",
+      "type": "Item",
+      "path": "packs/items-hyperborea-en.db",
+      "system": "hyperborea",
+      "private": false,
+      "flags": {}
+    },
+    {
+      "name": "osr-helper-macros-hyperborea",
+      "label": "OSR-helper Macros",
+      "path": "packs/macros-hyperborea.db",
+      "type": "Macro",
+      "system": "hyperborea",
+      "private": false,
+      "flags": {}
     }
   ],
   "relationships": {
     "systems": [
       {
         "id": "ose",
+        "type": "system",
+        "compatibility": {}
+      },
+      {
+        "id": "hyperborea",
         "type": "system",
         "compatibility": {}
       },
