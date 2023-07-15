@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - module now creates folder to organize included compendiums on intial world load.
 - added setting for compendium folder name.
 - added setting to control whether included compendium packs are grouped into a folder. Defaults to true.
+- added support for the Hyperborea game system for fvtt.
 
 ### fixes
 - fixed some irregularities with the hide foreign language packs feature. Hidden packs should now remain hidden after the compendium tab is refreshed.
