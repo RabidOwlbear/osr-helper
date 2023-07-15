@@ -911,3 +911,31 @@ export const registerUtil = () => {
      
    }
 };
+export const intializePackFolders = async () => {
+  let singleGM = false;
+  if (game.user.isGM && game.users.filter((u) => u.role == 4)[0]?.id === game.user.id) {
+    singleGM = true;
+  }
+  if (singleGM) {
+  const movePacks = await game.settings.get('osr-helper', 'makePackFolder');
+  const folderName = await game.settings.get('osr-helper', 'packFolderName');
+  const sleep = (ms) => new Promise((res) => setTimeout(res, ms));
+  const packnames = [
+    "osr-helper-items-en",
+    "osr-helper-items-es",
+    "osr-helper-macros-all",
+    "osr-helper-items-hyperborea-en",
+    "osr-helper-macros-hyperborea-all",
+  ];
+  let folder = game.folders.getName(folderName);
+  if (!folder && movePacks) {
+    folder = await Folder.create([{ name: folderName, type: 'Compendium', color: '#30741d' }]);
+    packnames.forEach(async (pn) => {
+      const pack = await game.packs.get(`osr-helper.${pn}`);
+      if(pack) await pack.setFolder(folder[0]);
+    });
+    await sleep(150)
+    ui.sidebar.render()
+  }
+  }
+};

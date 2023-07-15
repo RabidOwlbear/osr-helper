@@ -2,7 +2,7 @@
 import { registerLightModule } from './modules/lightModule.js';
 import { registerTurn } from './modules/turn.js';
 import { registerRations } from './modules/rations.js';
-import { registerUtil } from './modules/util.js';
+import { registerUtil, intializePackFolders } from './modules/util.js';
 import { registerData, registerLocalizedData } from './data/osrHelperData.js';
 import { registerCustomEffectList } from './modules/customEffectList.js';
 import { registerReports } from './modules/reports.js';
@@ -44,7 +44,6 @@ Hooks.once('init', async function () {
   registerLightModule();
   registerEffectModule();
   registerTravelConstants();
-  hideForeignPacks()
   OSRH.gameVersion = game.version ? game.version : game.version;
   OSRH.TurnTracker = OSRHTurnTracker;
   Hooks.callAll(`${OSRH.moduleName}.registered`);
@@ -72,35 +71,33 @@ Hooks.once('socketlib.ready', () => {
 });
 //update proc data if changed
 Hooks.on('updateSetting', async (a, b, c) => {
-
-  if (a.key ==="osr-helper.timeJournalName") {
+  if (a.key === 'osr-helper.timeJournalName') {
     const newName = await game.settings.get(`${OSRH.moduleName}`, 'timeJournalName');
     const oldName = turnData?.journalName;
     const journal = await game.journal.getName(oldName);
-     //turn journal update
+    //turn journal update
     if (oldName && newName != oldName) {
       console.log('journal name changed');
       turnData.journalName = newName;
       await journal.update({ name: newName });
     }
-
   }
 
   if (a.key === 'osr-helper.turnData') {
-   
     const turnData = await game.settings.get(`${OSRH.moduleName}`, 'turnData');
-    
-   
+
     console.log('Update Setting hook');
     await OSRH.socket.executeAsGM('setting', 'turnData', turnData, 'set');
   }
 });
 Hooks.once(`${OSRH.moduleName}.registered`, () => {});
 Hooks.once('ready', async () => {
-  OSRH.ui = uiControls
+  OSRH.ui = uiControls;
   registerLocalizedData();
   OSRH.ui.addUiControls();
-  
+  await intializePackFolders();
+  hideForeignPacks();
+
   OSRH.util.setTheme();
   const turnData = await game.settings.get(`${OSRH.moduleName}`, 'turnData');
   const jName = await game.settings.get(`${OSRH.moduleName}`, 'timeJournalName');

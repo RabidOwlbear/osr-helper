@@ -24,6 +24,10 @@
   "OSRH.settings.theme.hint": "Select theme for  effect forms",
   "OSRH.settings.equipContainers.name": "Enable Equippable Containers",
   "OSRH.settings.equipContainers.hint": "When enabled container items are equippable. This feature only works if \"complete\" encumbrance is selected in game settings.",
+  "OSRH.settings.makePackFolder":"Create Compendium Pack Folder",
+  "OSRH.settings.makePackFolderHint":"When selected a folder will be created and included compendiums will be moved to this folder.",
+  "OSRH.settings.packFolderName":"Compendium Pack Folder Name",
+  "OSRH.settings.packFolderNameHint":"Name to use for the compendium folder.",
 
   "OSRH.food.iron": "Rations (iron, 7 days)",
   "OSRH.food.standard":"Rations (standard, 7 days)",

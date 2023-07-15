@@ -3,6 +3,15 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+## [0.4.22] 2023-6-22
+### changes
+- module now creates folder to organize included compendiums on intial world load.
+- added setting for compendium folder name.
+- added setting to control whether included compendium packs are grouped into a folder. Defaults to true.
+
+### fixes
+- fixed some irregularities with the hide foreign language packs feature. Hidden packs should now remain hidden after the compendium tab is refreshed.
+
 ## [0.4.19] 2023-6-22
 ### fixes
 - Fixed template errors resulting in broken localization on the new active effect form.

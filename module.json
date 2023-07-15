@@ -9,10 +9,10 @@
       "flags": {}
     }
   ],
-  "version": "0.4.21",
+  "version": "0.4.22",
   "compatibility": {
     "minimum": "10",
-    "verified": "11.302",
+    "verified": "11.305",
     "maximum": "11"
   },
   "styles": [
@@ -36,7 +36,7 @@
   ],
   "packs": [
     {
-      "name": "osr-helper-items",
+      "name": "osr-helper-items-en",
       "label": "OSR-helper Items (en)",
       "type": "Item",
       "path": "packs/items.db",
@@ -54,7 +54,7 @@
       "flags": {}
     },
     {
-      "name": "osr-helper-macros",
+      "name": "osr-helper-macros-all",
       "label": "OSR-helper Macros",
       "path": "packs/macros.db",
       "type": "Macro",
@@ -72,7 +72,7 @@
       "flags": {}
     },
     {
-      "name": "osr-helper-macros-hyperborea",
+      "name": "osr-helper-macros-hyperborea-all",
       "label": "OSR-helper Macros",
       "path": "packs/macros-hyperborea.db",
       "type": "Macro",

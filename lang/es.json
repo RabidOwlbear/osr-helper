@@ -24,7 +24,11 @@
   "OSRH.settings.theme.hint": "Seleccionar tema para la ventana de efectos",
   "OSRH.settings.equipContainers.name": "Habilitar recipientes equipables",
   "OSRH.settings.equipContainers.hint": "Cuando se activa, los recipientes son equipables. Esta característica sólo funciona si se selecciona carga \"completa\" en la configuración del juego.",
-
+  "OSRH.settings.makePackFolder": "Crear carpeta de paquetes de compendios",
+  "OSRH.settings.makePackFolderHint": "Al seleccionar esta opción, se creará una carpeta a la que se trasladarán los compendios incluidos.",
+  "OSRH.settings.packFolderName": "Nombre de la carpeta del paquete de compendios",
+  "OSRH.settings.packFolderNameHint": "Nombre que se utilizará para la carpeta de compendios.",
+  
   "OSRH.food.iron": "Raciones (hierro, 7 días)",
   "OSRH.food.standard": "Raciones (estándar, 7 días)",
   "OSRH.food.berries": "Raciones forrajeadas: Bayas",
