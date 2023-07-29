@@ -13,24 +13,34 @@ export const hideForeignPacks = () => {
   });
 };
 
-async function hfp(tab) {
-  if (tab._element[0].id === 'compendium') {
+function hfp(tab) {
+  if (tab?._element[0]?.id === 'compendium') {
     const lis = document.querySelectorAll('li.compendium');
-    const osrcbPacks = [...lis].filter((li) => {
+    const osrPacks = [...lis].filter((li) => {
       const send = li.dataset.entryId.includes('osr-helper');
       return send ? send : false;
     });
-    if (osrcbPacks.length) {
-      const langstring = `-${game.i18n.lang}`;
-      osrcbPacks.forEach(async (p) => {
-        const pack = await game.packs.get(p.dataset.entryId);
-        const name = pack.metadata.name;
-        const uniPack = name.includes('-all');
-        if (uniPack) return;
-        if (!name.includes(langstring)) {
-          p.style.display = 'none';
-        }
-      });
+    if (osrPacks.length) {
+      if (OSRH.lang.includes(game.i18n.lang)) {
+        const langstring = `(${game.i18n.lang})`;
+        osrPacks.forEach((p) => {
+          const title = p.querySelector('h3.compendium-name').innerText;
+          if (title.includes('(') && !title.includes(langstring)) {
+            p.style.display = 'none';
+          }
+        });
+      } else {
+        const langs = OSRH.lang.filter(i=>i != `en`);
+        osrPacks.forEach((p) => {
+          const title = p.querySelector('h3.compendium-name').innerText;
+          for (let lang of langs) {
+            if (title.includes(`(${lang})`)) {
+              p.style.display = 'none';
+            }
+          }
+          
+        });
+      }
     }
   }
 }
