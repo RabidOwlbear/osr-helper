@@ -132,7 +132,7 @@ export const registerEffectModule = async function () {
       const iconName = formData.icon;
       const iconObj = OSRH.data.effectIcons.find((i) => i.name == iconName);
       let effectData = {
-        label: '',
+        name: '',
         icon: iconObj.path,
         iconName: iconObj.name,
         tint: iconObj.color,
@@ -164,7 +164,7 @@ export const registerEffectModule = async function () {
 
         if (type == 'name') {
           effectData.flags['data'].name = value;
-          effectData.label = value;
+          effectData.name = value;
         }
         if (type == 'descrip') {
           effectData.flags['data'].details = value;
@@ -493,7 +493,7 @@ export const registerEffectModule = async function () {
           let effect = await tActor.getEmbeddedDocument('ActiveEffect', e.effectId);
           let durObj = effect.duration;
           let entryData = {};
-          entryData.name = effect.label;
+          entryData.name = effect.name;
           entryData.effectId = e.effectId;
           entryData.target =
             type == 'self' ? tActor.name : type == 'other' ? eCreator.name : type == 'gm' ? eCreator.name : tActor.name;

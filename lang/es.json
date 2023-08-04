@@ -244,6 +244,7 @@
   "OSRH.light.config.colorHex": "Color (hex)",
   "OSRH.light.config.duration": "Duración (minutos)",
   "OSRH.light.config.alpha": "Alfa",
+  "OSRH.light.config.colorItensity": "Insensidad de color",
   "OSRH.light.config.warn": "Avisar (rondas antes de expirar)",
   "OSRH.light.config.alert": "Alerta (rondas antes de expirar)",
   "OSRH.light.config.animType": "Tipo de animación",

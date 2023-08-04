@@ -3,6 +3,12 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## [0.4.24]
+### changes
+- fixed error with light alpha input displaying an incorrect value if the value is set to 0.
+- renamed the "alpha" input on the light item config menu to "Color Itensity" to better indicate setting the input is for.
+
 ## [0.4.22] 2023-6-22
 ### changes
 - module now creates folder to organize included compendiums on intial world load.
