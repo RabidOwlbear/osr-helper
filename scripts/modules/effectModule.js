@@ -219,6 +219,13 @@ export const registerEffectModule = async function () {
             value: parseInt(value)
           });
         }
+        if(type === 'init'){
+          effectData.changes.push({
+            key: `system.initiative.mod`,
+            value: parseInt(value),
+            priority: 1
+          });
+        }
         if (type == 'attribute' && value != 0) {
           // effectData.icon = `icons/svg/book.svg`;
           // effectData.tint = '#005bbf';
@@ -252,6 +259,7 @@ export const registerEffectModule = async function () {
           effectData.flags['data'].isInf = interval == 'infinite' ? true : false;
           effectData.duration.seconds = interval == 'minutes' ? Math.floor(value * 60) : Math.floor(value);
         }
+       
       }
 
       await OSRH.socket.executeAsGM('gmCreateEffect', target, effectData, this.actorId);

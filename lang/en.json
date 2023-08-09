@@ -231,6 +231,8 @@
   "OSRH.newEffectForm.Reset":"Reset",
   "OSRH.newEffectForm.Save":"Save",
   "OSRH.newEffectForm.Create":"Create",
+  "OSRH.newEffectForm.initiative": "Initiative",
+  "OSRH.newEffectForm.initBonus": "Bonus",
 
   "OSRH.light.chat.turnsLeft": "Turns Left",
   "OSRH.light.chat.the": "The",

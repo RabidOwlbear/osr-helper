@@ -256,7 +256,7 @@ export const registerLightModule = async function () {
         bright: flag?.bright ? flag.bright : 10,
         color: flag?.color ? flag.color : '#ff7b24',
         dur: flag?.duration ? flag.duration : 60,
-        alpha: flag?.alpha ? flag.alpha : flag.alpha === 0 ? 0 :0.5,
+        alpha: flag?.alpha ? flag.alpha : flag?.alpha === 0 ? 0 :0.5,
         alert: flag?.alert ? flag.alert : 1,
         angle: flag?.angle ? flag.angle : 360,
         warn: flag?.warn ? flag.warn : 3,

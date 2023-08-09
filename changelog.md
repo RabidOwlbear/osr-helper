@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.4.25]
+### changes
+- Fixed issue preventing light item config menu from opening.
+- Fixed an issue preventing macros in the macro bar from being deleted.
+
 ## [0.4.24]
 ### changes
 - fixed error with light alpha input displaying an incorrect value if the value is set to 0.

@@ -18,6 +18,7 @@ export const uiControls = {
     // create control container
     const uiEl = document.createElement('div');
     uiEl.id = 'osrh-ui-control';
+    uiEl.style.zIndex = '-1';
     // create control button
     const controlBtn = document.createElement('a');
     controlBtn.id = 'osrh-ui-display-btn';
@@ -68,7 +69,8 @@ export const uiControls = {
         if (finished.playState === 'finished') {
           game.user.setFlag('osr-helper', 'uiControlOpen', true)
           btnCont.classList.remove('osrh-control-closed');
-          controlBtn.classList.add('osrh-controls-open')
+          controlBtn.classList.add('osrh-controls-open');
+          btnMask.style.display = 'inherit'
         }
       } else {
         let finished = await btnCont.animate(animationIn, animOptions).finished;
@@ -76,6 +78,7 @@ export const uiControls = {
           game.user.setFlag('osr-helper', 'uiControlOpen', false)
           btnCont.classList.add('osrh-control-closed');
           controlBtn.classList.remove('osrh-controls-open')
+          btnMask.style.display = 'none'
         }
       }
     });
