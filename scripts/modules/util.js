@@ -610,7 +610,8 @@ export const registerUtil = () => {
     const curItems = actor.items;
     const curCheck = async (type) => {
       let itemExists = await actor.items.getName(type);
-      const lang = game.i18n.lang;
+      // check for translated languages, default to english
+      const lang = OSRH.util.langCheck;
       const packName = lang === 'en' ? `${OSRH.moduleName}.${OSRH.moduleName}-items` : `${OSRH.moduleName}.${OSRH.moduleName}-items-${lang}`
       let pack = await game.packs.get(packName);
       console.log('SAZKERjhBFJHADSCBUYSDFHUDASHJI',lang, packName, pack)
@@ -909,6 +910,15 @@ export const registerUtil = () => {
   OSRH.util.renderTurnTracker = function (){
     new OSRH.TurnTracker().render(true)
      
+   }
+   OSRH.util.langCheck = function(){
+    const curLang = game.i18n.lang;
+    const langList = OSRH.lang;
+    let lang = 'en'
+    if(langList.includes(curLang)){
+      lang = curLang;
+    }
+    return lang
    }
 };
 export const intializePackFolders = async () => {

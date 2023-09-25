@@ -218,7 +218,7 @@ export const registerLightModule = async function () {
 
   OSRH.light.decrementLightItem = async function (uuid, itemId) {
     let actor = await fromUuid(uuid);
-    actor = actor.collectionName === 'tokens' ? actor.actor : actor;
+    actor = actor?.collectionName === 'tokens' ? actor.actor : actor;
     let item = await actor.items.get(itemId);
 
     if (item.system.quantity.value > 0) {
