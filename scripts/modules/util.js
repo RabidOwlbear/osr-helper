@@ -390,7 +390,7 @@ export const registerUtil = () => {
             let skipCheck = html.find('#skip')[0]?.checked;
             let ammoCheck = html.find(`#ammoCheck`)[0]?.checked;
             let weapon = selectedActor.items.find((i) => i.id == selected.value);
-            let ammoObj = OSRH.data.ammoData.find((a) => a.name == weapon?.name);
+            let ammoObj = OSRH.data.ammoData.find((a) => weapon?.name.includes(a.name));
             let ammo, ammoQty;
             if (ammoObj && ammoCheck) {
               ammo = selectedActor.items.find((i) => i.name == ammoObj.ammoType);
