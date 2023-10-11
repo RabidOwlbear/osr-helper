@@ -1,0 +1,21 @@
+<form class="flex-col">
+  <div class="main-cont">
+    <div class="select-cont">
+      <label for="item-type"><b>Item Type<b>:</label>
+      <select id="item-type">
+        <option value="none">none</option>
+        <option value="light">Light</option>
+        {{#if dispRation}}
+        <option value="ration">Ration</option>
+        {{/if}}
+      </select>
+     
+    </div>
+     <div class="config-cont">
+      <button class="{{#if isLight}}{{else}}hidden{{/if}} light-config">Config</button>
+     </div>
+  </div>
+
+  <button class="close-btn">Close</button>
+
+</form>

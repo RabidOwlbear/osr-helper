@@ -1,0 +1,230 @@
+<div class='main'>
+  {{! <div class="title item">Item Config</div> }}
+  
+    <div id='portrait-cont' class='{{#if startItem}}portrait-cont{{else}}hidden{{/if}}'>
+      <div class='title item-name'>{{name}}</div>
+      <div>
+        <img src='{{img}}' class='item-image' />
+      </div>
+    </div>
+  
+    <div class='dropzone items {{#if startItem}}hidden{{else}}flexrow{{/if}}'>
+      <div>Drop Item Here</div>
+    </div>
+
+  <form c='light-item-config' action=''>
+    <div class='list-cont'>
+      <div>
+        {{!-- <div class="list-item">
+        <div>{{localize "OSRH.newEffectForm.name"}}:</div>
+        <div>{{name}}</div>
+      </div> --}}
+        <div class='list-item'>
+          <label for='dim'>{{localize 'OSRH.light.config.dimRadius'}}:</label>
+          <input
+            class='light-config-input type-a'
+            type='number'
+            id='dim'
+            placeholder='{{dim}}'
+            value='{{dim}}'
+            name='dim'
+          />
+        </div>
+        <div class='list-item'>
+          <label for='bright'>{{localize 'OSRH.light.config.brightRadius'}}:</label>
+          <input
+            class='light-config-input type-a'
+            type='number'
+            id='bright'
+            placeholder='{{bright}}'
+            value='{{bright}}'
+            name='bright'
+          />
+        </div>
+        <div class='list-item'>
+          <label for='bright'>{{localize 'OSRH.light.config.emissionAngle'}}:</label>
+          <input
+            class='light-config-input type-a'
+            type='number'
+            id='angle'
+            placeholder='360'
+            value='{{angle}}'
+            name='angle'
+          />
+        </div>
+        <div class='list-item'>
+          <label for='color'>{{localize 'OSRH.light.config.colorHex'}}:</label>
+          <input class='light-config-input' type='color' id='color' value={{color}} name='color' />
+        </div>
+        <div class='list-item'>
+          <label for='duration'>{{localize 'OSRH.light.config.duration'}}:</label>
+          <input
+            class='light-config-input type-a'
+            type='text'
+            id='duration'
+            placeholder='{{dur}}'
+            value='{{dur}}'
+            name='dur'
+          />
+        </div>
+        <div class='list-item'>
+          <label for='alpha'>{{localize 'OSRH.light.config.colorItensity'}}:</label>
+          <input
+            class='light-config-input type-b'
+            type='number'
+            id='alpha'
+            placeholder='{{alpha}}'
+            value='{{alpha}}'
+            name='alpha'
+          />
+        </div>
+        <div class='list-item'>
+          <label for='warn'>{{localize 'OSRH.light.config.warn'}}:</label>
+          <input
+            class='light-config-input type-a'
+            type='number'
+            id='warn'
+            placeholder='{{warn}}'
+            min='0'
+            value='{{warn}}'
+            name='warn'
+          />
+        </div>
+        <div class='list-item'>
+          <label for='alert'>{{localize 'OSRH.light.config.alert'}}:</label>
+          <input
+            class='light-config-input type-a'
+            type='number'
+            id='alert'
+            placeholder='{{alert}}'
+            min='0'
+            value='{{alert}}'
+            name='alert'
+          />
+        </div>
+        <div class='list-item'>
+          <label for='animation'>{{localize 'OSRH.light.config.animType'}}:</label>
+          <select class='light-config-input' name='animation' id='animation'>
+            <option class='animation' value='none'>None</option>
+            <option class='animation' value='flame'>Torch</option>
+            <option class='animation' value='torch'>Flickering Light</option>
+            <option class='animation' value='pulse'>Pulse</option>
+            <option class='animation' value='chroma'>Chroma</option>
+            <option class='animation' value='wave'>Pulsing Wave</option>
+            <option class='animation' value='fog'>Swirling Fog</option>
+            <option class='animation' value='sunburst'>Sunburst</option>
+            <option class='animation' value='dome'>Light Dome</option>
+            <option class='animation' value='emanation'>Mysterious Emanation</option>
+            <option class='animation' value='hexa'>Hexa Dome</option>
+            <option class='animation' value='ghost'>Ghostly Light</option>
+            <option class='animation' value='energy'>Energy Field</option>
+            <option class='animation' value='roiling'>Roiling Mass</option>
+            <option class='animation' value='hole'>Black Hole</option>
+            <option class='animation' value='vortex'>Vortex</option>
+            <option class='animation' value='witchwave'>Bewitching Wave</option>
+            <option class='animation' value='rainbowswirl'>Swirling Rainbow</option>
+            <option class='animation' value='radialrainbow'>Radial Rainbow</option>
+            <option class='animation' value='fairy'>Fairy Light</option>
+          </select>
+        </div>
+        <div class='list-item'>
+          <label for='speed'>{{localize 'OSRH.light.config.animSpeed'}}:</label>
+          <input
+            class='light-config-input type-b'
+            type='number'
+            id='speed'
+            placeholder='{{speed}}'
+            min='0'
+            max='10'
+            value='{{speed}}'
+            name='speed'
+          />
+        </div>
+        <div class='list-item'>
+          <label for='intensity'>{{localize 'OSRH.light.config.animIntensity'}}:</label>
+          <input
+            class='light-config-input type-b'
+            type='number'
+            id='intensity'
+            placeholder='{{intensity}}'
+            min='1'
+            max='10'
+            value='{{intensity}}'
+            name='intensity'
+          />
+        </div>
+        <div class='list-item'>
+          <label for='coloration'>{{localize 'OSRH.light.config.lightColoration'}}</label>
+          <select class='light-config-input' name='coloration:' id='coloration'>
+            <option class='coloration' value='0'>Legacy Coloration</option>
+            <option class='coloration' value='1'>Adaptive Luminance</option>
+            <option class='coloration' value='2'>Internal Halo</option>
+            <option class='coloration' value='3'>External Halo</option>
+            <option class='coloration' value='4'>Color Burn</option>
+            <option class='coloration' value='5'>Internal Color Burn</option>
+            <option class='coloration' value='6'>External Color Burn</option>
+            <option class='coloration' value='7'>Low Absorption</option>
+            <option class='coloration' value='8'>High Absorption</option>
+            <option class='coloration' value='9'>Invert Absorption</option>
+          </select>
+        </div>
+        <div class='list-item'>
+          <label for='luminosity'>{{localize 'OSRH.light.config.luminosity'}}:</label>
+          <input
+            class='light-config-input type-b'
+            type='number'
+            id='luminosity'
+            placeholder='{{luminosity}}'
+            min='0'
+            max='1'
+            value='{{luminosity}}'
+            name='luminosity'
+          />
+        </div>
+        <div class='list-item'>
+          <label for='bgSat'>{{localize 'OSRH.light.config.bgSaturation'}}:</label>
+          <input
+            class='light-config-input type-b'
+            type='number'
+            id='bgSat'
+            placeholder='{{bgSat}}'
+            min='0'
+            max='1'
+            value='{{bgSat}}'
+            name='bgSat'
+          />
+        </div>
+        <div class='list-item'>
+          <label for='bgCont'>{{localize 'OSRH.light.config.bgContrast'}}:</label>
+          <input
+            class='light-config-input type-b'
+            type='number'
+            id='bgCont'
+            placeholder='{{bgCont}}'
+            min='0'
+            max='1'
+            value='{{bgCont}}'
+            name='bgCont'
+          />
+        </div>
+        <div class='list-item'>
+          <label for='bgShadow'>{{localize 'OSRH.light.config.bgShadows'}}:</label>
+          <input
+            class='light-config-input type-b'
+            type='number'
+            id='bgShadow'
+            placeholder='{{bgShadow}}'
+            min='0'
+            max='1'
+            value='{{bgShadow}}'
+            name='bgShadow'
+          />
+        </div>
+      </div>
+      <div class='form-button-div'>
+        <button id='close-btn'>{{localize 'OSRH.customEffect.close'}}</button>
+        <button type='submit' id='update-btn'>{{localize 'OSRH.light.config.update'}}</button>
+      </div>
+    </div>
+  </form>
+</div>
