@@ -12,6 +12,9 @@ import { registerEffectModule } from './modules/effectModule.js';
 import { uiControls } from './modules/ui-controls.mjs';
 import { OSRHTurnTracker, registerTravelConstants } from './modules/turn-tracker.mjs';
 import { hideForeignPacks } from './modules/hide-foreign-packs.mjs';
+import { lightConfig } from './modules/light-item-config.mjs';
+import { registerSystemData } from './modules/registerSystemData.mjs';
+import { registerSystemHooks } from './modules/hooks/system-hooks.mjs';
 //namespace
 window.OSRH = window.OSRH || {
   moduleName: `osr-helper`,
@@ -44,8 +47,11 @@ Hooks.once('init', async function () {
   registerLightModule();
   registerEffectModule();
   registerTravelConstants();
+  registerSystemData();
+
   OSRH.gameVersion = game.version ? game.version : game.version;
   OSRH.TurnTracker = OSRHTurnTracker;
+  OSRH.lightConfig = lightConfig;
   Hooks.callAll(`${OSRH.moduleName}.registered`);
 });
 Hooks.once('socketlib.ready', () => {
@@ -94,6 +100,8 @@ Hooks.once(`${OSRH.moduleName}.registered`, () => {});
 Hooks.once('ready', async () => {
   OSRH.ui = uiControls;
   registerLocalizedData();
+  registerSystemHooks()
+  console.log('pre-ui')
   OSRH.ui.addUiControls();
   await intializePackFolders();
   hideForeignPacks();

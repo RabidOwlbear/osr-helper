@@ -94,7 +94,17 @@
         "compatibility": {}
       },
       {
+        "id": "wwn",
+        "type": "system",
+        "compatibility": {}
+      },
+      {
         "id": "ose-dev",
+        "type": "system",
+        "compatibility": {}
+      },
+      {
+        "id": "dcc",
         "type": "system",
         "compatibility": {}
       }

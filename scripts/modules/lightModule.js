@@ -8,13 +8,15 @@ export const registerLightModule = async function () {
         return
       }
     }
+    
     let actor = await fromUuid(uuid);
     actor = actor.collectionName === 'tokens' ? actor.actor : actor;
 
-    let lightItems = actor.items.filter((i) => {
-      let tags = i.system.manualTags;
-      if (tags && tags.find((t) => t.value == 'Light')) return i;
-    });
+    let lightItems = await OSRH.light.getLightItems(actor.id);
+    // actor.items.filter((i) => {
+    //   let tags = i.system.manualTags;
+    //   if (tags && tags.find((t) => t.value == 'Light')) return i;
+    // });
     const lightData = deepClone(await game.settings.get(`${OSRH.moduleName}`, 'lightData'));
     let actorLightData = lightData[actor.id];
 
@@ -43,10 +45,13 @@ export const registerLightModule = async function () {
 
       return;
     }
-
+    // get path to quantity value
+    let qtyPath = OSRH.systemData[game.system.id]?.paths?.itemQty;
     let lightOptions = '';
     for (let light of lightItems) {
-      lightOptions += `<option value="${light.id}">${light.name}: ${light.system.quantity.value}</option>`;
+      console.log(light)
+      let qty = OSRH.util.getNestedValue(light, qtyPath)
+      lightOptions += `<option value="${light.id}">${light.name}: ${qty}</option>`;
     }
     if (lightOptions == '') {
       ui.notifications.error('No Light Items Found');
@@ -239,7 +244,7 @@ export const registerLightModule = async function () {
 
     static get defaultOptions() {
       return mergeObject(super.defaultOptions, {
-        classes: ['form', `light-item-config`],
+        classes: ['form', `light-item-config`, 'themed'],
         popOut: true,
         height: 540,
         width: 300,
@@ -251,7 +256,7 @@ export const registerLightModule = async function () {
       let flag = this.item.getFlag(`${OSRH.moduleName}`, 'lightItemData');
       // Send data to the template
       return {
-        name: this.item.name,
+        name: this.item.name ? this.item.name : ItemName,
         dim: flag?.dim ? flag.dim : 30,
         bright: flag?.bright ? flag.bright : 10,
         color: flag?.color ? flag.color : '#ff7b24',
@@ -414,4 +419,29 @@ export const registerLightModule = async function () {
     //loop through active game scenes
     OSRH.util.updateTokens(actorId, data);
   };
+  OSRH.light.getLightItems = async function (actorId) {
+    const actor = await game.actors.get(actorId);
+    if(!actor){
+      return
+    }
+    // determine system
+    const system = game.system.id;
+    const tags = OSRH.systemData[system].tags;
+    let lightItems
+    if(tags){
+      lightItems = actor.items.filter((i) => {
+        console.log(i)
+        let tags = i.system.manualTags;
+        if (tags && tags.find((t) => t.value == 'Light')) return i;
+      });
+    } else {
+      console.log("notag")
+      lightItems = actor.items.filter((i) => {
+        let isLight = i.flags["osr-helper"]?.itemType === 'light';
+        if(isLight) return i
+      });
+      console.log("lights",lightItems)
+    }
+    return lightItems
+  }
 };

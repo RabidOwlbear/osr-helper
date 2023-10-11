@@ -1,25 +1,25 @@
 export const registerUtil = () => {
-  OSRH.util.singleGM = function (){
-    return game.users.filter(u=>u.active && u.isGM)[0];
-  }
+  OSRH.util.singleGM = function () {
+    return game.users.filter((u) => u.active && u.isGM)[0];
+  };
   OSRH.util = OSRH.util || {};
   //tick: manages light duration, turn count
-// used
+  // used
   OSRH.util.osrTick = async function () {
-    const singleGM = OSRH.util.singleGM()
+    const singleGM = OSRH.util.singleGM();
     if (singleGM && game.user.id === singleGM.id) {
       let lastTick = await game.settings.get(`${OSRH.moduleName}`, 'lastTick');
       // await OSRH.util.osrLightTick(lastTick);
       OSRH.util.osrEffectTick(lastTick);
 
       //update lightTick
-      
+
       await game.settings.set(`${OSRH.moduleName}`, 'lastTick', game.time.worldTime);
     }
   };
-// used
+  // used
   OSRH.util.osrLightTick = async function (lastTick) {
-    const singleGM = OSRH.util.singleGM()
+    const singleGM = OSRH.util.singleGM();
     if (singleGM && game.user.id === singleGM.id) {
       //get data
       const data = {
@@ -51,7 +51,7 @@ export const registerUtil = () => {
                 // if duration <= 0 run lightOff function, and delete light type object
                 if (data.light[actorId][lightType].duration <= 0) {
                   // const actor = await game.actors.contents.find((a) => a.id == actorId);
-                  const actor = await game.actors.get(actorId)
+                  const actor = await game.actors.get(actorId);
                   const item = await actor.items.getName(OSRH.data.lightSource[lightType].name);
                   const newCount = item.system.quantity.value - 1;
                   if (newCount <= 0) {
@@ -83,29 +83,31 @@ export const registerUtil = () => {
       }
     }
   };
-// used
+  // used
   OSRH.util.osrEffectTick = function (lastTick) {
-    const singleGM = OSRH.util.singleGM()
+    const singleGM = OSRH.util.singleGM();
     if (singleGM && game.user.id === singleGM.id) {
       const curTime = game.time.worldTime;
       const elapsed = (curTime - lastTick) / 60;
       for (let user of game.users.contents) {
-        let effectData =  user.getFlag(`${OSRH.moduleName}`, 'effectData');
+        let effectData = user.getFlag(`${OSRH.moduleName}`, 'effectData');
 
         for (let effectId in effectData) {
           let effect = effectData[effectId];
           effect.duration -= elapsed;
 
           if (effect.duration <= 0) {
-            const msgData = `<h3 style="color: red;"> ${game.i18n.localize("OSRH.util.notification.effectExpired")}</h3>
-              <div>${game.i18n.localize("OSRH.util.notification.customEffect")} ${effectData[effectId].name} ${game.i18n.localize("OSRH.util.notification.hasExpired")}`;
+            const msgData = `<h3 style="color: red;"> ${game.i18n.localize('OSRH.util.notification.effectExpired')}</h3>
+              <div>${game.i18n.localize('OSRH.util.notification.customEffect')} ${
+              effectData[effectId].name
+            } ${game.i18n.localize('OSRH.util.notification.hasExpired')}`;
             OSRH.util.ChatMessage(effectData[effectId], effectData[effectId].userId, msgData);
             delete effectData[effectId];
           }
         }
 
-         user.unsetFlag(`${OSRH.moduleName}`, 'effectData');
-         user.setFlag(`${OSRH.moduleName}`, 'effectData', effectData);
+        user.unsetFlag(`${OSRH.moduleName}`, 'effectData');
+        user.setFlag(`${OSRH.moduleName}`, 'effectData', effectData);
       }
     }
   };
@@ -138,7 +140,7 @@ export const registerUtil = () => {
 
   OSRH.util.getActor = function () {
     if (canvas.tokens.controlled.length > 1 || canvas.tokens.controlled.length == 0) {
-      ui.notifications.error(game.i18n.localize("OSRH.util.notification.singleToken"));
+      ui.notifications.error(game.i18n.localize('OSRH.util.notification.singleToken'));
       return;
     }
     return game.actors.find((a) => a.id == canvas.tokens.controlled[0].actor.id);
@@ -159,7 +161,7 @@ export const registerUtil = () => {
     await user.unsetFlag(scope, flagname);
     if (reset) await user.setFlag(scope, flagname, {});
   };
-// used
+  // used
   OSRH.util.resetMonsterAttacks = async function () {
     for (let combatant of game.combats.active.combatants.contents) {
       const actor = combatant.actor;
@@ -191,7 +193,7 @@ export const registerUtil = () => {
       }
     }
   };
-// used
+  // used
   OSRH.util.ChatMessage = function (effectData, userId, msgContent) {
     const whisperArray = [userId];
     if (effectData.whisperTarget) {
@@ -205,7 +207,7 @@ export const registerUtil = () => {
 
     ChatMessage.create({ content: msgContent, whisper: whisperArray });
   };
-// used
+  // used
   OSRH.util.centerHotbar = async function () {
     let hotbar = document.getElementById('hotbar');
     if (await game.settings.get(`${OSRH.moduleName}`, 'centerHotbar')) {
@@ -216,7 +218,7 @@ export const registerUtil = () => {
       // document.documentElement.style.setProperty('--hotbar-center', ''); //'220px'
     }
   };
-// used
+  // used
   OSRH.util.osrHook = function (hookName, args = []) {
     Hooks.callAll(hookName, ...args);
   };
@@ -271,7 +273,7 @@ export const registerUtil = () => {
       });
     }
   };
-// used
+  // used
   OSRH.util.countJournalInit = async function (journalName) {
     let entry = game.journal.getName(journalName);
 
@@ -291,29 +293,29 @@ export const registerUtil = () => {
     }
     return entry;
   };
-// used
+  // used
   OSRH.util.singleSelected = function () {
     if (canvas.tokens.controlled.length == 0 || canvas.tokens.controlled.length > 1) {
-      ui.notifications.error(game.i18n.localize("OSRH.util.notification.singleToken"));
+      ui.notifications.error(game.i18n.localize('OSRH.util.notification.singleToken'));
       return false;
     }
     return true;
   };
 
   //random text generator
-// used
+  // used
   OSRH.util.tableFlavor = function () {
     let flavorArr = [
-      `<span style="color: DeepPink">${game.i18n.localize("OSRH.util.tableFlavor.a")}</span>`,
-      `<span style="color: DeepPink">${game.i18n.localize("OSRH.util.tableFlavor.b")}</span>`,
-      `<span style="color: DeepPink">${game.i18n.localize("OSRH.util.tableFlavor.c")}</span>`,
-      `<span style="color: DeepPink">${game.i18n.localize("OSRH.util.tableFlavor.d")}</span>`,
-      `<span style="color: DeepPink">${game.i18n.localize("OSRH.util.tableFlavor.e")}</span>`
+      `<span style="color: DeepPink">${game.i18n.localize('OSRH.util.tableFlavor.a')}</span>`,
+      `<span style="color: DeepPink">${game.i18n.localize('OSRH.util.tableFlavor.b')}</span>`,
+      `<span style="color: DeepPink">${game.i18n.localize('OSRH.util.tableFlavor.c')}</span>`,
+      `<span style="color: DeepPink">${game.i18n.localize('OSRH.util.tableFlavor.d')}</span>`,
+      `<span style="color: DeepPink">${game.i18n.localize('OSRH.util.tableFlavor.e')}</span>`
     ];
     let index = Math.floor(Math.random() * flavorArr.length);
     return flavorArr[index];
   };
-// used
+  // used
   OSRH.util.getPartyActors = function () {
     const systemName = game.system.id == 'ose' ? game.system.id : 'ose-dev';
     const allParty = game.actors.filter((a) => a?.flags?.[systemName]?.party);
@@ -331,7 +333,7 @@ export const registerUtil = () => {
     }
     return retObj;
   };
-// used
+  // used
   OSRH.util.attack = async function () {
     // Get Selected
     if (!OSRH.util.singleSelected()) {
@@ -344,7 +346,7 @@ export const registerUtil = () => {
       if (item.type == 'spell') return true;
     });
     if (actorWeapons.length == 0 && actorSpells.length == 0) {
-      ui.notifications.error(game.i18n.localize("OSRH.util.notification.noWeapon"));
+      ui.notifications.error(game.i18n.localize('OSRH.util.notification.noWeapon'));
       return;
     }
     let atkOptions = '';
@@ -360,7 +362,7 @@ export const registerUtil = () => {
     const ammoCheck = game.modules.get('osr-item-shop')?.active
       ? `
       <div style="width: 110px">
-      <input id="ammoCheck" type="checkbox" checked />${game.i18n.localize("OSRH.util.dialog.checkAmmo")}
+      <input id="ammoCheck" type="checkbox" checked />${game.i18n.localize('OSRH.util.dialog.checkAmmo')}
       </div>
       `
       : `
@@ -375,7 +377,7 @@ export const registerUtil = () => {
        </div>
        ${ammoCheck}
        <div>
-       <input id="skip" type="checkbox" checked />${game.i18n.localize("OSRH.util.dialog.skipDialog")}
+       <input id="skip" type="checkbox" checked />${game.i18n.localize('OSRH.util.dialog.skipDialog')}
        </div>
        </div>
      `;
@@ -404,7 +406,7 @@ export const registerUtil = () => {
                   await ammo.update({ system: { quantity: { value: ammoQty - 1 } } });
                 }
               } else {
-                ui.notifications.warn( game.i18n.localize("OSRH.util.notification.noAmmo"));
+                ui.notifications.warn(game.i18n.localize('OSRH.util.notification.noAmmo'));
               }
             } else {
               await weapon.roll({ skipDialog: skipCheck });
@@ -417,7 +419,7 @@ export const registerUtil = () => {
       }
     }).render(true);
   };
-// used
+  // used
   OSRH.util.randomName = function (type = null, gender = null) {
     function getRandomItem(arr) {
       return arr[Math.floor(Math.random() * arr.length)];
@@ -444,38 +446,38 @@ export const registerUtil = () => {
       }
 
       let diagTemplate = `
-    <h1> ${game.i18n.localize("OSRH.util.dialog.pickNameType")}</h1>
+    <h1> ${game.i18n.localize('OSRH.util.dialog.pickNameType')}</h1>
     <div style="display:flex; margin-bottom: 5px;">
       <div  style="flex:1">
         <select id="nameType">
-          <option value="none">-${game.i18n.localize("OSRH.util.dialog.type")}-</option>
+          <option value="none">-${game.i18n.localize('OSRH.util.dialog.type')}-</option>
           ${options}
         </select>
       </div>
       <div  style="flex:1">
         <select id="gender">
-          <option value="all">-${game.i18n.localize("OSRH.util.dialog.gender")}-</option>
-          <option value="male"${game.i18n.localize("OSRH.util.dialog.male")}></option>
-          <option value="female">${game.i18n.localize("OSRH.util.dialog.female")}</option>
-          <option value="all">${game.i18n.localize("OSRH.util.dialog.all")}</option>
+          <option value="all">-${game.i18n.localize('OSRH.util.dialog.gender')}-</option>
+          <option value="male"${game.i18n.localize('OSRH.util.dialog.male')}></option>
+          <option value="female">${game.i18n.localize('OSRH.util.dialog.female')}</option>
+          <option value="all">${game.i18n.localize('OSRH.util.dialog.all')}</option>
         </select>
       </div>
       <div>
-        <label for="whisperCheck">${game.i18n.localize("OSRH.util.dialog.whislper")}</label>
+        <label for="whisperCheck">${game.i18n.localize('OSRH.util.dialog.whislper')}</label>
         <input type ="checkbox" id="whisperCheck" checked />
       </div>
     </div>
     `;
       let prefix = [
-        game.i18n.localize("OSRH.util.prefix.a"),
-        game.i18n.localize("OSRH.util.prefix.b"),
-        game.i18n.localize("OSRH.util.prefix.c"),
-        game.i18n.localize("OSRH.util.prefix.d"),
-        game.i18n.localize("OSRH.util.prefix.e"),
-        game.i18n.localize("OSRH.util.prefix.f"),
-        game.i18n.localize("OSRH.util.prefix.g"),
-        game.i18n.localize("OSRH.util.prefix.h"),
-        game.i18n.localize("OSRH.util.prefix.i")
+        game.i18n.localize('OSRH.util.prefix.a'),
+        game.i18n.localize('OSRH.util.prefix.b'),
+        game.i18n.localize('OSRH.util.prefix.c'),
+        game.i18n.localize('OSRH.util.prefix.d'),
+        game.i18n.localize('OSRH.util.prefix.e'),
+        game.i18n.localize('OSRH.util.prefix.f'),
+        game.i18n.localize('OSRH.util.prefix.g'),
+        game.i18n.localize('OSRH.util.prefix.h'),
+        game.i18n.localize('OSRH.util.prefix.i')
       ];
       let picker = new Dialog({
         title: 'Random Name',
@@ -496,7 +498,7 @@ export const registerUtil = () => {
               }
               const tokens = canvas.tokens.controlled;
               if (nameType == 'none' || gender == 'none') {
-                ui.notifications.warn(game.i18n.localize("OSRH.util.notification.selectOption"));
+                ui.notifications.warn(game.i18n.localize('OSRH.util.notification.selectOption'));
                 picker.render();
                 return;
               }
@@ -521,7 +523,7 @@ export const registerUtil = () => {
                   }
                 });
                 await token.document.update({ name: fullName });
-                ui.notifications.info(game.i18n.localize("OSRH.util.notification.tokenActorNameUpdated"));
+                ui.notifications.info(game.i18n.localize('OSRH.util.notification.tokenActorNameUpdated'));
                 return;
               }
               if (tokens.length > 1) {
@@ -556,7 +558,7 @@ export const registerUtil = () => {
                     }
                   });
                   await token.document.update({ name: newName });
-                  ui.notifications.info(game.i18n.localize("OSRH.util.notification.tokenActorNameUpdated"));
+                  ui.notifications.info(game.i18n.localize('OSRH.util.notification.tokenActorNameUpdated'));
                 });
                 return;
               }
@@ -571,7 +573,7 @@ export const registerUtil = () => {
                     name: fullName
                   }
                 });
-                return
+                return;
               }
               let fullName = getName(nameType, gender);
               let cData = {
@@ -612,15 +614,18 @@ export const registerUtil = () => {
       let itemExists = await actor.items.getName(type);
       // check for translated languages, default to english
       const lang = OSRH.util.langCheck;
-      const packName = lang === 'en' ? `${OSRH.moduleName}.${OSRH.moduleName}-items` : `${OSRH.moduleName}.${OSRH.moduleName}-items-${lang}`
+      const packName =
+        lang === 'en'
+          ? `${OSRH.moduleName}.${OSRH.moduleName}-items`
+          : `${OSRH.moduleName}.${OSRH.moduleName}-items-${lang}`;
       let pack = await game.packs.get(packName);
-      console.log('SAZKERjhBFJHADSCBUYSDFHUDASHJI',lang, packName, pack)
+      console.log('SAZKERjhBFJHADSCBUYSDFHUDASHJI', lang, packName, pack);
       if (!itemExists) {
         const itemId = await pack.index.getName(type)?._id;
-        if(!itemId) {
-          ui.notifications.warn(`${game.i18n.localize("OSRH.notification.noGpFoundActor")}`)
-          return
-      }
+        if (!itemId) {
+          ui.notifications.warn(`${game.i18n.localize('OSRH.notification.noGpFoundActor')}`);
+          return;
+        }
         let curItm = await pack.getDocument();
         let itemData = curItm.clone();
         await actor.createEmbeddedDocuments('Item', [itemData]);
@@ -632,13 +637,13 @@ export const registerUtil = () => {
     const curItem = await curCheck(curCur);
     const newItem = await curCheck(newCur);
     if (curItem.system.quantity.value < amt) {
-      ui.notifications.warn(`${game.i18n.localize("OSRH.util.notification.notEnough")} ${curCur}`);
+      ui.notifications.warn(`${game.i18n.localize('OSRH.util.notification.notEnough')} ${curCur}`);
       OSRH.util.curConDiag(actor, amt);
       return;
     }
     let newVal = (curItem.system.cost * amt) / newItem.system.cost;
     if (newVal % 1 != 0) {
-      ui.notifications.warn(game.i18n.localize("OSRH.util.notification.cantConvertFraction"));
+      ui.notifications.warn(game.i18n.localize('OSRH.util.notification.cantConvertFraction'));
       curConDiag(actor, amt);
       return;
     }
@@ -657,50 +662,50 @@ export const registerUtil = () => {
       }
     });
   };
-// used
+  // used
   OSRH.util.curConDiag = async function (actor, amt = 0) {
     let content = `
     <div style="display: flex; height: 75px; align-items: center; justify-content: space-around;">
      
        
      
-     <div>${game.i18n.localize("OSRH.util.dialog.amount")}:</div>
+     <div>${game.i18n.localize('OSRH.util.dialog.amount')}:</div>
      
      <input id="amt" type="number" value="${amt}">
      <div><b> X </b></div>
      <select id="curCur">
-       <option value="null">${game.i18n.localize("OSRH.util.dialog.currency")}</option>
-       <option value='${game.i18n.localize("OSRH.curency.pp")}'>${game.i18n.localize("OSRH.curency.pp")}</option>
-       <option value='${game.i18n.localize("OSRH.curency.gp")}'>${game.i18n.localize("OSRH.curency.gp")}</option>
-       <option value='${game.i18n.localize("OSRH.curency.ep")}'>${game.i18n.localize("OSRH.curency.ep")}</option>
-       <option value='${game.i18n.localize("OSRH.curency.sp")}'>${game.i18n.localize("OSRH.curency.sp")}</option>
-       <option value='${game.i18n.localize("OSRH.curency.cp")}'>${game.i18n.localize("OSRH.curency.cp")}</option>
+       <option value="null">${game.i18n.localize('OSRH.util.dialog.currency')}</option>
+       <option value='${game.i18n.localize('OSRH.curency.pp')}'>${game.i18n.localize('OSRH.curency.pp')}</option>
+       <option value='${game.i18n.localize('OSRH.curency.gp')}'>${game.i18n.localize('OSRH.curency.gp')}</option>
+       <option value='${game.i18n.localize('OSRH.curency.ep')}'>${game.i18n.localize('OSRH.curency.ep')}</option>
+       <option value='${game.i18n.localize('OSRH.curency.sp')}'>${game.i18n.localize('OSRH.curency.sp')}</option>
+       <option value='${game.i18n.localize('OSRH.curency.cp')}'>${game.i18n.localize('OSRH.curency.cp')}</option>
      </select>
-     <div> ${game.i18n.localize("OSRH.util.dialog.to")}:</div>
+     <div> ${game.i18n.localize('OSRH.util.dialog.to')}:</div>
      <select id="newCur">
-       <option value="null">${game.i18n.localize("OSRH.util.dialog.currency")}</option>
-       <option value='${game.i18n.localize("OSRH.curency.pp")}'>${game.i18n.localize("OSRH.curency.pp")}</option>
-       <option value='${game.i18n.localize("OSRH.curency.gp")}'>${game.i18n.localize("OSRH.curency.gp")}</option>
-       <option value='${game.i18n.localize("OSRH.curency.ep")}'>${game.i18n.localize("OSRH.curency.ep")}</option>
-       <option value='${game.i18n.localize("OSRH.curency.sp")}'>${game.i18n.localize("OSRH.curency.sp")}</option>
-       <option value='${game.i18n.localize("OSRH.curency.cp")}'>${game.i18n.localize("OSRH.curency.cp")}</option>
+       <option value="null">${game.i18n.localize('OSRH.util.dialog.currency')}</option>
+       <option value='${game.i18n.localize('OSRH.curency.pp')}'>${game.i18n.localize('OSRH.curency.pp')}</option>
+       <option value='${game.i18n.localize('OSRH.curency.gp')}'>${game.i18n.localize('OSRH.curency.gp')}</option>
+       <option value='${game.i18n.localize('OSRH.curency.ep')}'>${game.i18n.localize('OSRH.curency.ep')}</option>
+       <option value='${game.i18n.localize('OSRH.curency.sp')}'>${game.i18n.localize('OSRH.curency.sp')}</option>
+       <option value='${game.i18n.localize('OSRH.curency.cp')}'>${game.i18n.localize('OSRH.curency.cp')}</option>
      </select>
      </div>
     `;
     let diag = new Dialog({
-      title: game.i18n.localize("OSRH.util.dialog.curencyConverter"),
+      title: game.i18n.localize('OSRH.util.dialog.curencyConverter'),
       content: content,
       buttons: {
         convert: {
-          label: game.i18n.localize("OSRH.util.dialog.convert"),
+          label: game.i18n.localize('OSRH.util.dialog.convert'),
           callback: (html) => {
             // let actor = canvas.tokens.controlled[0]?.actor;
-            if (!actor) ui.notifications.warn(game.i18n.localize("OSRH.util.notification.noTokenSelected"));
+            if (!actor) ui.notifications.warn(game.i18n.localize('OSRH.util.notification.noTokenSelected'));
             let curCur = html.find('#curCur')[0].value;
             let newCur = html.find('#newCur')[0].value;
             let amt = parseInt(html.find('#amt')[0].value);
             if (curCur == 'null' || newCur == 'null') {
-              ui.notifications.warn(game.i18n.localize("OSRH.util.notification.selectBothCurrency"));
+              ui.notifications.warn(game.i18n.localize('OSRH.util.notification.selectBothCurrency'));
               OSRH.util.curConDiag(actor, amt);
               return;
             }
@@ -720,7 +725,7 @@ export const registerUtil = () => {
       }, wait);
     };
   };
-// used
+  // used
   OSRH.util.setting = async function (setting, value, type) {
     if (type == 'set') {
       await game.settings.set(`${OSRH.moduleName}`, setting, value);
@@ -729,7 +734,7 @@ export const registerUtil = () => {
       return await game.settings.get(`${OSRH.moduleName}`, setting);
     }
   };
-// used
+  // used
   OSRH.util.createActiveEffectOnTarget = async function (data, target) {
     let id = target._id ? target._id : target.id;
     if (id) {
@@ -738,7 +743,7 @@ export const registerUtil = () => {
       return effect;
     }
   };
-// used
+  // used
   OSRH.util.setTheme = async function () {
     let index = await game.settings.get(OSRH.moduleName, 'theme');
     index = index == 'none' ? 0 : index;
@@ -752,13 +757,13 @@ export const registerUtil = () => {
     root.style.setProperty('--theme-btn-color', themeData.btnColor);
     root.style.setProperty('--el-button-glow', themeData.glow);
   };
-// used
+  // used
   OSRH.util.addContainerControls = async function (actor, html) {
     let containers = actor.items.filter((i) => i.type == 'container');
 
     for (let container of containers) {
       let flag = await container.getFlag('world', 'equipped');
-      
+
       if (flag == undefined) {
         await container.setFlag('world', 'equipped', true);
         flag = true;
@@ -773,10 +778,10 @@ export const registerUtil = () => {
       btnEl.innerHTML = `<i class="fas fa-tshirt"></i>`;
       element.prepend(btnEl);
       let eqpBtn = element.querySelector(`[title="Equip"]`);
-      
+
       eqpBtn.addEventListener('click', async (e) => {
         e.preventDefault();
-        
+
         OSRH.util.dropContainer(container.uuid, element, actor);
       });
     }
@@ -810,10 +815,9 @@ export const registerUtil = () => {
       // let eqpBtn = element.querySelector(`[title="Equip"]`);
       btnEl.addEventListener('click', async (ev) => {
         btnEl.disabled = true;
-        
+
         let flag = await container.getFlag('world', 'equipped');
         if (flag && contItems.length) {
-          
           btnEl.classList.replace(`item-equipped`, `item-unequipped`);
           await container.setFlag('world', 'equipped', false);
           for (let item of contItems) {
@@ -829,11 +833,11 @@ export const registerUtil = () => {
         }
         if (flag === false) {
           btnEl.classList.replace(`item-unequipped`, `item-equipped`);
-          
+
           for (let item of contItems) {
             let itemObj = await actor.items.get(item);
             let weight = await itemObj.getFlag('world', `weight`);
-            
+
             await itemObj.update({ system: { weight: weight } });
             await sleep(250);
             // await itemObj.unsetFlag(`world`, `weight`);
@@ -841,7 +845,6 @@ export const registerUtil = () => {
           await container.setFlag('world', 'equipped', true);
         }
         btnEl.disabled = false;
-        
       });
     }
   };
@@ -878,14 +881,12 @@ export const registerUtil = () => {
     }
   };
   OSRH.util.handleEquipableContainer = async function (actor, btnEl, container) {
-    
     btnEl.disabled = true;
-    
+
     let isEquipped = await container.getFlag('world', 'equipped');
-    const containerItems = actor.items.filter(i=>container.system.itemIds.includes(i.id));
-    
+    const containerItems = actor.items.filter((i) => container.system.itemIds.includes(i.id));
+
     if (isEquipped && containerItems.length) {
-      
       btnEl.classList.replace(`item-equipped`, `item-unequipped`);
       await container.setFlag('world', 'equipped', false);
       for (let item of containerItems) {
@@ -895,31 +896,54 @@ export const registerUtil = () => {
     }
     if (isEquipped === false) {
       btnEl.classList.replace(`item-unequipped`, `item-equipped`);
-      
+
       for (let item of containerItems) {
-        
         let weight = await item.getFlag('world', `weight`);
-        
+
         await item.update({ system: { weight: weight } });
       }
       await container.setFlag('world', 'equipped', true);
     }
     btnEl.disabled = false;
-    
   };
-  OSRH.util.renderTurnTracker = function (){
-    new OSRH.TurnTracker().render(true)
-     
-   }
-   OSRH.util.langCheck = function(){
+  OSRH.util.renderTurnTracker = function () {
+    new OSRH.TurnTracker().render(true);
+  };
+  OSRH.util.langCheck = function () {
     const curLang = game.i18n.lang;
     const langList = OSRH.lang;
-    let lang = 'en'
-    if(langList.includes(curLang)){
+    let lang = 'en';
+    if (langList.includes(curLang)) {
       lang = curLang;
     }
-    return lang
-   }
+    return lang;
+  };
+  OSRH.util.getNestedValue = function (obj, path) {
+    path = path.split('.');
+    let len = path.length;
+    for (let i = 0; i < len; i++) {
+      obj = obj[path[i]];
+    }
+    return obj;
+  };
+  OSRH.util.getItem = async function (item, parent) {
+    let itemData = null;
+    console.log(item)
+    if (item) {
+      //wwn
+      if (item.actor && item.actor.prototypeToken.actorLink) {
+        let actor = await game.actors.get(item.actor._id);
+        itemData = await actor.items.get(item._id);
+      } 
+      else if (item.actor) {
+        itemData = await item.actor.items.get(item._id);
+      } 
+      else {
+        itemData = await game.items.get(item._id);
+      }
+    }
+    return itemData;
+  };
 };
 export const intializePackFolders = async () => {
   let singleGM = false;
@@ -927,25 +951,25 @@ export const intializePackFolders = async () => {
     singleGM = true;
   }
   if (singleGM) {
-  const movePacks = await game.settings.get('osr-helper', 'makePackFolder');
-  const folderName = await game.settings.get('osr-helper', 'packFolderName');
-  const sleep = (ms) => new Promise((res) => setTimeout(res, ms));
-  const packnames = [
-    "osr-helper-items-en",
-    "osr-helper-items-es",
-    "osr-helper-macros-all",
-    "osr-helper-items-hyperborea-en",
-    "osr-helper-macros-hyperborea-all",
-  ];
-  let folder = game.folders.getName(folderName);
-  if (!folder && movePacks) {
-    folder = await Folder.create([{ name: folderName, type: 'Compendium', color: '#30741d' }]);
-    packnames.forEach(async (pn) => {
-      const pack = await game.packs.get(`osr-helper.${pn}`);
-      if(pack) await pack.setFolder(folder[0]);
-    });
-    await sleep(150)
-    ui.sidebar.render()
-  }
+    const movePacks = await game.settings.get('osr-helper', 'makePackFolder');
+    const folderName = await game.settings.get('osr-helper', 'packFolderName');
+    const sleep = (ms) => new Promise((res) => setTimeout(res, ms));
+    const packnames = [
+      'osr-helper-items-en',
+      'osr-helper-items-es',
+      'osr-helper-macros-all',
+      'osr-helper-items-hyperborea-en',
+      'osr-helper-macros-hyperborea-all'
+    ];
+    let folder = game.folders.getName(folderName);
+    if (!folder && movePacks) {
+      folder = await Folder.create([{ name: folderName, type: 'Compendium', color: '#30741d' }]);
+      packnames.forEach(async (pn) => {
+        const pack = await game.packs.get(`osr-helper.${pn}`);
+        if (pack) await pack.setFolder(folder[0]);
+      });
+      await sleep(150);
+      ui.sidebar.render();
+    }
   }
 };
