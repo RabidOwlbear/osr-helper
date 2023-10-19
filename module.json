@@ -9,7 +9,7 @@
       "flags": {}
     }
   ],
-  "version": "0.4.28",
+  "version": "0.5.00",
   "compatibility": {
     "minimum": "10",
     "verified": "11.305",
@@ -58,7 +58,7 @@
       "label": "OSR-helper Macros",
       "path": "packs/macros.db",
       "type": "Macro",
-      "system": "ose",
+      
       "private": false,
       "flags": {}
     },
@@ -72,11 +72,47 @@
       "flags": {}
     },
     {
-      "name": "osr-helper-macros-hyperborea-all",
-      "label": "OSR-helper Macros",
-      "path": "packs/macros-hyperborea.db",
-      "type": "Macro",
+      "name": "osr-helper-items-hyperborea-es",
+      "label": "OSR-helper Items (es)",
+      "type": "Item",
+      "path": "packs/items-hyperborea-es.db",
       "system": "hyperborea",
+      "private": false,
+      "flags": {}
+    },
+    {
+      "name": "osr-helper-items-wwn-en",
+      "label": "OSR-helper Items (en)",
+      "type": "Item",
+      "path": "packs/items-wwn.db",
+      "system": "wwn",
+      "private": false,
+      "flags": {}
+    },
+    {
+      "name": "osr-helper-items-wwn-es",
+      "label": "OSR-helper Items (es)",
+      "type": "Item",
+      "path": "packs/items-wwn-es.db",
+      "system": "wwn",
+      "private": false,
+      "flags": {}
+    },
+    {
+      "name": "osr-helper-items-dcc-en",
+      "label": "OSR-helper Items (en)",
+      "type": "Item",
+      "path": "packs/items-dcc.db",
+      "system": "dcc",
+      "private": false,
+      "flags": {}
+    },
+    {
+      "name": "osr-helper-items-dcc-es",
+      "label": "OSR-helper Items (es)",
+      "type": "Item",
+      "path": "packs/items-dcc-es.db",
+      "system": "dcc",
       "private": false,
       "flags": {}
     }
@@ -94,7 +130,17 @@
         "compatibility": {}
       },
       {
+        "id": "wwn",
+        "type": "system",
+        "compatibility": {}
+      },
+      {
         "id": "ose-dev",
+        "type": "system",
+        "compatibility": {}
+      },
+      {
+        "id": "dcc",
         "type": "system",
         "compatibility": {}
       }

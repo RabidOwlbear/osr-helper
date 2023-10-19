@@ -9,50 +9,57 @@ export const registerReports = () => {
         return
       }
     }
-    const Rations = [];
-    const Lights = [];
+    const systemData = OSRH.systemData
+    const lightItems = OSRH.util.getOSRHItems(actor, 'light');
+    const rationItems = OSRH.util.getOSRHItems(actor, 'ration');
+    // const Rations = [];
+    // const Lights = [];
     let totalRations = 0;
 
-    for (let key in OSRH.data.food) {
-      Rations.push(key);
-    }
-    for (let key in OSRH.data.lightSource) {
-      Lights.push(key);
-    }
+    // for (let key in OSRH.data.food) {
+    //   Rations.push(key);
+    // }
+    // for (let key in OSRH.data.lightSource) {
+    //   Lights.push(key);
+    // }
 
     const msgData = {
       food: '',
       light: ''
     };
 
-    for (let name of Rations) {
+    // for (let name of Rations) {
+      for (let ration of rationItems) {
       let actorItem = '';
-      let ration = actor.items.getName(OSRH.data.food[name]);
+      // let ration = actor.items.getName(OSRH.data.food[name]);
 
       if (ration) {
-        const qty = ration.system.quantity.value;
+        const rationQty = OSRH.util.getNestedValue(ration, systemData.paths.itemQty)//ration.system.quantity.value;
 
-        totalRations += qty;
+        totalRations += rationQty;
         let style = 'color: green';
-        if (qty <= 2) style = 'color: orangered';
-        if (qty <= 1) style = 'color: red';
-        actorItem += `<li><span style="${style}">${OSRH.data.food[name]}: ${qty}</span></li>`;
-        msgData.food += `<div><p> ${OSRH.data.food[name]}:</p><ul>` + actorItem + `</ul></div>`;
+        if (rationQty <= 2) style = 'color: orangered';
+        if (rationQty <= 1) style = 'color: red';
+        actorItem += `<li><span style="${style}">${ration.name/*OSRH.data.food[name]*/}: ${rationQty}</span></li>`;
+        msgData.food += `<div>${ration.name}: <span style="${style}">${rationQty}</span></div>`
+        //`<div><p> ${ration.name/*OSRH.data.food[name]*/}:</p><ul>` + actorItem + `</ul></div>`;
       }
     }
-    for (let name of Lights) {
+    // for (let name of Lights) {
+      for (let light of lightItems) {
       let actorItem = '';
 
-      let light = actor.items.getName(OSRH.data.lightSource[name].name);
+      // let light = actor.items.getName(OSRH.data.lightSource[name].name);
       if (light) {
-        const qty = light.system.quantity.value;
+        const lightQty = OSRH.util.getNestedValue(light, systemData.paths.itemQty)//light.system.quantity.value;
 
         let style = 'color: green';
-        if (qty <= 2) style = 'color: orangered';
-        if (qty <= 1) style = 'color: red';
-        actorItem += `<li><span style="${style}">${OSRH.data.lightSource[name].name}: ${light.system.quantity.value}</span></li>`;
-        msgData.light += `<div><p> ${OSRH.data.lightSource[name].name}:</p><ul>` + actorItem + `</ul></div>`;
-      }
+        if (lightQty <= 2) style = 'color: orangered';
+        if (lightQty <= 1) style = 'color: red';
+        actorItem += `<li>${light.name}: <span style="${style}">${lightQty}</span></li>`;
+        msgData.light += `<div>${light.name}: <span style="${style}">${lightQty}</span></div>`
+        //`<div><p> ${light.name/*OSRH.data.lightSource[name].name*/}:</p><ul>` + actorItem + `</ul></div>`;
+      };
     }
     let ratStyle = 'color: green;';
     if (totalRations <= 3) ratStyle = 'color: orangeRed;';
@@ -84,6 +91,7 @@ export const registerReports = () => {
 
   OSRH.report.ration = async function () {
     let actorObj = OSRH.util.getPartyActors();
+    const systemData = OSRH.systemData
     const Rations = [];
     for (let key in OSRH.data.food) {
       Rations.push(OSRH.data.food[key]);
@@ -101,16 +109,17 @@ export const registerReports = () => {
     };
 
     for (let partyMember of actorObj.party) {
-      let type = partyMember.system.retainer.enabled ? game.i18n.localize("OSRH.report.retainers") : game.i18n.localize("OSRH.report.characters");
+      let type = partyMember?.system?.retainer?.enabled ? game.i18n.localize("OSRH.report.retainers"): game.i18n.localize("OSRH.report.characters");
       let actorRations = '';
-      for (let type of Rations) {
-        let ration = partyMember.items.getName(type);
-        if (ration) {
-          const qty = ration.system.quantity.value;
+      let rationItems = OSRH.util.getOSRHItems(partyMember,'ration');
+      for (let ration of rationItems){//(let type of Rations) {
+        // let ration = partyMember.items.getName(type);
+        //if (ration) {
+          const qty = OSRH.util.getNestedValue(ration, systemData.paths.itemQty)//ration.system.quantity.value;
           const rStyle = style(qty);
           totalRations += qty;
-          actorRations += `<li style="margin-left:10px;"><span style="${rStyle} ">${type}: ${ration.system.quantity.value}</span></li>`;
-        }
+          actorRations += `<li style="margin-left:10px;"><span style="${rStyle} ">${ration.name}: ${qty/*ration.system.quantity.value*/}</span></li>`;
+        //}
       }
 
       if (actorRations == '') actorRations = '<span style="color: red">None</span>';
@@ -171,6 +180,7 @@ export const registerReports = () => {
         desert: 3,
         allElse: 2
       };
+      this.systemData = OSRH.systemData;
     }
     static get defaultOptions() {
       return mergeObject(super.defaultOptions, {
@@ -188,15 +198,17 @@ export const registerReports = () => {
       const partyObj = OSRH.util.getPartyActors();
       // get slowest
       let slowest;
+
       if (partyObj.party.length) {
-        slowest = partyObj.party[0].system.movement.base;
+        slowest = parseInt(OSRH.util.getNestedValue(partyObj.party[0], this.systemData.paths.encMov))//partyObj.party[0].system.movement.base;
         partyObj.party.forEach((a) => {
-          let rate = a.system.movement.base;
+          let rate = parseInt(OSRH.util.getNestedValue(a, this.systemData.paths.encMov))//a.system.movement.base;
           if (slowest > rate) slowest = rate;
         });
       }
+
       //convert to miles
-      context.baseRate = Math.floor(slowest / 5);
+      context.baseRate = Math.floor((slowest * this.systemData.baseMovMod) / 5);
       context.ose = game.modules.get('old-school-essentials')?.active || false;
       context.characters = this.partyData(partyObj.characters);
       context.retainers = this.partyData(partyObj.retainers);
@@ -239,9 +251,11 @@ export const registerReports = () => {
     partyData(actorObj, mod = 1) {
       let data = [];
       for (let actor of actorObj) {
+        let mov = parseInt(OSRH.util.getNestedValue(actor, this.systemData.paths.encMov)) * this.systemData.baseMovMod;
+
         data.push({
           name: actor.name.length >= 20 ? actor.name.slice(0, 19) + `...` : actor.name,
-          distance: Math.floor((actor.system.movement.base / 5) * mod)
+          distance: Math.floor((mov / 5) * mod)
         });
       }
       return data;
@@ -329,12 +343,17 @@ export const registerReports = () => {
     }
     async getTravelData(mod) {
       const partyObj = OSRH.util.getPartyActors();
-      let slowest = partyObj.party[0]?.system.movement.base;
-      //find slowest rate
+      let slowest = parseInt(OSRH.util.getNestedValue(partyObj.party[0], this.systemData.paths.encMov));
       partyObj.party.forEach((a) => {
-        let rate = a.system.movement.base;
+        let rate = OSRH.util.getNestedValue(a, this.systemData.paths.encMov)
         if (slowest > rate) slowest = rate;
       });
+      // let slowest = partyObj.party[0]?.system.movement.base;
+      // //find slowest rate
+      // partyObj.party.forEach((a) => {
+      //   let rate = a.system.movement.base;
+      //   if (slowest > rate) slowest = rate;
+      // });
       //convert to miles
       const convertedRate = Math.floor((slowest / 5) * mod);
       let retData = {
@@ -347,7 +366,7 @@ export const registerReports = () => {
       };
       retData.html.characters = await renderTemplate('modules/osr-helper/templates/travel-report-character-list.hbs', {actors: retData.data.characters});
       retData.html.retainers = await renderTemplate('modules/osr-helper/templates/travel-report-character-list.hbs', {actors: retData.data.retainers});
-      return retData; 
+      return retData;
     }
   };
   OSRH.report.travelCalc = function(){

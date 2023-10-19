@@ -1,7 +1,7 @@
 export class OSRHTurnTracker extends FormApplication {
   constructor() {
     super();
-
+    this.systemData = OSRH.systemData[game.system.id]
     this.tableNames = game.tables.contents.map((i) => i.name);
     // this.dungeonTurnData = game.settings.get('osr-helper', 'dungeonTurnData');
     this.isGM = game.user.isGM;
@@ -314,22 +314,23 @@ export class OSRHTurnTracker extends FormApplication {
   getBaseRate(partyObj) {
     let slowest;
     if (partyObj.party.length) {
-      slowest = partyObj.party[0].system.movement.base;
+      slowest = parseInt(OSRH.util.getNestedValue(partyObj.party[0], this.systemData.paths.encMov));//partyObj.party[0].system.movement.base;
       partyObj.party.forEach((a) => {
-        let rate = a.system.movement.base;
+        let rate = OSRH.util.getNestedValue(a, this.systemData.paths.encMov)//a.system.movement.base;
 
         if (slowest > rate) slowest = rate;
       });
     }
 
-    return Math.floor(slowest / 5);
+    return Math.floor(parseInt(slowest * this.systemData.baseMovMod) / 5);
   }
   partyData(actorObj, mod = 1) {
     let data = [];
     for (let actor of actorObj) {
+      let mov = parseInt(OSRH.util.getNestedValue(actor, this.systemData.paths.encMov)) * this.systemData.baseMovMod;
       data.push({
         name: actor.name.length >= 35 ? actor.name.slice(0, 30) + `...` : actor.name,
-        distance: Math.floor((actor.system.movement.base / 5) * mod),
+        distance: Math.floor((mov / 5) * mod),
         img: actor.img
         // controlled: actor.ownership[game.user.id] >= 3,
       });
