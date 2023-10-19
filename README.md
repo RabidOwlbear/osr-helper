@@ -60,7 +60,8 @@ The Tracker will roll any encounter and reaction tables as defined in the config
 
 ### Custom Lights
 
-Custom light sources can be created by checking the **Enable Light Item Settings Config.** setting in the ose helper module settings. This setting will add a wrench icon to item display for any item with a "Light" tag applied to it in the characters inventory. (The tag needs to be capitalized in order to function correctly.)
+##### OSE and Hyperborea systems:
+Custom light sources can be created by checking the **Enable Light Item Settings Config.** setting in the ose helper module settings. This setting will add a wrench icon to item display for any item with a "Light" tag applied to it in the characters inventory. (The tag needs to be capitalized in order to function correctly.) Note: this feature will be phased out in future versions, and is not available in all systems.
 
 The wrench icon (number 1. in image below) will also be added to the header of the item details window, allowing for lights to be configured from the item sidebar tab, or inside compendiums. 
 
@@ -87,6 +88,16 @@ When clicked:
 note: Several light items have been provided in the OSR-helper Items compendium.
 If the macro has been used to light a light source, the light can be extinguished by clicking the macro again, preserving any remaning duration until lit again by clicking the Light On macro and selecting the corresponding light type.
 
+##### Other Systems:
+
+In systems other than those listed above light items may be configured using the item config button added to the title bar of relevant items. This menu may be used to set the item type, and open the light configuration panel described above.
+
+![light configuration panel image](./images/doc/item-config.webp)
+
+1. Item Config Button: Click this item to open the OSRH item Config window.
+2. Item type Select: Select the Item type here. May be set to Light, Ration and None. This setting eables light or ration tracking ofr this item.
+3. Light Item Configuration: This button only appears when light is selected as the item type. Clicking it will open the light item configuration for this item.
+
 Each time game world time advances, all lit light sources will be checked against their duration, if the duration is exceeded the tight source will be extinguished, and the total quantity for that item will be decremented by 1. If the item quantity is reduced to zero the item will be deleted from the actor's invetory.
 
 ---
@@ -103,6 +114,8 @@ Total number of days worth of rations for the entire tracked group(assuming the 
 ### Custom Effects
 
 A 'custom effect' system has been implementd and can be accessed via an  icon located on the character portrait secton of the character sheet when moused over (number 1 in the image below).
+
+At this time Active Effects are only enable in the OSE game system. This will be addressed in a future update.
 
 #### Active Effects List
 
