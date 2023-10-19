@@ -46,10 +46,9 @@ export const registerLightModule = async function () {
       return;
     }
     // get path to quantity value
-    let qtyPath = OSRH.systemData[game.system.id]?.paths?.itemQty;
+    let qtyPath = OSRH.systemData?.paths?.itemQty;
     let lightOptions = '';
     for (let light of lightItems) {
-      console.log(light)
       let qty = OSRH.util.getNestedValue(light, qtyPath)
       lightOptions += `<option value="${light.id}">${light.name}: ${qty}</option>`;
     }
@@ -223,14 +222,16 @@ export const registerLightModule = async function () {
 
   OSRH.light.decrementLightItem = async function (uuid, itemId) {
     let actor = await fromUuid(uuid);
+    let qtyPath = OSRH.systemData.paths.itemQty;
     actor = actor?.collectionName === 'tokens' ? actor.actor : actor;
     let item = await actor.items.get(itemId);
-
-    if (item.system.quantity.value > 0) {
-      let qty = item.system.quantity.value - 1;
-      await item.update({ system: { quantity: { value: qty } } });
+    let itemQty = OSRH.util.getNestedValue(item, qtyPath)
+    if (itemQty > 0) {
+      itemQty = itemQty - 1;
+      await item.update({ [qtyPath]: itemQty });
+      
     }
-    if (item.system.quantity.value <= 0) {
+    if (itemQty <= 0) {
       await actor.deleteEmbeddedDocuments('Item', [itemId]);
     }
   };
@@ -254,6 +255,7 @@ export const registerLightModule = async function () {
 
     getData() {
       let flag = this.item.getFlag(`${OSRH.moduleName}`, 'lightItemData');
+      console.log("light flag", flag)
       // Send data to the template
       return {
         name: this.item.name ? this.item.name : ItemName,
@@ -420,27 +422,28 @@ export const registerLightModule = async function () {
     OSRH.util.updateTokens(actorId, data);
   };
   OSRH.light.getLightItems = async function (actorId) {
-    const actor = await game.actors.get(actorId);
+    let actor = await game.actors.get(actorId);
+    if(!actor.prototypeToken.actorLink){
+      actor = await canvas.tokens.controlled[0].document.actor
+    }
     if(!actor){
+      console.log('no actor found')
       return
     }
     // determine system
     const system = game.system.id;
-    const tags = OSRH.systemData[system].tags;
+    const tags = OSRH.systemData.tags;
     let lightItems
     if(tags){
       lightItems = actor.items.filter((i) => {
-        console.log(i)
         let tags = i.system.manualTags;
         if (tags && tags.find((t) => t.value == 'Light')) return i;
       });
     } else {
-      console.log("notag")
       lightItems = actor.items.filter((i) => {
         let isLight = i.flags["osr-helper"]?.itemType === 'light';
         if(isLight) return i
       });
-      console.log("lights",lightItems)
     }
     return lightItems
   }

@@ -92,6 +92,7 @@
   "OSRH.ui.rationReport": "Informe de ración",
   "OSRH.ui.travelCalc": "Planificador de viaje",
   "OSRH.ui.attack": "Ataque",
+  "OSRH.ui.partySheet": "Party Sheet",
 
   "OSRH.util.notification.singleToken" : "Por favor, selecciona un único icono",
   "OSRH.util.notification.noWeapon": "No se han encontrado armas",

@@ -92,6 +92,7 @@
   "OSRH.ui.rationReport": "Ration Report",
   "OSRH.ui.travelCalc": "Travel Calculator",
   "OSRH.ui.attack": "Attack",
+  "OSRH.ui.partySheet": "Party Sheet",
 
   "OSRH.util.notification.singleToken" :"Please select a single token.",
   "OSRH.util.notification.noWeapon": "No weapons found.",
@@ -267,8 +268,8 @@
   "OSRH.report.charRations": "Character Rations",
   "OSRH.report.charLightSource": "Character Light Sources",
   "OSRH.report.none": "None",
-  "OSRH.report.retainers":"retainers",
-  "OSRH.report.characters":"characters",
+  "OSRH.report.retainers":"Retainers",
+  "OSRH.report.characters":"Characters",
   "OSRH.report.rationReport":"Ration Report",
   "OSRH.report.totaldaysleft":"Total Days left",
   "OSRH.report.retainerRations":"Retainer Rations",

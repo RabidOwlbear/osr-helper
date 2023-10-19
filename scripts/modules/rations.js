@@ -12,20 +12,30 @@ data: {
 
 
   OSRH.ration.eat = async function (actorId=null) {
+    const tags = OSRH.systemData.tags;
+    const qPath = OSRH.systemData.paths.itemQty;
+    let actor
     if(!actorId){
       if(OSRH.util.singleSelected()){
-        actorId = canvas.tokens.controlled[0].actor.id
+        actor = canvas.tokens.controlled[0].actor
       }else{
-        return
+        actor = await game.actors.find((a) => a.id == actorId)
       }
     }
-    const actor = await game.actors.find((a) => a.id == actorId);
+    // let actor = await game.actors.find((a) => a.id == actorId);
     // const rationItems = await actor.items.find()
+    console.log(actor)
     let rationOptions = '';
     actor.items.map(i=>{
-      const isRat = i.system.tags.find(t=>t.title === 'Ration') ? true : false;
+      let isRat 
+      if(tags) {
+        isRat = i.system.tags.find(t=>t.title === 'Ration') ? true : false
+      }
+      else {
+        isRat = i.flags?.['osr-helper']?.itemType === 'ration'
+      };
       if(isRat){
-        rationOptions += `<option value="${i.name}">${i.name}: ${i.system.quantity.value}</option>`
+        rationOptions += `<option value="${i.name}">${i.name}: ${OSRH.util.getNestedValue(i , qPath)}</option>`
       }
     })
     
@@ -38,8 +48,8 @@ data: {
     // }
 
     let dialogTemplate = `
-  <h1> ${game.i18n.localize("OSRH.ration.pickType")}</h1>
-  <div style="display:flex">
+    <h1> ${game.i18n.localize("OSRH.ration.pickType")}</h1>
+    <div style="display:flex">
     <div  style="flex:1"><select id="ration">${rationOptions}</select></div>
     </div>`;
     new Dialog({
@@ -48,7 +58,26 @@ data: {
       buttons: {
         rollAtk: {
           label: game.i18n.localize("OSRH.ration.eatRation"),
-          callback: async (html) => {
+          callback: async function(html){
+            
+            let item = actor.items.getName(html.find('#ration')[0].value);
+            let itemQty = OSRH.util.getNestedValue(item, qPath) - 1;
+            if (itemQty <= 0) {
+              await item.delete();
+            } else {
+              await item.update({[qPath ]: itemQty})
+            }
+          }
+        },
+        close: {
+          label: game.i18n.localize("OSRH.customEffect.close"),
+        }
+      }
+    }).render(true);
+  };
+};
+/*
+async (html) => {
             let item = actor.items.getName(html.find('#ration')[0].value);
             let itemQty = item.system.quantity.value - 1;
             if (itemQty <= 0) {
@@ -63,11 +92,4 @@ data: {
               });
             }
           }
-        },
-        close: {
-          label: game.i18n.localize("OSRH.customEffect.close"),
-        }
-      }
-    }).render(true);
-  };
-};
+*/

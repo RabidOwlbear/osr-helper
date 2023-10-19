@@ -215,10 +215,18 @@ export const registerLocalizedData = () =>{
       gm: false,
       function: 'util.attack',
       img: 'modules/osr-helper/images/icons/attack-64.png'
-    }
+    },
+    
   ]
-
-
+  if(game.user.isGM){
+    OSRH.ui.controlOptions.push({
+      id: 'partySheet',
+      label: game.i18n.localize("OSRH.ui.partySheet"),
+      gm: true,
+      function: 'util.renderPartySheet',
+      img: 'modules/osr-helper/images/icons/party-sheet-64.png'
+    })
+  }
   
   OSRH.ui.labels = {
       turnTracker: game.i18n.localize("OSRH.ui.turnTracker"),

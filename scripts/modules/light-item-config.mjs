@@ -3,6 +3,8 @@ export class lightConfig extends FormApplication {
     super();
     this.html;
     this.item = item;
+    const flag = this.item?.getFlag(`${OSRH.moduleName}`, 'lightItemData');
+    this.lightFlag = flag ? flag : null
   }
   static get defaultOptions() {
     return mergeObject(super.defaultOptions, {
@@ -24,6 +26,7 @@ export class lightConfig extends FormApplication {
   
   getData() {
     let flag = this.item?.getFlag(`${OSRH.moduleName}`, 'lightItemData');
+    console.log("light flag", flag)
     let context = super.getData();
     // Send data to the template
     context = mergeObject(context, {

@@ -13,9 +13,9 @@ import { uiControls } from './modules/ui-controls.mjs';
 import { OSRHTurnTracker, registerTravelConstants } from './modules/turn-tracker.mjs';
 import { hideForeignPacks } from './modules/hide-foreign-packs.mjs';
 import { lightConfig } from './modules/light-item-config.mjs';
-import { registerSystemData } from './modules/registerSystemData.mjs';
+import { registerSystemData } from './data/registerSystemData.mjs';
 import { registerSystemHooks } from './modules/hooks/system-hooks.mjs';
-//namespace
+import { OSRHPartySheet } from './modules/party sheet/party-sheet.mjs';
 window.OSRH = window.OSRH || {
   moduleName: `osr-helper`,
   ce: {},
@@ -41,17 +41,16 @@ Hooks.once('init', async function () {
   registerTurn();
   registerRations();
 
-  registerCustomEffectList();
   registerReports();
   registerNameData();
   registerLightModule();
-  registerEffectModule();
+
   registerTravelConstants();
-  registerSystemData();
 
   OSRH.gameVersion = game.version ? game.version : game.version;
   OSRH.TurnTracker = OSRHTurnTracker;
   OSRH.lightConfig = lightConfig;
+  OSRH.partySheet = OSRHPartySheet;
   Hooks.callAll(`${OSRH.moduleName}.registered`);
 });
 Hooks.once('socketlib.ready', () => {
@@ -63,15 +62,9 @@ Hooks.once('socketlib.ready', () => {
     OSRH.socket.register('updateTokens', OSRH.light.updateTokens);
     OSRH.socket.register('setting', OSRH.util.setting);
     OSRH.socket.register('decrementLightItem', OSRH.light.decrementLightItem);
-    OSRH.socket.register('clearExpiredEffects', OSRH.effect.clearExpired);
-    OSRH.socket.register('renderNewEffectForm', OSRH.effect.renderNewEffectForm);
-    OSRH.socket.register('createActiveEffectOnTarget', OSRH.util.createActiveEffectOnTarget);
+
     // OSRH.socket.register('deleteEffect', OSRH.effect.deleteEffect)
-    OSRH.socket.register('deleteAll', OSRH.effect.deleteAll);
-    OSRH.socket.register('effectHousekeeping', OSRH.effect.housekeeping);
-    OSRH.socket.register('gmCreateEffect', OSRH.effect.gmCreateEffect);
-    OSRH.socket.register('deleteEffect', OSRH.effect.delete);
-    OSRH.socket.register('refreshEffectLists', OSRH.effect.refreshEffectLists);
+
     OSRH.socket.register('refreshTurnTracker', OSRH.turn.refreshTurnTracker);
   });
 });
@@ -98,10 +91,24 @@ Hooks.on('updateSetting', async (a, b, c) => {
 });
 Hooks.once(`${OSRH.moduleName}.registered`, () => {});
 Hooks.once('ready', async () => {
+  
+  registerSystemData();
   OSRH.ui = uiControls;
+  if (OSRH.systemData.effects) {
+    registerCustomEffectList();
+    registerEffectModule();
+    OSRH.socket.register('clearExpiredEffects', OSRH.effect.clearExpired);
+    OSRH.socket.register('renderNewEffectForm', OSRH.effect.renderNewEffectForm);
+    OSRH.socket.register('createActiveEffectOnTarget', OSRH.util.createActiveEffectOnTarget);
+    OSRH.socket.register('deleteAll', OSRH.effect.deleteAll);
+    OSRH.socket.register('effectHousekeeping', OSRH.effect.housekeeping);
+    OSRH.socket.register('gmCreateEffect', OSRH.effect.gmCreateEffect);
+    OSRH.socket.register('deleteEffect', OSRH.effect.delete);
+    OSRH.socket.register('refreshEffectLists', OSRH.effect.refreshEffectLists);
+  }
+  
   registerLocalizedData();
-  registerSystemHooks()
-  console.log('pre-ui')
+  registerSystemHooks();
   OSRH.ui.addUiControls();
   await intializePackFolders();
   hideForeignPacks();
@@ -112,7 +119,6 @@ Hooks.once('ready', async () => {
   //update turn proc
 
   if (!turnData.journalName && jName) turnData.journalName = jName;
-  console.log('ready hook');
   await OSRH.socket.executeAsGM('setting', 'turnData', turnData, 'set');
   // migrate turn data
   migrateTurnData();
@@ -200,20 +206,22 @@ Hooks.on('renderActorSheet', async (actor, html) => {
   // itemPiles accomodation
   let itemPiles = actor.flags?.['item-piles']?.data?.enabled || null;
   if (!itemPiles) {
-    const modBox = html.find(`[class="modifiers-btn"]`);
-    modBox.append(
-      `<a class="ose-effect-list ose-icon" id ="ose-effect-list" title="Show Active Effects"><i class="fas fa-list"></i></a>`
-    );
+    if (OSRH.systemData.effects) {
+      const modBox = html.find(`[class="modifiers-btn"]`);
+      modBox.append(
+        `<a class="ose-effect-list ose-icon" id ="ose-effect-list" title="Show Active Effects"><i class="fas fa-list"></i></a>`
+      );
 
-    modBox.on('click', '.ose-effect-list', (e) => {
-      // active effects button
-      // OSRH.ce.effectList(actor.object);
-      let pos = { x: e.pageX + 100, y: e.pageY - 200 };
-      // check window for instances of form
-      if (Object.values(ui.windows).filter((i) => i.id == `activeEffectList.${actor.object.id}`).length == 0) {
-        new OSRH.effect.ActiveEffectList(actor.object, pos).render(true);
-      }
-    });
+      modBox.on('click', '.ose-effect-list', (e) => {
+        // active effects button
+        // OSRH.ce.effectList(actor.object);
+        let pos = { x: e.pageX + 100, y: e.pageY - 200 };
+        // check window for instances of form
+        if (Object.values(ui.windows).filter((i) => i.id == `activeEffectList.${actor.object.id}`).length == 0) {
+          new OSRH.effect.ActiveEffectList(actor.object, pos).render(true);
+        }
+      });
+    }
 
     //currency converter
     let linkCont = html.find(`#treasure .item-controls`)[0];
@@ -378,10 +386,7 @@ async function migrateTurnData() {
   let hasEncTable = turnData.hasOwnProperty('eTable');
   let hasEncTables = turnData.hasOwnProperty('eTables');
   let newData;
-  // console.log(hasDungeon,
-  //   hasTravel,
-  //   hasEncTable,
-  //   hasEncTables)
+ 
   if (hasDungeon && hasTravel) {
     return;
   }

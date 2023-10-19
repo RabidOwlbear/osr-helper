@@ -317,15 +317,16 @@ export const registerUtil = () => {
   };
   // used
   OSRH.util.getPartyActors = function () {
-    const systemName = game.system.id == 'ose' ? game.system.id : 'ose-dev';
-    const allParty = game.actors.filter((a) => a?.flags?.[systemName]?.party);
+    const partySheet = OSRH.systemData.partySheet;
+    const flagName = partySheet ?  game.system.id : 'osr-helper';// == 'ose' ? game.system.id : 'ose-dev';
+    const allParty = game.actors.filter((a) => a?.flags?.[flagName]?.party);
     const retObj = {
       party: allParty,
       characters: [],
       retainers: []
     };
     for (let actor of allParty) {
-      if (actor.system.retainer.enabled) {
+      if (actor.system?.retainer?.enabled) {
         retObj.retainers.push(actor);
       } else {
         retObj.characters.push(actor);
@@ -619,7 +620,6 @@ export const registerUtil = () => {
           ? `${OSRH.moduleName}.${OSRH.moduleName}-items`
           : `${OSRH.moduleName}.${OSRH.moduleName}-items-${lang}`;
       let pack = await game.packs.get(packName);
-      console.log('SAZKERjhBFJHADSCBUYSDFHUDASHJI', lang, packName, pack);
       if (!itemExists) {
         const itemId = await pack.index.getName(type)?._id;
         if (!itemId) {
@@ -928,7 +928,6 @@ export const registerUtil = () => {
   };
   OSRH.util.getItem = async function (item, parent) {
     let itemData = null;
-    console.log(item)
     if (item) {
       //wwn
       if (item.actor && item.actor.prototypeToken.actorLink) {
@@ -944,6 +943,20 @@ export const registerUtil = () => {
     }
     return itemData;
   };
+  OSRH.util.getOSRHItems = function (actor, type){
+    let tags = OSRH.systemData.tags;
+    if(tags){
+      return actor.items.filter(i=>{
+      let itemTags = [];
+      i.system.tags.map(t=>itemTags.push(t.value.toLowerCase()))
+      return itemTags.includes(type, actor);
+      })
+    }
+    return actor.items.filter(i=>i.flags?.['osr-helper']?.itemType === type);
+  }
+  OSRH.util.renderPartySheet = function(){
+    new OSRH.partySheet().render(true)
+  }
 };
 export const intializePackFolders = async () => {
   let singleGM = false;
