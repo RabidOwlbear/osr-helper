@@ -360,16 +360,22 @@ export const registerUtil = () => {
       }
     }
 
-    const ammoCheck = game.modules.get('osr-item-shop')?.active
-      ? `
+    let ammoCheck = `
       <div style="width: 110px">
       <input id="ammoCheck" type="checkbox" checked />${game.i18n.localize('OSRH.util.dialog.checkAmmo')}
       </div>
-      `
-      : `
-      <div style="width: 110px">
-      </div>
       `;
+    // let ammoCheck = game.modules.get('osr-item-shop')?.active
+    //   ? `
+    //   <div style="width: 110px">
+    //   <input id="ammoCheck" type="checkbox" checked />${game.i18n.localize('OSRH.util.dialog.checkAmmo')}
+    //   </div>
+    //   `
+    //   : `
+    //   <div style="width: 110px">
+    //   </div>
+    //   `;
+
     let dialogTemplate = `
      <h1> Pick a weapon </h1>
      <div style="display:flex; justify-content: space-between; margin-bottom: 1em;">
@@ -397,20 +403,33 @@ export const registerUtil = () => {
             let ammo, ammoQty;
             if (ammoObj && ammoCheck) {
               ammo = selectedActor.items.find((i) => i.name == ammoObj.ammoType);
-              ammoQty = ammo?.system.quantity.value;
+              ammoQty = OSRH.util.getNestedValue(ammo, OSRH.systemData.paths.itemQty)//ammo?.system.quantity.value;
               if (ammoQty > 0) {
-                await weapon.roll({ skipDialog: skipCheck });
+                switch(OSRH.systemData.id){
+                  case 'dcc':
+                    await weapon.parent.rollWeaponAttack(weapon.id)
+                    break;
+                  default:
+                    await weapon.roll({ skipDialog: skipCheck });
+                }
+                
                 //delete ammo object if quantity is 0 or less
                 if (ammoQty - 1 == 0) {
                   ammo.delete();
                 } else {
-                  await ammo.update({ system: { quantity: { value: ammoQty - 1 } } });
+                  await ammo.update({[OSRH.systemData.paths.itemQty] : ammoQty - 1});
                 }
               } else {
                 ui.notifications.warn(game.i18n.localize('OSRH.util.notification.noAmmo'));
               }
             } else {
-              await weapon.roll({ skipDialog: skipCheck });
+              switch(OSRH.systemData.id){
+                case 'dcc':
+                  await weapon.parent.rollWeaponAttack(weapon.id)
+                  break;
+                default:
+                  await weapon.roll({ skipDialog: skipCheck });
+              }
             }
           }
         },
