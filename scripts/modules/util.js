@@ -407,7 +407,7 @@ export const registerUtil = () => {
               if (ammoQty > 0) {
                 switch(OSRH.systemData.id){
                   case 'dcc':
-                    await weapon.parent.rollWeaponAttack(weapon.id)
+                    await weapon.parent.rollWeaponAttack(weapon.id, {showModifierDialog: skipCheck ? false: true})
                     break;
                   default:
                     await weapon.roll({ skipDialog: skipCheck });
@@ -425,7 +425,7 @@ export const registerUtil = () => {
             } else {
               switch(OSRH.systemData.id){
                 case 'dcc':
-                  await weapon.parent.rollWeaponAttack(weapon.id)
+                  await weapon.parent.rollWeaponAttack(weapon.id, {showModifierDialog: skipCheck ? false: true})
                   break;
                 default:
                   await weapon.roll({ skipDialog: skipCheck });
