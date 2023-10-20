@@ -7,16 +7,6 @@ Supprted via patreon: https://patreon.com/RabidOwlbear
 An unimaginatively named module that aims to assist with light, time, and resource management. For use in games using the Foundry Vtt implementation of the 'Old School Essentials' system.
 This module provides several macros found in a compendium named "OSR-helper Macros".
 
-### Important Notice
-
-If updating from the previous version named "OSE-helper", any macros existing in your game worlds from the previous version will no longer function. Please replace them with the included updated versions. We apologize for any inconvenience this causes.
-
-If you have created custom light items in your world you will need to run the provided conversion macro named "Convert Light Data" located in the included macro compendium "Utility Macros" folder. This wil convert your existing light configurations, existing lights  will not function without conversion. this only needs to be run once.
-
-You will also need to disable and/or uninstall the previous "OSE-CharacterBuilder" installation to avoid conflicts.
-
----
-
 ### installation
 
 install using the following manifest url:
@@ -101,6 +91,39 @@ In systems other than those listed above light items may be configured using the
 Each time game world time advances, all lit light sources will be checked against their duration, if the duration is exceeded the tight source will be extinguished, and the total quantity for that item will be decremented by 1. If the item quantity is reduced to zero the item will be deleted from the actor's invetory.
 
 ---
+### Ammunition Tracking
+The attack function located in the ui controls above the macro bar allows for limited ammunition tracking.
+At this time the system is name based. When the attack function is used and ammunition tracking is checked, the weapons name will be checked against the tracked weapon names, if it exists the function will look for an item with a name matching the ammunition type for that weapon. If the ammunition item exists, and has a quantity of 2 or greater, the items quantity will be decremented by 1, if the quantity is 1, the item will be deleted.
+The currently racked weapon names, and their ammunition item names are listed below, use the names for the language pack you are using.  
+Eg. An item named "Shortbow" requires and item named "Arrows (quiver of 20)" with a quantity of 1 or greater to have ammo tracked correctly.
+
+**En**:
+Shortbow - Arrows (quiver of 20)
+Longbow - Arrows (quiver of 20)
+Crossbow - Crossbow bolts (case of 30)
+Sling - Sling Stones
+Matchlock blunderbuss - Ammunition pouch
+Matchlock heavy musket - Ammunition pouch
+Matchlock musket - Ammunition pouch
+Matchlock pistol - Ammunition pouch
+Wheellock blunderbuss - Ammunition pouch
+Wheellock heavy musket - Ammunition pouch
+Wheellock musket - Ammunition pouch
+Wheellock pistol - Ammunition pouch
+
+**Es**:
+Arco corto - Flechas (carcaj de 20)
+Arco largo - Flechas (carcaj de 20)
+Ballesta - Saetas (estuche de 30)
+Honda - Piedras de honda
+Trabuco de mecha - Bolsa de munición
+Mosquete pesado de mecha - Bolsa de munición
+Mosquete de mecha - Bolsa de munición
+Pistola de mecha - Bolsa de munición
+Trabuco de rueda - Bolsa de munición
+Mosquete pesado de rueda - Bolsa de munición
+Mosquete de rueda - Bolsa de munición
+Pistola de rueda - Bolsa de munición
 
 ### Ration Report
 
