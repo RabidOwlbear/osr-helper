@@ -1,7 +1,7 @@
 export class OSRHTurnTracker extends FormApplication {
   constructor() {
     super();
-    this.systemData = OSRH.systemData[game.system.id]
+    this.systemData = OSRH.systemData
     this.tableNames = game.tables.contents.map((i) => i.name);
     // this.dungeonTurnData = game.settings.get('osr-helper', 'dungeonTurnData');
     this.isGM = game.user.isGM;
@@ -312,6 +312,7 @@ export class OSRHTurnTracker extends FormApplication {
   }
   // travel turn
   getBaseRate(partyObj) {
+    console.log(this)
     let slowest;
     if (partyObj.party.length) {
       slowest = parseInt(OSRH.util.getNestedValue(partyObj.party[0], this.systemData.paths.encMov));//partyObj.party[0].system.movement.base;
