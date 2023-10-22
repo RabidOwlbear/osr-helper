@@ -109,7 +109,7 @@ export const registerReports = () => {
     };
 
     for (let partyMember of actorObj.party) {
-      let type = partyMember?.system?.retainer?.enabled ? game.i18n.localize("OSRH.report.retainers"): game.i18n.localize("OSRH.report.characters");
+      let type = partyMember?.system?.retainer?.enabled ? 'retainers' : "characters";
       let actorRations = '';
       let rationItems = OSRH.util.getOSRHItems(partyMember,'ration');
       for (let ration of rationItems){//(let type of Rations) {
@@ -128,7 +128,6 @@ export const registerReports = () => {
         type
       ] += `<div style="margin-left: 10px;"><p><b> ${partyMember.name}</b>:</p><ul> ${actorRations} </ul></div>`;
     }
-
     const daysLeft = Math.floor(totalRations / actorObj.party.length);
     let contents = `
   <details >
