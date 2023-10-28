@@ -28,6 +28,8 @@
   "OSRH.settings.makePackFolderHint":"When selected a folder will be created and included compendiums will be moved to this folder.",
   "OSRH.settings.packFolderName":"Compendium Pack Folder Name",
   "OSRH.settings.packFolderNameHint":"Name to use for the compendium folder.",
+  "OSRH.settings.showItemConfig.name": "Enable OSRH item configuration button.",
+  "OSRH.settings.showItemConfig.hint": "Adds a configuration button to the title bar of applicable items, allowing custom options to be configured.",  
 
   "OSRH.food.iron": "Rations (iron, 7 days)",
   "OSRH.food.standard":"Rations (standard, 7 days)",
@@ -259,6 +261,7 @@
   "OSRH.light.config.bgContrast":"Background Contrast",
   "OSRH.light.config.bgShadows":"Background Shadows",
   "OSRH.light.config.update": "Update",
+  "OSRH.light.config.dropItem":"Drop Item Here",
 
   "OSRH.ration.pickType":"Pick a Ration Type",
   "OSRH.ration.eatRation":"Eat Ration",
@@ -306,6 +309,7 @@
   "OSRH.report.bonus":"bonus",
   "OSRH.report.encRoll":"Encounter Roll",
   "OSRH.report.roll":"Roll",
+  "OSRH.report.expires": "Expires",
 
   "OSRH.turn.react.monster.a": "Monster Attacks!",
   "OSRH.turn.react.monster.b": "Monster is aggressive! roll again in one round with a penalty of - 4 to the roll",
@@ -358,9 +362,12 @@
   "OSRH.turnTracker.none":"None",
   "OSRH.turnTracker.travelTurnOpt":"Travel Turn Options",
   "OSRH.turnTracker.enc":"Encounters",
+  "OSRH.turnTracker.globalOpt": "Global Options",
+  "OSRH.turnTracker.rationExpiration": "Track party ration expiration",
 
   "OSRH.turnTracker.title.dunTurnConfig":"Dungeon Turn Config",
   "OSRH.turnTracker.title.travTurnConfig":"Travel Turn Config",
+  "OSRH.turnTracker.title.globalConfig":"Global Config",
   "OSRH.turnTracker.title.rest":"Rest",
   "OSRH.turnTracker.title.advDunTurn":"Advance Dungeon Turn",
   "OSRH.turnTracker.title.travSessCount":"Session Travel Turn Count",
@@ -376,11 +383,25 @@
   "OSRH.turnTracker.title.encTarget":"Encounter Roll Target(Roll Under)",
   "OSRH.turnTracker.title.rollReact":"Roll For Reaction?",
   "OSRH.turnTracker.title.encPerTurn":"Number Of Encounter Rolls(Per Travel Turn)",
+  "OSRH.turnTracker.title.rationExpiration": "Track expiration status of party ration items.",
 
   "OSRH.curency.pp": "PP",
   "OSRH.curency.gp": "GP",
   "OSRH.curency.ep": "EP",
   "OSRH.curency.sp": "SP",
-  "OSRH.curency.cp": "CP"
+  "OSRH.curency.cp": "CP",
 
+  "OSRH.ration.config.hours": "Hours",
+  "OSRH.ration.config.days": "Days",
+  "OSRH.ration.config.minutes": "Minutes",
+  "OSRH.ration.config.timeToExpire": "Time until expiration",
+  "OSRH.ration.config.trackRationExp": "Track Ration Expiration",
+
+  "OSRH.item.config.itemType": "Item Type",
+  "OSRH.item.config.none": "none",
+  "OSRH.item.config.light": "Light",
+  "OSRH.item.config.ration": "Ration",
+  "OSRH.item.config.config": "Config",
+  "OSRH.item.config.close": "Close"
+ 
 }

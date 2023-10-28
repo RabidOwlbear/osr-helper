@@ -12,8 +12,11 @@
         <a class="nav-tab" data-tab="travel">{{localize "OSRH.turnTracker.travel"}} </a>
         {{#if isGM}}
         <a class="nav-tab narrow-tab" data-tab="dungeon-config" title="{{localize "OSRH.turnTracker.title.dunTurnConfig"}} "><i class="fa-solid fa-dungeon"></i></a> 
+        
+        <a class="nav-tab narrow-tab" data-tab="travel-config" title="{{localize "OSRH.turnTracker.title.travTurnConfig"}} "><i class="fa-regular fa-compass"></i></a> 
+        
+        <a class="nav-tab narrow-tab" data-tab="global-config" title="{{localize "OSRH.turnTracker.title.globalConfig"}} "><i class="fa-solid fa-gear"></i></a> 
         {{/if}}
-        {{#if isGM}}<a class="nav-tab narrow-tab" data-tab="travel-config" title="{{localize "OSRH.turnTracker.title.travTurnConfig"}} "><i class="fa-regular fa-compass"></i></a> {{/if}}
       </div>
      
     </header>
@@ -333,6 +336,27 @@
             </div>
           </div>
 
+          <footer class="config">
+            {{#if isGM}}
+            <p class="blank-button"></p>
+            <a id="save-settings"class="hidden save-settings light-icon"><i class="fa-solid fa-floppy-disk"></i></a>
+            <p class="blank-button"></p>
+          {{/if}}
+          </footer>
+        </div>
+      </div>
+      <div class="tab global-config" data-group="primary" data-tab="global-config">
+        
+        <div class="global-options">
+          <div class="main">
+            <h2>{{localize "OSRH.turnTracker.globalOpt"}} </h2>
+            <div class="row">
+              <div class="row">
+                <label for="track-ration-expiration">{{localize "OSRH.turnTracker.rationExpiration"}}:</label>
+                <input type="checkbox" name="ration-expiration" id="track-ration-expiration" title="" {{#if turnData.global.trackRationExp}}checked{{/if}}>
+              </div>
+            </div>
+          </div>
           <footer class="config">
             {{#if isGM}}
             <p class="blank-button"></p>

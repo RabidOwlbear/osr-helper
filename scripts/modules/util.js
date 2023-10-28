@@ -963,20 +963,68 @@ export const registerUtil = () => {
     return itemData;
   };
   OSRH.util.getOSRHItems = function (actor, type){
-    let tags = OSRH.systemData.tags;
-    if(tags){
-      return actor.items.filter(i=>{
-      let itemTags = [];
-      i.system.tags.map(t=>itemTags.push(t.value.toLowerCase()))
-      return itemTags.includes(type, actor);
-      })
-    }
+    let tags = false//OSRH.systemData.tags;
+    // if(tags){
+    //   return actor.items.filter(i=>{
+    //   let itemTags = [];
+    //   i.system.tags.map(t=>itemTags.push(t.value.toLowerCase()))
+    //   return itemTags.includes(type, actor);
+    //   })
+    // }
     return actor.items.filter(i=>i.flags?.['osr-helper']?.itemType === type);
   }
   OSRH.util.renderPartySheet = function(){
     new OSRH.partySheet().render(true)
   }
+  OSRH.util.convertToSeconds = function (duration, unit){
+    const inc = {
+      minute: 60,
+      turn: 600,      
+      hour: 3600,
+      day: 86400,
+    };
+    return Math.round(parseInt(duration) * inc[unit]);
+  }
+  OSRH.util.convertFromSeconds = function(seconds, unit){
+    const inc = {
+      minute: 60,
+      turn: 600,      
+      hour: 3600,
+      day: 86400,
+    }
+  
+    return Math.floor(seconds / inc[unit]);
+    
+  }
+  OSRH.util.convertTime = function(duration,type, disp=false){
+    const inc = {
+      minute: 60,
+      turn: 600,      
+      hour: 3600,
+      day: 86400,
+    }
+    let val = duration / inc[type]
+    let rem = val % 1 ? true : false;
+    if(disp && rem && val > 1){
+      return `${Math.floor(val)}+`
+    }
+    return Math.floor(val)
+    // const fn = {
+    //   0: (d, u)=>Math.round(parseInt(d) * inc[u]), //'get duration in seconds'
+    //   1: (d, u)=>Math.floor(d / inc[u]), //'get duration in new type from seconds'
+    //   2: (d, u, nt)=>{ //'day to hours'
+        
+    //   },
+    //   3: (d,u)=>{ //day to minutes
+    //   }
+    // }
+    // fn[2]()
+  }
+  OSRH.util.hasPermission= function (actor, uId, pLvl){
+    return actor.ownership?.[uId] >= pLvl ? true : false;
+  }
 };
+
 export const intializePackFolders = async () => {
   let singleGM = false;
   if (game.user.isGM && game.users.filter((u) => u.role == 4)[0]?.id === game.user.id) {

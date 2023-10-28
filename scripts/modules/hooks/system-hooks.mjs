@@ -5,28 +5,31 @@ export async function registerSystemHooks() {
   console.log('register system hooks');
   switch (game.system.id) {
     case 'dcc':
-      Hooks.on('renderItemSheet', (obj, html, item) => {
+      Hooks.on('renderItemSheet', async (app, html, itemObj) => {
 
-        if (systemData.lightItemTypes.includes(item.item.type)) {
-          addItemConfigControl(html, item.item);
+        const item = await fromUuid(app.object.uuid);
+        if (systemData.lightItemTypes.includes(item.type)) {
+          addItemConfigControl(html, item);
         }
       });
 
       break;
       case 'ose':
-        Hooks.on('renderItemSheet', (app, html, item) => {
-
+        Hooks.on('renderItemSheet', async (app, html, itemObj) => {
           if (systemData.lightItemTypes.includes(app.object.type)) {
-            addItemConfigControl(html, app.object);
+            
+            const item = await fromUuid(app.object.uuid)
+            addItemConfigControl(html, item);
           }
         });
 
         break;
     default:
-      Hooks.on('renderItemSheet', (app, html, item) => {
+      Hooks.on('renderItemSheet', async (app, html, itemObj) => {
+        const item = await fromUuid(app.object.uuid)
         if (systemData.lightItemTypes.includes(item.type)) {
-          let parent = app.object.parent ? app.object.parent : null
-          addItemConfigControl(html, app.object, parent);
+          // let parent = app.object.parent ? app.object.parent : null
+          addItemConfigControl(html, item);
         }
       });
   }
@@ -39,24 +42,27 @@ export async function registerSystemHooks() {
   });
 }
 
-function addItemConfigControl(html, item) {
-  const headerEl = html[0].querySelector('.window-header');
-  const configIcon = '<i class="fa-regular fa-book-skull"></i>';
-  const titleEl = headerEl?.querySelector('.window-title');
-  if (titleEl) {
-    const configBtn = document.createElement('a');
-    configBtn.classList.add('control', 'osrh-item-config');
-    configBtn.innerHTML = configIcon;
-    titleEl.after(configBtn);
-    configBtn.addEventListener('click', async (ev) => {
-      let itemData;
-      if (item.actor) {
-        itemData = await item.actor.items.get(item._id);
-      } else {
-        itemData = await game.items.get(item._id);
-      }
-      let ration = OSRH.systemData.rationItemTypes.includes(item.type);
-      new OSRHItemConfig(itemData, ration).render(true, {top: ev.y, left: ev.x - 125});
-    });
+async function addItemConfigControl(html, item) {
+  const addControl = await game.settings.get('osr-helper', 'enableItemConfig');
+  if (addControl) {
+    const headerEl = html[0].querySelector('.window-header');
+    const configIcon = '<i class="fa-regular fa-book-skull"></i>';
+    const titleEl = headerEl?.querySelector('.window-title');
+    if (titleEl) {
+      const configBtn = document.createElement('a');
+      configBtn.classList.add('control', 'osrh-item-config');
+      configBtn.innerHTML = configIcon;
+      titleEl.after(configBtn);
+      configBtn.addEventListener('click', async (ev) => {
+        let itemData;
+        if (item.actor) {
+          itemData = await item.actor.items.get(item._id);
+        } else {
+          itemData = item;
+        }
+        let ration = OSRH.systemData.rationItemTypes.includes(item.type);
+        new OSRHItemConfig(item, ration).render(true, { top: ev.y, left: ev.x - 125 });
+      });
+    }
   }
 }

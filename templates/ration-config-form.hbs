@@ -1,0 +1,24 @@
+<form class="flex-col">
+  <div class="main">
+    <div class="row">
+      <label for="track-expiration">{{localize "OSRH.ration.config.trackRationExp"}}:</label>
+      <input type="checkbox" name="track-expiration" id="track-expiration"{{#if trackExpiration}}checked{{/if}}>
+    </div>
+    <div class="">
+      <label for="duration">{{localize "OSRH.ration.config.timeToExpire"}}:</label>
+      <div class="row">
+        <input type="text" name="duration" id="duration">
+        <select name="duration-type" id="duration-type">
+          <option value="hour">{{localize "OSRH.ration.config.hours"}}</option>
+          <option value="day">{{localize "OSRH.ration.config.days"}}</option>
+          <option value="minute">{{localize "OSRH.ration.config.minutes"}}</option>
+        </select>
+      </div>
+    </div>
+
+     
+   
+  </div>
+  <button class="save-btn">{{localize "OSRH.newEffectForm.Save"}}</button>
+
+</form>

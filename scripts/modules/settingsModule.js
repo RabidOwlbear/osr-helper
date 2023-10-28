@@ -244,9 +244,9 @@ export const registerSettings = async function () {
     config: false
   });
 
-  game.settings.register(`${OSRH.moduleName}`, 'enableLightConfig', {
-    name: "OSRH.settings.showLightConfig.name",
-    hint: "OSRH.settings.showLightConfig.hint",
+  game.settings.register(`${OSRH.moduleName}`, 'enableItemConfig', {
+    name: "OSRH.settings.showItemConfig.name",
+    hint: "OSRH.settings.showItemConfig.hint",
     scope: 'world',
     type: Boolean,
     default: false,
@@ -298,4 +298,14 @@ export const registerSettings = async function () {
     config: false
   });
   // --------------
+  // migration settings
+//v0.6.0
+game.settings.register(`${OSRH.moduleName}`, `migrationItemTags`, {
+  name: "migrationItemTags",
+  scope: 'world',
+  type: Boolean,
+  default: false,
+  config: false
+});
 };
+

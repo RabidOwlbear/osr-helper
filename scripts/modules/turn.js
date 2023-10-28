@@ -242,6 +242,7 @@ export const registerTurn = () => {
       }
     }
     OSRH.turn.timePlus(10, 'minute'); //increment game time
+    await OSRH.ration.handlePartyRations(10, 'minute')//handel ration expiration
     await game.settings.set(`${OSRH.moduleName}`, 'turnData', turnData); //update settings data <--------
     await OSRH.turn.updateJournal(); //update turn count journal
     if (turnMsg) ui.notifications.notify('Dungeon turn Advanced.');
@@ -327,6 +328,7 @@ export const registerTurn = () => {
     }
 
     OSRH.turn.timePlus(travelData.duration, 'hour'); //increment game time
+    await OSRH.ration.handlePartyRations(travelData.duration, 'hour')//handel ration expiration
     await OSRH.turn.updateJournal(); //update turn count journal
     if (turnMsg) ui.notifications.notify(game.i18n.localize("OSRH.util.notification.travelTurnAdvance"));
     OSRH.turn.refreshTurnTracker();

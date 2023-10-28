@@ -28,6 +28,8 @@
   "OSRH.settings.makePackFolderHint": "Al seleccionar esta opción, se creará una carpeta a la que se trasladarán los compendios incluidos.",
   "OSRH.settings.packFolderName": "Nombre de la carpeta del paquete de compendios",
   "OSRH.settings.packFolderNameHint": "Nombre que se utilizará para la carpeta de compendios.",
+  "OSRH.settings.showItemConfig.name": "Habilitar configuración de elementos OSRH",
+  "OSRH.settings.showItemConfig.hint": "Añade un botón de configuración a la barra de título de los elementos aplicables, lo que permite configurar opciones personalizadas.",  
   
   "OSRH.food.iron": "Raciones (hierro, 7 días)",
   "OSRH.food.standard": "Raciones (estándar, 7 días)",
@@ -259,6 +261,7 @@
   "OSRH.light.config.bgContrast": "Contraste del fondo",
   "OSRH.light.config.bgShadows": "Sombras de fondo",
   "OSRH.light.config.update": "Actualizar",
+  "OSRH.light.config.dropItem":"Deje el artículo aquí",
 
   "OSRH.ration.pickType": "Elige un tipo de ración",
   "OSRH.ration.eatRation": "Comer ración",
@@ -306,6 +309,7 @@
   "OSRH.report.bonus": "bonificación",
   "OSRH.report.encRoll": "Tirada de encuentro",
   "OSRH.report.roll": "Tirada",
+  "OSRH.report.expires": "Expira",
 
   "OSRH.turn.react.monster.a": "¡El monstruo ataca!",
   "OSRH.turn.react.monster.b": "¡El monstruo parece agresivo! vuelve a tirar en una ronda con una penalización de - 4 a la tirada",
@@ -358,9 +362,12 @@
   "OSRH.turnTracker.none": "Ninguno",
   "OSRH.turnTracker.travelTurnOpt": "Opciones de turno de viaje",
   "OSRH.turnTracker.enc": "Encuentros",
+  "OSRH.turnTracker.globalOpt": "Opciones globaless",
+  "OSRH.turnTracker.rationExpiration": "Seguimiento de la caducidad de las raciones",
 
   "OSRH.turnTracker.title.dunTurnConfig": "Configuración de turno de mazmorra",
   "OSRH.turnTracker.title.travTurnConfig": "Configuración de turno de viaje",
+  "OSRH.turnTracker.title.globalConfig":"Configuración global",
   "OSRH.turnTracker.title.rest": "Descanso",
   "OSRH.turnTracker.title.advDunTurn": "Avanzar turno de mazmorra",
   "OSRH.turnTracker.title.travSessCount": "Recuento de turnos de la sesión",
@@ -376,19 +383,25 @@
   "OSRH.turnTracker.title.encTarget": "Objetivo de la tirada de encuentro (tirada por debajo)",
   "OSRH.turnTracker.title.rollReact": "¿Tirada de reacción?",
   "OSRH.turnTracker.title.encPerTurn": "Número de tiradas de encuentro (por turno de viaje).",
+  "OSRH.turnTracker.title.rationExpiration": "Seguimiento de la caducidad de los elementos de ración de partido.",
 
   "OSRH.curency.pp": "MP",
   "OSRH.curency.gp": "MO",
   "OSRH.curency.ep": "ME",
   "OSRH.curency.sp": "ML",
-  "OSRH.curency.cp": "MC"
+  "OSRH.curency.cp": "MC",
 
+  "OSRH.ration.config.hours": "Hora",
+  "OSRH.ration.config.days": "Día",
+  "OSRH.ration.config.minutes": "Minuto",
+  "OSRH.ration.config.timeToExpire": "Tiempo hasta caducida",
+  "OSRH.ration.config.trackRationExp": "Seguimiento de caducidad de raciones",
+
+  "OSRH.item.config.itemType": "Tipo de ítem",
+  "OSRH.item.config.none": "ningun",
+  "OSRH.item.config.light": "Lu",
+  "OSRH.item.config.ration": "Ració",
+  "OSRH.item.config.config": "Confi",
+  "OSRH.item.config.close": "Cerra"
+  
 }
-
-
-
-
-
-
-
-

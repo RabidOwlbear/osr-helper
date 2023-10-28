@@ -27,11 +27,20 @@ export class OSRHPartySheet extends FormApplication {
       return;
     }
     const actor = await fromUuid(data.uuid);
-    if(!actor.flags?.['osr-helper']?.party?.active){
-      await actor.setFlag('osr-helper', 'party', {active: true});
-      // this.close()
-      this.render();
+    if(OSRH.systemData.partySheet){
+      if(!actor.flags?.[game.system.id]?.party?.active){
+        await actor.setFlag(game.system.id, 'party', {active: true});
+        // this.close()
+        this.render();
+      }
+    }else{
+      if(!actor.flags?.['osr-helper']?.party?.active){
+        await actor.setFlag('osr-helper', 'party', {active: true});
+        // this.close()
+        this.render();
+      }
     }
+    
     return true
   }
   _onDragStart(event){
@@ -49,7 +58,7 @@ export class OSRHPartySheet extends FormApplication {
   }
   getData() {
     const context = super.getData()
-    const party = game.actors.filter(a=>a.flags?.['osr-helper']?.party?.active);
+    const party = OSRH.util.getPartyActors().party//game.actors.filter(a=>a.flags?.['osr-helper']?.party?.active);
     context.party = []
     party.map(p=>{
       context.party.push({

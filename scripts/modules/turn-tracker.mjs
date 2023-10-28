@@ -1,7 +1,7 @@
 export class OSRHTurnTracker extends FormApplication {
   constructor() {
     super();
-    this.systemData = OSRH.systemData
+    this.systemData = OSRH.systemData;
     this.tableNames = game.tables.contents.map((i) => i.name);
     // this.dungeonTurnData = game.settings.get('osr-helper', 'dungeonTurnData');
     this.isGM = game.user.isGM;
@@ -62,6 +62,7 @@ export class OSRHTurnTracker extends FormApplication {
     const resetTotal = html.find('#reset-total-btn')[0];
     const dLvlUp = html.find('#d-lvl-up')[0];
     const dLvlDn = html.find('#d-lvl-dn')[0];
+    const trackRationExp = html.find(`#track-ration-expiration`)[0];
     // gm only controls
     if (this.isGM) {
       terrainSelect.value = this.turnData.travel.terrain;
@@ -117,6 +118,9 @@ export class OSRHTurnTracker extends FormApplication {
       dungeonLvl.addEventListener('change', (e) => {
         this.showSaveBtn(html);
       });
+      trackRationExp.addEventListener('change', (e) => {
+        this.showSaveBtn(html);
+      });
       dRestBtn.addEventListener('click', async (e) => {
         e.preventDefault();
         await OSRH.turn.rest('dungeon');
@@ -164,7 +168,7 @@ export class OSRHTurnTracker extends FormApplication {
         btn.addEventListener('click', async (e) => {
           await this.updateTurnData(html);
           OSRH.socket.executeForEveryone('refreshTurnTracker');
-          ui.notifications.notify(game.i18n.localize("OSRH.util.notification.dungeonTurnSettingsUpdated"));
+          ui.notifications.notify(game.i18n.localize('OSRH.util.notification.dungeonTurnSettingsUpdated'));
         });
       }
       // saveSettings.addEventListener('click', async (e) => {
@@ -175,12 +179,12 @@ export class OSRHTurnTracker extends FormApplication {
       resetTotal.addEventListener('click', (e) => {
         let tab = this.getActiveTab(html);
         let app = new Dialog({
-          title: game.i18n.localize("OSRH.turnTracker.warning"),
-          content: `<p>${game.i18n.localize("OSRH.turnTracker.turnResetWarning")}</p>`,
+          title: game.i18n.localize('OSRH.turnTracker.warning'),
+          content: `<p>${game.i18n.localize('OSRH.turnTracker.turnResetWarning')}</p>`,
           buttons: {
             one: {
               icon: '<i class=`fas fa-check`></i>',
-              label: game.i18n.localize("OSRH.newEffectForm.Reset"),
+              label: game.i18n.localize('OSRH.newEffectForm.Reset'),
               callback: async () => {
                 await OSRH.turn.resetAllCounts(tab);
                 OSRH.socket.executeForEveryone('refreshTurnTracker');
@@ -188,7 +192,7 @@ export class OSRHTurnTracker extends FormApplication {
             },
             two: {
               icon: '<i class=`fas fa-times`></i>',
-              label: game.i18n.localize("OSRH.customEffect.close"),
+              label: game.i18n.localize('OSRH.customEffect.close'),
               callback: function () {
                 app.close();
               }
@@ -260,6 +264,7 @@ export class OSRHTurnTracker extends FormApplication {
     const tRollTarget = html.find('#t-encounter-target')[0];
     const dRollTarget = html.find('#d-encounter-target')[0];
     const dungeonLvl = html.find('#d-level')[0];
+    const trackRationExp = html.find('#track-ration-expiration')[0];
     const encTables = this.getEncounterTables(html);
     const saveSettings = html.find('.save-settings');
     const terrainSelect = html.find('#terrain')[0];
@@ -279,6 +284,9 @@ export class OSRHTurnTracker extends FormApplication {
     this.turnData.dungeon.proc = parseInt(dEncFreq.value);
     this.turnData.dungeon.rollTarget = parseInt(dRollTarget.value);
     this.turnData.dungeon.lvl = parseInt(dungeonLvl.value);
+    this.turnData.global
+      ? (this.turnData.global.trackRationExp = trackRationExp.checked)
+      : (this.turnData.global = { trackRationExp: trackRationExp.checked });
 
     await game.settings.set('osr-helper', 'turnData', this.turnData);
     this.hideSaveBtn(saveSettings);
@@ -312,12 +320,11 @@ export class OSRHTurnTracker extends FormApplication {
   }
   // travel turn
   getBaseRate(partyObj) {
-    console.log(this)
     let slowest;
     if (partyObj.party.length) {
-      slowest = parseInt(OSRH.util.getNestedValue(partyObj.party[0], this.systemData.paths.encMov));//partyObj.party[0].system.movement.base;
+      slowest = parseInt(OSRH.util.getNestedValue(partyObj.party[0], this.systemData.paths.encMov)); //partyObj.party[0].system.movement.base;
       partyObj.party.forEach((a) => {
-        let rate = OSRH.util.getNestedValue(a, this.systemData.paths.encMov)//a.system.movement.base;
+        let rate = OSRH.util.getNestedValue(a, this.systemData.paths.encMov); //a.system.movement.base;
 
         if (slowest > rate) slowest = rate;
       });
@@ -343,7 +350,7 @@ export class OSRHTurnTracker extends FormApplication {
     const bonus = html.find(`#nav-bonus`)[0];
     const gm = game.users.contents.filter((u) => u.role == 4).map((u) => u.id);
     if (terrain == 'road' || terrain == 'trail') {
-      ui.notifications.warn(game.i18n.localize("OSRH.report.cantGetLost"));
+      ui.notifications.warn(game.i18n.localize('OSRH.report.cantGetLost'));
       return;
     }
     let roll = await new Roll(`1d6 + ${bonus.value}`).evaluate({ async: true });
@@ -353,8 +360,8 @@ export class OSRHTurnTracker extends FormApplication {
       let data = {
         whisper: [game.user],
         flavor: `
-        <h3>${game.i18n.localize("OSRH.report.navCheck")}: ${terrain}</h3>
-        <span style="color: red">${game.i18n.localize("OSRH.report.navCheckFail")}</span>`
+        <h3>${game.i18n.localize('OSRH.report.navCheck')}: ${terrain}</h3>
+        <span style="color: red">${game.i18n.localize('OSRH.report.navCheckFail')}</span>`
       };
       await game?.dice3d?.showForRoll(roll, game.user, false, gm, false);
       ChatMessage.create(data);
@@ -362,8 +369,8 @@ export class OSRHTurnTracker extends FormApplication {
       let data = {
         whisper: [game.user],
         flavor: `
-        <h3>${game.i18n.localize("OSRH.report.navCheck")}: ${terrain}</h3>
-        ${game.i18n.localize("OSRH.report.navCheckSuccess")}
+        <h3>${game.i18n.localize('OSRH.report.navCheck')}: ${terrain}</h3>
+        ${game.i18n.localize('OSRH.report.navCheckSuccess')}
         `
       };
       await game?.dice3d?.showForRoll(roll, game.user, false, gm, false);
@@ -384,8 +391,8 @@ export class OSRHTurnTracker extends FormApplication {
         whisper: gm,
         roll: roll,
         flavor: `
-        <h3>${game.i18n.localize("OSRH.report.forageCheck")}: ${terrain}</h3>
-        <div><span style="color: red"><b>${game.i18n.localize("OSRH.report.forageFail")}</b></span></div>
+        <h3>${game.i18n.localize('OSRH.report.forageCheck')}: ${terrain}</h3>
+        <div><span style="color: red"><b>${game.i18n.localize('OSRH.report.forageFail')}</b></span></div>
         `
       };
       await game?.dice3d?.showForRoll(roll, game.user, false, gm, false);
@@ -396,8 +403,8 @@ export class OSRHTurnTracker extends FormApplication {
         whisper: gm,
         roll: roll,
         flavor: `
-        <h3>${game.i18n.localize("OSRH.report.forageCheck")}: ${terrain}</h3>
-        <div><span style="color: green"><b>${game.i18n.localize("OSRH.report.forageSuccess")}</b></span></div>
+        <h3>${game.i18n.localize('OSRH.report.forageCheck')}: ${terrain}</h3>
+        <div><span style="color: green"><b>${game.i18n.localize('OSRH.report.forageSuccess')}</b></span></div>
         `
       };
       await game?.dice3d?.showForRoll(roll, game.user, false, gm, false);
@@ -466,4 +473,11 @@ export function registerTravelConstants() {
     desert: 3,
     allElse: 2
   };
+  OSRH.CONST.timeInc = {
+    minute: 60,
+    turn: 600,      
+    hour: 3600,
+    day: 86400,
+  }
+  
 }
