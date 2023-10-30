@@ -27,6 +27,7 @@ export class OSRHTurnTracker extends FormApplication {
     const partyObj = OSRH.util.getPartyActors();
 
     const tMod = this.terrainMod[this.turnData.travel.terrain];
+    console.log(tMod, this.getBaseRate(partyObj), partyObj)
     context.baseRate = Math.floor(this.getBaseRate(partyObj) * tMod);
     context.characters = this.partyData(partyObj.characters, tMod);
     context.retainers = this.partyData(partyObj.retainers, tMod);
@@ -222,7 +223,6 @@ export class OSRHTurnTracker extends FormApplication {
     const terrain = html.find('#terrain')[0].value;
     const terrainEls = [...html.find('option.terrainOpt')];
     const data = terrainEls.find((i) => i.value === terrain).dataset;
-
     return parseInt(data.target);
   }
   getActiveTab(html) {

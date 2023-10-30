@@ -244,30 +244,30 @@ Hooks.on('renderActorSheet', async (actor, html) => {
     });
 
     //  lightItemSettings
-    if (await game.settings.get(`${OSRH.moduleName}`, 'enableLightConfig')) {
-      let lightItems = actor.object.items.filter((i) => {
-        let tags = i.system.manualTags;
-        if (tags && tags.find((t) => t.value == 'Light')) return i;
-      });
-      for (let item of lightItems) {
-        let targetEl = html.find(`[data-item-id="${item.id}"] .item-controls`);
-        let el = document.createElement('a');
-        let iEl = document.createElement('i');
-        el.classList = 'light-config'; //'item-control'
-        el.title = 'Light Config';
-        iEl.classList = 'fa fa-wrench';
-        iEl.style['margin-right'] = '5px';
-        el.appendChild(iEl);
-        targetEl.prepend(el);
-        el.addEventListener('click', async (ev) => {
-          ev.preventDefault();
-          let itemConfig = await item.getFlag(`${OSRH.moduleName}`, 'lightItemData');
-          if (Object.values(ui.windows).filter((i) => i.id.includes(`light-item-config.${item.id}`)).length == 0) {
-            new OSRH.light.ItemSettingsForm(item).render(true);
-          }
-        });
-      }
-    }
+    // if (await game.settings.get(`${OSRH.moduleName}`, 'enableLightConfig')) {
+    //   let lightItems = actor.object.items.filter((i) => {
+    //     let tags = i.system.manualTags;
+    //     if (tags && tags.find((t) => t.value == 'Light')) return i;
+    //   });
+    //   for (let item of lightItems) {
+    //     let targetEl = html.find(`[data-item-id="${item.id}"] .item-controls`);
+    //     let el = document.createElement('a');
+    //     let iEl = document.createElement('i');
+    //     el.classList = 'light-config'; //'item-control'
+    //     el.title = 'Light Config';
+    //     iEl.classList = 'fa fa-wrench';
+    //     iEl.style['margin-right'] = '5px';
+    //     el.appendChild(iEl);
+    //     targetEl.prepend(el);
+    //     el.addEventListener('click', async (ev) => {
+    //       ev.preventDefault();
+    //       let itemConfig = await item.getFlag(`${OSRH.moduleName}`, 'lightItemData');
+    //       if (Object.values(ui.windows).filter((i) => i.id.includes(`light-item-config.${item.id}`)).length == 0) {
+    //         new OSRH.light.ItemSettingsForm(item).render(true);
+    //       }
+    //     });
+    //   }
+    // }
     if (await game.settings.get(OSRH.moduleName, `enableEquippableContainers`)) {
       OSRH.util.initializeDroppableContainers(actor.object, html);
     }
