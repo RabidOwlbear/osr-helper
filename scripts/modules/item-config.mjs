@@ -3,7 +3,6 @@ export class OSRHItemConfig extends FormApplication {
     super();
     let itemType = item?.flags?.["osr-helper"]?.itemType;
     this.item = item;
-    
     this.itemType = itemType ? itemType : 'none';
     this.dispRation = ration
   }
@@ -21,21 +20,27 @@ export class OSRHItemConfig extends FormApplication {
 
   getData() {
     let context = super.getData();
-    
-
     context.isLight = this.itemType === 'light';
+    context.isRation = this.itemType === 'ration';
     context.dispRation = this.dispRation;
     return context;
   }
   async activateListeners(html) {
 
     const select = html.find('#item-type')[0];
-    const configBtn = html.find('.light-config')[0];
+    const lightConfigBtn = html.find('.light-config')[0];
+    const rationConfigBtn = html.find('.ration-config')[0];
     const closeBtn = html.find(".close-btn")[0];
-    configBtn.addEventListener('click', async (ev)=>{
+    lightConfigBtn.addEventListener('click', async (ev)=>{
       ev.preventDefault();
-      let item = await OSRH.util.getItem(this.item)
+      let item = this.item//await OSRH.util.getItem(this.item)
       new OSRH.lightConfig(item).render(true, {top:this.position.top, left:this.position.left})
+      this.close()
+    })
+    rationConfigBtn.addEventListener('click', async (ev)=>{
+      ev.preventDefault();
+      let item = await OSRH.util.getItem(this.item);
+      new OSRH.RationConfig(this.item).render(true, {top:this.position.top, left:this.position.left})
       this.close()
     })
     closeBtn.addEventListener('click', ev=>{
@@ -45,15 +50,25 @@ export class OSRHItemConfig extends FormApplication {
 
     select.addEventListener('change', async (ev)=>{
       ev.preventDefault();
-      
-      if(select.value === 'light'){
-        configBtn.classList.remove('hidden');
-      } else {
-        configBtn.classList.add('hidden');
-      }
-      let item = await OSRH.util.getItem(this.item);
-     
+      select.value === 'light' ? lightConfigBtn.classList.remove('hidden') : lightConfigBtn.classList.add('hidden');
+      select.value === 'ration' ? rationConfigBtn.classList.remove('hidden') : rationConfigBtn.classList.add('hidden');
+      // if(select.value === 'light'){
+      //   configBtn.classList.remove('hidden');
+      // } else {
+      //   configBtn.classList.add('hidden');
+      // }
+      let item = this.item//await OSRH.util.getItem(this.item);
       await item.setFlag('osr-helper', 'itemType', select.value);
+      if(select.value == 'light' && !this.item.flags?.['osr-helper']?.lightItemData){
+        let lightData = deepClone(OSRH.data.defaultLightSettings);
+        lightData.name = item.name
+        await item.setFlag('osr-helper', 'lightItemData', lightData)
+      }
+      if(select.value == 'ration' && !this.item.flags?.['osr-helper']?.rationData){
+        let rationData = OSRH.data.defaultRationSettings;
+        rationData.name = item.name;
+        await item.setFlag('osr-helper', 'rationData', rationData);
+      }
       this.itemType = select.value;
 
     })

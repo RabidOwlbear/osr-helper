@@ -127,6 +127,33 @@ lightType: {
       btnColor: `#003747`
     },
   ]
+  OSRH.data.defaultLightSettings = {
+    name: '',
+    dim: 30,
+    bright: 10,
+    color: '#ff7b24',
+    dur:  60,
+    alpha:0.5,
+    alert:  1,
+    angle:  360,
+    warn:  3,
+    animation: 'flame',
+    speed: 3,
+    intensity: 5,
+    coloration: '1',
+    luminosity: 0.4,
+    bgSat: 0,
+    bgCont: 0,
+    bgShadow: 0
+  };
+  OSRH.data.defaultRationSettings = {
+    name: '',
+    trackExpiration: true,
+    duration: {
+      value: 604800,
+      type: 'day'
+    } 
+  };
 }; 
 export const registerLocalizedData = () =>{
   OSRH.ui.controlOptions= [
@@ -170,7 +197,7 @@ export const registerLocalizedData = () =>{
     {
       id: 'actorItemReport',
       label: game.i18n.localize("OSRH.ui.actorItemReport"), 
-      gm: true,
+      gm: false,
       function: 'report.actorItem',
       img: 'modules/osr-helper/images/icons/actor-item-report-64.png'
     },

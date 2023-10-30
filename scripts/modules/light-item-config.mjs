@@ -26,7 +26,6 @@ export class lightConfig extends FormApplication {
   
   getData() {
     let flag = this.item?.getFlag(`${OSRH.moduleName}`, 'lightItemData');
-    console.log("light flag", flag)
     let context = super.getData();
     // Send data to the template
     context = mergeObject(context, {
@@ -50,7 +49,6 @@ export class lightConfig extends FormApplication {
       bgCont: flag?.bgCont ? flag.bgCont : 0,
       bgShadow: flag?.bgShadow ? flag.bgShadow : 0
     });
-    console.log(context)
     return context
   }
  activateListeners(html) {
@@ -68,6 +66,7 @@ export class lightConfig extends FormApplication {
 
 
   closeBtn.addEventListener('click', (ev) => {
+    ev.preventDefault();
     this.close();
   });
   // update button
@@ -120,7 +119,6 @@ export class lightConfig extends FormApplication {
  }
  async _onDrop(event){
   const data = TextEditor.getDragEventData(event);
-  console.log(event)
   const itemTypes = OSRH.systemData[game.system.id].lightItemTypes
   if(data.type === 'Item'){
     const item = await fromUuid(data.uuid);
@@ -130,12 +128,10 @@ export class lightConfig extends FormApplication {
       return
     }else{
       this.item = item
-      console.log('item',item)
       const pCont =this.html[0].querySelector('#portrait-cont');
       const imgEl = this.html[0].querySelector('.item-image');
       const nameEl = this.html[0].querySelector(".item-name");
       const dropzone = this.html[0].querySelector(".dropzone");
-      console.log(pCont, this.html[0]);
       // hide dropzone
       // dropzone.style.display = 'none';
       // unhide portrait cont

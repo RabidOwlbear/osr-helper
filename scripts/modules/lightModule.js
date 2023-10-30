@@ -255,7 +255,6 @@ export const registerLightModule = async function () {
 
     getData() {
       let flag = this.item.getFlag(`${OSRH.moduleName}`, 'lightItemData');
-      console.log("light flag", flag)
       // Send data to the template
       return {
         name: this.item.name ? this.item.name : ItemName,
@@ -432,19 +431,22 @@ export const registerLightModule = async function () {
     }
     // determine system
     const system = game.system.id;
-    const tags = OSRH.systemData.tags;
-    let lightItems
-    if(tags){
-      lightItems = actor.items.filter((i) => {
-        let tags = i.system.manualTags;
-        if (tags && tags.find((t) => t.value == 'Light')) return i;
-      });
-    } else {
-      lightItems = actor.items.filter((i) => {
-        let isLight = i.flags["osr-helper"]?.itemType === 'light';
-        if(isLight) return i
-      });
-    }
+    const tags = false//OSRH.systemData.tags;
+    let lightItems = actor.items.filter((i) => {
+      let isLight = i.flags["osr-helper"]?.itemType === 'light';
+      if(isLight) return i
+    });
+    // if(tags){
+    //   lightItems = actor.items.filter((i) => {
+    //     let tags = i.system.manualTags;
+    //     if (tags && tags.find((t) => t.value == 'Light')) return i;
+    //   });
+    // } else {
+    //   lightItems = actor.items.filter((i) => {
+    //     let isLight = i.flags["osr-helper"]?.itemType === 'light';
+    //     if(isLight) return i
+    //   });
+    // }
     return lightItems
   }
 };

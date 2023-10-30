@@ -16,6 +16,7 @@ import { lightConfig } from './modules/light-item-config.mjs';
 import { registerSystemData } from './data/registerSystemData.mjs';
 import { registerSystemHooks } from './modules/hooks/system-hooks.mjs';
 import { OSRHPartySheet } from './modules/party sheet/party-sheet.mjs';
+import { tagMigration } from './modules/migration/tagMigration.mjs';
 window.OSRH = window.OSRH || {
   moduleName: `osr-helper`,
   ce: {},
@@ -121,7 +122,7 @@ Hooks.once('ready', async () => {
   if (!turnData.journalName && jName) turnData.journalName = jName;
   await OSRH.socket.executeAsGM('setting', 'turnData', turnData, 'set');
   // migrate turn data
-  migrateTurnData();
+  // migrateTurnData();
   //set hook to update light timer durations
   Hooks.on('updateWorldTime', async () => {
     console.log('time update');
@@ -131,7 +132,7 @@ Hooks.once('ready', async () => {
   });
 
   Hooks.on(`${OSRH.moduleName} Time Updated`, async () => {
-    if (game.user.isGM) await OSRH.socket.executeAsGM('effectHousekeeping');
+    if (game.user.isGM && OSRH.systemData.effects) await OSRH.socket.executeAsGM('effectHousekeeping');
   });
   //check for count journal
   await OSRH.util.countJournalInit(jName);
@@ -150,6 +151,9 @@ Hooks.once('ready', async () => {
         await user.setFlag(`${OSRH.moduleName}`, 'effectData', {});
       }
     }
+
+    // migrate tags
+    tagMigration()
   }
 
   Hooks.on('createActor', async (actor) => {
@@ -240,33 +244,31 @@ Hooks.on('renderActorSheet', async (actor, html) => {
     });
 
     //  lightItemSettings
-    if (await game.settings.get(`${OSRH.moduleName}`, 'enableLightConfig')) {
-      let lightItems = actor.object.items.filter((i) => {
-        let tags = i.system.manualTags;
-        if (tags && tags.find((t) => t.value == 'Light')) return i;
-      });
-      for (let item of lightItems) {
-        let targetEl = html.find(`[data-item-id="${item.id}"] .item-controls`);
-        let el = document.createElement('a');
-        let iEl = document.createElement('i');
-        el.classList = 'light-config'; //'item-control'
-        el.title = 'Light Config';
-        iEl.classList = 'fa fa-wrench';
-        iEl.style['margin-right'] = '5px';
-        el.appendChild(iEl);
-        targetEl.prepend(el);
-        el.addEventListener('click', async (ev) => {
-          ev.preventDefault();
-          let itemConfig = await item.getFlag(`${OSRH.moduleName}`, 'lightItemData');
-          if (Object.values(ui.windows).filter((i) => i.id.includes(`light-item-config.${item.id}`)).length == 0) {
-            new OSRH.light.ItemSettingsForm(item).render(true);
-          }
-        });
-      }
-    }
+    // if (await game.settings.get(`${OSRH.moduleName}`, 'enableLightConfig')) {
+    //   let lightItems = actor.object.items.filter((i) => {
+    //     let tags = i.system.manualTags;
+    //     if (tags && tags.find((t) => t.value == 'Light')) return i;
+    //   });
+    //   for (let item of lightItems) {
+    //     let targetEl = html.find(`[data-item-id="${item.id}"] .item-controls`);
+    //     let el = document.createElement('a');
+    //     let iEl = document.createElement('i');
+    //     el.classList = 'light-config'; //'item-control'
+    //     el.title = 'Light Config';
+    //     iEl.classList = 'fa fa-wrench';
+    //     iEl.style['margin-right'] = '5px';
+    //     el.appendChild(iEl);
+    //     targetEl.prepend(el);
+    //     el.addEventListener('click', async (ev) => {
+    //       ev.preventDefault();
+    //       let itemConfig = await item.getFlag(`${OSRH.moduleName}`, 'lightItemData');
+    //       if (Object.values(ui.windows).filter((i) => i.id.includes(`light-item-config.${item.id}`)).length == 0) {
+    //         new OSRH.light.ItemSettingsForm(item).render(true);
+    //       }
+    //     });
+    //   }
+    // }
     if (await game.settings.get(OSRH.moduleName, `enableEquippableContainers`)) {
-      // OSRH.util.dropContainer(actor.object, html)
-      // OSRH.util.dropContainer(actor.object, html)
       OSRH.util.initializeDroppableContainers(actor.object, html);
     }
   }
@@ -321,23 +323,23 @@ Hooks.on('rendercustomEffectList', (CEL, html, form) => {
   CEL.renderEffectList(html);
 });
 
-Hooks.on('renderItemSheet', async (sheetObj, html) => {
-  const isLight = sheetObj.object.system.tags?.find((t) => t.value == 'Light');
-  if ((await game.settings.get(`${OSRH.moduleName}`, 'enableLightConfig')) && isLight) {
-    let item = sheetObj.item;
-    let el = document.createElement('a');
-    el.addEventListener('click', async (ev) => {
-      ev.preventDefault();
-      let itemConfig = await item.getFlag(`${OSRH.moduleName}`, 'lightItemConfig');
-      if (Object.values(ui.windows).filter((i) => i.id.includes(`light-item-config`)).length == 0) {
-        new OSRH.light.ItemSettingsForm(item).render(true);
-      }
-    });
-    let target = html.find('.header-button.configure-sheet');
-    el.innerHTML = `<a title="OSRH Light Item Config"><i class="fas fa-wrench"></i></a>`;
-    target.before(el);
-  }
-});
+// Hooks.on('renderItemSheet', async (sheetObj, html) => {
+//   const isLight = sheetObj.object.system.tags?.find((t) => t.value == 'Light');
+//   if ((await game.settings.get(`${OSRH.moduleName}`, 'enableLightConfig')) && isLight) {
+//     let item = sheetObj.item;
+//     let el = document.createElement('a');
+//     el.addEventListener('click', async (ev) => {
+//       ev.preventDefault();
+//       let itemConfig = await item.getFlag(`${OSRH.moduleName}`, 'lightItemConfig');
+//       if (Object.values(ui.windows).filter((i) => i.id.includes(`light-item-config`)).length == 0) {
+//         new OSRH.light.ItemSettingsForm(item).render(true);
+//       }
+//     });
+//     let target = html.find('.header-button.configure-sheet');
+//     el.innerHTML = `<a title="OSRH Light Item Config"><i class="fas fa-wrench"></i></a>`;
+//     target.before(el);
+//   }
+// });
 // remove once ose combat time advancement fixed
 Hooks.on('deleteCombat', async () => {
   await OSRH.socket.executeAsGM('setting', 'lastRound', 0, 'set');
@@ -378,65 +380,4 @@ Hooks.on('renderNewActiveEffectForm', (form, html) => {
   }
 });
 
-async function migrateTurnData() {
-  let turnData = deepClone(await game.settings.get('osr-helper', 'turnData'));
-  const dungeonTurnData = await game.settings.get('osr-helper', 'dungeonTurnData');
-  let hasDungeon = turnData.hasOwnProperty('dungeon');
-  let hasTravel = turnData.hasOwnProperty('travel');
-  let hasEncTable = turnData.hasOwnProperty('eTable');
-  let hasEncTables = turnData.hasOwnProperty('eTables');
-  let newData;
- 
-  if (hasDungeon && hasTravel) {
-    return;
-  }
-  if (!hasEncTable && dungeonTurnData) {
-    turnData = mergeObject(turnData, dungeonTurnData);
-    turnData.eTables = [dungeonTurnData.eTable, 'none', 'none', 'none', 'none', 'none', 'none', 'none'];
-    turnData.lvl = 1;
-    turnData.walkCount = 1;
-    turnData.rSprite = false;
 
-    hasEncTables = true;
-  }
-
-  if (!hasDungeon && hasEncTables) {
-    newData = {
-      journalName: turnData.journalName,
-      dungeon: {
-        lvl: turnData.lvl,
-        proc: turnData.proc,
-        procCount: turnData.procCount,
-        eTables: turnData.eTables,
-        rSprite: turnData.rSprite,
-        rTable: turnData.rTable,
-        rest: turnData.rest,
-        restWarnCount: turnData.restWarnCount,
-        rollEnc: turnData.rollEnc,
-        rollReact: turnData.rollReact,
-        rollTarget: turnData.rollTarget,
-        session: turnData.session,
-        total: turnData.total,
-        walkCount: 1
-      },
-      travel: {
-        session: 0,
-        total: 0,
-        rest: 0,
-        rollEnc: false,
-        rollReact: false,
-        rTable: 'none',
-        eTable: 'none',
-        proc: 0,
-        procCount: 0,
-        rollTarget: 2,
-        restWarnCount: 0,
-        terrain: 'clear',
-        duration: 24
-      }
-    };
-    await game.settings.set('osr-helper', 'turnData', newData);
-    ui.notifications.notify('Turn Data Successcully Migrated.');
-  }
-}
-OSRH.MTD = migrateTurnData;

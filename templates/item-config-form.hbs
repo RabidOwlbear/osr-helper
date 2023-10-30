@@ -1,21 +1,22 @@
 <form class="flex-col">
   <div class="main-cont">
     <div class="select-cont">
-      <label for="item-type"><b>Item Type<b>:</label>
+      <label for="item-type"><b>{{localize "OSRH.item.config.itemType"}}<b>:</label>
       <select id="item-type">
-        <option value="none">none</option>
-        <option value="light">Light</option>
+        <option value="none">{{localize "OSRH.item.config.none"}}</option>
+        <option value="light">{{localize "OSRH.item.config.light"}}</option>
         {{#if dispRation}}
-        <option value="ration">Ration</option>
+        <option value="ration">{{localize "OSRH.item.config.ration"}}</option>
         {{/if}}
       </select>
      
     </div>
      <div class="config-cont">
-      <button class="{{#if isLight}}{{else}}hidden{{/if}} light-config">Config</button>
+      <button class="{{#if isLight}}{{else}}hidden{{/if}} light-config">{{localize "OSRH.item.config.config"}}</button>
+      <button class="{{#if isRation}}{{else}}hidden{{/if}} ration-config">{{localize "OSRH.item.config.config"}}</button>
      </div>
   </div>
 
-  <button class="close-btn">Close</button>
+  <button class="close-btn">{{localize "OSRH.item.config.close"}}</button>
 
 </form>

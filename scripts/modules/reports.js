@@ -2,6 +2,7 @@ export const registerReports = () => {
   OSRH.report = OSRH.report || {};
 
   OSRH.report.actorItem = async function (actor=null) {
+    let turnData = game.settings.get('osr-helper', 'turnData');
     if(!actor){
       if(OSRH.util.singleSelected()){
         actor = canvas.tokens.controlled[0].actor
@@ -29,21 +30,22 @@ export const registerReports = () => {
     };
 
     // for (let name of Rations) {
-      for (let ration of rationItems) {
+    for (let ration of rationItems) {
+      let rationData = ration.getFlag('osr-helper', 'rationData');
+      let expText = turnData.global.trackRationExp ? `<div>- ${game.i18n.localize("OSRH.report.expires")}: ${OSRH.util.convertTime(rationData.duration.value, rationData.duration.type)} 
+      ${rationData.duration.type}</div> `:'';
       let actorItem = '';
       // let ration = actor.items.getName(OSRH.data.food[name]);
 
-      if (ration) {
         const rationQty = OSRH.util.getNestedValue(ration, systemData.paths.itemQty)//ration.system.quantity.value;
 
         totalRations += rationQty;
         let style = 'color: green';
         if (rationQty <= 2) style = 'color: orangered';
         if (rationQty <= 1) style = 'color: red';
-        actorItem += `<li><span style="${style}">${ration.name/*OSRH.data.food[name]*/}: ${rationQty}</span></li>`;
-        msgData.food += `<div>${ration.name}: <span style="${style}">${rationQty}</span></div>`
+        actorItem += `<li><div style="${style}">${ration.name/*OSRH.data.food[name]*/}: ${rationQty}</div></li>`;
+        msgData.food += `<div>${ration.name}: <span style="${style}">${rationQty}</span></div>${expText}`
         //`<div><p> ${ration.name/*OSRH.data.food[name]*/}:</p><ul>` + actorItem + `</ul></div>`;
-      }
     }
     // for (let name of Lights) {
       for (let light of lightItems) {
@@ -91,6 +93,7 @@ export const registerReports = () => {
 
   OSRH.report.ration = async function () {
     let actorObj = OSRH.util.getPartyActors();
+    let turnData = game.settings.get('osr-helper', 'turnData')
     const systemData = OSRH.systemData
     const Rations = [];
     for (let key in OSRH.data.food) {
@@ -112,13 +115,19 @@ export const registerReports = () => {
       let type = partyMember?.system?.retainer?.enabled ? 'retainers' : "characters";
       let actorRations = '';
       let rationItems = OSRH.util.getOSRHItems(partyMember,'ration');
+      
       for (let ration of rationItems){//(let type of Rations) {
         // let ration = partyMember.items.getName(type);
         //if (ration) {
+          let rationData = ration.getFlag('osr-helper', 'rationData');
+          let expText = turnData?.global?.trackRationExp ? `<div>${game.i18n.localize("OSRH.report.expires")}: ${OSRH.util.convertTime(rationData.duration.value, rationData.duration.type)} 
+          ${rationData.duration.type}</div> `:'';
           const qty = OSRH.util.getNestedValue(ration, systemData.paths.itemQty)//ration.system.quantity.value;
           const rStyle = style(qty);
           totalRations += qty;
-          actorRations += `<li style="margin-left:10px;"><span style="${rStyle} ">${ration.name}: ${qty/*ration.system.quantity.value*/}</span></li>`;
+          actorRations += `
+          <li style="margin-left:10px;"><div style="${rStyle} ">${ration.name}: ${qty} </div>${expText}</li>
+          `;
         //}
       }
 
