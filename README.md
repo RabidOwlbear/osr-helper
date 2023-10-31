@@ -47,20 +47,50 @@ When the advance dungeon turn button is used, the Turn Tracker will advance the 
 The Tracker will roll any encounter and reaction tables as defined in the config tab.
 
 ---
+### Configurable Items
+##### Item Configuration Menu
+![item configuration panel image](./images/doc/item-config-menu.webp)
 
-### Custom Lights
+1. Item Configuation Menu Button.
+2. Item Type: sets the OSR Helper item type.
+3. Item Configuation: Opens the relevant configuration menu for the item.
 
-##### OSE and Hyperborea systems:
-Custom light sources can be created by checking the **Enable Light Item Settings Config.** setting in the ose helper module settings. This setting will add a wrench icon to item display for any item with a "Light" tag applied to it in the characters inventory. (The tag needs to be capitalized in order to function correctly.) Note: this feature will be phased out in future versions, and is not available in all systems.
+ Certain item types may be configured using the item config button added to the title bar of relevant items. This menu may be used to set the item type, and open the relevant configuration panel for the item. 
+
+ #### Ration Items
+
+ 4. Track Ration Expiration: When checked, the item will have its duration checked when party ration expiration tracking is enabled.
+ 5. Ration Duration: Length of time before the ration item expires.
+
+ Ration Items may be tracked, and set to expire after a certain amount of in game time. Selecting the ration item type will enable this items use with the eat ration and ration item repoting features of the module.
+
+ Ration Expiration tracking may be enabled for the adventuring party as tracked with the turn tracker. To enable party ration tracking, navigate to the global config tab of the turn tracker, and check the Track Party ration Expiration setting and save the settings.
+ When enabled, each turn the tracker will check for tracked ration items, if any are found their duration will be decremented by the turn time amount, if the Remaining duration is 0 the item name will be appended with '- expired'.
+
+ When the track party ration expiration setting is enabled, the remaining ration duration will be displayed in any ration report generated.
+ 
+
+#### Custom Lights
+![light configuration panel image](./images/doc/item-config.webp)
+
+1. Item Config Button: Click this item to open the OSRH item Config window.
+2. Item type Select: Select the Item type here. May be set to Light, Ration and None. This setting eables light or ration tracking ofr this item.
+3. Light Item Configuration: This button only appears when light is selected as the item type. Clicking it will open the light item configuration for this item.
+
+Each time game world time advances, all lit light sources will be checked against their duration, if the duration is exceeded the tight source will be extinguished, and the total quantity for that item will be decremented by 1. If the item quantity is reduced to zero the item will be deleted from the actor's invetory.
+
+
+
+
+Custom light sources can be created by checking the **Enable Light Item Settings Config.** setting in the ose helper module settings. This setting will add a book icon to applicable Item types.
 
 The wrench icon (number 1. in image below) will also be added to the header of the item details window, allowing for lights to be configured from the item sidebar tab, or inside compendiums. 
 
-![light configuration panel image](./images/doc/lights-doc-01.webp)
+![light configuration panel image](./images/doc/light-item-config.webp)
 
-1. Configuration icon: Click this to open the light item configuration panel.
-2. Light Configuration Panel: Here you can define the custom light properties and duration.
-3. Close: Closes the configuration panel without saving.
-4. Update: Updates the light configuration data.
+**Light Configuration Panel** - Here you can define the custom light properties and duration.
+**Close** - Closes the configuration panel without saving.
+**Update** - Updates the light configuration data.
 
 ![light configuration panel image](./images/doc/lights-doc-03.webp)
 
@@ -78,17 +108,6 @@ When clicked:
 note: Several light items have been provided in the OSR-helper Items compendium.
 If the macro has been used to light a light source, the light can be extinguished by clicking the macro again, preserving any remaning duration until lit again by clicking the Light On macro and selecting the corresponding light type.
 
-##### Other Systems:
-
-In systems other than those listed above light items may be configured using the item config button added to the title bar of relevant items. This menu may be used to set the item type, and open the light configuration panel described above.
-
-![light configuration panel image](./images/doc/item-config.webp)
-
-1. Item Config Button: Click this item to open the OSRH item Config window.
-2. Item type Select: Select the Item type here. May be set to Light, Ration and None. This setting eables light or ration tracking ofr this item.
-3. Light Item Configuration: This button only appears when light is selected as the item type. Clicking it will open the light item configuration for this item.
-
-Each time game world time advances, all lit light sources will be checked against their duration, if the duration is exceeded the tight source will be extinguished, and the total quantity for that item will be decremented by 1. If the item quantity is reduced to zero the item will be deleted from the actor's invetory.
 
 ---
 ### Ammunition Tracking
