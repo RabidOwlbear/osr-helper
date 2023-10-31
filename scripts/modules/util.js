@@ -332,6 +332,7 @@ export const registerUtil = () => {
         retObj.characters.push(actor);
       }
     }
+    console.log('party', retObj)
     return retObj;
   };
   // used

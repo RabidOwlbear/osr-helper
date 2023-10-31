@@ -28,8 +28,8 @@ export class OSRHPartySheet extends FormApplication {
     }
     const actor = await fromUuid(data.uuid);
     if(OSRH.systemData.partySheet){
-      if(!actor.flags?.[game.system.id]?.party?.active){
-        await actor.setFlag(game.system.id, 'party', {active: true});
+      if(!actor.flags?.[game.system.id]?.party){
+        await actor.setFlag(game.system.id, 'party', true);
         // this.close()
         this.render();
       }
@@ -75,36 +75,17 @@ export class OSRHPartySheet extends FormApplication {
   activateListeners(html) {
     const deleteBtns = html.find('.delete-btn');
     const portraits = html.find('.portrait');
-    const xpBtn = html.find('.xp-btn')[0];
-    const coinBtn = html.find('.coin-btn')[0];
     // delete event listener
     deleteBtns.map(b=>{
       deleteBtns[b].addEventListener('click', async (e)=>{
         e.preventDefault();
         let uuid = e.target.closest('.item').dataset.uuid;
         await this._unsetPartyFlag(uuid);
-        // this.render(true)
+
       })
-      // open xp award
 
     })
-    // xpBtn.addEventListener('click', (e)=>{
-    //   e.preventDefault();
-    //   const openSheet = document.querySelector('.xp-award');
-    //   if(!openSheet){
-    //             new XpAwardSheet({x:e.x, y:e.y - 350}).render(true);
-    //   } 
-      
-    // })
-    // // open coin award sheet
-    // coinBtn.addEventListener('click', (e)=>{
-    //   e.preventDefault();
-    //   const openSheet = document.querySelector('.coin-award');
-    //   if(!openSheet){
-    //             new CoinAwardSheet({x:e.x, y:e.y - 350}).render(true);
-    //   } 
-      
-    // })
+   
     // open sheet listener
     portraits.map(async p=>{
       portraits[p].addEventListener('click',async  e=>{
@@ -117,11 +98,13 @@ export class OSRHPartySheet extends FormApplication {
 
   async _setPartyFlag(uuid){
     const actor = await fromUuid(uuid);
-    actor.setFlag('osr-helper', 'party', {active: true});
+    let scope = OSRH.systemData.partySheet ? game.system.id : 'osr-helper';
+    actor.setFlag(scope, 'party',  true);
   }
   async _unsetPartyFlag(uuid){
+    let scope = OSRH.systemData.partySheet ? game.system.id : 'osr-helper';
     const actor = await fromUuid(uuid);
-    await actor.unsetFlag('osr-helper', 'party')
+    await actor.unsetFlag(scope , 'party')
     this.render()
 
   }
