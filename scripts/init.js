@@ -16,7 +16,10 @@ import { lightConfig } from './modules/light-item-config.mjs';
 import { registerSystemData } from './data/registerSystemData.mjs';
 import { registerSystemHooks } from './modules/hooks/system-hooks.mjs';
 import { OSRHPartySheet } from './modules/party sheet/party-sheet.mjs';
+// import { osrhAttack } from './modules/attack.mjs';
+import { AmmoItemConfig } from './modules/ammo-config.mjs';
 import { tagMigration } from './modules/migration/tagMigration.mjs';
+import { migrateAmmoFlag } from './modules/migration/ammoFlag.mjs';
 window.OSRH = window.OSRH || {
   moduleName: `osr-helper`,
   ce: {},
@@ -52,6 +55,8 @@ Hooks.once('init', async function () {
   OSRH.TurnTracker = OSRHTurnTracker;
   OSRH.lightConfig = lightConfig;
   OSRH.partySheet = OSRHPartySheet;
+  // OSRH.attack = osrhAttack;
+  OSRH.AmmoConfig = AmmoItemConfig;
   Hooks.callAll(`${OSRH.moduleName}.registered`);
 });
 Hooks.once('socketlib.ready', () => {
@@ -152,8 +157,9 @@ Hooks.once('ready', async () => {
       }
     }
 
-    // migrate tags
+    // migrate tags, and flags
     tagMigration()
+    migrateAmmoFlag()
   }
 
   Hooks.on('createActor', async (actor) => {

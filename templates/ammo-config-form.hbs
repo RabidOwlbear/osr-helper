@@ -1,0 +1,20 @@
+<form>
+  <div class="main">
+    <div class="row">
+      <label for="track-ammo">{{localize "OSRH.item.config.trackAmmo"}}</label>
+      <input type="checkbox" name="track-ammo" id="track-ammo" {{#if trackAmmo}}checked{{/if}}>
+    </div>
+      <div class="row">
+        <label for="ammo-name">{{localize "OSRH.item.config.ammoName"}}:</label>
+        {{!-- <a id="add-name-btn">
+          <i class="fa-solid fa-square-plus"></i>
+        </a> --}}
+        </div>
+      <div class="name-inputs">
+        <input class="item-name" type="text" value="{{ammoName}}">
+        {{!-- {{{nameInputs}}} --}}
+      </div>
+
+  </div>
+  <button id="save-btn">{{localize "OSRH.newEffectForm.Save"}}</button>
+</form>
