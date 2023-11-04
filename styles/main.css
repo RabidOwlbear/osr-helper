@@ -428,20 +428,82 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 60%;
+  width: 72%;
   max-height:1.5em;
 }
 .osrh.item-config .config-cont{
   max-height:1.5em;
 }
-.osrh.item-config .config-cont button{
+.osrh.item-config button.config-btn{
   line-height: 1.5em;
   color: var(--theme-btn-color);
   border: none;
   border-radius: .2em;
-  width: 100%;
+  width: 50px;
   background-color: var(--osrh-ui-btn)
 }
+.osrh.item-config .main,
+.osrh.ammo-config .main,
+.osrh.ration-config .main,
+.osrh.item-config .main{
+  /* height: 100%; */
+  display: flex;
+  flex-direction: column;
+}
+/* .osrh.ammo-config .main{
+  height: 135px;
+} */
+.osrh.ration-config .title,
+.osrh.item-config .title{
+  font-size: 1.5em;
+  font-weight: 700;
+}
+.osrh.item-config .items{
+  flex: 1;
+}
+.osrh.item-config #item-type{
+  width: 100px;
+}
+.osrh.item-config .row,
+.osrh.ammo-config .row,
+.osrh.ration-config .row{
+  display: flex;
+  justify-content: space-between;
+}
+.osrh.item-config .row{
+  margin-bottom: .22em;
+  align-items: center;
+}
+
+.osrh.ammo-config .item-name{
+  margin-bottom: .2em;
+}
+.osrh.ammo-config i{
+  color: var(--osrh-ui-control);
+}
+.osrh.ammo-config .name-inputs::-webkit-scrollbar {
+  display: none;
+}
+.osrh.ammo-config .name-inputs{
+  overflow-y: scroll;
+  scrollbar-width: none;
+  flex: 1
+}
+.osrh.ammo-config .name-row{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.osrh.ammo-config form,
+.osrh.item-config form{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.osrh.item-config .spacer{
+  height: 1em;
+}
+/* active effects */
 .osrh-new-active-effect-form textarea{
   height: 65px;
 }
@@ -1132,24 +1194,7 @@
   width: 150px
 }
 
-.osrh.ration-config .main,
-.osrh.item-config .main{
-  /* height: 100%; */
-  display: flex;
-  flex-direction: column;
-}
-.osrh.ration-config .title,
-.osrh.item-config .title{
-  font-size: 1.5em;
-  font-weight: 700;
-}
-.osrh.item-config .items{
-  flex: 1;
-}
-.osrh.ration-config .row{
-  display: flex;
-  justify-content: space-between;
-}
+
 /* party sheet */
 .osrh.party-sheet .window-header{
   background-color: var(--osrh-ui-control-hover);

@@ -27,7 +27,7 @@ export async function registerSystemHooks() {
     default:
       Hooks.on('renderItemSheet', async (app, html, itemObj) => {
         const item = await fromUuid(app.object.uuid)
-        if (systemData.lightItemTypes.includes(item.type)) {
+        if (systemData.lightItemTypes.includes(item?.type)) {
           // let parent = app.object.parent ? app.object.parent : null
           addItemConfigControl(html, item);
         }
@@ -56,7 +56,7 @@ async function addItemConfigControl(html, item) {
       configBtn.addEventListener('click', async (ev) => {
         let itemData;
         if (item.actor) {
-          itemData = await item.actor.items.get(item._id);
+          itemData = await item.actor.items.get(item?._id);
         } else {
           itemData = item;
         }

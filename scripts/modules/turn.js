@@ -26,22 +26,47 @@ export const registerTurn = () => {
         break;
       case 'turnData':
         data = {
-          procCount: 0,
-          rest: 0,
-          restWarnCount: 0,
-          session: 0,
-          total: 0,
-          journalName: await game.settings.get(`${OSRH.moduleName}`, 'timeJournalName')
-        };
+          journalName: game.settings.get(`${OSRH.moduleName}`, 'timeJournalName'),
+          dungeon: {  
+            eTables: ['none', 'none', 'none', 'none', 'none', 'none', 'none', 'none'],
+            rTable: 'none',
+            lvl: 1,
+            walkCount: 1,
+            rSprite: false,
+            proc: 0,
+            procCount: 0,
+            rollEnc: false,
+            rollReact: false,
+            rollTarget: 0,
+            rest: 0,
+            restWarnCount: 0,
+            session: 0,
+            total: 0,
+          },
+          travel: {
+            session: 0,
+            total: 0,
+            rest: 0,
+            rollEnc: false,
+            rollReact: false,
+            rTable: 'none',
+            eTable: 'none',
+            proc: 0,
+            procCount: 0,
+            rollTarget: 2,
+            restWarnCount: 0,
+            terrain: 'clear',
+            duration: 24
+          }
+    };
         break;
       default:
         console.error(`${OSRH.moduleName}: resetData('name') error: Name not found`);
         return;
     }
-
+    
     await game.settings.set(`${OSRH.moduleName}`, `${name}`, data);
   };
-
   OSRH.turn.resetSessionCount = async function (type = null) {
     const data = deepClone(await game.settings.get(`${OSRH.moduleName}`, 'turnData'));
     if (type) {

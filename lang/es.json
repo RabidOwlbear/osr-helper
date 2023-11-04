@@ -124,7 +124,8 @@
   "OSRH.util.notification.dungeonTurnSettingsUpdated": "Ajustes de turno de mazmorra actualizados",
   "OSRH.util.notification.travelTurnSettingsUpdated": "Ajustes de turno de viaje actualizados",
   "OSRH.notification.noGpFoundActor": "No se encuentra el objeto MO en el Actor",
-
+  "OSRH.util.notification.ammoNameRequiredAll": "Todos los nombres de elementos de munición requieren un nombre de elemento válido.",
+  "OSRH.notification.invalidItemName": "Introduzca un nombre de artículo válido",
 
   "OSRH.util.dialog.checkAmmo": "Comprobar munición",
   "OSRH.util.dialog.skipDialog": "Saltar diálogo",
@@ -402,6 +403,13 @@
   "OSRH.item.config.light": "Lu",
   "OSRH.item.config.ration": "Ració",
   "OSRH.item.config.config": "Confi",
-  "OSRH.item.config.close": "Cerra"
+  "OSRH.item.config.close": "Cerra",
+  "OSRH.item.config.ammunition": "Munición",
+  "OSRH.item.config.ammoConfig": "Configurar munición",
+  "OSRH.item.config.trackAmmo": "Rastrear munición",
+  "OSRH.item.config.ammoName": "Munición Nombre del objeto",
+
+  "OSRH.attack.pickWeapon": "Elegir arma",
+  "OSRH.attack.atk": "Ataque"
   
 }

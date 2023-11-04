@@ -1,0 +1,18 @@
+<h1> {{localize "OSRH.attack.pickWeapon"}} </h1>
+<div style='display:flex; justify-content: space-between; margin-bottom: .2em;'>
+  <div>
+    <select id='weapon' style='width: 150px'>{{{atkOptions}}}</select>
+  </div>
+  <div style="display:flex; width: 110px; align-items: center;">
+      <input id="ammoCheck" type="checkbox" checked />
+      <label for="ammoCheck">{{localize 'OSRH.util.dialog.checkAmmo'}}</label>
+      </div>
+  <div style="display:flex; align-items: center;">
+    <input id='skip' type='checkbox' checked />
+    <label for="skip">{{localize 'OSRH.util.dialog.skipDialog'}}</label>
+  </div>
+</div>
+<div style="display:flex; space-between; margin-bottom: 1em;">
+  <button id="attack-btn">{{localize "OSRH.attack.atk"}}</button>
+  <button id="close-btn">{{localize "OSRH.item.config.close"}}</button>
+</div>

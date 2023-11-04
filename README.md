@@ -111,38 +111,17 @@ If the macro has been used to light a light source, the light can be extinguishe
 
 ---
 ### Ammunition Tracking
+![ammunition configuration panel image](./images/doc/ammo-config.webp)
 The attack function located in the ui controls above the macro bar allows for limited ammunition tracking.
-At this time the system is name based. When the attack function is used and ammunition tracking is checked, the weapons name will be checked against the tracked weapon names, if it exists the function will look for an item with a name matching the ammunition type for that weapon. If the ammunition item exists, and has a quantity of 2 or greater, the items quantity will be decremented by 1, if the quantity is 1, the item will be deleted.
-The currently racked weapon names, and their ammunition item names are listed below, use the names for the language pack you are using.  
-Eg. An item named "Shortbow" requires and item named "Arrows (quiver of 20)" with a quantity of 1 or greater to have ammo tracked correctly.
 
-**En**:
-Shortbow - Arrows (quiver of 20)
-Longbow - Arrows (quiver of 20)
-Crossbow - Crossbow bolts (case of 30)
-Sling - Sling Stones
-Matchlock blunderbuss - Ammunition pouch
-Matchlock heavy musket - Ammunition pouch
-Matchlock musket - Ammunition pouch
-Matchlock pistol - Ammunition pouch
-Wheellock blunderbuss - Ammunition pouch
-Wheellock heavy musket - Ammunition pouch
-Wheellock musket - Ammunition pouch
-Wheellock pistol - Ammunition pouch
+Weapon items may have an ammunition item assigned using the Ammunition config form (above), accessible via a button on the OSRH Item Config Form.
 
-**Es**:
-Arco corto - Flechas (carcaj de 20)
-Arco largo - Flechas (carcaj de 20)
-Ballesta - Saetas (estuche de 30)
-Honda - Piedras de honda
-Trabuco de mecha - Bolsa de munición
-Mosquete pesado de mecha - Bolsa de munición
-Mosquete de mecha - Bolsa de munición
-Pistola de mecha - Bolsa de munición
-Trabuco de rueda - Bolsa de munición
-Mosquete pesado de rueda - Bolsa de munición
-Mosquete de rueda - Bolsa de munición
-Pistola de rueda - Bolsa de munición
+Checking the Track Ammunition checkbox will enable ammunition tracking for that item. When checked the attack function will look for an item with the same name as defined in the Ammunition Item Name field of the ammunition config form.
+
+When tracked the Attack function will reduce the quantity of the ammunition item by 1, deleting the item when the quantity reaches 0
+
+
+---
 
 ### Ration Report
 
@@ -151,6 +130,7 @@ The OSR-helper Ration Report macro
 When clicked this macro will generate a report detailing all rations currently held by all tracked Player and Retainer actors seprated by name, listing items held and their quantities, color coded.
 Total number of days worth of rations for the entire tracked group(assuming the party pools resources) is also profided in a color coded display.
 
+When ration expiration is tracked the ration report will include time until expiration for all ration items.
 ---
 
 ### Custom Effects

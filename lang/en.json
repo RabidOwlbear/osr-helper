@@ -124,7 +124,8 @@
   "OSRH.util.notification.dungeonTurnSettingsUpdated": "Dungeon Turn Settings Updated.",
   "OSRH.util.notification.travelTurnSettingsUpdated": "Travel Turn Settings Updated.",
   "OSRH.notification.noGpFoundActor": "No GP Item Found In Actor",
-
+  "OSRH.util.notification.ammoNameRequiredAll": "All ammunition item names require a valid item name.",
+  "OSRH.notification.invalidItemName": "Please enter valid item name.",
 
   "OSRH.util.dialog.checkAmmo": "Check Ammo",
   "OSRH.util.dialog.skipDialog":"Skip Dialog",
@@ -402,6 +403,13 @@
   "OSRH.item.config.light": "Light",
   "OSRH.item.config.ration": "Ration",
   "OSRH.item.config.config": "Config",
-  "OSRH.item.config.close": "Close"
+  "OSRH.item.config.close": "Close",
+  "OSRH.item.config.ammunition": "Ammunition",
+  "OSRH.item.config.ammoConfig": "Configure Ammunition",
+  "OSRH.item.config.trackAmmo": "Track ammunition",
+  "OSRH.item.config.ammoName": "Ammunition Item Name",
+
+  "OSRH.attack.pickWeapon": "Pick Weapon",
+  "OSRH.attack.atk": "Attack"
  
 }

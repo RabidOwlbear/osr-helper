@@ -1,20 +1,31 @@
 <form class="flex-col">
-  <div class="main-cont">
-    <div class="select-cont">
-      <label for="item-type"><b>{{localize "OSRH.item.config.itemType"}}<b>:</label>
-      <select id="item-type">
-        <option value="none">{{localize "OSRH.item.config.none"}}</option>
-        <option value="light">{{localize "OSRH.item.config.light"}}</option>
-        {{#if dispRation}}
-        <option value="ration">{{localize "OSRH.item.config.ration"}}</option>
-        {{/if}}
-      </select>
-     
+  <div class="main">
+    <div class="row">
+      <div class="select-cont">
+        <label for="item-type"><b>{{localize "OSRH.item.config.itemType"}}<b>:</label>
+        <select id="item-type">
+          <option value="none">{{localize "OSRH.item.config.none"}}</option>
+          <option value="light">{{localize "OSRH.item.config.light"}}</option>
+          {{#if dispRation}}
+          <option value="ration">{{localize "OSRH.item.config.ration"}}</option>
+          {{/if}}
+      
+        </select>
+      </div>
+      <div class="config-cont">
+        <button class="{{#if isLight}}{{else}}hidden{{/if}} light-config config-btn">{{localize "OSRH.item.config.config"}}</button>
+        <button class="{{#if isRation}}{{else}}hidden{{/if}} ration-config config-btn">{{localize "OSRH.item.config.config"}}</button>
+      
+      </div>
     </div>
-     <div class="config-cont">
-      <button class="{{#if isLight}}{{else}}hidden{{/if}} light-config">{{localize "OSRH.item.config.config"}}</button>
-      <button class="{{#if isRation}}{{else}}hidden{{/if}} ration-config">{{localize "OSRH.item.config.config"}}</button>
-     </div>
+     {{#if dispAmmo}}
+    <div class="ammo-cont row">
+        <label for="ammo-config">{{localize "OSRH.item.config.ammoConfig"}}</label>
+        <button id="ammo-config" class="ammo-config config-btn">{{localize "OSRH.item.config.config"}}</button>
+    </div>
+    {{else}}
+    <div class="spacer"></div>
+    {{/if}}
   </div>
 
   <button class="close-btn">{{localize "OSRH.item.config.close"}}</button>
