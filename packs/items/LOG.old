@@ -1,3 +1,7 @@
-2023/11/02-23:45:47.082 4e34 Recovering log #837
-2023/11/02-23:45:47.087 4e34 Delete type=0 #837
-2023/11/02-23:45:47.087 4e34 Delete type=3 #835
+2023/11/04-14:00:28.703 4a5c Recovering log #847
+2023/11/04-14:00:28.707 4a5c Delete type=0 #847
+2023/11/04-14:00:28.707 4a5c Delete type=3 #845
+2023/11/04-14:24:37.416 15cc Level-0 table #852: started
+2023/11/04-14:24:37.416 15cc Level-0 table #852: 0 bytes OK
+2023/11/04-14:24:37.417 15cc Delete type=0 #850
+2023/11/04-14:24:37.420 15cc Manual compaction at level-0 from '!folders!7yvydKi4nQ34R3K0' @ 72057594037927935 : 1 .. '!items!yulepD7it3eDZHT8' @ 0 : 0; will stop at (end)

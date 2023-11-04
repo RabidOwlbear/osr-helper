@@ -5,7 +5,7 @@ export class AmmoItemConfig extends FormApplication {
   }
   static get defaultOptions() {
     return mergeObject(super.defaultOptions, {
-      title: 'OSRH Ration Config',
+      title: 'OSRH Ammunition Config',
       classes: ['osrh', 'ammo-config'],
       top: 120,
       left: 60,
