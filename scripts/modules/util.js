@@ -1050,9 +1050,14 @@ export const intializePackFolders = async () => {
     const packnames = [
       'osr-helper-items-en',
       'osr-helper-items-es',
+      'osr-helper-items-pt-br',
       'osr-helper-macros-all',
       'osr-helper-items-hyperborea-en',
-      'osr-helper-macros-hyperborea-all'
+      'osr-helper-items-hyperborea-es',
+      'osr-helper-items-hyperborea-pt-br',
+      "osr-helper-items-dcc-en",
+      "osr-helper-items-dcc-es",
+      "osr-helper-items-dcc-pt-br",
     ];
     let folder = game.folders.getName(folderName);
     if (!folder && movePacks) {

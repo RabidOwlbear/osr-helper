@@ -5,6 +5,7 @@ export async function migrateTurnData() {
   let hasTravel = turnData.hasOwnProperty('travel');
   let hasEncTable = turnData.hasOwnProperty('eTable');
   let hasEncTables = turnData.hasOwnProperty('eTables');
+  let hasGlobal = turnData.hasOwnProperty('global')
   let newData;
  
   if (hasDungeon && hasTravel) {
@@ -55,6 +56,9 @@ export async function migrateTurnData() {
         duration: 24
       }
     };
+    if(!hasGlobal){
+      newData.global = { trackRationExp: false }
+    }
     await game.settings.set('osr-helper', 'turnData', newData);
     ui.notifications.notify('Turn Data Successcully Migrated.');
   }

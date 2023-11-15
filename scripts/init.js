@@ -33,7 +33,7 @@ window.OSRH = window.OSRH || {
   ui,
   socket: undefined
 };
-OSRH.lang = ['en', 'es'];
+OSRH.lang = ['en', 'es', 'pt-BR'];
 Hooks.once('init', async function () {
   //add settings
   registerData();

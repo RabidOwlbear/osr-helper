@@ -145,6 +145,9 @@ export const registerSettings = async function () {
         restWarnCount: 0,
         terrain: 'clear',
         duration: 24
+      },
+      global:{ 
+        trackRationExp: false 
       }
       
     },

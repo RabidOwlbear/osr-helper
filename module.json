@@ -9,7 +9,7 @@
       "flags": {}
     }
   ],
-  "version": "0.6.2",
+  "version": "0.6.3",
   "compatibility": {
     "minimum": "10",
     "verified": "11.305",
@@ -32,6 +32,11 @@
       "lang": "es",
       "name": "Spanish",
       "path": "./lang/es.json"
+    },
+    {
+      "lang": "pt-BR",
+      "name": "Português (Brasil)",
+      "path": "./lang/pt-br.json"
     }
   ],
   "packs": [
@@ -49,6 +54,15 @@
       "label": "OSR-helper Items (es)",
       "type": "Item",
       "path": "packs/items-es.db",
+      "system": "ose",
+      "private": false,
+      "flags": {}
+    },
+    {
+      "name": "osr-helper-items-pt-br",
+      "label": "OSR-helper Items (pt-BR)",
+      "type": "Item",
+      "path": "packs/items-pt-br.db",
       "system": "ose",
       "private": false,
       "flags": {}
@@ -81,6 +95,15 @@
       "flags": {}
     },
     {
+      "name": "osr-helper-items-hyperborea-pt-br",
+      "label": "OSR-helper Items (pt-BR)",
+      "type": "Item",
+      "path": "packs/items-hyperborea-pt-br.db",
+      "system": "hyperborea",
+      "private": false,
+      "flags": {}
+    },
+    {
       "name": "osr-helper-items-wwn-en",
       "label": "OSR-helper Items (en)",
       "type": "Item",
@@ -99,6 +122,15 @@
       "flags": {}
     },
     {
+      "name": "osr-helper-items-wwn-pt-br",
+      "label": "OSR-helper Items (pt-BR)",
+      "type": "Item",
+      "path": "packs/items-wwn-pt-br.db",
+      "system": "wwn",
+      "private": false,
+      "flags": {}
+    },
+    {
       "name": "osr-helper-items-dcc-en",
       "label": "OSR-helper Items (en)",
       "type": "Item",
@@ -112,6 +144,15 @@
       "label": "OSR-helper Items (es)",
       "type": "Item",
       "path": "packs/items-dcc-es.db",
+      "system": "dcc",
+      "private": false,
+      "flags": {}
+    },
+    {
+      "name": "osr-helper-items-dcc-pt-br",
+      "label": "OSR-helper Items (pt-BR)",
+      "type": "Item",
+      "path": "packs/items-dcc-pt-br.db",
       "system": "dcc",
       "private": false,
       "flags": {}
