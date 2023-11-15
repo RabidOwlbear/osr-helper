@@ -23,7 +23,7 @@
   "OSRH.settings.theme.name": "Tema",
   "OSRH.settings.theme.hint": "Selecione o tema para formas de efeito",
   "OSRH.settings.equipContainers.name": "Habilitar Contêineres Equipáveis",
-  "OSRH.settings.equipContainers.hint": "Quando ativado, os itens do contêiner podem ser equipados. Esse recurso funciona apenas se o sistema de Carga \"Completo\" estiver selecionado nas configurações de jogo.",
+  "OSRH.settings.equipContainers.hint": "Quando ativado, os itens do contêiner podem ser equipados. Esse recurso funciona apenas se o sistema de Carga \"detalhada\" estiver selecionado nas configurações de jogo.",
   "OSRH.settings.makePackFolder":"Criar Pasta de pacotes de compêndio",
   "OSRH.settings.makePackFolderHint":"Quando selecionado, uma pasta será criada e os compêndios incluídos serão movidos para esta pasta.",
   "OSRH.settings.packFolderName":"Nome da pasta do compêndio",
