@@ -18,7 +18,7 @@ export class OSRHTurnTracker extends FormApplication {
       title: `Turn Tracker`,
       tabs: [{ navSelector: '.sheet-tabs', contentSelector: '.tab-content', initial: 'dungeon' }],
       width: 300,
-      height: 470
+      height: 480
     });
   }
   async getData() {

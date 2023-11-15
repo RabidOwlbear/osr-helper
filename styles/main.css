@@ -932,7 +932,7 @@
 
 .osrh.turn-tracker footer{
   position: absolute;
-  top: 340px;
+  top: 350px;
   width: 100%;
   height: 40px;
   display: flex;
@@ -944,7 +944,8 @@
   z-index: 15;
 }
 .osrh.turn-tracker footer i{
-  font-size: 1.5rem;
+  /* font-size: 1.5rem; */
+  text-wrap: nowrap;
   margin: 0 5px;
 }
 .osrh.turn-tracker header{
@@ -1187,7 +1188,8 @@
   color: #221e2e;
 }
 .osrh.turn-tracker .travel-rest-count{
-  font-size: 1.2em
+  /* font-size: 1.2em */
+  width: 120px;
 }
 .osrh.turn-tracker .travel-config-tab select,
 .osrh.turn-tracker .dungeon-config-tab select{
