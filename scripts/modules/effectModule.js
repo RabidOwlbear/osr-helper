@@ -31,7 +31,7 @@ export const registerEffectModule = async function () {
         width: 310,
         template: `modules/${OSRH.moduleName}/templates/new-active-effect-form.hbs`,
         id: 'new-active-effect',
-        title: game.i18n.localize("OSRH.effect.newEffectTitle")//'OSRH New Active Effect'
+        title: game.i18n.localize('OSRH.effect.newEffectTitle') //'OSRH New Active Effect'
       });
     }
     async getData() {
@@ -81,13 +81,13 @@ export const registerEffectModule = async function () {
         saveBtn.addEventListener('click', async (ev, data) => {
           ev.preventDefault();
           if (nameField.value == '') {
-            ui.notifications.warn(game.i18n.localize("OSRH.util.notification.enterEffectName"));
+            ui.notifications.warn(game.i18n.localize('OSRH.util.notification.enterEffectName'));
             return;
           }
           let savedFx = await game.settings.get(OSRH.moduleName, 'savedEffects');
           for (let key in savedFx) {
             if (savedFx[key].name == nameField.value) {
-              ui.notifications.warn(game.i18n.localize("OSRH.util.notification.nameInUse"));
+              ui.notifications.warn(game.i18n.localize('OSRH.util.notification.nameInUse'));
               return;
             }
           }
@@ -98,19 +98,19 @@ export const registerEffectModule = async function () {
         let userTargets = game.user.targets;
         let targetInp = html.find('[name="target"]:checked')[0].id;
         let interval = html.find('[name="interval"]:checked')[0].id;
-        if (targetInp == 'targeted' && userTargets.size != 1) {
+        if (targetInp == 'targeted' && userTargets.size <= 0 /*!= 1*/) {
           ev.preventDefault();
 
           ui.notifications.warn(game.i18n.localize("OSRH.util.notification.targetOneActor"));
         }
         if (nameField.value == '') {
           ev.preventDefault();
-          ui.notifications.warn(game.i18n.localize("OSRH.util.notification.enterEffectName"));
+          ui.notifications.warn(game.i18n.localize('OSRH.util.notification.enterEffectName'));
         }
 
         if (parseInt(durationField.value) == 0 && interval != 'infinite') {
           ev.preventDefault();
-          ui.notifications.warn(game.i18n.localize("OSRH.util.notification.enterEffectDuration"));
+          ui.notifications.warn(game.i18n.localize('OSRH.util.notification.enterEffectDuration'));
         }
       });
       resetBtn.addEventListener('click', (ev) => {
@@ -126,8 +126,20 @@ export const registerEffectModule = async function () {
     async _updateObject(ev, formData) {
       let userTargets = game.user.targets;
       let targetInp = ev.target.querySelector('[name="target"]:checked').id;
-      let actor = this.actor;
-      let target = targetInp == 'self' ? actor.uuid : game.user.targets.first()?.actor?.uuid;
+      let targets = [];
+      if (targetInp == 'self') {
+        targets.push(this.actor.uuid);
+      } else {
+        userTargets.every((i) => {
+          const uuid = i.document.actor.uuid
+          //filter duplicate uuid's
+          if(!targets.includes(uuid)){
+          targets.push(uuid);
+          }
+          return true;
+        });
+      }
+      // let target = targetInp == 'self' ? actor.uuid : game.user.targets.first()?.actor?.uuid;
       let interval = ev.target.querySelector('[name="interval"]:checked').id;
       const iconName = formData.icon;
       const iconObj = OSRH.data.effectIcons.find((i) => i.name == iconName);
@@ -219,7 +231,7 @@ export const registerEffectModule = async function () {
             value: parseInt(value)
           });
         }
-        if(type === 'init'){
+        if (type === 'init') {
           effectData.changes.push({
             key: `system.initiative.mod`,
             value: parseInt(value),
@@ -259,10 +271,12 @@ export const registerEffectModule = async function () {
           effectData.flags['data'].isInf = interval == 'infinite' ? true : false;
           effectData.duration.seconds = interval == 'minutes' ? Math.floor(value * 60) : Math.floor(value);
         }
-       
       }
-
-      await OSRH.socket.executeAsGM('gmCreateEffect', target, effectData, this.actorId);
+      // multi target
+      
+      for(let i = 0; i<targets.length;i++){
+        await OSRH.socket.executeAsGM('gmCreateEffect', targets[i], effectData, this.actorId)
+      }
 
       // if (this.effectList) this.effectList.render();
       OSRH.socket.executeAsGM('effectHousekeeping');
@@ -291,7 +305,7 @@ export const registerEffectModule = async function () {
         }
       }
     }
-    
+
     await OSRH.socket.executeAsGM('setting', 'effectData', activeEffects, 'set');
   };
 
@@ -312,7 +326,7 @@ export const registerEffectModule = async function () {
         left: 0,
         template: `modules/${OSRH.moduleName}/templates/active-effect-list.hbs`,
         // id: 'activeEffectList',
-        title: game.i18n.localize("OSRH.effect.activeEffectListTitle")
+        title: game.i18n.localize('OSRH.effect.activeEffectListTitle')
       };
 
       return mergeObject(super.defaultOptions, options);
@@ -429,7 +443,7 @@ export const registerEffectModule = async function () {
     }
   };
   OSRH.effect.delete = async function (effectId) {
-    let effectData =  deepClone(await game.settings.get(`${OSRH.moduleName}`, 'effectData')).filter(
+    let effectData = deepClone(await game.settings.get(`${OSRH.moduleName}`, 'effectData')).filter(
       (e) => e.effectId == effectId
     )[0];
 
@@ -451,10 +465,8 @@ export const registerEffectModule = async function () {
       if (!effect?.isInf) {
         //get actor from uuid
         let actor = await fromUuid(effect.target);
-
         //if token get token actor
         if (actor.collectionName == 'tokens') actor = actor.actor;
-
         let activeEffect = await actor.getEmbeddedDocument('ActiveEffect', effect.effectId);
 
         if (activeEffect.duration.remaining <= 0) {
@@ -475,9 +487,8 @@ export const registerEffectModule = async function () {
   };
   OSRH.effect.gmCreateEffect = async function (target, effectData, creatorId) {
     let actor = await fromUuid(target);
-    if (actor.collectionName == 'tokens') actor = actor.actor;
+    // if (actor.collectionName == 'tokens') actor = actor.actor;
     let e = await ActiveEffect.create(effectData, { parent: actor });
-
     let activeEffectData = deepClone(await game.settings.get(`${OSRH.moduleName}`, 'effectData'));
     activeEffectData.push({
       isInf: effectData.flags['data'].isInf,
@@ -487,6 +498,7 @@ export const registerEffectModule = async function () {
       target: target
     });
     await game.settings.set(`${OSRH.moduleName}`, 'effectData', activeEffectData);
+    return true
   };
 
   OSRH.effect.effectListGetData = async function (data, type) {
@@ -561,7 +573,7 @@ export const registerEffectModule = async function () {
     presetSel.innerHTML += `
     <option value="">${effectObj.name}</option>
     `;
-    ui.notifications.notify(game.i18n.localize("OSRH.util.notification.effectPresetSaved"));
+    ui.notifications.notify(game.i18n.localize('OSRH.util.notification.effectPresetSaved'));
     this.render();
   };
   OSRH.effect.applyEffectPreset = async function (ev) {
@@ -602,7 +614,7 @@ export const registerEffectModule = async function () {
         width: 300,
         template: `modules/${OSRH.moduleName}/templates/manage-preset-form.hbs`,
         id: 'manage-preset-form',
-        title: game.i18n.localize("OSRH.effect.ManagePresets")
+        title: game.i18n.localize('OSRH.effect.ManagePresets')
       });
     }
     async getData() {
@@ -638,16 +650,16 @@ export const registerEffectModule = async function () {
         input.addEventListener('change', async function (e) {
           let file = this.files[0];
           if (file.type != 'application/json') {
-            ui.notifications.warn(game.i18n.localize("OSRH.util.notification.selectValidJsonFile"));
+            ui.notifications.warn(game.i18n.localize('OSRH.util.notification.selectValidJsonFile'));
             return;
           }
           let fr = new FileReader();
           fr.onload = async function (e) {
             let content = e.target.result;
             let parsed = JSON.parse(content);
-            if(!parsed){
-              ui.notifications.warn(game.i18n.localize("OSRH.util.notification.invalidJson"));
-              return
+            if (!parsed) {
+              ui.notifications.warn(game.i18n.localize('OSRH.util.notification.invalidJson'));
+              return;
             }
             new Dialog({
               title: 'Import Type',
@@ -672,7 +684,7 @@ export const registerEffectModule = async function () {
               }
             }).render(true);
             form.render();
-            return game.i18n.localize("OSRH.effect.settingsUpdated");
+            return game.i18n.localize('OSRH.effect.settingsUpdated');
           };
           fr.readAsText(file);
         });
