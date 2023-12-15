@@ -135,57 +135,52 @@ When ration expiration is tracked the ration report will include time until expi
 
 ### Custom Effects
 
-A 'custom effect' system has been implementd and can be accessed via an  icon located on the character portrait secton of the character sheet when moused over (number 1 in the image below).
+A 'active effect' system has been implementd and can be accessed via an  icon located on the character portrait secton of the character sheet when moused over. Accessing the effects application via this button will open the app window displaying all effects applied to and by the selected actor.
 
-At this time Active Effects are only enable in the OSE game system. This will be addressed in a future update.
+For GM users, an icon has been aded to the OSR helper ui controls that will open the global effects application which displays all current actively tracked effects.
+
+
 
 #### Active Effects List
 
-![light configuration panel image](./images/doc/effects-doc-02.webp)
+![effect global panel image](./images/doc/effects-list-1.webp) ![effect configuration user panel image](./images/doc/effects-list-2.webp)
 
+- The first column of each displayed effect displays general information about the effect.
+- The second column lists the targeted attributes and the modication value.
+- The third column displays the effects description.
+- Effect list, description and saved preset lists become scrollable on overflow.
 
-1. Active Effects List Icon: Click here to open the Active Effects List panel. This icon will only appear on 'character' type actor sheets.
-2. Active Effect List: all current active effects related to this actor will be displayed here.
-3. Actor Created Effects: Active Effects created by this actor are displayed here. Each effect will display its name, taget, duration, and a button to delete the effect. Clicking the name of the effect will expand the entry revealing the applied effects and the effect description(if any).
-4. Other Created Effects: Active effects created by other actors are displayed here. Each effect will display its name, actor created by, and duration. Each entry can be expanded as above.
-5. Close: Closes the panel.
-6. New: Opens a New Active Effect panel.
+Global Effect Display:
+- Effects are grouped by the actor they are applied to.
+- A header above each group of effects displays the name of the Actor the effectsa are targeting.
+- Clicking the red x in the right upper corner of the listed effect will delete that effect.
+
+Actor Effect Display
+- Effects are grouped by effects created by the actor, and effects applied to the actor by others.
+- The red x  in the right upper corner of the listed actor created effects will delete that effect.
 
 #### New Active Effect
 
-7. Presets: This list will be populated by presets created by the GM. To use a preset simply select one from the list. Its information will then be populated to the fields of the effect form. Click create to apply the effect. Presets can be created by th GM by filling out the active effect form and clicking the save button at the bottom of the form.
-8. Icon: an icon for the effect can be selected from thsi dropdown, the name of the icon and its color are displayed.
-9. Name (required): Active effect name.
-10. Description: active effect description.
-11. Target: Selecting 'self' will apply the created active effect to the actor the active effect list was opened from. Selecting target will apply the created active effect to the actor associated with the current targeted single token.
-12. Attributes: Changes to abilitiy scores are applied here. The fields accept positive and negative  number values.
-13. Saves: Changes to saves are applied here. The fields accept positive and negative number values.
-14. Combat Bonus: changes to thac0/attack bonus, melee, and ranged attacks are applied here. This input will assumes a positve number is a bonus, and a negative value is a penalty and will multply the value entered by -1 automatically as required by the selected game system thac0 setting.
-15. Armor Bonus: changes to ac/aac are applied here. This input will assumes a positve number is a bonus, and a negative value is a penalty and will multply the value entered by -1 automatically as required by the selected game system armor class setting.
-16. Hp: changes to hp current and max values are applied here.
-17. Duration (required): The duration of the effect is entered here. The duration will be set as the selected duration type, minutes or seconds.
-18. Reset: Clicking here will reset all number inputs to 0 and clear all text fields.
-19. Save: this button will only appear for the GM. This button will save the current effect data as a named preset in the presets dropdown, allowing for quick reuse. At this time anyone creating an active effect will be able to apply a defined preset.
-20. Create: Clicking here will create a new active effect with the inputted effects on the selected target (number 9. image above).
-21. Active Effect Icons: Upon active effect creation an icon will be applied to the targeted actors token. This icon will be removed when the active effect expires.
+![effect global panel image](./images/doc/effects-create-1.webp) 
 
-Effects may also be created uing the provided 'render new active effect form' macro while selecting or targeting a single token.
+Mousing over any input will display its function.
 
-Effects created by/placed on monster actors my be viewed by using the provided "Render Active Effect List" while selecting an actor token.
+- Target: a dropdown for selecting target type. Self applies the effect to the actor used to opem the effect app. Target applies the effect to the actors associated with the tokens currently targeted.
+- Name: Name for active effect.
+- Icon: Icon to apply to the token of the targeted actor.
+- Duration: Select an interval from the dropdown menu, and enter a number.
+- Add Effect: Clicking the button to the right of the effect duration will add an attribute to the effect list. This row will include a select for choosing the attribute to target, and a mod inout to enter the modification value. Clicking the x buton on the right side of an effect list row will delete that entry from the list. An effect requires at least one added effect.
+- Create Effect: located in the top right corner. Clicking this button will attempt to create the created effect on the selected target.
+- Save Preset: Clicking this button will attempt to save the defined effect as a preset.
+- Preset list: Saved effect presets will be displayed below the effect presets header.
+- Apply Preset Button: Clicking the green checkmark button on the right side of a displayed saved effect will apply the saved preset data to the create effect fields. 
+- Clicking an effect preset name will expand the entry displaying the targeted attributesd and effect description.
+- Manage Presets button: This button appears to the immediate right of the effect presets header. This button is only visible for GM level users. Clicking this button will change the green checkmark button on the saved effects to red minus buttons. clicking a red button willd delete that saved preset. 
+
+
 
 Each time the game world time updates all active effect's duration will be checked, and any expired effects will be removed.
 
----
-
-#### Managing Effect presets
-
-![light configuration panel image](./images/doc/effects-doc-03.webp)
-
-1. Manage Custom Effects: this button will only be visible for the GM. When clickedf it will open the preset management window (see picture above, left).
-The Preset Management panel will display all currently saved active effect presets. Presetc can be deleted using the red x buttons (see 3. below). Clicking on the name of a custom effect will expand its entry to show more details about the effect.
-2. Import/Export Custom Preset Lists: Clcking the export Custom Presets button will open a file save dialog allowing the GM to save their custom presets for backup or import into another game world. The Import Custom Preset button will open a file open dialog where a GM can select a previously save custom presets JSON file for import. When a valid file is selected the GM will be prompted to Merge or Replace the existinng presets. Selecting merge will add any custom effects not currently existing into the game world's saved custom presets, selecting Replace will replace all curent saved presets with the presets contained in the file imported.
-3. Delete Preset: Clicking this button will delete the custom effect preset.
-4. Save custom preset button, only visible for GM user. Saves defined preset to the custom effects list.
 
 ---
 

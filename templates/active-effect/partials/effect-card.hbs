@@ -1,0 +1,41 @@
+<div class='active-effect'>
+  <div class='fx-details'>
+    <div class="img-cont">
+      <img src='{{this.targetImg}}' class='target-img' />
+      </div>
+    <div class='effect-header'>
+      <div class='header-name'><b>{{localize 'OSRH.newEffectForm.name'}}:&nbsp; </b></div>
+      <div class='effect-name' title='{{this.name}}'>{{this.name}}</div>
+    </div>
+    <div class='effect-header'>
+      <div class='header-name'><b>{{localize "OSRH.effect.createdBy"}}:&nbsp; </b></div>
+      <div class='effect-target' title="{{this.creator}}">{{this.creator}}</div>
+    </div>
+    <div class='effect-header'>
+      <div class='header-name'><b>{{localize 'OSRH.customEffect.target'}}:&nbsp; </b></div>
+      <div class='effect-target' title="{{this.target}}">{{this.target}}</div>
+    </div>
+    <div class='effect-header'>
+      <div class='header-dur'><b>{{localize 'OSRH.newEffectForm.duration'}}:&nbsp; </b></div>
+      {{#if this.isInf}}
+        <div class='effect-dur'><i class='fa-solid fa-infinity'></i></div>
+      {{else}}
+        <div class='effect-dur'>{{this.duration}} {{this.durType}}</div>
+      {{/if}}
+    </div>
+
+  </div>
+  <div class='effect-list-cont'>
+    <ul class='effect-list'>
+      {{{this.list}}}
+    </ul>
+  </div>
+  <div class='descrip-cont'>
+    <div>{{this.descrip}}</div>
+  </div>
+  {{#if this.delBtn}}
+  <div class='delete-cont'>
+    <a id='{{this.effectId}}' class='delete-btn'><i class='fas fa-times'></i></a>
+  </div>
+  {{/if}}
+</div>

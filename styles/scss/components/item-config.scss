@@ -1,0 +1,140 @@
+/* light config form */
+.light-item-config .window-content{
+  padding-bottom: 0;
+}
+.light-item-config .list-cont {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  overflow: hidden;
+  height: 100%;
+}
+.light-item-config .list-item {
+  display: flex;
+  align-content: space-around;
+  justify-content: space-between;
+}
+.light-item-config input {
+  width: 70px;
+}
+.light-item-config .form-button-div {
+  display: flex;
+  margin: 1em 0 0.5em 0;
+}
+.light-item-config .dropzone,
+.light-item-config .portrait-cont{
+  
+  width:100%;
+  height: 75px;
+  margin-bottom: .3em;
+  
+}
+.light-item-config .item-image{
+  height: 75px;
+  width: 75px;
+}
+.light-item-config .dropzone{  
+  /* display: flex; */
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  color: #00000030;
+  border: 2px solid #00000020;
+}
+.light-item-config .portrait-cont{
+  display: flex;
+  justify-content: space-between;
+}
+/* .light-item-config .window-content{
+  background: var(--t1-bg);
+  background: linear-gradient(0deg, var(--t1-1) 0%, var(--t1-2) 32%, var(--t1-3) 100%);
+}
+.osrh-new-active-effect-form .window-content {
+  background: var(--t1-1);
+  background: linear-gradient(0deg, var(--t1-1) 0%, var(--t1-2) 20%, var(--t1-3) 100%);
+  overflow: none;
+} */
+.osrh.item-config .main-cont{
+  display: flex;
+  justify-content: space-between;
+  height: 2em;
+}
+.osrh.item-config .select-cont{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 72%;
+  max-height:1.5em;
+}
+.osrh.item-config .config-cont{
+  max-height:1.5em;
+}
+.osrh.item-config button.config-btn{
+  line-height: 1.5em;
+  color: var(--theme-btn-color);
+  border: none;
+  border-radius: .2em;
+  width: 50px;
+  background-color: var(--osrh-ui-btn)
+}
+.osrh.item-config .main,
+.osrh.ammo-config .main,
+.osrh.ration-config .main,
+.osrh.item-config .main{
+  /* height: 100%; */
+  display: flex;
+  flex-direction: column;
+}
+/* .osrh.ammo-config .main{
+  height: 135px;
+} */
+.osrh.ration-config .title,
+.osrh.item-config .title{
+  font-size: 1.5em;
+  font-weight: 700;
+}
+.osrh.item-config .items{
+  flex: 1;
+}
+.osrh.item-config #item-type{
+  width: 100px;
+}
+.osrh.item-config .row,
+.osrh.ammo-config .row,
+.osrh.ration-config .row{
+  display: flex;
+  justify-content: space-between;
+}
+.osrh.item-config .row{
+  margin-bottom: .22em;
+  align-items: center;
+}
+
+.osrh.ammo-config .item-name{
+  margin-bottom: .2em;
+}
+.osrh.ammo-config i{
+  color: var(--osrh-ui-control);
+}
+.osrh.ammo-config .name-inputs::-webkit-scrollbar {
+  display: none;
+}
+.osrh.ammo-config .name-inputs{
+  overflow-y: scroll;
+  scrollbar-width: none;
+  flex: 1
+}
+.osrh.ammo-config .name-row{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.osrh.ammo-config form,
+.osrh.item-config form{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.osrh.item-config .spacer{
+  height: 1em;
+}

@@ -162,15 +162,6 @@ export const registerSettings = async function () {
     config: false
   });
 
-  //ration settings
-  // game.settings.register(`${OSRH.moduleName}`, 'trackRations', {
-  //   name: 'Track Rations Use',
-  //   hint: 'Track Rations Use',
-  //   scope: 'client',
-  //   type: Boolean,
-  //   default: false,
-  //   config: true
-  // });
   // hide foreign language packs
   game.settings.register(`${OSRH.moduleName}`, 'hideForeignPacks', {
     name: "OSRH.settings.hideForeignPack.name",
@@ -197,7 +188,7 @@ export const registerSettings = async function () {
     default: 'OSRH Compendiums',
     config: true
   });
-
+// investigate for removal
   game.settings.register(`${OSRH.moduleName}`, 'rationData', {
     name: 'rationData',
     scope: 'world',
@@ -268,12 +259,13 @@ export const registerSettings = async function () {
     hint: "OSRH.settings.theme.hint",
     type: String,
     choices: {
-      0: "OSRH.themes.purpleSlide",//OSRH.data.themeData[0].name,
-      1: "OSRH.themes.santaFe",//OSRH.data.themeData[1].name,
-      2: "OSRH.themes.deepBlue",//OSRH.data.themeData[2].name,
-      3: "OSRH.themes.greenSLime",//OSRH.data.themeData[3].name,
-      4: "OSRH.themes.cottonCandy",//OSRH.data.themeData[4].name,
-      5: "OSRH.themes.paleSunrise"//OSRH.data.themeData[5].name
+      0: "OSRH.themes.purpleSlide",
+      1: "OSRH.themes.santaFe",
+      2: "OSRH.themes.deepBlue",
+      3: "OSRH.themes.greenSLime",
+      4: "OSRH.themes.cottonCandy",
+      5: "OSRH.themes.paleSunrise",
+      6: "OSRH.themes.Dark"
     },
     default: 'none',
     scope: 'client',
@@ -298,6 +290,16 @@ export const registerSettings = async function () {
     scope: 'world',
     type: Number,
     default: 0,
+    config: false
+  });
+  // temp settings
+
+ 
+  game.settings.register(`${OSRH.moduleName}`, 'tempOldSavedEffects', {
+    name: 'tempOldSavedEffects',
+    scope: 'world',
+    type: Object,
+    default: {},
     config: false
   });
   // --------------

@@ -1,0 +1,30 @@
+<div class='fx-list'>
+  {{#if noFX}}
+    <div class="no-fx">{{localize "OSRH.customEffect.noEffectActive"}}</div>
+  {{else}}
+    {{#if displayAll}}
+      {{#each list}}
+        <div class="user-name"><b>{{this.name}}</b></div>
+        {{#each this.self}}
+          {{> 'modules/osr-helper/templates/active-effect/partials/effect-card.hbs'}}
+        {{/each}}
+        {{#each this.other}}
+          {{> 'modules/osr-helper/templates/active-effect/partials/effect-card.hbs'}}
+        {{/each}}
+      {{/each}}
+    {{else}}
+      {{#each selfEffects}}
+        {{> 'modules/osr-helper/templates/active-effect/partials/effect-card.hbs'}}
+      {{/each}}
+      {{#if otherEffects}}
+        <div class='list-header fx sb w100p bgb05'>
+          <b>Effects from others</b>
+        </div>
+
+        {{#each otherEffects}}
+          {{> 'modules/osr-helper/templates/active-effect/partials/effect-card.hbs'}}
+        {{/each}}
+      {{/if}}
+    {{/if}}
+  {{/if}}
+</div>

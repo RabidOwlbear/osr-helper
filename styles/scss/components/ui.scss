@@ -1,0 +1,110 @@
+/* center hotbar */
+#hotbar.center-hotbar{
+  position: absolute;
+  left: var(--hotbar-center);
+  top: calc(100% - 62px);
+}
+#fps {
+  position: relative;
+  left: calc(100% - 110px);
+}
+/* icon */
+.ose-helper-icon {
+  padding: 0 3px;
+}
+
+/* control bar */
+
+#osrh-ui-control{
+  position: absolute;
+  /* top: calc(100vh - 100px); */
+  top: -40px;
+  height:40px;
+  width: 600px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: calc(var(--z-index-ui) + 15);
+  
+  cursor: pointer;
+  pointer-events: all;
+}
+#osrh-ui-display-btn{
+  height: 35px;
+  width: 35px;
+  border-radius: 8px;
+  background-color: var(--osrh-ui-btn);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  
+  position: relative;
+}
+.osrh-controls-open{
+  background-color: var(--osrh-ui-btn-open) !important;
+}
+.osrh-control-btn{
+  cursor:pointer;
+  height: 35px;
+  width: 35px;
+  border-radius: 8px;
+  background-color: var(--osrh-ui-control);
+  
+  margin-left:5px;
+  
+}
+.osrh-control-btn:hover{
+  background-color: var(--osrh-ui-control-hover);
+}
+.osrh-control-btn-img{
+  height: 35px;
+  width: 35px;
+  background-size: 30PX;
+  background-position: center;
+  background-repeat: no-repeat;
+  opacity: .65;
+}
+#osrh-ui-display-btn::before{
+  content: "";
+  position: absolute;
+  background-image: url('../images/icons/owlbear-white-a-64.png');
+  background-size: 30px;
+  background-repeat: no-repeat;
+  background-position: center;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  opacity: 0.65;
+}
+#osrh-ui-control i{
+  color:#f8ebcf;
+  font-size: 20px;
+}
+#osrh-ui-control:hover{
+  transform: translate();
+  
+}
+#osrh-control-mask{
+  width: 600px;
+  height: 40px;
+  overflow: hidden;
+  position: relative;
+}
+#osrh-control-cont{
+  height: 40px;
+  width: 435px;
+  position: absolute;
+  transition-duration: .5s;
+  transition-property: transform;
+  display: flex;
+  align-items: center;
+  
+}
+
+.osrh-control-closed{
+  left: -600px;
+}
+.osrh-control-open{
+  left: 0;
+}

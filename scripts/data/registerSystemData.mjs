@@ -10,7 +10,7 @@ export async function registerSystemData() {
         itemSheetHook: 'renderItemSheet',
         characterSheetHook: 'renderActorSheet',
         baseMovMod: 4,
-        effects: false,
+        effects: true,
         paths: {
           itemQty: 'system.quantity',
           encMov: 'system.attributes.speed.base',
@@ -79,7 +79,7 @@ export async function registerSystemData() {
         itemSheetHook: 'renderItemSheet',
         characterSheetHook: 'renderActorSheet',
         baseMovMod: 4,
-        effects: false,
+        effects: true,
         paths: {
           itemQty: 'system.quantity',
           encMov: 'system.movement.base',
@@ -125,7 +125,7 @@ export async function registerSystemData() {
         itemSheetHook: 'renderItemSheet',
         characterSheetHook: 'renderActorSheet',
         baseMovMod: 3,
-        effects: false,
+        effects: true,
         paths: {
           itemQty: 'system.quantity.value',
           encMov: 'system.movement.base',

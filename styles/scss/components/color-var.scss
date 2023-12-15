@@ -1,0 +1,38 @@
+// color variables
+:root {
+  --hotbar-center: 220px;
+  --border: #1712228c;
+  --center-hotbar: calc(50% - 270px);
+  --bg-red05: rgba(255, 0, 0, 0.025);
+  --bg-blue05: rgba(0, 0, 255, 0.05);
+  --bg-yellow05: rgba(255, 255, 0, 0.05);
+  --bg-green5: rgba(0, 255, 0, 0.05);
+  --bg-orange05: rgba(255, 115, 0, 0.05);
+  --bg-purple05: rgba(125, 0, 125, 0.05);
+  --el-button-glow: rgb(255 0 156);
+  /* theme 1 */
+  --t1-1: #b58ed1;
+  --t1-2: #b3eaf8;
+  --t1-3: #e9ffde;
+  --t1-bg: #a27dba;
+  --t1-bg-light: #f8f5e2;
+  --t1-dark: #634f88;
+  --t1-text: #000;
+  --t1-num: 30%;
+  /* theme 2 */
+  --t2-1: #7bcbcc ;
+  --t2-2: #f8ebcf;
+  --t2-3: #f8d6c6;
+  --t2-bg: #aecccc;
+  /* theme 3 */
+  --a: #11e233;
+  --theme-btn-color: #fff;
+  --osrh-ui-btn: #253b41;
+  --osrh-ui-btn-open: #236577;
+  --osrh-ui-control: #32383a;
+  --osrh-ui-control-hover: #314d57;
+  --text-light: #f8f5e2;
+  --bg-light: #ebdad8;
+  --temp: #159b87;
+  --a: #08635b;
+}

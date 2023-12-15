@@ -1,0 +1,22 @@
+<div class='main-cont'>
+  <div class='sheet-tabs' data-group='primary'>
+    <a class='nav-tab' data-tab='active-fx'>{{localize 'OSRH.effect.activeEffects'}} </a>
+    
+    <a class='nav-tab' data-tab='create'>{{localize "OSRH.customEffect.newEffect"}} </a>
+    
+    {{!-- <a class='nav-tab' data-tab='presets'>{{localize 'OSRH.effect.effectPresets'}} </a> --}}
+  </div>
+  <section class='tab-content' id='tab-content'>
+    <div class='tab' id='active-effects-tab' data-group='primary' data-tab='active-fx'>
+      {{> 'modules/osr-helper/templates/active-effect/partials/effects-list-tab.hbs'}}
+    </div>
+    
+    <div class='tab' data-group='primary' data-tab='create'>
+      {{> 'modules/osr-helper/templates/active-effect/partials/create-effect-tab.hbs'}}
+    </div>
+    
+    {{!-- <div class='tab' data-group='primary' data-tab='presets'>
+      <h2>presets</h2>
+    </div> --}}
+  </section>
+</div>

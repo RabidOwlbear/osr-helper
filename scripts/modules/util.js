@@ -11,14 +11,14 @@ export const registerUtil = () => {
     if (singleGM && game.user.id === singleGM.id) {
       let lastTick = await game.settings.get(`${OSRH.moduleName}`, 'lastTick');
       // await OSRH.util.osrLightTick(lastTick);
-      OSRH.util.osrEffectTick(lastTick);
+      // OSRH.util.osrEffectTick(lastTick);
 
       //update lightTick
 
       await game.settings.set(`${OSRH.moduleName}`, 'lastTick', game.time.worldTime);
     }
   };
-  // used
+  // delete
   OSRH.util.osrLightTick = async function (lastTick) {
     const singleGM = OSRH.util.singleGM();
     if (singleGM && game.user.id === singleGM.id) {
@@ -84,7 +84,7 @@ export const registerUtil = () => {
       }
     }
   };
-  // used
+  // delete
   OSRH.util.osrEffectTick = function (lastTick) {
     const singleGM = OSRH.util.singleGM();
     if (singleGM && game.user.id === singleGM.id) {
@@ -92,7 +92,6 @@ export const registerUtil = () => {
       const elapsed = (curTime - lastTick) / 60;
       for (let user of game.users.contents) {
         let effectData = user.getFlag(`${OSRH.moduleName}`, 'effectData');
-
         for (let effectId in effectData) {
           let effect = effectData[effectId];
           effect.duration -= elapsed;
@@ -333,7 +332,6 @@ export const registerUtil = () => {
         retObj.characters.push(actor);
       }
     }
-    console.log('party', retObj)
     return retObj;
   };
   // used
@@ -348,110 +346,7 @@ export const registerUtil = () => {
     new OSRHAttack(actor).render(true, {top: y,
     left: x})
   }
-  // OSRH.util.attack = async function () {
-  //   // Get Selected
-  //   if (!OSRH.util.singleSelected()) {
-  //     return;
-  //   }
-  //   const selectedActor = canvas.tokens.controlled[0].actor;
-  //   // Select Weapon
-  //   let actorWeapons = selectedActor?.items.filter((item) => item.type == 'weapon');
-  //   let actorSpells = selectedActor?.items.filter((item) => {
-  //     if (item.type == 'spell') return true;
-  //   });
-  //   if (actorWeapons.length == 0 && actorSpells.length == 0) {
-  //     ui.notifications.error(game.i18n.localize('OSRH.util.notification.noWeapon'));
-  //     return;
-  //   }
-  //   let atkOptions = '';
-  //   for (let item of actorWeapons) {
-  //     atkOptions += `<option value=${item.id}>${item.name} | ATK: ${item.system.damage}</option>`;
-  //   }
-  //   for (let item of actorSpells) {
-  //     if (item.system.roll != '') {
-  //       atkOptions += `<option value=${item.id}>${item.name} | ATK: ${item.system.roll}</option>`;
-  //     }
-  //   }
-
-  //   let ammoCheck = `
-  //     <div style="width: 110px">
-  //     <input id="ammoCheck" type="checkbox" checked />${game.i18n.localize('OSRH.util.dialog.checkAmmo')}
-  //     </div>
-  //     `;
-  //   // let ammoCheck = game.modules.get('osr-item-shop')?.active
-  //   //   ? `
-  //   //   <div style="width: 110px">
-  //   //   <input id="ammoCheck" type="checkbox" checked />${game.i18n.localize('OSRH.util.dialog.checkAmmo')}
-  //   //   </div>
-  //   //   `
-  //   //   : `
-  //   //   <div style="width: 110px">
-  //   //   </div>
-  //   //   `;
-
-  //   let dialogTemplate = `
-  //    <h1> Pick a weapon </h1>
-  //    <div style="display:flex; justify-content: space-between; margin-bottom: 1em;">
-  //      <div>
-  //      <select id="weapon" style="width: 150px">${atkOptions}</select>
-  //      </div>
-  //      ${ammoCheck}
-  //      <div>
-  //      <input id="skip" type="checkbox" checked />${game.i18n.localize('OSRH.util.dialog.skipDialog')}
-  //      </div>
-  //      </div>
-  //    `;
-  //   new Dialog({
-  //     title: 'Roll Attack',
-  //     content: dialogTemplate,
-  //     buttons: {
-  //       rollAtk: {
-  //         label: 'Roll Attack',
-  //         callback: async (html) => {
-  //           let selected = html.find('#weapon')[0];
-  //           let skipCheck = html.find('#skip')[0]?.checked;
-  //           let ammoCheck = html.find(`#ammoCheck`)[0]?.checked;
-  //           let weapon = selectedActor.items.find((i) => i.id == selected.value);
-  //           let ammoObj = OSRH.data.ammoData.find((a) => weapon?.name?.toLowerCase()?.includes(a.name.toLowerCase()));
-  //           let ammo, ammoQty;
-  //           if (ammoObj && ammoCheck) {
-  //             ammo = selectedActor.items.find((i) => i.name == ammoObj.ammoType);
-  //             ammoQty = OSRH.util.getNestedValue(ammo, OSRH.systemData.paths.itemQty)//ammo?.system.quantity.value;
-  //             if (ammoQty > 0) {
-  //               switch(OSRH.systemData.id){
-  //                 case 'dcc':
-  //                   await weapon.parent.rollWeaponAttack(weapon.id, {showModifierDialog: skipCheck ? false: true})
-  //                   break;
-  //                 default:
-  //                   await weapon.roll({ skipDialog: skipCheck });
-  //               }
-                
-  //               //delete ammo object if quantity is 0 or less
-  //               if (ammoQty - 1 == 0) {
-  //                 ammo.delete();
-  //               } else {
-  //                 await ammo.update({[OSRH.systemData.paths.itemQty] : ammoQty - 1});
-  //               }
-  //             } else {
-  //               ui.notifications.warn(game.i18n.localize('OSRH.util.notification.noAmmo'));
-  //             }
-  //           } else {
-  //             switch(OSRH.systemData.id){
-  //               case 'dcc':
-  //                 await weapon.parent.rollWeaponAttack(weapon.id, {showModifierDialog: skipCheck ? false: true})
-  //                 break;
-  //               default:
-  //                 await weapon.roll({ skipDialog: skipCheck });
-  //             }
-  //           }
-  //         }
-  //       },
-  //       close: {
-  //         label: 'Close'
-  //       }
-  //     }
-  //   }).render(true);
-  // };
+  
   // used
   OSRH.util.randomName = function (type = null, gender = null) {
     function getRandomItem(arr) {
@@ -785,6 +680,9 @@ export const registerUtil = () => {
     root.style.setProperty('--t1-2', themeData.c2);
     root.style.setProperty('--t1-3', themeData.c3);
     root.style.setProperty('--t1-bg', themeData.bg);
+    root.style.setProperty('--t1-bg-light', themeData.lightBg);
+    root.style.setProperty('--t1-dark', themeData.dark);
+    root.style.setProperty('--t1-text', themeData.text);
     root.style.setProperty('--t1-num', themeData.midNum);
     root.style.setProperty('--theme-btn-color', themeData.btnColor);
     root.style.setProperty('--el-button-glow', themeData.glow);

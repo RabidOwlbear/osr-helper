@@ -1,0 +1,74 @@
+<div class='create-effect-tab'>
+  <div class='new-effect-cont'>
+    <div class='new-effect-header'>
+      <div class="label-group">
+        <label for='effect-target'>{{localize 'OSRH.customEffect.target'}}:&nbsp;</label>
+        <select id='effect-target' title="{{localize "OSRH.newEffectForm.target"}}">
+          {{#if displayAll}}  
+            <option value='target'>{{localize 'OSRH.newEffectForm.target'}}</option>  
+          {{else}}
+            <option value='self'>{{localize 'OSRH.newEffectForm.self'}}</option>
+            <option value='target'>{{localize 'OSRH.newEffectForm.target'}}</option>
+          {{/if}}
+        </select>
+      </div>
+      <button class="dark-button"id='apply-effect'>{{localize 'OSRH.effect.createEffect'}}</button>
+    </div>
+    <div class="effect-details">
+      <div class="detail-header">
+        <input type="text" id="effect-name" title="{{localize "OSRH.customEffect.effectName"}}"placeholder="{{localize "OSRH.customEffect.effectName"}}">
+        <select name='icon' id='icon-select' title="{{localize "OSRH.newEffectForm.icon"}}">
+          {{!-- <option value='none'>-{{localize 'OSRH.newEffectForm.none'}}-</option> --}}
+          
+          {{#each iconList}}
+            <option
+              value='{{this.name}}'
+              id='{{this.name}}'
+              style='color: {{this.textColor}}; background-color:{{this.color}};'
+            >
+              {{this.name}}
+            </option>
+          {{/each}}
+         
+        </select>
+        <div class="label-group">
+          <label for="duration-value">{{localize "OSRH.customEffect.duration"}}:&nbsp;</label>
+          <input type="text" id="duration-value" value="0" data-d-type="number" title="{{localize "OSRH.customEffect.duration"}}" class="num-inp">
+          <select  id="duration-type">
+            <option value="minutes">{{localize "OSRH.ration.config.minutes"}}</option>
+            <option value="hours">{{localize "OSRH.ration.config.hours"}}</option>
+            <option value="seconds">{{localize "OSRH.effect.seconds"}}</option>
+            <option value="infinite">{{localize "OSRH.effect.infinite"}}</option>
+          </select>
+        </div>
+        <a id="add-effect-btn" title="{{localize "OSRH.effect.addEffectLabel"}}">
+          <i class="fa-solid fa-square-plus"></i>
+        </a>
+      </div>
+      <div class="effect-cont" id="effect-cont">
+
+      </div>
+      <div class="descrip-cont">
+        <textarea name="" id="effect-description" cols="30" rows="10" placeholder="{{localize "OSRH.util.notification.enterEffectDescrip"}}"></textarea>
+      </div>
+    </div>
+  </div>
+  <div class='saved-effect-cont'>
+    <div class="saved-effect-header">
+      <div class="title"><b>{{localize "OSRH.effect.effectPresets"}}</b>
+      {{#if @root.isGM}}
+      <a id="manage-presets" title="{{localize "OSRH.effect.ManagePresets"}}">
+        <i class="fa-solid fa-rectangle-list"></i>
+      </a>
+      {{/if}}
+      </div>
+      
+      <button class="dark-button" id="save-preset">{{localize "OSRH.effect.savePreset"}}</button>
+    </div>
+    <div class="saved-effects">
+    {{#each effectPresets }}
+      {{> 'modules/osr-helper/templates/active-effect/partials/saved-effect-card.hbs'}}
+    {{/each}}
+    </div>
+  </div>
+</div>

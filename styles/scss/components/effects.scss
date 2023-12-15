@@ -1,0 +1,285 @@
+/* custom effect form */
+#customEffectForm .effectDesc {
+  height: 100px;
+}
+
+#customEffectForm .inputDiv {
+  padding: 0.5em 0;
+}
+
+#customEffectForm .whisperTargetDiv {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.5em 0;
+}
+/* custom effect list styling */
+#customEffectList .effect-red {
+  background-color: rgba(146, 3, 3, 0.089);
+}
+#customEffectList .effect-orange {
+  background-color: rgba(165, 107, 0, 0.219);
+}
+#customEffectList .effect-green {
+  background-color: rgba(44, 146, 3, 0.219);
+}
+#customEffectList section.window-content {
+  padding: 0;
+}
+#customEffectList .fx {
+  display: flex;
+}
+#customEffectList .jc {
+  justify-content: center;
+}
+#customEffectList .sb {
+  justify-content: space-between;
+}
+#customEffectList .fdc {
+  flex-direction: column;
+}
+#customEffectList .aic {
+  align-items: center;
+}
+#customEffectList .pr {
+  padding-right: 0.5em;
+}
+#customEffectList .pl {
+  padding-left: 0.5em;
+}
+#customEffectList .pt {
+  padding-top: 0.5em;
+}
+#customEffectList .pb {
+  padding-bottom: 0.5em;
+}
+#customEffectList .mb {
+  margin-bottom: 0.5em;
+}
+#customEffectList .w100 {
+  width: 100%;
+}
+#customEffectList .h100 {
+  height: 100%;
+}
+#customEffectList .txt-center {
+  text-align: center;
+}
+
+#customEffectList #newEffectForm {
+  height: 100%;
+  background-color: rgba(0, 174, 255, 0.089);
+}
+#customEffectList .effect-list-title {
+  font-size: 18pt;
+  font-weight: 600;
+}
+#customEffectList #effectList {
+  height: 600px;
+  border-right: 1px solid var(--border);
+  border-top: 2px solid var(--border);
+  border-bottom: 2px solid var(--border);
+  /* background-color: rgba(146, 3, 3, 0.219); */
+}
+#customEffectList #effectDetails {
+  height: 600px;
+  border-left: 1px solid var(--border);
+  border-top: 2px solid var(--border);
+  border-bottom: 2px solid var(--border);
+  /* background-color: rgba(18, 185, 13, 0.192); */
+}
+.effect-list-div {
+  width: 170px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+#customEffectList .effect-time-div {
+  width: 120px;
+}
+#customEffectList #effect-duration {
+  width: 45px;
+}
+#customEffectList #effect-item-dur {
+  width: 150px;
+}
+
+/* active effects */
+.osrh-new-active-effect-form textarea{
+  height: 65px;
+}
+
+.osrh-new-active-effect-form .radio {
+  width: 30px
+}
+.osrh-new-active-effect-form button:focus,
+.osrh-new-active-effect-form button:hover {
+  box-shadow: 0 0 5px var(--el-button-glow);
+}
+#new-active-effect-cont {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+#new-active-effect-cont .attrib-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+#new-active-effect-cont .combined-row {
+  display: flex;
+  justify-content: space-between;
+}
+#new-active-effect-cont .bbl {
+  border: solid black;
+  border-width: 0px 2px 2px 4px;
+}
+#new-active-effect-cont .bbr {
+  border: solid black;
+  border-width: 0px 4px 2px 2px;
+}
+#new-active-effect-cont h4 {
+  text-align: center;
+  width: 100%;
+  margin: 0;
+}
+#new-active-effect-cont label {
+  padding-bottom: 5px;
+}
+#new-active-effect-cont textarea {
+  resize: none;
+}
+#new-active-effect-cont #duration {
+  width: 70px;
+}
+#new-active-effect-cont h4,
+#new-active-effect-cont h3,
+#new-active-effect-cont #name-label #new-active-effect-cont #descrip-label {
+  font-weight: 550;
+}
+
+#new-active-effect-cont .armor {
+  width: 120px;
+}
+
+/* active effect list */
+.osrh-active-effect-list .effect-cont {
+  height: 470px;
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.1);
+  border: 2px solid rgba(0, 0, 0, 0.3);
+  border-radius: 3px;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.osrh-active-effect-list form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+}
+.osrh-active-effect-list .header-name {
+  padding-left: 3px;
+  text-overflow: ellipsis;
+  width: 130px;
+}
+.osrh-active-effect-list .header-del {
+  width: 40px;
+}
+#manage-preset-form .delete-btn .fas.fa-times,
+.osrh-active-effect-list .delete-btn .fas.fa-times {
+  color: rgb(175, 28, 28);
+}
+.osrh-active-effect-list .effect-name {
+  padding-left: 3px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 140px;
+}
+.osrh-active-effect-list .effect-target {
+  padding-left: 3px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 140px;
+}
+.osrh-active-effect-list .effect-dur {
+  padding-left: 3px;
+  width: 80px;
+}
+.active-effect:nth-of-type(even) {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+.osrh-active-effect-list .details-cont {
+  display: none;
+  justify-content: space-between;
+}
+.descrip-cont {
+  /* min-height: 100%; */
+  word-wrap: normal;
+  word-break: break-word;
+  overflow-x: hidden;
+  background-color: rgba(0, 0, 0, 0.05);
+}
+.effect-list {
+  margin: 0;
+}
+.effect-details-section {
+  width: 180px;
+  padding: 3px 5px;
+}
+.effect-details-section h4 {
+  margin-bottom: 0;
+}
+.effect-details-section p {
+  margin: 0 4px 0 0;
+}
+/* .osrh-active-effect-list .button-cont button {
+  color: white;
+} */
+.osrh-active-effect-list .button-cont button:focus,
+.osrh-active-effect-list .button-cont button:hover {
+  box-shadow: 0 0 5px var(--el-button-glow);
+}
+/* .osrh-active-effect-list .window-content {
+  
+  background: var(--t1-bg);
+  background: linear-gradient(0deg, var(--t1-1) 0%, var(--t1-2) 30%, var(--t1-3) 100%);
+} */
+.osrh-new-active-effect-form #preset-select{
+  width: 160px
+}
+ #manage-preset-form .window-content{
+  overflow: auto;
+ }
+#manage-preset-form .window-content,
+.osrh-active-effect-list .window-content ,
+.osrh-new-active-effect-form .window-content ,
+.light-item-config.themed .window-content{
+  background: var(--t1-bg);
+  background: linear-gradient(0deg, var(--t1-1) 0%, var(--t1-2) var(--t1-num), var(--t1-3) 100%);
+ }
+#manage-preset-form .xprt-btn{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+  width: 20px;
+  height: 20px;
+  color: black;
+}
+#manage-preset-form h3{
+  position: absolute;
+  left: 33%
+}
+.osrh-active-effect-list .button-cont button,
+.osrh-new-active-effect-form button {
+  color: var(--theme-btn-color);
+}
+.osrh-active-effect-list .manage-effects-btn{
+  width: 20px
+}
+.osrh-active-effect-list .manage-effects-btn i{
+  height: 12px;
+}
+

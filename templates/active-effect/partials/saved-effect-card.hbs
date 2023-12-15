@@ -1,0 +1,44 @@
+<div class="effect-preset" data-id="{{this.id}}">
+  <div class="header">
+    <div class="name">{{this.name}}</div>
+    <div class="icon" style="color: {{this.iconText}}; {{!--background-color:{{this.iconColor}};--}}">
+      <img class="effect-icon"src="{{this.iconPath}}"style="background: {{this.iconColor}};">
+      </div>
+    <div class="target">{{this.target}}</div>
+    <div class="duration-value">{{this.duration}}</div>
+    <div class="duration-interval">{{this.interval}}</div>
+
+    
+      
+      <a class="select-preset" title="{{localize "OSRH.effect.applyEffectPreset"}}">
+        <i class="fa-solid fa-circle-check"></i>
+      </a>
+      {{#if @root.isGM}}
+      <a class="delete-preset hidden">
+        <i class="fa-solid fa-circle-minus"></i>
+      </a>
+      {{/if}}
+    {{!-- {{else}}
+      <a class="select-preset">
+        <i class="fa-solid fa-circle-check"></i>
+      </a> --}}
+    
+
+    
+
+  </div>
+  <div class="detail-cont hidden">
+    <div class="details">
+      <div class="effect-list">
+        {{#each this.changes as |change idx|}}
+        <div class="effect-row">
+          <div class="effect-name"><b>{{change.label}}</b>:</div>
+          <div class="effect-value">{{change.value}}</div>
+        </div>
+        {{/each}}
+      </div>
+      <div class="description">{{this.description}}</div>
+    </div>
+    
+  </div>
+</div>

@@ -1,0 +1,412 @@
+/* turn tracker */
+.osrh.turn-tracker section.window-content{
+  padding: 0;
+  background-color: #e9e6d9;
+  background-image: none;
+}
+
+.osrh.turn-tracker form{
+  height: 100%;
+  width: 100%;
+  display: grid;
+  z-index: 5;
+}
+.osrh.turn-tracker h2{
+  border: none;
+  text-align: center;
+  font-weight: 600;
+}
+.osrh.turn-tracker section.main{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.osrh.turn-tracker .nav-tab,
+/* .osrh.turn-tracker i,  */
+.osrh.turn-tracker .title{
+  color: #e9e6d9;
+}
+.osrh.turn-tracker .light-icon{
+  color: #e9e6d9;
+}
+.osrh.turn-tracker .dark-icon{
+  color: #221e2e;
+}
+.osrh.turn-tracker .title{
+  
+  color: #e9e6d9;
+  font-weight: 600;
+  font-size: 1.2rem;
+}
+.osrh.turn-tracker .sheet-tabs{
+  display: flex;
+  justify-content: space-evenly;
+  font-weight: 600;
+  z-index:  5;
+}
+.osrh.turn-tracker .sheet-tabs a {
+  flex: 1;
+  text-align: center;
+}
+.osrh.turn-tracker .nav-tab.active{
+ background-color: #3e345a;
+}
+.osrh.turn-tracker .travel-tab,
+.osrh.turn-tracker .dungeon-tab,
+.osrh.turn-tracker .config-tab,
+.osrh.turn-tracker .tab,
+.osrh.turn-tracker .tab-content{
+  position: relative;
+  height: 100%;
+  width: 100%;
+}
+.narrow-tab{
+  width: 35px;
+  max-width: 35px;
+}
+.osrh.turn-tracker .dungeon-tab::before {    
+  content: "";
+  background-image: url('../images/trackerbg.jpg');
+  background-size: auto;
+  background-repeat: no-repeat;
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  bottom: 0px;
+  left: 0px;
+  opacity: 0.75;
+  z-index: -1;
+}
+.osrh.turn-tracker .blank-button{
+  width: 30px; 
+  height: 24px;
+}
+.osrh.turn-tracker .dungeon-config-tab::after {    
+  content: "";
+  background-image: url('../images/trackerbg.jpg');
+  background-size: auto;
+  background-repeat: no-repeat;
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  bottom: 0px;
+  left: 0px;
+  opacity: 0.45;
+  z-index: -1;
+}
+.osrh.turn-tracker .global-config::before,
+.osrh.turn-tracker .travel-config-tab::before,
+.osrh.turn-tracker .travel-tab::before {    
+  content: "";
+  background-image: url('../images/travel-tab-bg.webp');
+  background-size: auto;
+  background-repeat: no-repeat;
+  position: absolute;
+  top: -5px;
+  right: 0px;
+  bottom: 0px;
+  left: 0px;
+  opacity: 0.25;
+  z-index: -1;
+}
+/* global config */
+.osrh.turn-tracker .global-options {
+  height: 100%;
+  display: flex;
+}
+.osrh.turn-tracker .global-options .main{
+  width: 100%;
+  height: 82%;
+  border-radius: .5em;
+  margin: 1em;
+  background-color: #ffffff88;
+}
+/* .osrh.turn-tracker .travel-config-tab::before{
+  top: 10px;
+} */
+.osrh.turn-tracker .config-tab{
+  display: flex;
+  flex-direction: column;
+  
+  background-color: #ffffff;
+  z-index: 10;
+}
+.travel-config-tab{
+  height: 340px;
+  display: grid;
+  align-items: start;
+  grid-template-rows: 2em auto;
+  justify-items: center;
+}
+.osrh.turn-tracker .dungeon-tab{
+  display: grid;
+  place-items: center;
+  z-index: 1;
+}
+
+.osrh.turn-tracker footer{
+  position: absolute;
+  top: 350px;
+  width: 100%;
+  height: 40px;
+  display: flex;
+  height: 2.5rem;
+  justify-content: space-between;
+  padding: 0 1em;
+  align-items: center;
+  background-color: #221e2e;
+  z-index: 15;
+}
+.osrh.turn-tracker footer i{
+  /* font-size: 1.5rem; */
+  text-wrap: nowrap;
+  margin: 0 5px;
+}
+.osrh.turn-tracker header{
+  background-color: #221e2e;
+}
+.osrh.turn-tracker .count-cont{
+  position: relative;
+  top: -20px;
+  padding: .5rem;
+  border-radius: 5px;
+  background-color: #ffffff77;
+  display: flex;
+  /* width: 100%; */
+  flex-direction: column;
+  align-items: center;
+  z-index: 3;
+}
+.osrh.turn-tracker .count-cont .row{
+  width: 100%;
+  justify-content: space-between;
+
+}
+.travel-options{
+  width: 97%;
+  padding: .3em;
+  background-color: #fff8;
+  border-radius: .3em;
+}
+.osrh.turn-tracker .config-tab label{
+  font-weight: 600;
+}
+.osrh.turn-tracker .tracker-header{
+  display: flex;
+  flex-direction: column;
+}
+.osrh.turn-tracker header .btn-div{
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+}
+.osrh.turn-tracker .btn-div i{
+  font-size: 1rem
+}
+.osrh.turn-tracker .count-label{
+  font-size: 1.5em;
+  font-weight: 600;
+}
+.osrh.turn-tracker  .count-value{
+  font-size: 1.8em;
+  font-weight: 600;
+}
+.osrh.turn-tracker .row{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 .2rem;
+}
+.osrh.turn-tracker .half-row{
+  width: 50%;
+}
+.osrh.turn-tracker .num-inp{
+  width: 3em;
+  margin-right: .2em;
+  text-align: center;
+  font-weight: 600;
+  border: none;
+  border-style: none;
+}
+.osrh.turn-tracker .d-level-row{
+  margin-top: 1rem;
+}
+.osrh.turn-tracker .row.dungeon-lvl{
+  justify-content: center;
+  width: 100%;
+}
+.osrh.turn-tracker .dungeon-lvl i{
+  font-size: 1.5rem;
+  color: #221e2e;
+}
+
+.osrh.turn-tracker input#d-level{
+  margin: 0 .3em;
+  font-weight: 800;
+  font-size: 25px;
+}
+/* BG image sprites */
+.osrh.turn-tracker .bg-img-cont{
+  position: absolute;
+  height: 100%; 
+  width: 100%;
+  top: 0;
+  left: 0;
+  z-index: 0;
+}
+.osrh.turn-tracker .sprite{
+  position: absolute;
+  border: none;
+}
+.osrh.turn-tracker #bg-0{
+  top: -5px;
+  left: 55px;
+}
+.osrh.turn-tracker #bg-1{
+  top: 0px;
+  left: 55px;
+}
+.osrh.turn-tracker #bg-2{
+  top: 140px;
+  left: 5px;
+}
+.osrh.turn-tracker #bg-3{
+  top: 260px;
+  left: 100px;
+}
+.osrh.turn-tracker #bg-4{
+  top: 135px;
+  left: 225px;
+}
+.osrh.turn-tracker #bg-5{
+  top: 0px;
+  left: 185px;
+}
+
+.osrh.turn-tracker .travel-tab{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* justify-content: center; */
+
+  
+}
+.osrh.turn-tracker .travel-tab #terrain{
+  width: 35%;
+  text-align: center;
+  height: 1.3em;
+  background-color: #ffffffbb;
+}
+.osrh.turn-tracker .travel-tab h2.terrain-spacer{
+  margin-bottom:.8em;
+}
+.osrh.turn-tracker .travel-tab h2{
+  text-shadow: 0 0 4px #dbdbdb;
+  margin-bottom: 0;
+}
+.osrh.turn-tracker .travel-tab .actor-list{
+  width: 100%;
+}
+.osrh.turn-tracker .travel-tab .actor-div{
+  display: flex;
+  justify-content: space-between;
+}
+.osrh.turn-tracker .travel-tab .actor-div a{
+  font-size: .8em;
+  margin-right: .2em;
+}
+.osrh.turn-tracker .actor-controls{
+  display: flex; 
+  justify-content: space-evenly;
+}
+.osrh.turn-tracker .travel-tab .travel-total,
+.osrh.turn-tracker .travel-tab .travel-session{
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  top: 8px;
+  font-weight: 700;
+  font-size: 1.3em;
+}
+.osrh.turn-tracker .travel-tab .travel-session{
+  justify-content: start;
+  left: 15px;
+  text-align: left;
+}
+.osrh.turn-tracker .travel-tab .travel-total{
+  justify-content: end;
+  left: 245px;
+  text-align: right;
+}
+.osrh.turn-tracker .travel-tab .base-rate{
+  display: flex;
+  justify-content: space-between;
+  width: 55%;
+  font-weight: 700;
+  font-size: 1.1em;
+}
+.osrh.turn-tracker .travel-tab #party-list::-webkit-scrollbar{
+  display: none;
+}
+.osrh.turn-tracker .check-label{
+  font-weight: 700;
+  text-align: center;
+}
+.osrh.turn-tracker .char-list-header{
+  font-weight: 700;
+  width: 100%;
+  border-bottom: 2px solid #222;
+}
+.osrh.turn-tracker .travel-tab .party-list{
+  width: 90%;
+  height: 225px;
+  overflow-y: scroll;
+  border-radius: .5em;
+  scrollbar-width: none;
+  background-color: #ffffff88;
+  padding: .2em;
+}
+.osrh.turn-tracker .travel-tab .party-list.lg-list{
+  height: 265px;
+}
+.osrh.turn-tracker .actor-list{
+  width: 100%;
+}
+.osrh.turn-tracker .travel-checks{
+  width: 100%;
+  display: flex;
+  justify-content: space-evenly;
+}
+.osrh.turn-tracker .travel-checks input{
+  background-color: #ffffff88;
+  text-align: center;
+}
+.osrh.turn-tracker .input-block{
+  display: flex;
+  flex-direction: column;
+  width: 35%;
+}
+.osrh.turn-tracker .flex-row{
+  display: flex;
+  justify-content: space-evenly;
+}
+.osrh.turn-tracker .input-block input{
+  width: 2em;
+}
+.osrh.turn-tracker .travel-tab  .input-block i{
+  color: #221e2e;
+  font-size: 1.5rem
+}
+.osrh.turn-tracker .terrain-type{
+  font-weight: 700;
+  color: #221e2e;
+}
+.osrh.turn-tracker .travel-rest-count{
+  /* font-size: 1.2em */
+  width: 120px;
+}
+.osrh.turn-tracker .travel-config-tab select,
+.osrh.turn-tracker .dungeon-config-tab select{
+  width: 150px
+}
+

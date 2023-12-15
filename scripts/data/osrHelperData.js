@@ -17,7 +17,7 @@ lightType: {
 */
   OSRH.data.effectIcons = [
     {
-      name:`none`,
+      name:`-Icon-`,
       color: '#fff',
       textColor: `#000`,
       path:`none`
@@ -72,9 +72,12 @@ lightType: {
       c2: `#b3eaf8`,
       c3: `#e9ffde`,
       bg: `#a27dba`,
+      lightBg: `#f1eee7`,
+      dark: `#634f88`,
+      text: `#000`,
       glow: `#e9ffde`,
       midNum: `30%`,
-      btnColor: `#e9ffde`
+      btnColor: `#634f88`
     },
     {
       name: 'sante fe mall',
@@ -82,29 +85,38 @@ lightType: {
       c2: `#f8ebcf`,
       c3: `#f8d6c6`,
       bg: `#aecccc`,
+      lightBg: `#f8f5e2`,
+      dark: `#2f6868`,
+      text: `#000`,
       glow: `#fbefda`,
       midNum: `32%`,
-      btnColor: `#ffffff`
+      btnColor: `#2f6868`
     },
     {
       name: 'deep blue',
       c1: `#5549b9`,
       c2: `#4f7adb`,
       c3: `#93eafb`,
-      bg: `#4039c990`,
+      bg: `#4039c9`,
+      lightBg: `#d6d2c9`,
+      dark: `#363d85`,
+      text: `#fff`,
       glow: `#93eafb`,
       midNum: `20%`,
-      btnColor: `#ddeeff`
+      btnColor: `#363d85`
     },
     {
       name: 'green slime',
       c1: `#a27dba`,
       c2: `#b2ffb5`,
       c3: `#ddffcd`,
-      bg: `#a27dba`,
+      bg: `#7a2e6f`,
+      lightBg: `#e2e7d5`,
+      dark: `#472544`,
+      text: `#000`,
       glow: `#ddffcd`,
       midNum: `28%`,
-      btnColor: `#ddffcd`
+      btnColor: `#7a2e6f`
     },
     {
       name: 'cotton candy',
@@ -112,19 +124,38 @@ lightType: {
       c2: `#f9b2ff`,
       c3: `#ffeaef`,
       bg: `#ec5cda`,
+      lightBg: `#ebdad8`,
+      dark: `#7a2e6f`,
+      text: `#000`,
       glow: `#ffeaef`,
       midNum: `24%`,
-      btnColor: `#ffffff`
+      btnColor: `#ec5cda`
     },
     {
       name: 'pale sunrise',
       c1: `#fffbc0`,
       c2: `#c6fef1`,
       c3: `#eafaff`,
-      bg: `#fffbc0`,
+      bg: `#fffbfc`,
+      lightBg: `#fffbfc`,
+      dark: `#159b87`,
+      text: `#000`,
       glow: `#88eefd`,
       midNum: `28%`,
       btnColor: `#003747`
+    },
+    {
+      name: 'Dark',
+      c1: `#353535`,
+      c2: `#666666`,
+      c3: `#757575`,
+      bg: `#242424`,
+      lightBg: `#8f8f8f`,
+      dark: `#3f3f3f`,
+      text: `#000`,
+      glow: `#88fd8e`,
+      midNum: `28%`,
+      btnColor: `#08635b`
     },
   ]
   OSRH.data.defaultLightSettings = {
@@ -243,8 +274,16 @@ export const registerLocalizedData = () =>{
       function: 'util.attack',
       img: 'modules/osr-helper/images/icons/attack-64.png'
     },
+    // {
+    //   id: 'activeEffects',
+    //   label: game.i18n.localize("OSRH.effect.activeEffects"), 
+    //   gm: true,
+    //   function: 'effect.renderGlobalEffectApp',
+    //   img: 'modules/osr-helper/images/icons/active-effects-64.png'
+    // },
     
   ]
+  
   if(game.user.isGM){
     OSRH.ui.controlOptions.push({
       id: 'partySheet',
@@ -253,6 +292,15 @@ export const registerLocalizedData = () =>{
       function: 'util.renderPartySheet',
       img: 'modules/osr-helper/images/icons/party-sheet-64.png'
     })
+    if(OSRH.systemData.effects){
+      OSRH.ui.controlOptions.push({
+        id: 'activeEffects',
+        label: game.i18n.localize("OSRH.effect.activeEffects"), 
+        gm: true,
+        function: 'effect.renderGlobalEffectApp',
+        img: 'modules/osr-helper/images/icons/active-effects-64.png'
+      })
+    }
   }
   
   OSRH.ui.labels = {
