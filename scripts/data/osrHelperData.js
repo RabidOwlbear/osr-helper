@@ -77,7 +77,8 @@ lightType: {
       text: `#000`,
       glow: `#e9ffde`,
       midNum: `30%`,
-      btnColor: `#634f88`
+      btnColor: `#634f88`,
+      btnTxt: '#f1eee7',
     },
     {
       name: 'sante fe mall',
@@ -90,7 +91,9 @@ lightType: {
       text: `#000`,
       glow: `#fbefda`,
       midNum: `32%`,
-      btnColor: `#2f6868`
+      btnColor: `#f8f5e2`
+      ,
+      btnTxt: '#f1eee7',
     },
     {
       name: 'deep blue',
@@ -104,6 +107,8 @@ lightType: {
       glow: `#93eafb`,
       midNum: `20%`,
       btnColor: `#363d85`
+      ,
+      btnTxt: '#f1eee7',
     },
     {
       name: 'green slime',
@@ -117,6 +122,8 @@ lightType: {
       glow: `#ddffcd`,
       midNum: `28%`,
       btnColor: `#7a2e6f`
+      ,
+      btnTxt: '#e2e7d5',
     },
     {
       name: 'cotton candy',
@@ -130,6 +137,8 @@ lightType: {
       glow: `#ffeaef`,
       midNum: `24%`,
       btnColor: `#ec5cda`
+      ,
+      btnTxt: '#ebdad8',
     },
     {
       name: 'pale sunrise',
@@ -143,6 +152,8 @@ lightType: {
       glow: `#88eefd`,
       midNum: `28%`,
       btnColor: `#003747`
+      ,
+      btnTxt: '#fffbfc',
     },
     {
       name: 'Dark',
@@ -156,6 +167,8 @@ lightType: {
       glow: `#88fd8e`,
       midNum: `28%`,
       btnColor: `#08635b`
+      ,
+      btnTxt: '#fffbfc',
     },
   ]
   OSRH.data.defaultLightSettings = {

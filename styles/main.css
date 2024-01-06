@@ -26,7 +26,9 @@
   /* theme 3 */
   --a: #11e233;
   --theme-btn-color: #fff;
+  --theme-btn-txt: #000;
   --osrh-ui-btn: #253b41;
+  --osrh-ui-btn-txt: #fff;
   --osrh-ui-btn-open: #236577;
   --osrh-ui-control: #32383a;
   --osrh-ui-control-hover: #314d57;
@@ -295,6 +297,82 @@
 
 .osrh-control-open {
   left: 0;
+}
+
+.osrh-sheet-ui-cont {
+  position: absolute;
+  left: -30px;
+  top: 30px;
+  height: 300px;
+  width: 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: end;
+}
+
+.osrh-sheet-ui-cont .ui-tab {
+  width: 15px;
+  background-color: rgba(32, 32, 32, 0.623);
+  min-height: 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.3rem 0 0 0.3rem;
+  padding: 10px 0;
+  margin-bottom: 0.2rem;
+}
+
+.osrh-sheet-ui-cont .ui-tab:hover {
+  padding: 0 10px;
+  width: 35px;
+  left: -35px;
+}
+
+.osrh-sheet-ui-cont .ui-tab .mod-label {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--text-light);
+  opacity: 60%;
+  transform: rotate(-90deg);
+}
+
+.osrh-sheet-ui-cont .ui-tab:hover .mod-label {
+  opacity: 90%;
+  font-size: 0.7rem;
+  transform: rotate(0deg);
+}
+
+.osrh-sheet-ui-cont .ui-tab:hover .btn-cont {
+  display: flex;
+}
+
+.osrh-sheet-ui-cont .ui-tab .btn-cont {
+  display: none;
+  height: 100%;
+  width: 100%;
+  flex-direction: column;
+  align-items: center;
+}
+
+.osrh-sheet-ui-cont .sheet-ui-btn {
+  height: 30px;
+  width: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 0.2rem;
+  color: var(--text-light);
+  opacity: 40%;
+}
+
+.osrh-sheet-ui-cont .sheet-ui-btn i {
+  font-size: 1.1rem;
+}
+
+.osrh-sheet-ui-cont a.sheet-ui-btn:hover {
+  opacity: 100%;
+  text-shadow: 0 0 8px var(--el-button-glow);
 }
 
 /* party sheet */
@@ -981,6 +1059,9 @@
 .osr-active-effects .saved-effect-cont #manage-presets {
   color: var(--t1-dark);
 }
+.osr-active-effects .saved-effect-cont #save-preset {
+  color: var(--theme-btn-color);
+}
 .osr-active-effects .saved-effect-cont .effect-preset {
   border-radius: 0.3rem;
   border: 2px solid var(--t1-dark);
@@ -1122,11 +1203,11 @@
 
 .osrh.item-config button.config-btn {
   line-height: 1.5em;
-  color: var(--theme-btn-color);
+  color: var(--theme-btn-txt);
   border: none;
   border-radius: 0.2em;
   width: 50px;
-  background-color: var(--osrh-ui-btn);
+  background-color: var(--theme-btn-color);
 }
 
 .osrh.item-config .main,

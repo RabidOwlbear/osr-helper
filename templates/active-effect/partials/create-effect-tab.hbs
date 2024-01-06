@@ -12,7 +12,7 @@
           {{/if}}
         </select>
       </div>
-      <button class="dark-button"id='apply-effect'>{{localize 'OSRH.effect.createEffect'}}</button>
+      {{!-- <button class="dark-button"id='apply-effect'>{{localize 'OSRH.effect.createEffect'}}</button> --}}
     </div>
     <div class="effect-details">
       <div class="detail-header">
@@ -61,9 +61,12 @@
         <i class="fa-solid fa-rectangle-list"></i>
       </a>
       {{/if}}
+      <a id="save-preset" title="{{localize "OSRH.effect.savePreset"}}">
+        <i class="fa-solid fa-floppy-disk"></i>
+      </a>
       </div>
       
-      <button class="dark-button" id="save-preset">{{localize "OSRH.effect.savePreset"}}</button>
+      <button class="dark-button" id='apply-effect'>{{localize 'OSRH.effect.createEffect'}}</button>
     </div>
     <div class="saved-effects">
     {{#each effectPresets }}

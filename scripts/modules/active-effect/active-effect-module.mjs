@@ -15,12 +15,6 @@ export function registerOsrActiveEffectModule() {
         width: 500,
         height: 600,
         tabs: [{ navSelector: '.sheet-tabs', contentSelector: '.tab-content', initial: 'active-fx' }],
-        // dragDrop: [
-        //   {
-        //     dragSelector: '.item',
-        //     dropSelector: '.sortable'
-        //   }
-        // ],
         template: `modules/osr-helper/templates/active-effect/active-effect-app.hbs`
       });
     }
@@ -54,13 +48,12 @@ export function registerOsrActiveEffectModule() {
         
         selfEffectData = effectData.filter((e) => {
           // shim for uuid change
-          let id = e.createdBy.includes('.') ? this.actor.uuid : this.actor.id;
+          let id = e.createdBy?.includes('.') ? this.actor.uuid : this.actor.id;
           return e.createdBy === id;
         });
-
         otherEffectData = effectData.filter((e) => {
           // shim for uuid change
-          let id = e.createdBy.includes('.') ? this.actor.uuid : this.actor.id;
+          let id = e.createdBy?.includes('.') ? this.actor.uuid : this.actor.id;
           return e.target == this.actor.uuid && id != e.createdBy;
         });
         let selfEffectsTemplate = await this.effectListGetData(selfEffectData, 'self');
@@ -203,7 +196,7 @@ export function registerOsrActiveEffectModule() {
         data.forEach(async (e) => {
           let tActor = await fromUuid(e.target);
           // tActor = tActor.collectionName == 'tokens' ? (tActor = tActor.actor) : tActor;
-          let eCreator = e.createdBy.includes('.') ? await fromUuid(e.createdBy) : await game.actors.get(e.createdBy);
+          let eCreator = e.createdBy?.includes('.') ? await fromUuid(e.createdBy) : await game.actors.get(e.createdBy);
           if (eCreator) {
             let isInf = e.isInf;
             let effect = await tActor.getEmbeddedDocument('ActiveEffect', e.effectId);

@@ -40,7 +40,7 @@ window.OSRH = window.OSRH || {
 };
 OSRH.lang = ['en', 'es', 'pt-BR'];
 Hooks.once('init', async function () {
-  console.log('init')
+  console.log('init');
   //add settings
   registerData();
   registerUtil();
@@ -63,9 +63,8 @@ Hooks.once('init', async function () {
   OSRH.partySheet = OSRHPartySheet;
   // OSRH.attack = osrhAttack;
   OSRH.AmmoConfig = AmmoItemConfig;
- 
+
   Hooks.callAll(`${OSRH.moduleName}.registered`);
-  
 });
 Hooks.once('socketlib.ready', () => {
   console.log('SL ready');
@@ -106,16 +105,16 @@ Hooks.on('updateSetting', async (a, b, c) => {
 Hooks.once(`${OSRH.moduleName}.registered`, () => {});
 Hooks.once('ready', async () => {
   // no gm warning
-  if(!OSRH.util.singleGM()) ui.notifications.warn(game.i18n.localize("OSRH.notification.noGmUser"));
+  if (!OSRH.util.singleGM()) ui.notifications.warn(game.i18n.localize('OSRH.notification.noGmUser'));
   // handlebars partials
-  registerPartials()
+  registerPartials();
   registerSystemData();
   OSRH.ui = uiControls;
   if (OSRH.systemData.effects) {
     registerCustomEffectList();
     // registerEffectModule();
     registerOsrActiveEffectModule();
-    registerEffectData()
+    registerEffectData();
     // OSRH.socket.register('clearExpiredEffects', OSRH.effect.clearExpired);
     // OSRH.socket.register('renderNewEffectForm', OSRH.effect.renderNewEffectForm);
     OSRH.socket.register('createActiveEffectOnTarget', OSRH.util.createActiveEffectOnTarget);
@@ -127,7 +126,7 @@ Hooks.once('ready', async () => {
     OSRH.socket.register('handleEffectPreset', OSRH.effect.handleEffectPreset);
     OSRH.socket.register('deleteAllEffects', OSRH.effect.deleteAll);
   }
-  
+
   registerLocalizedData();
   registerSystemHooks();
   OSRH.ui.addUiControls();
@@ -139,15 +138,15 @@ Hooks.once('ready', async () => {
   const jName = await game.settings.get(`${OSRH.moduleName}`, 'timeJournalName');
   //update turn proc
 
-  if (!turnData.journalName && jName ) turnData.journalName = jName;
-  if (game.user.isGM)await OSRH.socket.executeAsGM('setting', 'turnData', turnData, 'set');
-  
+  if (!turnData.journalName && jName) turnData.journalName = jName;
+  if (game.user.isGM) await OSRH.socket.executeAsGM('setting', 'turnData', turnData, 'set');
+
   // migrate turn data
   // migrateTurnData();
   //set hook to update light timer durations
   Hooks.on('updateWorldTime', async () => {
     console.log('time update');
-    
+
     await OSRH.util.osrTick(); // remove
     await OSRH.socket.executeAsGM('lightCheck');
     if (game.user.isGM && OSRH.systemData.effects) await OSRH.socket.executeAsGM('effectHousekeeping');
@@ -161,12 +160,10 @@ Hooks.once('ready', async () => {
   //check for userflags
 
   if (game.user.id === OSRH.util.singleGM()?.id) {
-    
-
     // migrate tags, and flags
-    tagMigration()
-    migrateAmmoFlag()
-    migrateSavedEffects()
+    tagMigration();
+    migrateAmmoFlag();
+    migrateSavedEffects();
   }
 
   Hooks.on('createActor', async (actor) => {
@@ -218,46 +215,59 @@ Hooks.on('updateCombat', (combat) => {
 
 // //effect report
 
-Hooks.on('renderActorSheet', async (actor, html) => {
+Hooks.on('renderActorSheet', async (sheetEl, html, actorObj) => {
   // itemPiles accomodation
-  let itemPiles = actor.flags?.['item-piles']?.data?.enabled || null;
+  let itemPiles = actorObj.flags?.['item-piles']?.data?.enabled || null;
   if (!itemPiles) {
-    if (OSRH.systemData.effects) {
-      const modBox = html.find(`[class="modifiers-btn"]`);
-      modBox.append(
-        `<a class="ose-effect-list ose-icon" id ="ose-effect-list" title="Show Active Effects"><i class="fas fa-list"></i></a>`
-      );
-
-      modBox.on('click', '.ose-effect-list', (e) => {
-        // active effects button
-        // OSRH.ce.effectList(actor.object);
-        let pos = { x: e.pageX + 100, y: e.pageY - 200 };
-        // check window for instances of form
-        if (Object.values(ui.windows).filter((i) => i.id == `activeEffectList.${actor.object.id}`).length == 0) {
-          OSRH.effect.renderEffectApp(actor.object)
-          // new OSRH.effect.ActiveEffectList(actor.object, pos).render(true);
-        }
-      });
-    }
-
-    //currency converter
-    let linkCont = html.find(`#treasure .item-controls`)[0];
-    let el = document.createElement('a');
-    let iEl = document.createElement('i');
-    el.classList = 'item-control';
-    el.title = 'Currency Converter';
-    iEl.classList = 'fa fa-coins';
-    iEl.style['margin-right'] = '5px';
-    el.appendChild(iEl);
-    if (linkCont) linkCont.prepend(el);
-    el.addEventListener('click', (ev) => {
-      ev.preventDefault();
-      actor.render();
-      OSRH.util.curConDiag(actor.object);
-    });
-
     if (await game.settings.get(OSRH.moduleName, `enableEquippableContainers`)) {
       OSRH.util.initializeDroppableContainers(actor.object, html);
+    }
+    //sheet side ui
+    const sheetUiEl = addSheetUi(html[0].closest('.app'));
+    if (sheetUiEl !== 'skip') {
+      if (actorObj?.owner || actorObj?.isOwner) {
+        const uiTab = document.createElement('div');
+        const btnCont = document.createElement('div');
+        uiTab.classList.add('ui-tab');
+        btnCont.classList.add('btn-cont');
+        const label = document.createElement('label');
+        label.classList.add('mod-label');
+        label.innerText = 'OSRH';
+        uiTab.appendChild(label);
+        //active effects
+        if (OSRH.systemData.effects) {
+          let aeBtn = document.createElement('a');
+          let aeIcon = document.createElement('i');
+          aeBtn.classList.add('sheet-ui-btn');
+          aeBtn.title = game.i18n.localize('OSRH.effect.activeEffects');
+          aeIcon.classList.add('fa-solid', 'fa-list');
+          aeBtn.appendChild(aeIcon);
+          aeBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            if (Object.values(ui.windows).filter((i) => i.id == `activeEffectList.${actorObj.id}`).length == 0) {
+              OSRH.effect.renderEffectApp(sheetEl.object);
+            }
+          });
+          btnCont.appendChild(aeBtn);
+        }
+        // currency converter
+        if (game.system.id === 'ose' && actorObj.type == 'character') {
+          let ccBtn = document.createElement('a');
+          let ccIcon = document.createElement('i');
+          ccBtn.classList.add('sheet-ui-btn');
+          ccIcon.classList.add('fa-solid', 'fa-coins');
+          ccBtn.title = game.i18n.localize('OSRH.util.dialog.curencyConverter');
+          ccBtn.appendChild(ccIcon);
+          ccBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            sheetEl.render();
+            OSRH.util.curConDiag(actorObj);
+          });
+          btnCont.appendChild(ccBtn);
+        }
+        uiTab.appendChild(btnCont);
+        sheetUiEl?.appendChild(uiTab);
+      }
     }
   }
 });
@@ -291,43 +301,6 @@ Hooks.on('osrItemShopActive', async () => {
   }, randTime);
 });
 
-// Hooks.on('gmPleasePause', () => {
-//   if (game.user.role == 4) {
-//     let newState = game.paused ? false : true;
-//     game.togglePause(newState, true);
-//   }
-// });
-
-// Hooks.on(`renderDungTurnConfig`, async (ev, html) => {
-//   const data = await game.settings.get(`${OSRH.moduleName}`, 'dungeonTurnData');
-//   document.getElementById('enc-table').value = data.eTable;
-//   document.getElementById('react-table').value = data.rTable;
-//   document.getElementById('proc').value = data.proc;
-//   document.getElementById('roll-target').value = data.rollTarget;
-//   document.getElementById('roll-enc').checked = data.rollEnc;
-//   document.getElementById('roll-react').checked = data.rollReact;
-// });
-// Hooks.on('rendercustomEffectList', (CEL, html, form) => {
-//   CEL.renderEffectList(html);
-// });
-
-// Hooks.on('renderItemSheet', async (sheetObj, html) => {
-//   const isLight = sheetObj.object.system.tags?.find((t) => t.value == 'Light');
-//   if ((await game.settings.get(`${OSRH.moduleName}`, 'enableLightConfig')) && isLight) {
-//     let item = sheetObj.item;
-//     let el = document.createElement('a');
-//     el.addEventListener('click', async (ev) => {
-//       ev.preventDefault();
-//       let itemConfig = await item.getFlag(`${OSRH.moduleName}`, 'lightItemConfig');
-//       if (Object.values(ui.windows).filter((i) => i.id.includes(`light-item-config`)).length == 0) {
-//         new OSRH.light.ItemSettingsForm(item).render(true);
-//       }
-//     });
-//     let target = html.find('.header-button.configure-sheet');
-//     el.innerHTML = `<a title="OSRH Light Item Config"><i class="fas fa-wrench"></i></a>`;
-//     target.before(el);
-//   }
-// });
 // remove once ose combat time advancement fixed
 Hooks.on('deleteCombat', async () => {
   await OSRH.socket.executeAsGM('setting', 'lastRound', 0, 'set');
@@ -369,4 +342,14 @@ Hooks.on('updateCombat', async (combat, details) => {
 //   }
 // });
 
-
+function addSheetUi(sheetEl) {
+  const exists = sheetEl.querySelector('#osrh-sheet-ui-cont');
+  if (!exists) {
+    const uiEl = document.createElement('div');
+    uiEl.id = 'osrh-sheet-ui-cont';
+    uiEl.classList.add('osrh-sheet-ui-cont');
+    sheetEl.prepend(uiEl);
+    return uiEl;
+  }
+  return 'skip';
+}

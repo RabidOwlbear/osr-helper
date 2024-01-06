@@ -71,11 +71,11 @@
 }
 .osrh.item-config button.config-btn{
   line-height: 1.5em;
-  color: var(--theme-btn-color);
+  color: var(--theme-btn-txt);
   border: none;
   border-radius: .2em;
   width: 50px;
-  background-color: var(--osrh-ui-btn)
+  background-color: var(--theme-btn-color)
 }
 .osrh.item-config .main,
 .osrh.ammo-config .main,

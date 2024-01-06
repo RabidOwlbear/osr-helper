@@ -1,7 +1,3 @@
-2023/12/15-11:27:28.089 ea4 Recovering log #1249
-2023/12/15-11:27:28.093 ea4 Delete type=0 #1249
-2023/12/15-11:27:28.093 ea4 Delete type=3 #1247
-2023/12/15-11:56:31.708 294c Level-0 table #1254: started
-2023/12/15-11:56:31.708 294c Level-0 table #1254: 0 bytes OK
-2023/12/15-11:56:31.710 294c Delete type=0 #1252
-2023/12/15-11:56:31.712 294c Manual compaction at level-0 from '!folders!1su0quDIvtUXEx81' @ 72057594037927935 : 1 .. '!macros!zsQvgbLJU3RwW7sX' @ 0 : 0; will stop at (end)
+2024/01/06-13:21:28.690 36f8 Recovering log #1318
+2024/01/06-13:21:28.694 36f8 Delete type=0 #1318
+2024/01/06-13:21:28.694 36f8 Delete type=3 #1317

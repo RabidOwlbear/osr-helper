@@ -685,6 +685,7 @@ export const registerUtil = () => {
     root.style.setProperty('--t1-text', themeData.text);
     root.style.setProperty('--t1-num', themeData.midNum);
     root.style.setProperty('--theme-btn-color', themeData.btnColor);
+    root.style.setProperty('--theme-btn-txt', themeData.btnTxt);
     root.style.setProperty('--el-button-glow', themeData.glow);
   };
   // used

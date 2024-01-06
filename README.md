@@ -170,8 +170,8 @@ Mousing over any input will display its function.
 - Icon: Icon to apply to the token of the targeted actor.
 - Duration: Select an interval from the dropdown menu, and enter a number.
 - Add Effect: Clicking the button to the right of the effect duration will add an attribute to the effect list. This row will include a select for choosing the attribute to target, and a mod inout to enter the modification value. Clicking the x buton on the right side of an effect list row will delete that entry from the list. An effect requires at least one added effect.
-- Create Effect: located in the top right corner. Clicking this button will attempt to create the created effect on the selected target.
-- Save Preset: Clicking this button will attempt to save the defined effect as a preset.
+- Create Effect: located in the middle left. Clicking this button will attempt to create the created effect on the selected target.
+- Save Preset: Located to the right of the effect presets header. Clicking this button will attempt to save the defined effect as a preset.
 - Preset list: Saved effect presets will be displayed below the effect presets header.
 - Apply Preset Button: Clicking the green checkmark button on the right side of a displayed saved effect will apply the saved preset data to the create effect fields. 
 - Clicking an effect preset name will expand the entry displaying the targeted attributesd and effect description.
