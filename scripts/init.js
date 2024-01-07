@@ -220,7 +220,7 @@ Hooks.on('renderActorSheet', async (sheetEl, html, actorObj) => {
   let itemPiles = actorObj.flags?.['item-piles']?.data?.enabled || null;
   if (!itemPiles) {
     if (await game.settings.get(OSRH.moduleName, `enableEquippableContainers`)) {
-      OSRH.util.initializeDroppableContainers(actor.object, html);
+      OSRH.util.initializeDroppableContainers(sheetEl.object, html);
     }
     //sheet side ui
     const sheetUiEl = addSheetUi(html[0].closest('.app'));
