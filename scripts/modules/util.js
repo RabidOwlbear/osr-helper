@@ -886,7 +886,8 @@ export const registerUtil = () => {
     return actor.items.filter(i=>i.flags?.['osr-helper']?.itemType === type);
   }
   OSRH.util.renderPartySheet = function(){
-    new OSRH.partySheet().render(true)
+    // new OSRH.partySheet().render(true);
+    Hooks.call('renderOSRHPartySheet');
   }
   OSRH.util.convertToSeconds = function (duration, unit){
     const inc = {

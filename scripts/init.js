@@ -19,7 +19,6 @@ import { lightConfig } from './modules/light-item-config.mjs';
 import { registerSystemData } from './data/registerSystemData.mjs';
 import { registerSystemHooks } from './modules/hooks/system-hooks.mjs';
 import { OSRHPartySheet } from './modules/party-sheet/party-sheet.mjs';
-// import { osrhAttack } from './modules/attack.mjs';
 import { AmmoItemConfig } from './modules/ammo-config.mjs';
 import { tagMigration } from './modules/migration/tagMigration.mjs';
 import { migrateAmmoFlag } from './modules/migration/ammoFlag.mjs';
@@ -40,7 +39,6 @@ window.OSRH = window.OSRH || {
 };
 OSRH.lang = ['en', 'es', 'pt-BR'];
 Hooks.once('init', async function () {
-  console.log('init');
   //add settings
   registerData();
   registerUtil();
@@ -48,6 +46,7 @@ Hooks.once('init', async function () {
 
   // import modules
   // registerLight();
+  
   registerTurn();
   registerRations();
 
@@ -61,6 +60,7 @@ Hooks.once('init', async function () {
   OSRH.TurnTracker = OSRHTurnTracker;
   OSRH.lightConfig = lightConfig;
   OSRH.partySheet = OSRHPartySheet;
+  // OSRH.advPartySheet = PartySheetAdvanced;
   // OSRH.attack = osrhAttack;
   OSRH.AmmoConfig = AmmoItemConfig;
 
@@ -106,9 +106,11 @@ Hooks.once(`${OSRH.moduleName}.registered`, () => {});
 Hooks.once('ready', async () => {
   // no gm warning
   if (!OSRH.util.singleGM()) ui.notifications.warn(game.i18n.localize('OSRH.notification.noGmUser'));
+  registerSystemData();
+  OSRHPartySheet.init();
   // handlebars partials
   registerPartials();
-  registerSystemData();
+  
   OSRH.ui = uiControls;
   if (OSRH.systemData.effects) {
     registerCustomEffectList();
@@ -324,23 +326,7 @@ Hooks.on('updateCombat', async (combat, details) => {
   }
 });
 
-// Hooks.on('renderNewActiveEffectForm', (form, html) => {
-//   console.log('renderNewActiveEffectForm')
-//   if (game.user.role == 4) {
-//     let header = html.find('header')[0];
-//     let closeBtn = html.find(`header a.close`)[0];
-//     // <a class="light-config" title="Light Config"><i class="fa fa-wrench" style="margin-right: 5px;"></i></a>
-//     let btn = document.createElement('a');
-//     btn.title = `Manage Custom Effects`;
-//     btn.innerHTML = `<i class="fa fa-bars fa-xs"></i>`;
-//     btn.classList.add('manage-effects-btn');
-//     header?.insertBefore(btn, closeBtn);
-//     btn.addEventListener('click', (e) => {
-//       e.preventDefault();
-//       new OSRH.effect.manageCustomPresets().render(true);
-//     });
-//   }
-// });
+Hooks.on('renderOSRHPartySheet', OSRHPartySheet.renderPartySheet);
 
 function addSheetUi(sheetEl) {
   const exists = sheetEl.querySelector('#osrh-sheet-ui-cont');

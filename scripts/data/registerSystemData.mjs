@@ -9,6 +9,7 @@ export async function registerSystemData() {
         rationItemTypes: ['equipment'],
         itemSheetHook: 'renderItemSheet',
         characterSheetHook: 'renderActorSheet',
+        partyTypes: ['player', 'NPC'],
         baseMovMod: 4,
         effects: true,
         paths: {
@@ -32,6 +33,7 @@ export async function registerSystemData() {
         rationItemTypes: ['item'],
         itemSheetHook: 'renderItemSheet',
         characterSheetHook: 'renderActorSheet',
+        partyTypes: [ 'character'],
         baseMovMod: 3,
         effects: true,
         paths: {
@@ -55,6 +57,7 @@ export async function registerSystemData() {
         rationItemTypes: ['item'],
         itemSheetHook: 'renderItemSheet',
         characterSheetHook: 'renderActorSheet',
+        partyTypes: [ 'character'],
         baseMovMod: 3,
         effects: true,
         paths: {
@@ -78,6 +81,7 @@ export async function registerSystemData() {
         rationItemTypes: ['item'],
         itemSheetHook: 'renderItemSheet',
         characterSheetHook: 'renderActorSheet',
+        partyTypes: [ 'character'],
         baseMovMod: 4,
         effects: true,
         paths: {
@@ -101,6 +105,7 @@ export async function registerSystemData() {
         rationItemTypes: ['item'],
         itemSheetHook: 'renderItemSheet',
         characterSheetHook: 'renderActorSheet',
+        partyTypes: [ 'character'],
         baseMovMod: 3,
         effects: false,
         paths: {
@@ -110,7 +115,7 @@ export async function registerSystemData() {
             val: 'system.hp.value',
             max: 'system.hp.max'
           },
-          ac: game.settings.get('bfs', 'ascendingAC') ? 'system.aac.value' : 'system.ac.value'
+          ac:'system.ac.value'
         }
       };
       break;
@@ -124,6 +129,7 @@ export async function registerSystemData() {
         rationItemTypes: ['item'],
         itemSheetHook: 'renderItemSheet',
         characterSheetHook: 'renderActorSheet',
+        partyTypes: [ 'character'],
         baseMovMod: 3,
         effects: true,
         paths: {

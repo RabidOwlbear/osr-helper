@@ -376,68 +376,204 @@
 }
 
 /* party sheet */
-.osrh.party-sheet .window-header {
-  background-color: var(--osrh-ui-control-hover);
-  color: var(--text-light);
+.osrh.party-sheet a:hover {
+  text-shadow: 0 0 8px var(--el-button-glow);
 }
-
+.osrh.party-sheet .window-header {
+  background-color: var(--t1-1);
+  color: var(--t1-text);
+}
 .osrh.party-sheet .window-content {
   background: none;
-  background-color: var(--bg-light);
+  background-color: var(--t1-bg-light);
+  padding: 0;
+  position: relative;
 }
-
 .osrh.party-sheet .party-row {
   flex: 1;
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
-
-.osrh.party-sheet .party-row i {
-  color: var(--osrh-ui-control-hover);
+.osrh.party-sheet .party-actor:nth-of-type(even) {
+  background-color: rgba(0, 0, 0, 0.1019607843);
+}
+.osrh.party-sheet .icon {
+  color: var(--theme-btn-color);
+  text-shadow: 0 0 8px var(--el-button-glow);
   display: flex;
   align-items: center;
 }
-
+.osrh.party-sheet .delete-btn {
+  color: var(--theme-btn-color);
+}
+.osrh.party-sheet .delete-btn:hover {
+  text-shadow: 0 0 8px var(--el-button-glow);
+}
 .osrh.party-sheet .name {
   width: 120px;
 }
-
 .osrh.party-sheet .wide-val {
   text-align: center;
   width: 1.7em;
 }
-
 .osrh.party-sheet .hp {
   width: 80px;
 }
-
 .osrh.party-sheet .ac {
   display: flex;
   justify-content: space-between;
   padding-right: 0.5em;
   width: 45px;
 }
-
 .osrh.party-sheet form {
   height: 100%;
   width: 100%;
 }
-
 .osrh.party-sheet ol.items {
   height: 100%;
   padding: 0;
   margin: 0;
 }
-
-/* .osrh.party-sheet li{
-  height: 50px;
-} */
 .osrh.party-sheet .portrait {
   border-radius: 50%;
   height: 25px;
   width: 25px;
   margin-right: 0.2em;
+}
+.osrh.party-sheet .marker-portrait {
+  height: 40px;
+  width: 40px;
+  margin: 0 0 0.3rem 0.3rem;
+}
+.osrh.party-sheet .marker-portrait img {
+  border-radius: 50%;
+}
+.osrh.party-sheet .sheet-tabs {
+  display: flex;
+  justify-content: center;
+  text-align: center;
+}
+.osrh.party-sheet .nav-tab {
+  height: 20px;
+  width: 50%;
+  background-color: var(--t1-2);
+  color: var(--t1-text);
+  box-shadow: inset 2px 2px 5px #111;
+}
+.osrh.party-sheet .nav-tab.active {
+  background-color: var(--t1-1);
+  color: var(--t1-text);
+  box-shadow: none;
+}
+.osrh.party-sheet .tab-content {
+  height: 350px;
+}
+.osrh.party-sheet .tab {
+  height: 100%;
+}
+.osrh.party-sheet .tab.party {
+  padding: 0.2rem;
+}
+.osrh.party-sheet .formation-cont {
+  display: grid;
+  height: 100%;
+  width: 100%;
+  grid-template-rows: 1fr 300px;
+  overflow: hidden;
+}
+.osrh.party-sheet .marker-sm {
+  height: 40px;
+  width: 40px;
+}
+.osrh.party-sheet .marker-lg {
+  height: 55px;
+  width: 55px;
+  margin: auto;
+}
+.osrh.party-sheet .marker-list {
+  display: flex;
+  flex-wrap: wrap;
+}
+.osrh.party-sheet .party-picker {
+  height: 50px;
+  overflow-y: scroll;
+  scrollbar-width: thin;
+  scrollbar-color: var(--t1-dark) black;
+  padding: 0.2rem;
+}
+.osrh.party-sheet .formation-grid {
+  display: flex;
+  flex-direction: column;
+  border: 2px solid #333;
+}
+.osrh.party-sheet .formation-grid .grid-row {
+  display: flex;
+  justify-content: space-evenly;
+  flex: 1;
+  align-content: center;
+}
+.osrh.party-sheet .formation-header {
+  display: grid;
+  grid-template-columns: 1fr 50px;
+  border: 2px solid #333;
+  border-bottom: none;
+  overflow: hidden;
+}
+.osrh.party-sheet .marker {
+  position: relative;
+  display: grid;
+  align-content: center;
+  flex-shrink: 0;
+}
+.osrh.party-sheet .round-shadow {
+  border-radius: 50%;
+  box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.37);
+}
+.osrh.party-sheet .grid-cell {
+  border: 1px solid rgba(0, 0, 0, 0.1333333333);
+  width: 100%;
+  position: relative;
+}
+.osrh.party-sheet .marker-del {
+  opacity: 0%;
+  position: absolute;
+  top: 3px;
+  left: 40px;
+  color: rgb(102, 10, 10);
+}
+.osrh.party-sheet .marker-del:hover {
+  color: rgb(224, 18, 18);
+}
+.osrh.party-sheet .grid-cell:hover .marker-del {
+  opacity: 100%;
+}
+.osrh.party-sheet .side-panel {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  width: 25px;
+  height: 350px;
+  left: 300px;
+  top: 50px;
+}
+.osrh.party-sheet .drag-party-btn {
+  background-color: var(--theme-btn-color);
+  color: white;
+  display: grid;
+  align-content: center;
+}
+.osrh.party-sheet .drag-party-btn i {
+  font-size: 35px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.osrh.party-sheet .drag-party-btn:hover {
+  cursor: pointer;
+}
+.osrh.party-sheet .leader {
+  background-color: rgba(158, 31, 31, 0.2666666667);
 }
 
 /* custom effect form */

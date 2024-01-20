@@ -82,6 +82,13 @@ export const registerSettings = async function () {
     },
     config: false
   });
+  game.settings.register(`${OSRH.moduleName}`, 'currentFormation', {
+    name: 'currentFormation',
+    scope: 'world',
+    type: Object,
+    default:{active: false, data: null},
+    config: false
+  });
 
   //custom effect data obj
   game.settings.register(`${OSRH.moduleName}`, 'customEffects', {

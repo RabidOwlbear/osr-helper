@@ -500,5 +500,9 @@
   "OSRH.notification.greaterThanZero": "Number must be greater than zero.",
   "OSRH.notification.chooseIcon": "Please choose an icon.",
   "OSRH.notification.noGmUser": "WARNING: No Game Master level Users are currently logged in. OSR-Helper requires a logged in Game Master level User for full functionality.",
-  "OSRH.themes.Dark": "Dark"  
+  "OSRH.themes.Dark": "Dark",
+
+  "OSRH.partySheet.party": "Party",
+  "OSRH.partySheet.formation": "Formation"
+
 } 

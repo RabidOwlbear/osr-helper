@@ -1,72 +1,103 @@
-<form >
-  <ol class="items">
-    {{#each party as |actor idx|}}
-    <li class="fx party-actor item" data-type="Actor" data-uuid="{{actor.uuid}}">
-      <img src="{{actor.img}}"class="portrait item" data-uuid="{{actor.uuid}}">
-      <div class="party-row " data-uuid="{{actor.uuid}}">
-        <div class="name">
-            {{actor.name}}
+<form>
+  <div class='sheet-tabs' data-group='primary'>
+    <a class='nav-tab' data-tab='party'>{{localize 'OSRH.partySheet.party'}} </a>
+    <a class='nav-tab' data-tab='formation'>{{localize 'OSRH.partySheet.formation'}} </a>
+  </div>
+  <div class='tab-content' id='tab-content'>
+    <div class='tab party' data-group='primary' data-tab='party'>
+      <ol class='items' id='party-list'>
+        {{#each party as |actor idx|}}
+          <li class='fx party-actor item' data-type='Actor' data-uuid='{{actor.uuid}}'>
+            <img src='{{actor.img}}' class='portrait round-shadow item' data-uuid='{{actor.uuid}}' />
+            <div class='party-row' data-uuid='{{actor.uuid}}'>
+              <div class='name'>
+                {{actor.name}}
+              </div>
+              <div class='hp fx'>
+                <i class='fa-solid fa-heart icon'></i>
+                <p class='wide-val'>{{actor.hp}}</p>
+                <p>/</p>
+                <p class='wide-val'>{{actor.hpMax}}</p>
+              </div>
+              <div class='ac fx'>
+                <i class='fa-solid fa-shield icon'></i>
+                <p>{{actor.ac}}</p>
+              </div>
+              <div class='delete'>
+                <i class='fa-solid fa-delete-left delete-btn'></i>
+              </div>
+            </div>
+            {{!-- <div class="row row-b">
+            <div class="ab fx">
+              <i class="fa-solid fa-burst"></i>
+              <p>{{actor.system.combat.ab}}</p>
+              <i class="fa-solid fa-bullseye"></i>
+              <p>{{actor.system.combat.mod.ranged}}</p>
+              <i class="fa-solid fa-hand-fist"></i>
+              <p>{{actor.system.combat.mod.melee}}</p>
+            </div>
+            <div class="mov fx">
+              <i class="fa-solid fa-person"></i>
+              <p>{{actor.system.movement.base}}</p>
+              <i class="fa-solid fa-dungeon"></i>
+              <p>{{actor.system.movement.ov}}</p>
+              <i class="fa-solid fa-person-hiking"></i>
+              <p>{{actor.system.movement.enc}}</p>
+            </div>
+          </div> --}}
+            {{!-- <div class="row row-c">
+            <div class="save">
+            <i class="fa-solid fa-skull-crossbones"></i>
+            <p>{{actor.system.saves.death.value}}</p>
+          </div>
+          <div class="save">
+            <i class="fa-solid fa-wand-sparkles"></i>
+            <p>{{actor.system.saves.wand.value}}</p>
+          </div>
+          <div class="save">
+            <i class="fa-solid fa-person-rays"></i>
+            <p>{{actor.system.saves.paralysis.value}}</p>
+          </div>
+          <div class="save">
+            <i class="fa-solid fa-wind"></i>
+            <p>{{actor.system.saves.breath.value}}</p>
+          </div>
+          <div class="save">
+            <i class="fa-solid fa-hand-sparkles"></i>
+            <p>{{actor.system.saves.spells.value}}</p>
+          </div>
+          <div class="save">
+            <i class="fa-solid fa-hat-wizard"></i>
+            <p>{{actor.system.abilities.wis.bonus}}</p>
+          </div>
+          </div> --}}
+
+          </li>
+        {{/each}}
+      </ol>
+    </div>
+
+    <div class='tab formation' data-group='primary' data-tab='formation'>
+      <div class='formation-cont'>
+        <div class='formation-header'>
+          <div class='party-picker formation-drop'>
+            <div class="marker-list">
+              {{#each pool as |marker idx|}}
+                <div class='marker  marker-portrait marker-sm' data-uuid='{{marker.uuid}}'>
+                  <img src='{{marker.img}}' class='marker-sm' data-uuid='{{marker.uuid}}' title="{{marker.name}}" />
+                </div>
+              {{/each}}
+            </div>
+          </div>
+          <div class='drag-party-btn party-drag' title="Drag Party To Table">
+            <i class='fa-solid fa-people-group'></i>
+          </div>
         </div>
-        <div class="hp fx">
-          <i class="fa-solid fa-heart"></i>
-          <p class="wide-val">{{actor.hp}}</p>
-          <p>/</p>
-          <p class="wide-val">{{actor.hpMax}}</p>
-        </div>
-        <div class="ac fx">
-          <i class="fa-solid fa-shield"></i>
-          <p>{{actor.ac}}</p>
-        </div>
-        <div class="delete">
-          <i class="fa-solid fa-delete-left delete-btn"></i>
+        <div class='formation-grid'>
+          {{{formationGrid}}}
         </div>
       </div>
-      {{!-- <div class="row row-b">
-        <div class="ab fx">
-          <i class="fa-solid fa-burst"></i>
-          <p>{{actor.system.combat.ab}}</p>
-          <i class="fa-solid fa-bullseye"></i>
-          <p>{{actor.system.combat.mod.ranged}}</p>
-          <i class="fa-solid fa-hand-fist"></i>
-          <p>{{actor.system.combat.mod.melee}}</p>
-        </div>
-        <div class="mov fx">
-          <i class="fa-solid fa-person"></i>
-          <p>{{actor.system.movement.base}}</p>
-          <i class="fa-solid fa-dungeon"></i>
-          <p>{{actor.system.movement.ov}}</p>
-          <i class="fa-solid fa-person-hiking"></i>
-          <p>{{actor.system.movement.enc}}</p>
-        </div>
-      </div> --}}
-      {{!-- <div class="row row-c">
-        <div class="save">
-        <i class="fa-solid fa-skull-crossbones"></i>
-        <p>{{actor.system.saves.death.value}}</p>
-      </div>
-      <div class="save">
-        <i class="fa-solid fa-wand-sparkles"></i>
-        <p>{{actor.system.saves.wand.value}}</p>
-      </div>
-      <div class="save">
-        <i class="fa-solid fa-person-rays"></i>
-        <p>{{actor.system.saves.paralysis.value}}</p>
-      </div>
-      <div class="save">
-        <i class="fa-solid fa-wind"></i>
-        <p>{{actor.system.saves.breath.value}}</p>
-      </div>
-      <div class="save">
-        <i class="fa-solid fa-hand-sparkles"></i>
-        <p>{{actor.system.saves.spells.value}}</p>
-      </div>
-      <div class="save">
-        <i class="fa-solid fa-hat-wizard"></i>
-        <p>{{actor.system.abilities.wis.bonus}}</p>
-      </div>
-      </div> --}}
-      
-    </li>
-    {{/each}}
-  </ol>
+    </div>
+  </div>
+
 </form>
