@@ -9,7 +9,7 @@ const OSRHParty = {
 export class OSRHPartySheet extends FormApplication {
   constructor(party, formation) {
     super();
-    this.gridSize = 5;
+    this.gridSize = OSRHParty.gridSize;
     this.party = party
     this.formation = formation; //? formation :this._defaultFormationData(OSRHParty.gridSize);
     this.start;
@@ -103,7 +103,7 @@ export class OSRHPartySheet extends FormApplication {
     // test persist
     dragPartyBtn.addEventListener('click', (e) => {
       e.preventDefault();
-      // this._testPersist();
+      this._rotateFormation();
     });
 
     markerDeletBtns.map((m) => {
@@ -342,7 +342,7 @@ export class OSRHPartySheet extends FormApplication {
   }
   _getPartyoffsets(formation) {
     
-    let data = this.tempForm;
+    let data = formation;//this.tempForm;
     let leader = data.grid[data.lead[0]][data.lead[1]].uuid;
     let party = [];
     for (let r =0; r < data.grid.length; r++) {
@@ -393,5 +393,36 @@ export class OSRHPartySheet extends FormApplication {
       return data;
     }
     
+  }
+  
+  _blankGrid(){
+    const grid = [];
+    const blankObj = { uuid: null, img: null, name: null }
+    for(let i = 0; i < OSRHParty.gridSize; i++){
+      let row = []
+      for(let r = 0; r < OSRHParty.gridSize; r++){
+        row.push(blankObj);
+      }
+      grid.push(row)
+    }
+    return grid
+  }
+ async _rotateFormation(){
+    let gridL = OSRHParty.gridSize;
+    const curGrid = this.formation.grid;
+    const newGrid = []
+    for(let i =0; i<gridL;i++){
+      newGrid.push([])
+    }
+    for(let r=0; r < gridL; r++){
+      let idx = gridL - r;
+      for(let c = 0; c < gridL; c++){
+        let i = idx - 1;
+        newGrid[c][i] = {uuid: curGrid[r][c].uuid, img: curGrid[r][c].img, name: curGrid[r][c].name}
+      }
+    }
+    this.formation.grid = newGrid;
+    await game.settings.set('osr-helper', 'currentFormation', { active: true, data: this.formation} )
+    this.render();
   }
 }
