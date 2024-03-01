@@ -1,8 +1,7 @@
 export const registerSettings = async function () {
-
   game.settings.register(`${OSRH.moduleName}`, 'timeJournalName', {
-    name: "OSRH.settings.timeJournal.name",
-    hint: "OSRH.settings.timeJournal.hint",
+    name: 'OSRH.settings.timeJournal.name',
+    hint: 'OSRH.settings.timeJournal.hint',
     scope: 'world',
     type: String,
     default: 'Turn Count',
@@ -10,32 +9,34 @@ export const registerSettings = async function () {
   });
 
   game.settings.register(`${OSRH.moduleName}`, 'displayControlUi', {
-    name: "OSRH.settings.displayUI.name",
-    hint: "OSRH.settings.displayUI.hint",
+    name: 'OSRH.settings.displayUI.name',
+    hint: 'OSRH.settings.displayUI.hint',
     scope: 'client',
     type: Boolean,
     default: true,
     config: true
   });
-  game.settings.register(`${OSRH.moduleName}`, 'displaycustomAttrib', {
-    name: "OSRH.settings.displaycustomAttib.name",
-    hint: "OSRH.settings.displaycustomAttib.hint",
-    scope: 'client',
-    type: Boolean,
-    default: false,
-    config: true
-  });
-  game.settings.register(`${OSRH.moduleName}`, 'trackCustomAttrib', {
-    name: "OSRH.settings.trackcustomAttib.name",
-    hint: "OSRH.settings.trackcustomAttib.hint",
-    scope: 'client',
-    type: Boolean,
-    default: true,
-    config: true
-  });
+  if (game.system.id === 'ose') {
+    game.settings.register(`${OSRH.moduleName}`, 'displaycustomAttrib', {
+      name: 'OSRH.settings.displaycustomAttib.name',
+      hint: 'OSRH.settings.displaycustomAttib.hint',
+      scope: 'client',
+      type: Boolean,
+      default: false,
+      config: true
+    });
+    game.settings.register(`${OSRH.moduleName}`, 'trackCustomAttrib', {
+      name: 'OSRH.settings.trackcustomAttib.name',
+      hint: 'OSRH.settings.trackcustomAttib.hint',
+      scope: 'client',
+      type: Boolean,
+      default: true,
+      config: true
+    });
+  }
   game.settings.register(`${OSRH.moduleName}`, 'restMessage', {
-    name: "OSRH.settings.restMsg.name",
-    hint: "OSRH.settings.restMsg.name",
+    name: 'OSRH.settings.restMsg.name',
+    hint: 'OSRH.settings.restMsg.name',
     scope: 'world',
     type: Boolean,
     default: true,
@@ -43,8 +44,8 @@ export const registerSettings = async function () {
   });
 
   game.settings.register(`${OSRH.moduleName}`, 'whisperRest', {
-    name: "OSRH.settings.restMsg.whisper",
-    hint: "OSRH.settings.restMsg.whisper",
+    name: 'OSRH.settings.restMsg.whisper',
+    hint: 'OSRH.settings.restMsg.whisper',
     scope: 'world',
     type: Boolean,
     default: true,
@@ -52,16 +53,16 @@ export const registerSettings = async function () {
   });
 
   game.settings.register(`${OSRH.moduleName}`, 'tokenLightDefault', {
-    name: "OSRH.settings.tokenLightDefault.name",
-    hint: "OSRH.settings.tokenLightDefault.hint",
+    name: 'OSRH.settings.tokenLightDefault.name',
+    hint: 'OSRH.settings.tokenLightDefault.hint',
     scope: 'world',
     type: Boolean,
     default: true,
     config: true
   });
   game.settings.register(`${OSRH.moduleName}`, 'combatTimeAdvance', {
-    name: "OSRH.settings.combatTime.name",
-    hint: "OSRH.settings.combatTime.hint",
+    name: 'OSRH.settings.combatTime.name',
+    hint: 'OSRH.settings.combatTime.hint',
     scope: 'world',
     type: Boolean,
     default: true,
@@ -69,8 +70,8 @@ export const registerSettings = async function () {
   });
 
   game.settings.register(`${OSRH.moduleName}`, 'dungeonTurnNotificiation', {
-    name: "OSRH.settings.dungeonTurnNotify.name",
-    hint: "OSRH.settings.dungeonTurnNotify.hint",
+    name: 'OSRH.settings.dungeonTurnNotify.name',
+    hint: 'OSRH.settings.dungeonTurnNotify.hint',
     scope: 'world',
     type: Boolean,
     default: true,
@@ -101,7 +102,7 @@ export const registerSettings = async function () {
     name: 'currentFormation',
     scope: 'world',
     type: Object,
-    default:{active: false, data: null},
+    default: { active: false, data: null },
     config: false
   });
 
@@ -120,7 +121,7 @@ export const registerSettings = async function () {
     default: {},
     config: false
   });
-  
+
   game.settings.register(`${OSRH.moduleName}`, 'effectData', {
     name: 'effectData',
     scope: 'world',
@@ -137,7 +138,7 @@ export const registerSettings = async function () {
     type: Object,
     default: {
       journalName: game.settings.get(`${OSRH.moduleName}`, 'timeJournalName'),
-      dungeon: {  
+      dungeon: {
         eTables: ['none', 'none', 'none', 'none', 'none', 'none', 'none', 'none'],
         rTable: 'none',
         lvl: 1,
@@ -151,7 +152,7 @@ export const registerSettings = async function () {
         rest: 0,
         restWarnCount: 0,
         session: 0,
-        total: 0,
+        total: 0
       },
       travel: {
         session: 0,
@@ -168,10 +169,9 @@ export const registerSettings = async function () {
         terrain: 'clear',
         duration: 24
       },
-      global:{ 
-        trackRationExp: false 
+      global: {
+        trackRationExp: false
       }
-      
     },
     config: false
   });
@@ -186,8 +186,8 @@ export const registerSettings = async function () {
 
   // hide foreign language packs
   game.settings.register(`${OSRH.moduleName}`, 'hideForeignPacks', {
-    name: "OSRH.settings.hideForeignPack.name",
-    hint: "OSRH.settings.hideForeignPack.hint",
+    name: 'OSRH.settings.hideForeignPack.name',
+    hint: 'OSRH.settings.hideForeignPack.hint',
     scope: 'client',
     type: Boolean,
     default: true,
@@ -195,22 +195,22 @@ export const registerSettings = async function () {
   });
 
   game.settings.register(`${OSRH.moduleName}`, 'makePackFolder', {
-    name: "OSRH.settings.makePackFolder",
-    hint: "OSRH.settings.makePackFolderHint",
+    name: 'OSRH.settings.makePackFolder',
+    hint: 'OSRH.settings.makePackFolderHint',
     scope: 'client',
     type: Boolean,
     default: true,
     config: true
   });
   game.settings.register(`${OSRH.moduleName}`, 'packFolderName', {
-    name: "OSRH.settings.packFolderName",
-    hint: "OSRH.settings.packFolderNameHint",
+    name: 'OSRH.settings.packFolderName',
+    hint: 'OSRH.settings.packFolderNameHint',
     scope: 'world',
     type: String,
     default: 'OSRH Compendiums',
     config: true
   });
-// investigate for removal
+  // investigate for removal
   game.settings.register(`${OSRH.moduleName}`, 'rationData', {
     name: 'rationData',
     scope: 'world',
@@ -228,8 +228,8 @@ export const registerSettings = async function () {
   });
 
   game.settings.register(`${OSRH.moduleName}`, 'centerHotbar', {
-    name: "OSRH.settings.centerHotbar.name",
-    hint: "OSRH.settings.centerHotbar.hint",
+    name: 'OSRH.settings.centerHotbar.name',
+    hint: 'OSRH.settings.centerHotbar.hint',
     scope: 'client',
     type: Boolean,
     default: true,
@@ -261,8 +261,8 @@ export const registerSettings = async function () {
   });
 
   game.settings.register(`${OSRH.moduleName}`, 'enableItemConfig', {
-    name: "OSRH.settings.showItemConfig.name",
-    hint: "OSRH.settings.showItemConfig.hint",
+    name: 'OSRH.settings.showItemConfig.name',
+    hint: 'OSRH.settings.showItemConfig.hint',
     scope: 'world',
     type: Boolean,
     default: false,
@@ -277,17 +277,17 @@ export const registerSettings = async function () {
   });
 
   game.settings.register(`${OSRH.moduleName}`, 'theme', {
-    name: "OSRH.settings.theme.name",
-    hint: "OSRH.settings.theme.hint",
+    name: 'OSRH.settings.theme.name',
+    hint: 'OSRH.settings.theme.hint',
     type: String,
     choices: {
-      0: "OSRH.themes.purpleSlide",
-      1: "OSRH.themes.santaFe",
-      2: "OSRH.themes.deepBlue",
-      3: "OSRH.themes.greenSLime",
-      4: "OSRH.themes.cottonCandy",
-      5: "OSRH.themes.paleSunrise",
-      6: "OSRH.themes.Dark"
+      0: 'OSRH.themes.purpleSlide',
+      1: 'OSRH.themes.santaFe',
+      2: 'OSRH.themes.deepBlue',
+      3: 'OSRH.themes.greenSLime',
+      4: 'OSRH.themes.cottonCandy',
+      5: 'OSRH.themes.paleSunrise',
+      6: 'OSRH.themes.Dark'
     },
     default: 'none',
     scope: 'client',
@@ -298,8 +298,8 @@ export const registerSettings = async function () {
   });
 
   game.settings.register(`${OSRH.moduleName}`, 'enableEquippableContainers', {
-    name: "OSRH.settings.equipContainers.name",
-    hint: "OSRH.settings.equipContainers.hint",
+    name: 'OSRH.settings.equipContainers.name',
+    hint: 'OSRH.settings.equipContainers.hint',
     scope: 'world',
     type: Boolean,
     default: false,
@@ -316,7 +316,6 @@ export const registerSettings = async function () {
   });
   // temp settings
 
- 
   game.settings.register(`${OSRH.moduleName}`, 'tempOldSavedEffects', {
     name: 'tempOldSavedEffects',
     scope: 'world',
@@ -326,13 +325,12 @@ export const registerSettings = async function () {
   });
   // --------------
   // migration settings
-//v0.6.0
-game.settings.register(`${OSRH.moduleName}`, `migrationItemTags`, {
-  name: "migrationItemTags",
-  scope: 'world',
-  type: Boolean,
-  default: false,
-  config: false
-});
+  //v0.6.0
+  game.settings.register(`${OSRH.moduleName}`, `migrationItemTags`, {
+    name: 'migrationItemTags',
+    scope: 'world',
+    type: Boolean,
+    default: false,
+    config: false
+  });
 };
-
