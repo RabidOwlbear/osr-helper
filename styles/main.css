@@ -300,6 +300,7 @@
 }
 
 .osrh-sheet-ui-cont {
+  font-family: "Signika", sans-serif;
   position: absolute;
   left: -30px;
   top: 30px;
@@ -373,6 +374,192 @@
 .osrh-sheet-ui-cont a.sheet-ui-btn:hover {
   opacity: 100%;
   text-shadow: 0 0 8px var(--el-button-glow);
+}
+
+.osrh-custom-attrib-cont {
+  position: absolute;
+  height: 25px;
+  width: 100%;
+  background-color: rgba(32, 32, 32, 0.623);
+  border-radius: 0 0 0.4em 0.4em;
+  top: 100%;
+  display: flex;
+  padding: 0 1em;
+}
+.osrh-custom-attrib-cont .attrib-cont {
+  display: flex;
+  margin: 0 0.4em;
+}
+.osrh-custom-attrib-cont .attrib-cont .custom-attrib-label {
+  color: white;
+  width: 2.2em;
+  font-weight: 700;
+  background-color: black;
+  display: grid;
+  place-items: center;
+}
+.osrh-custom-attrib-cont .attrib-cont .custom-attrib-input {
+  width: 2em;
+  background-color: #cacaca;
+  border: none;
+  text-align: center;
+  font-weight: 500;
+}
+
+.app.attribute-config .window-content {
+  padding: 0;
+  margin: 0;
+  overflow: hidden;
+}
+.app.attribute-config form {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.app.attribute-config .hRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.app.attribute-config .vRow {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.app.attribute-config .custom-attribute-config {
+  display: flex;
+  width: 100%;
+  height: 85%;
+  overflow: hidden;
+}
+.app.attribute-config .custom-attribute-config .left-panel {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  padding: 0.3em;
+  width: 60%;
+  height: 100%;
+}
+.app.attribute-config .custom-attribute-config .left-panel label {
+  text-align: center;
+}
+.app.attribute-config .custom-attribute-config .right-panel::-webkit-scrollbar {
+  display: none;
+}
+.app.attribute-config .custom-attribute-config .right-panel {
+  position: relative;
+  width: 40%;
+  height: 100%;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  padding-top: 0.3em;
+  overflow-y: scroll;
+  scrollbar-width: none;
+  row-gap: 0.3em;
+  overflow: hidden;
+}
+.app.attribute-config .custom-attribute-config .right-panel .placeholder.hidden {
+  display: none;
+}
+.app.attribute-config .custom-attribute-config .right-panel .placeholder {
+  width: 95%;
+  height: 95%;
+  margin: 2.5%;
+  display: grid;
+  place-items: center;
+  border-radius: 0.8em;
+  border: solid 2px rgb(116, 116, 116);
+}
+.app.attribute-config .custom-attribute-config .right-panel .placeholder .placeholder-text {
+  color: rgb(116, 116, 116);
+}
+.app.attribute-config .custom-attribute-config .right-panel .item-list::-webkit-scrollbar {
+  display: none;
+}
+.app.attribute-config .custom-attribute-config .right-panel .item-list {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  overflow-y: scroll;
+  scrollbar-width: none;
+}
+.app.attribute-config .custom-attribute-config .right-panel .atrib-item {
+  position: relative;
+  width: 40px;
+  height: 40px;
+  margin: 0 0 0.3em 0.3em;
+}
+.app.attribute-config .custom-attribute-config .right-panel .atrib-item .delete-item {
+  display: none;
+  height: 10px;
+  width: 10px;
+  position: absolute;
+  top: 3px;
+  left: 23px;
+  color: red;
+}
+.app.attribute-config .custom-attribute-config .right-panel .atrib-item:hover .delete-item {
+  display: inherit;
+}
+.app.attribute-config .custom-attribute-config #abbreviation {
+  width: 2.5em;
+  font-weight: 500;
+  text-align: center;
+}
+.app.attribute-config .footer {
+  width: 100%;
+  height: 15%;
+  background-color: var(--osrh-ui-control);
+  display: flex;
+  justify-content: center;
+}
+.app.attribute-config .footer #save-btn {
+  width: 100%;
+  text-align: center;
+  width: 100%;
+  color: white;
+}
+
+.app.manage-attributes .window-content {
+  padding: 0;
+}
+.app.manage-attributes .main-cont {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.app.manage-attributes .header {
+  height: 1.5em;
+  background-color: var(--color-underline-active);
+  color: var(--text-light);
+  display: flex;
+  justify-content: space-between;
+  padding: 0 0.3em;
+}
+.app.manage-attributes .header .add-btn {
+  font-size: 1.3em;
+  color: var(--text-light);
+}
+.app.manage-attributes .attributes::-webkit-scrollbar {
+  display: none;
+}
+.app.manage-attributes .attributes {
+  flex: 1;
+  overflow-y: scroll;
+  scrollbar-width: none;
+  padding: 0.2em;
+}
+.app.manage-attributes .attrib-cont {
+  width: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.app.manage-attributes .attrib-cont .delete-btn {
+  font-size: 25px;
+  color: var(--color-underline-active);
 }
 
 /* party sheet */
@@ -1602,7 +1789,7 @@
   margin: 0 5px;
 }
 
-.osrh.turn-tracker header {
+.app.osrh.turn-tracker header {
   background-color: #221e2e;
 }
 

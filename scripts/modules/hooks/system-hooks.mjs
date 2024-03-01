@@ -33,7 +33,7 @@ export async function registerSystemHooks() {
         }
       });
   }
-  // universal hooks
+  // universal hooksaddItemConfigControl
   Hooks.on('renderOSRHItemConfig', async (obj, html, app) => {
     let itemType = obj.itemType;
     if (!itemType) itemType = 'none';
@@ -51,6 +51,7 @@ async function addItemConfigControl(html, item) {
     if (titleEl) {
       const configBtn = document.createElement('a');
       configBtn.classList.add('control', 'osrh-item-config');
+      configBtn.title = game.i18n.localize("OSRH.item.config.itemConfig")
       configBtn.innerHTML = configIcon;
       titleEl.after(configBtn);
       configBtn.addEventListener('click', async (ev) => {

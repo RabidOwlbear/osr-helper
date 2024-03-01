@@ -1,0 +1,40 @@
+<form class="">
+  <div class="custom-attribute-config">
+    <div class="left-panel">
+      <div class="hRow">
+    
+        <label for="abbreviation">{{localize "OSRH.attribConfig.displayAbbr"}}:</label>
+        <input type="text" id="abbreviation" title="{{localize "OSRH.attribConfig.displayAbbrHint"}}" value="{{abbr}}">
+      </div>
+      <div class="vRow">
+        <label for="hover-text">{{localize "OSRH.attribConfig.attribName"}}:</label>
+        <input type="text" id="attrib-name" value="{{name}}">
+      </div>
+    </div>
+    <div class="right-panel items">
+      {{#if noItems}}
+      <div class="placeholder">
+        <div class="placeholder-text">
+          {{localize "OSRH.attribConfig.dropAbility"}}
+        </div>
+      </div>
+      {{else}}
+        <div class="item-list">
+       
+        {{#each items as |item index|}}
+        <div class="atrib-item" id="{{item.uuid}}" data-id="{{item.id}}">
+          <img src="{{item.img}}" title="{{item.name}}">
+          <a class="delete-item" title="{{localize "OSRH.attribConfig.deleteItemTrack"}}">
+            <i class="fa-solid fa-circle-xmark"></i>
+          </a>
+        </div>
+        {{/each}}
+       
+      </div>
+      {{/if}}
+    </div>
+  </div>
+  <div class="footer">
+    <a id="save-btn">{{localize "OSRH.newEffectForm.Save"}}</a>
+  </div>
+</form>

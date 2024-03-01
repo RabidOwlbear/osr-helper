@@ -17,7 +17,22 @@ export const registerSettings = async function () {
     default: true,
     config: true
   });
-
+  game.settings.register(`${OSRH.moduleName}`, 'displaycustomAttrib', {
+    name: "OSRH.settings.displaycustomAttib.name",
+    hint: "OSRH.settings.displaycustomAttib.hint",
+    scope: 'client',
+    type: Boolean,
+    default: false,
+    config: true
+  });
+  game.settings.register(`${OSRH.moduleName}`, 'trackCustomAttrib', {
+    name: "OSRH.settings.trackcustomAttib.name",
+    hint: "OSRH.settings.trackcustomAttib.hint",
+    scope: 'client',
+    type: Boolean,
+    default: true,
+    config: true
+  });
   game.settings.register(`${OSRH.moduleName}`, 'restMessage', {
     name: "OSRH.settings.restMsg.name",
     hint: "OSRH.settings.restMsg.name",

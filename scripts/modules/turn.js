@@ -279,6 +279,7 @@ export const registerTurn = () => {
     let turnMsg = await game.settings.get(`${OSRH.moduleName}`, 'dungeonTurnNotificiation');
     let turnData = deepClone(await game.settings.get(`${OSRH.moduleName}`, 'turnData'));
     let travelData = turnData.travel;
+    console.log(turnMsg, travelData)
     const encTableName = travelData.eTable;
     let encTable;
     let reactTable;
@@ -297,7 +298,7 @@ export const registerTurn = () => {
       }
     }
 
-    turnData = deepClone(await OSRH.turn.incrementTurnData('travel'));
+    turnData = deepClone(await OSRH.turn.incrementTurnData('travel', true, turnData));
     travelData = turnData.travel;
     if (await game.settings.get(`${OSRH.moduleName}`, 'restMessage')) {
       OSRH.turn.restMsg(turnData.travel.rest, 'travel'); //generate chat message regarding rest status

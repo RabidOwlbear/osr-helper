@@ -23,6 +23,14 @@ import { AmmoItemConfig } from './modules/ammo-config.mjs';
 import { tagMigration } from './modules/migration/tagMigration.mjs';
 import { migrateAmmoFlag } from './modules/migration/ammoFlag.mjs';
 import { migrateSavedEffects } from './modules/migration/savedEffecst.mjs';
+import { CustomAttributeEdit } from './modules/custom-attrib/custom-attrib-edit.mjs';
+import { ManageCustomAttributes } from './modules/custom-attrib/manage-attributes.mjs';
+import {
+  addSheetUi,
+  addcustomAttribElement,
+  decrementAttribute,
+  addAttribListeners
+} from './modules/custom-attrib/custom-attrib-util.mjs';
 window.OSRH = window.OSRH || {
   moduleName: `osr-helper`,
   ce: {},
@@ -46,7 +54,7 @@ Hooks.once('init', async function () {
 
   // import modules
   // registerLight();
-  
+
   registerTurn();
   registerRations();
 
@@ -60,6 +68,10 @@ Hooks.once('init', async function () {
   OSRH.TurnTracker = OSRHTurnTracker;
   OSRH.lightConfig = lightConfig;
   OSRH.partySheet = OSRHPartySheet;
+  OSRH.CustomAttributeEdit = CustomAttributeEdit;
+  OSRH.ManageCustomAttributes = ManageCustomAttributes;
+  // OSRH.customAttributeConfig = CustomAttributeConfig;
+
   // OSRH.advPartySheet = PartySheetAdvanced;
   // OSRH.attack = osrhAttack;
   OSRH.AmmoConfig = AmmoItemConfig;
@@ -110,7 +122,7 @@ Hooks.once('ready', async () => {
   OSRHPartySheet.init();
   // handlebars partials
   registerPartials();
-  
+
   OSRH.ui = uiControls;
   if (OSRH.systemData.effects) {
     registerCustomEffectList();
@@ -224,6 +236,7 @@ Hooks.on('renderActorSheet', async (sheetEl, html, actorObj) => {
     if (await game.settings.get(OSRH.moduleName, `enableEquippableContainers`)) {
       OSRH.util.initializeDroppableContainers(sheetEl.object, html);
     }
+
     //sheet side ui
     const sheetUiEl = addSheetUi(html[0].closest('.app'));
     if (sheetUiEl !== 'skip') {
@@ -252,7 +265,7 @@ Hooks.on('renderActorSheet', async (sheetEl, html, actorObj) => {
           });
           btnCont.appendChild(aeBtn);
         }
-        // currency converter
+        // currency converter/attribute bar
         if (game.system.id === 'ose' && actorObj.type == 'character') {
           let ccBtn = document.createElement('a');
           let ccIcon = document.createElement('i');
@@ -265,7 +278,30 @@ Hooks.on('renderActorSheet', async (sheetEl, html, actorObj) => {
             sheetEl.render();
             OSRH.util.curConDiag(actorObj);
           });
+          // custom attrib btn
           btnCont.appendChild(ccBtn);
+          console.log(actorObj.prototypeToken.actorLink);
+          if ((await game.settings.get(OSRH.moduleName, `displaycustomAttrib`)) && actorObj.prototypeToken.actorLink) {
+            addcustomAttribElement(html[0].closest('.app'), actorObj);
+            if (await game.settings.get(OSRH.moduleName, 'trackCustomAttrib')) {
+              addAttribListeners(html, actorObj);
+            }
+
+            let caBtn = document.createElement('a');
+            let caIcon = document.createElement('i');
+            caBtn.classList.add('sheet-ui-btn');
+            caBtn.title = game.i18n.localize('OSRH.uiControl.editCustomAttrib');
+            caIcon.classList.add('fa-solid', 'fa-pen-to-square');
+            caBtn.appendChild(caIcon);
+            caBtn.addEventListener('click', async (e) => {
+              e.preventDefault();
+              if (Object.values(ui.windows).filter((i) => i.options.id == `OSRHManageAttributes`).length == 0) {
+                let left = e.x - 350 > 0 ? e.x - 350 : 0;
+                new OSRH.ManageCustomAttributes(actorObj).render(true, { top: e.y - 130, left: left - 15 });
+              }
+            });
+            btnCont.appendChild(caBtn);
+          }
         }
         uiTab.appendChild(btnCont);
         sheetUiEl?.appendChild(uiTab);
@@ -328,14 +364,98 @@ Hooks.on('updateCombat', async (combat, details) => {
 
 Hooks.on('renderOSRHPartySheet', OSRHPartySheet.renderPartySheet);
 
-function addSheetUi(sheetEl) {
-  const exists = sheetEl.querySelector('#osrh-sheet-ui-cont');
-  if (!exists) {
-    const uiEl = document.createElement('div');
-    uiEl.id = 'osrh-sheet-ui-cont';
-    uiEl.classList.add('osrh-sheet-ui-cont');
-    sheetEl.prepend(uiEl);
-    return uiEl;
-  }
-  return 'skip';
-}
+// function addSheetUi(sheetEl) {
+//   const exists = sheetEl.querySelector('#osrh-sheet-ui-cont');
+//   if (!exists) {
+//     const uiEl = document.createElement('div');
+//     uiEl.id = 'osrh-sheet-ui-cont';
+//     uiEl.classList.add('osrh-sheet-ui-cont');
+//     sheetEl.prepend(uiEl);
+//     return uiEl;
+//   }
+//   return 'skip';
+// }
+// async function addcustomAttribElement(sheetEl, actor) {
+//   if (!actor.isOwner) {
+//     // check setting
+//     const showBar = await game.settings.get(`${OSRH.moduleName}`, 'displaycustomAttrib');
+//     if (showBar && actor.flags[OSRH.moduleName]?.customAttributes?.length > 0) {
+//       const exists = sheetEl.querySelector('#osrh-custom-attrib-cont');
+//       if (!exists) {
+//         const uiEl = document.createElement('div');
+//         uiEl.id = 'osrh-custom-attrib-cont';
+//         uiEl.classList.add('osrh-custom-attrib-cont');
+
+//         for (let attrib of actor.flags[OSRH.moduleName]?.customAttributes) {
+//           const div = document.createElement('div');
+//           div.classList.add('attrib-cont');
+//           div.id = attrib.id;
+//           const label = document.createElement('div');
+//           label.classList.add('custom-attrib-label');
+//           label.innerText = attrib.abbr;
+//           label.title = attrib.name;
+//           div.appendChild(label);
+//           const inp = document.createElement('input');
+//           inp.classList.add('custom-attrib-input');
+//           inp.value = attrib.value;
+//           inp.id = attrib.id;
+//           inp.addEventListener('change', async (e) => {
+//             e.preventDefault();
+//             const id = e.target.closest('.attrib-cont').id;
+//             const attributes = await deepClone(actor.flags[OSRH.moduleName]?.customAttributes);
+//             const attrib = attributes.find((i) => i.id == id);
+//             if (attrib) attrib.value = parseInt(inp.value);
+//             const actorObj = await game.actors.get(actor._id);
+//             await actorObj.setFlag(`${OSRH.moduleName}`, 'customAttributes', attributes);
+
+//             const actorSheet = Object.values(ui.windows).find((i) => i.id.includes(actor._id));
+//             if (actorSheet) {
+//               const pos = { top: actorSheet.position.top, left: actorSheet.position.left };
+//               await actorSheet.close();
+//               actorObj.sheet.render(true, pos);
+//             }
+//           });
+//           div.appendChild(inp);
+//           uiEl.appendChild(div);
+//         }
+
+//         sheetEl.prepend(uiEl);
+//         return uiEl;
+//       }
+//       return 'skip';
+//     }
+//   }
+// }
+// async function addAttribListeners(html, actorObj) {
+//   const data = actorObj.flags?.[OSRH.moduleName]?.customAttributes;
+//   const containerEl = html.find('div[data-tab="abilities"]')[0];
+//   if (data) {
+//     for (let attrib of data) {
+//       attrib?.items.map((i) => {
+//         const el = containerEl.querySelector(`li[data-item-id="${i.id}"] .item-image`);
+//         el?.addEventListener('click', (e) => {
+//           e.preventDefault();
+//           decrementAttribute(actorObj._id, attrib.id);
+//         });
+//       });
+//     }
+//   }
+// }
+// async function decrementAttribute(actorId, attribId) {
+//   const actor = game.actors.get(actorId);
+//   const flag = await deepClone(actor.flags?.[OSRH.moduleName]?.customAttributes);
+//   const attribute = flag.find((i) => i.id == attribId);
+//   if (!attribute.value >= 1) {
+//     ui.notifications.warn(`${attribute.name} ${game.i18n.localize('OSRH.util.notification.hasNoCharges')}`);
+//     return;
+//   } else {
+//     attribute.value -= 1;
+//     if (attribute.value < 0) attribute.value = 0;
+//     await actor.setFlag(OSRH.moduleName, 'customAttributes', flag);
+//   }
+//   const actorObj = Object.values(ui.windows).find((i) => i.id.includes(actor.id));
+//   if (actorObj) {
+//     await actorObj.close();
+//     actor.sheet.render(true);
+//   }
+// }

@@ -9,7 +9,7 @@ export async function registerSystemData() {
         rationItemTypes: ['equipment'],
         itemSheetHook: 'renderItemSheet',
         characterSheetHook: 'renderActorSheet',
-        partyTypes: ['player', 'NPC'],
+        partyTypes: ['Player', 'NPC'],
         baseMovMod: 4,
         effects: true,
         paths: {

@@ -400,6 +400,7 @@
 
   "OSRH.item.config.itemType": "Item Type",
   "OSRH.item.config.none": "none",
+  "OSRH.item.config.itemConfig": "Item Configuration Panel",
   "OSRH.item.config.light": "Light",
   "OSRH.item.config.ration": "Ration",
   "OSRH.item.config.config": "Config",
@@ -503,6 +504,23 @@
   "OSRH.themes.Dark": "Dark",
 
   "OSRH.partySheet.party": "Party",
-  "OSRH.partySheet.formation": "Formation"
+  "OSRH.partySheet.formation": "Formation",
 
+  "OSRH.settings.displaycustomAttib.name": "Display Custom Attributes On Character Sheet.",
+  "OSRH.settings.displaycustomAttib.hint": "Displays a custom attributes display bar to the bottom of the character sheet.",
+  "OSRH.settings.trackcustomAttib.name":"Track Custom Attribute Use",
+  "OSRH.settings.trackcustomAttib.hint":"When selected, a custom attribute will be decresed by 1 whenever a configured rollable ability is rolled from the character sheet.",
+  "OSRH.attribConfig.dropAbility": "Drop Ability Here",
+  "OSRH.attribConfig.title":"OSRH Custom Attribute Config",
+  "OSRH.attribConfig.displayAbbr": "Display Abbreviation",
+  "OSRH.attribConfig.displayAbbrHint": "The attribute will be displayed in the attribute bar using this 3 character abbreviation.",
+  "OSRH.attribConfig.attribName": "Attribute Name",
+  "OSRH.attribConfig.deleteItemTrack":"Delete Item Tracking",
+  "OSRH.uiControl.editCustomAttrib": "Edit Custom Attributes",
+  "OSRH.manageAttributes.title": "Manage Custom Attributes",
+  "OSRH.manageAttributes.customAttributes": "Custom Attributes",
+  "OSRH.util.notification.abbrLengthWarn":"Abbreviation must be 3 characters long.",
+  "OSRH.util.notification.itemAbilDropWarn": "Item must be an ability item contained on this actor sheet and must have a valid roll formula.",
+  "OSRH.util.notification.invalidAttribName":"Please enter a valid attribute name.",
+  "OSRH.util.notification.hasNoCharges":"has no charges."
 } 

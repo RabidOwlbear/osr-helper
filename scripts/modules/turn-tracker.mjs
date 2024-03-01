@@ -27,7 +27,7 @@ export class OSRHTurnTracker extends FormApplication {
     const partyObj = OSRH.util.getPartyActors();
 
     const tMod = this.terrainMod[this.turnData.travel.terrain];
-    console.log(tMod, this.getBaseRate(partyObj), partyObj)
+    // console.log(tMod, this.getBaseRate(partyObj), partyObj)
     context.baseRate = Math.floor(this.getBaseRate(partyObj) * tMod);
     context.characters = this.partyData(partyObj.characters, tMod);
     context.retainers = this.partyData(partyObj.retainers, tMod);

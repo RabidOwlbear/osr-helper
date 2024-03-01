@@ -385,7 +385,7 @@ export const registerUtil = () => {
       <div  style="flex:1">
         <select id="gender">
           <option value="all">-${game.i18n.localize('OSRH.util.dialog.gender')}-</option>
-          <option value="male"${game.i18n.localize('OSRH.util.dialog.male')}></option>
+          <option value="male">${game.i18n.localize("OSRH.util.dialog.male")}</option>
           <option value="female">${game.i18n.localize('OSRH.util.dialog.female')}</option>
           <option value="all">${game.i18n.localize('OSRH.util.dialog.all')}</option>
         </select>

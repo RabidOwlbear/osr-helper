@@ -400,6 +400,7 @@
 
   "OSRH.item.config.itemType": "Tipo de ítem",
   "OSRH.item.config.none": "ningun",
+  "OSRH.item.config.itemConfig": "Panel de configuración de artículos",
   "OSRH.item.config.light": "Lu",
   "OSRH.item.config.ration": "Ració",
   "OSRH.item.config.config": "Confi",
@@ -500,5 +501,26 @@
   "OSRH.notification.greaterThanZero": "El número debe ser mayor que cero..",
   "OSRH.notification.chooseIcon": "Por favor, elija un icono.",
   "OSRH.notification.noGmUser": "ADVERTENCIA: No hay usuarios de nivel Game Master conectados. OSR-Helper requiere un usuario de nivel Game Master conectado para una funcionalidad completa.",
-  "OSRH.themes.Dark": "Oscuridad"  
+  "OSRH.themes.Dark": "Oscuridad",
+  
+  "OSRH.partySheet.party": "Partido",
+  "OSRH.partySheet.formation": "Formación",
+
+  "OSRH.settings.displaycustomAttib.name": "Mostrar atributos personalizados en la hoja de personaje.",
+  "OSRH.settings.displaycustomAttib.hint": "Muestra una barra de visualización de atributos personalizados en la parte inferior de la hoja de personaje.",
+  "OSRH.settings.trackcustomAttib.name":"Seguimiento del uso de atributos personalizados",
+  "OSRH.settings.trackcustomAttib.hint":"Cuando se selecciona esta opción, un atributo personalizado se reducirá en 1 cada vez que se lance una habilidad configurable desde la hoja de personaje.",
+  "OSRH.attribConfig.dropAbility": "Tirar habilidad aquí",
+  "OSRH.attribConfig.title":"Configuración de atributos personalizados OSRH",
+  "OSRH.attribConfig.displayAbbr": "Mostrar Abreviatura",
+  "OSRH.attribConfig.displayAbbrHint": "El atributo se mostrará en la barra de atributos utilizando esta abreviatura de 3 caracteres.",
+  "OSRH.attribConfig.attribName": "Nombre del Atributo",
+  "OSRH.attribConfig.deleteItemTrack":"Eliminar seguimiento de elementos",
+  "OSRH.uiControl.editCustomAttrib": "Editar Atributos Personalizados",
+  "OSRH.manageAttributes.title": "Gestionar atributos personalizados",
+  "OSRH.manageAttributes.customAttributes": "Atributos personalizados",
+  "OSRH.util.notification.abbrLengthWarn":"La abreviatura debe tener 3 caracteres.",
+  "OSRH.util.notification.itemAbilDropWarn": "El elemento debe ser un elemento de habilidad contenido en esta hoja de actor y debe tener una fórmula de tirada válida.",
+  "OSRH.util.notification.invalidAttribName":"Introduzca un nombre de atributo válido.",
+  "OSRH.util.notification.hasNoCharges":"no tiene cargos."
 }

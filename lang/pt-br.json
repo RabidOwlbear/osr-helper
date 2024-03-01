@@ -400,6 +400,7 @@
 
   "OSRH.item.config.itemType": "Tipo de Item",
   "OSRH.item.config.none": "nenhum",
+  "OSRH.item.config.itemConfig": "Painel de configuração de itens",
   "OSRH.item.config.light": "Luz",
   "OSRH.item.config.ration": "Ração",
   "OSRH.item.config.config": "Config",
@@ -500,5 +501,26 @@
   "OSRH.notification.greaterThanZero": "O número deve ser maior que zero.",
   "OSRH.notification.chooseIcon": "Por favor, escolha um ícone.",
   "OSRH.notification.noGmUser": "AVISO: nenhum usuário do nível Game Master está conectado no momento. O OSR-Helper requer um usuário de nível Mestre de Jogo conectado para ter total funcionalidade.",
-  "OSRH.themes.Dark": "Escuro"  
+  "OSRH.themes.Dark": "Escuro" ,
+
+  "OSRH.partySheet.party": "Grupo",
+  "OSRH.partySheet.formation": "Formação",
+
+  "OSRH.settings.displaycustomAttib.name": "Exibir atributos personalizados na ficha do personagem.",
+  "OSRH.settings.displaycustomAttib.hint": "Exibe uma barra de exibição de atributos personalizados na parte inferior da folha do personagem.",
+  "OSRH.settings.trackcustomAttib.name":"Rastrear o uso de atributos personalizados",
+  "OSRH.settings.trackcustomAttib.hint":"Quando selecionado, um atributo personalizado será diminuído em 1 sempre que uma habilidade rolável configurada for rolada na ficha do personagem.",
+  "OSRH.attribConfig.dropAbility": "Drop Ability Here (Solte a habilidade aqui)",
+  "OSRH.attribConfig.title":"Configuração de atributo personalizado OSRH",
+  "OSRH.attribConfig.displayAbbr": "Exibir abreviação",
+  "OSRH.attribConfig.displayAbbrHint": "O atributo será exibido na barra de atributos usando essa abreviação de 3 caracteres.",
+  "OSRH.attribConfig.attribName": "Nome do atributo",
+  "OSRH.attribConfig.deleteItemTrack":"Excluir rastreamento de item",
+  "OSRH.uiControl.editCustomAttrib": "Editar atributos personalizados",
+  "OSRH.manageAttributes.title": "Gerenciar atributos personalizados",
+  "OSRH.manageAttributes.customAttributes": "Atributos personalizados",
+  "OSRH.util.notification.abbrLengthWarn":"A abreviação deve ter 3 caracteres.",
+  "OSRH.util.notification.itemAbilDropWarn": "O item deve ser um item de habilidade contido nessa folha de ator e deve ter uma fórmula de rolagem válida.",
+  "OSRH.util.notification.invalidAttribName":"Digite um nome de atributo válido.",
+  "OSRH.util.notification.hasNoCharges":"não tem cobranças."
 }

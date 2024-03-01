@@ -124,8 +124,8 @@ export class OSRHPartySheet extends FormApplication {
     const actor = await fromUuid(dragData.uuid);
     const party = OSRH.util.getPartyActors()
     // party list drop
-    if (event.target.id === 'party-list') {
       if(!OSRH.systemData.partyTypes.includes(actor.type)){
+        console.log('no')
         return
       }
       if (OSRH.systemData.partySheet) {
@@ -151,9 +151,7 @@ export class OSRHPartySheet extends FormApplication {
           this.formation = await OSRHPartySheet.defaultFormationData(OSRHParty.gridSize);
         }
       }
-      // OSRHParty.sheet.render();
-      Hooks.call('renderOSRHPartySheet')
-    }
+
     // grid drop
     if (event.target.dataset.type == 'grid-cell') {
       const grid = this.formation.grid;
@@ -171,10 +169,9 @@ export class OSRHPartySheet extends FormApplication {
           img: null
         };
       }
-      game.settings.set('osr-helper', 'currentFormation', { active: true, data: this.formation} );
-      this.render();
+      await game.settings.set('osr-helper', 'currentFormation', { active: true, data: this.formation} );
     }
-
+    Hooks.call('renderOSRHPartySheet')
     return true;
   }
   _onDragStart(event) {

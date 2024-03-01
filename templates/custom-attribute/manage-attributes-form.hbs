@@ -1,0 +1,26 @@
+<form class="main-cont">
+  <div class="header">
+    <div class="title">{{localize "OSRH.manageAttributes.customAttributes"}}</div>
+    <a  class="add-btn">
+      {{#if maxAttrib}}
+        <div></div>
+      {{else}}
+        <i class="fa-solid fa-square-plus" title=""></i>
+      {{/if}}
+    </a>
+  </div>
+  <div class="attributes">
+    
+    {{#if hasAttrib}}
+      {{#each attributes as |attrib idx|}}
+        <div class="attrib-cont" data-id="{{attrib.id}}" >
+          <a class="name" data-id="{{attrib.id}}">{{attrib.name}}</a>
+          <a class="delete-btn">
+            <i class="fa-solid fa-square-xmark"></i>
+          </a>
+          </div>
+      {{/each}}
+    {{else}}
+    {{/if}}
+  </div>
+</form>
