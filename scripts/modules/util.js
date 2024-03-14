@@ -1,4 +1,4 @@
-import { OSRHAttack } from "./attack.mjs";
+import { OSRHAttack } from './attack.mjs';
 export const registerUtil = () => {
   OSRH.util.singleGM = function () {
     return game.users.filter((u) => u.active && u.isGM)[0];
@@ -318,7 +318,7 @@ export const registerUtil = () => {
   // used
   OSRH.util.getPartyActors = function () {
     const partySheet = OSRH.systemData.partySheet;
-    const flagName = partySheet ?  game.system.id : 'osr-helper';// == 'ose' ? game.system.id : 'ose-dev';
+    const flagName = partySheet ? game.system.id : 'osr-helper'; // == 'ose' ? game.system.id : 'ose-dev';
     const allParty = game.actors.filter((a) => a?.flags?.[flagName]?.party);
     const retObj = {
       party: allParty,
@@ -335,18 +335,17 @@ export const registerUtil = () => {
     return retObj;
   };
   // used
-  OSRH.util.attack =function (){
+  OSRH.util.attack = function () {
     if (!OSRH.util.singleSelected()) {
-      return
+      return;
     }
     const actor = canvas.tokens.controlled[0].actor;
-    let x = (window.innerWidth / 2) - 300;
+    let x = window.innerWidth / 2 - 300;
     let y = window.innerHeight / 2;
-  
-    new OSRHAttack(actor).render(true, {top: y,
-    left: x})
-  }
-  
+
+    new OSRHAttack(actor).render(true, { top: y, left: x });
+  };
+
   // used
   OSRH.util.randomName = function (type = null, gender = null) {
     function getRandomItem(arr) {
@@ -354,13 +353,13 @@ export const registerUtil = () => {
     }
     function getName(type, gender = 'all') {
       const nameData = OSRH.data.nameData;
-      const firstObj = nameData[type];
+      const firstObj = nameData[type] || nameData.human;
       const typeObj =
         gender == 'all'
           ? firstObj.first[Math.floor(Math.random() * firstObj.first.length)]
           : firstObj.first.find((a) => a.type == gender);
       let firstName = getRandomItem(typeObj.list);
-      let lastName = nameData[type].last.length > 0 ? getRandomItem(nameData[type].last) : false;
+      let lastName = firstObj.last.length > 0 ? getRandomItem(firstObj.last) : false;
       let fullName = !lastName ? firstName : `${firstName} ${lastName}`;
       return fullName;
     }
@@ -385,7 +384,7 @@ export const registerUtil = () => {
       <div  style="flex:1">
         <select id="gender">
           <option value="all">-${game.i18n.localize('OSRH.util.dialog.gender')}-</option>
-          <option value="male">${game.i18n.localize("OSRH.util.dialog.male")}</option>
+          <option value="male">${game.i18n.localize('OSRH.util.dialog.male')}</option>
           <option value="female">${game.i18n.localize('OSRH.util.dialog.female')}</option>
           <option value="all">${game.i18n.localize('OSRH.util.dialog.all')}</option>
         </select>
@@ -864,18 +863,16 @@ export const registerUtil = () => {
       if (item.actor && item.actor.prototypeToken.actorLink) {
         let actor = await game.actors.get(item.actor._id);
         itemData = await actor.items.get(item._id);
-      } 
-      else if (item.actor) {
+      } else if (item.actor) {
         itemData = await item.actor.items.get(item._id);
-      } 
-      else {
+      } else {
         itemData = await game.items.get(item._id);
       }
     }
     return itemData;
   };
-  OSRH.util.getOSRHItems = function (actor, type){
-    let tags = false//OSRH.systemData.tags;
+  OSRH.util.getOSRHItems = function (actor, type) {
+    let tags = false; //OSRH.systemData.tags;
     // if(tags){
     //   return actor.items.filter(i=>{
     //   let itemTags = [];
@@ -883,59 +880,58 @@ export const registerUtil = () => {
     //   return itemTags.includes(type, actor);
     //   })
     // }
-    return actor.items.filter(i=>i.flags?.['osr-helper']?.itemType === type);
-  }
-  OSRH.util.renderPartySheet = function(){
+    return actor.items.filter((i) => i.flags?.['osr-helper']?.itemType === type);
+  };
+  OSRH.util.renderPartySheet = function () {
     // new OSRH.partySheet().render(true);
     Hooks.call('renderOSRHPartySheet');
-  }
-  OSRH.util.convertToSeconds = function (duration, unit){
+  };
+  OSRH.util.convertToSeconds = function (duration, unit) {
     const inc = {
       minute: 60,
-      turn: 600,      
+      turn: 600,
       hour: 3600,
-      day: 86400,
+      day: 86400
     };
     return Math.round(parseInt(duration) * inc[unit]);
-  }
-  OSRH.util.convertFromSeconds = function(seconds, unit){
+  };
+  OSRH.util.convertFromSeconds = function (seconds, unit) {
     const inc = {
       minute: 60,
-      turn: 600,      
+      turn: 600,
       hour: 3600,
-      day: 86400,
-    }
-  
+      day: 86400
+    };
+
     return Math.floor(seconds / inc[unit]);
-    
-  }
-  OSRH.util.convertTime = function(duration,type, disp=false){
+  };
+  OSRH.util.convertTime = function (duration, type, disp = false) {
     const inc = {
       minute: 60,
-      turn: 600,      
+      turn: 600,
       hour: 3600,
-      day: 86400,
-    }
-    let val = duration / inc[type]
+      day: 86400
+    };
+    let val = duration / inc[type];
     let rem = val % 1 ? true : false;
-    if(disp && rem && val > 1){
-      return `${Math.floor(val)}+`
+    if (disp && rem && val > 1) {
+      return `${Math.floor(val)}+`;
     }
-    return Math.floor(val)
+    return Math.floor(val);
     // const fn = {
     //   0: (d, u)=>Math.round(parseInt(d) * inc[u]), //'get duration in seconds'
     //   1: (d, u)=>Math.floor(d / inc[u]), //'get duration in new type from seconds'
     //   2: (d, u, nt)=>{ //'day to hours'
-        
+
     //   },
     //   3: (d,u)=>{ //day to minutes
     //   }
     // }
     // fn[2]()
-  }
-  OSRH.util.hasPermission= function (actor, uId, pLvl){
+  };
+  OSRH.util.hasPermission = function (actor, uId, pLvl) {
     return actor.ownership?.[uId] >= pLvl ? true : false;
-  }
+  };
 };
 
 export const intializePackFolders = async () => {
@@ -955,9 +951,9 @@ export const intializePackFolders = async () => {
       'osr-helper-items-hyperborea-en',
       'osr-helper-items-hyperborea-es',
       'osr-helper-items-hyperborea-pt-br',
-      "osr-helper-items-dcc-en",
-      "osr-helper-items-dcc-es",
-      "osr-helper-items-dcc-pt-br",
+      'osr-helper-items-dcc-en',
+      'osr-helper-items-dcc-es',
+      'osr-helper-items-dcc-pt-br'
     ];
     let folder = game.folders.getName(folderName);
     if (!folder && movePacks) {

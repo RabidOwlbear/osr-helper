@@ -123,7 +123,7 @@ export const registerTurn = () => {
     }
     return data;
   };
-  OSRH.turn.rollReact = async function (type, mod = false, cMod = null) {
+  OSRH.turn.rollReact = async function (type ='monster', mod = false, cMod = null) {
     let rollMod = 0;
     if (mod) {
       if (cMod) {
@@ -163,14 +163,14 @@ export const registerTurn = () => {
       return result.text;
     };
     let result = getResultText(tRoll, tables[type]);
-    const tType = type == 'npc' ? 'NPC' : 'Monster';
+    const typeText = type.toLowerCase() == 'npc' ? 'NPC' : 'Monster';
     let modTxt = mod ? `+ ${rollMod}` : ``;
     let content = `
-    <h3 style="text-align: center;">${game.i18n.localize("OSRH.turn.react.roll")}: ${tType}</h3>
+    <h3 style="text-align: center;">${game.i18n.localize("OSRH.turn.react.roll")}: ${typeText}</h3>
     <div>
     <div><b>${game.i18n.localize("OSRH.turn.react.formula")}:</b> 2d6 ${modTxt}</div>
     <div><b>${game.i18n.localize("OSRH.turn.react.result")}:</b> ${roll.total}</div>
-    <div><b>${tType} ${game.i18n.localize("OSRH.turn.react.reaction")}:</b></div>
+    <div><b>${typeText} ${game.i18n.localize("OSRH.turn.react.reaction")}:</b></div>
     <p>${result}</p>
     </div>
   `;
@@ -279,7 +279,6 @@ export const registerTurn = () => {
     let turnMsg = await game.settings.get(`${OSRH.moduleName}`, 'dungeonTurnNotificiation');
     let turnData = deepClone(await game.settings.get(`${OSRH.moduleName}`, 'turnData'));
     let travelData = turnData.travel;
-    console.log(turnMsg, travelData)
     const encTableName = travelData.eTable;
     let encTable;
     let reactTable;
