@@ -522,5 +522,7 @@
   "OSRH.util.notification.abbrLengthWarn":"A abreviação deve ter 3 caracteres.",
   "OSRH.util.notification.itemAbilDropWarn": "O item deve ser um item de habilidade contido nessa folha de ator e deve ter uma fórmula de rolagem válida.",
   "OSRH.util.notification.invalidAttribName":"Digite um nome de atributo válido.",
-  "OSRH.util.notification.hasNoCharges":"não tem cobranças."
+  "OSRH.util.notification.hasNoCharges":"não tem cobranças.",
+
+  "OSRH.util.notification.compendiumTableWarn":"A tabela deve existir no mundo do jogo, exportar a tabela do compêndio para usar com o rastreador."
 }

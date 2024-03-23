@@ -522,5 +522,7 @@
   "OSRH.util.notification.abbrLengthWarn":"Abbreviation must be 3 characters long.",
   "OSRH.util.notification.itemAbilDropWarn": "Item must be an ability item contained on this actor sheet and must have a valid roll formula.",
   "OSRH.util.notification.invalidAttribName":"Please enter a valid attribute name.",
-  "OSRH.util.notification.hasNoCharges":"has no charges."
+  "OSRH.util.notification.hasNoCharges":"has no charges.",
+
+  "OSRH.util.notification.compendiumTableWarn":"Table must exist in the game world, export table from compendium to use with tracker."
 } 

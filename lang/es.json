@@ -522,5 +522,8 @@
   "OSRH.util.notification.abbrLengthWarn":"La abreviatura debe tener 3 caracteres.",
   "OSRH.util.notification.itemAbilDropWarn": "El elemento debe ser un elemento de habilidad contenido en esta hoja de actor y debe tener una fórmula de tirada válida.",
   "OSRH.util.notification.invalidAttribName":"Introduzca un nombre de atributo válido.",
-  "OSRH.util.notification.hasNoCharges":"no tiene cargos."
+  "OSRH.util.notification.hasNoCharges":"no tiene cargos.",
+
+  "OSRH.util.notification.compendiumTableWarn":"La tabla debe existir en el mundo del juego, exporta la tabla del compendio para usarla con el rastreador."
+
 }

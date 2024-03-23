@@ -201,7 +201,7 @@
           </div>
           <div class="row">
             <label for="d-react-table">{{localize "OSRH.turnTracker.reactTable"}} : </label>
-                <select class="react-select" name="d-react-table" id="d-react-table" value="{{turnData.dungeon.rTable}}">
+                <select class="react-select dropEl" name="d-react-table" id="d-react-table" value="{{turnData.dungeon.rTable}}">
                   <option value="none">{{localize "OSRH.turnTracker.none"}} </option>
                   {{#each tableNames as |name idx|}}
                     <option value="{{name}}">{{name}}</option>
@@ -209,72 +209,72 @@
                 </select>
           </div>
             <div class="encounter-tables">
-              <div class="row">
+              <div class="row" >
                 <label for="lvl-1">Lvl 1: </label>
-                <select class="d-enc-select" name="lvl-1" id="lvl-1" data-lvl="1">
+                <select class="d-enc-select dropEl" name="lvl-1" id="lvl-1" data-lvl="1">
                   <option value="none">{{localize "OSRH.turnTracker.none"}} </option>
                   {{#each tableNames as |name idx|}}
                     <option value="{{name}}">{{name}}</option>
                   {{/each}}
                 </select>
               </div>
-              <div class="row">
+              <div class="row" >
                 <label for="lvl-2">Lvl 2: </label>
-                <select class="d-enc-select" name="lvl-2" id="lvl-2" data-lvl="2">
+                <select class="d-enc-select dropEl" name="lvl-2" id="lvl-2" data-lvl="2">
                   <option value="none">{{localize "OSRH.turnTracker.none"}} </option>
                   {{#each tableNames as |name idx|}}
                     <option value="{{name}}">{{name}}</option>
                   {{/each}}
                 </select>
               </div>
-              <div class="row">
+              <div class="row" >
                 <label for="lvl-3">Lvl 3: </label>
-                <select class="d-enc-select" name="lvl-3" id="lvl-3" data-lvl="3">
+                <select class="d-enc-select dropEl" name="lvl-3" id="lvl-3" data-lvl="3">
                   <option value="none">{{localize "OSRH.turnTracker.none"}} </option>
                   {{#each tableNames as |name idx|}}
                     <option value="{{name}}">{{name}}</option>
                   {{/each}}
                 </select>
               </div>
-              <div class="row">
+              <div class="row" >
                 <label for="lvl-4">Lvl 4: </label>
-                <select class="d-enc-select" name="lvl-4" id="lvl-4" data-lvl="4">
+                <select class="d-enc-select dropEl" name="lvl-4" id="lvl-4" data-lvl="4">
                   <option value="none">{{localize "OSRH.turnTracker.none"}} </option>
                   {{#each tableNames as |name idx|}}
                     <option value="{{name}}">{{name}}</option>
                   {{/each}}
                 </select>
               </div>
-              <div class="row">
+              <div class="row" >
                 <label for="lvl-5">Lvl 5: </label>
-                <select class="d-enc-select" name="lvl-5" id="lvl-5" data-lvl="5">
+                <select class="d-enc-select dropEl" name="lvl-5" id="lvl-5" data-lvl="5">
                   <option value="none">{{localize "OSRH.turnTracker.none"}} </option>
                   {{#each tableNames as |name idx|}}
                     <option value="{{name}}">{{name}}</option>
                   {{/each}}
                 </select>
               </div>
-              <div class="row">
+              <div class="row" >
                 <label for="lvl-6">Lvl 6: </label>
-                <select class="d-enc-select" name="lvl-6" id="lvl-6" data-lvl="6">
+                <select class="d-enc-select dropEl" name="lvl-6" id="lvl-6" data-lvl="6">
                   <option value="none">{{localize "OSRH.turnTracker.none"}} </option>
                   {{#each tableNames as |name idx|}}
                     <option value="{{name}}">{{name}}</option>
                   {{/each}}
                 </select>
               </div>
-              <div class="row">
+              <div class="row" >
                 <label for="lvl-7">Lvl 7: </label>
-                <select class="d-enc-select" name="lvl-7" id="lvl-7" data-lvl="7">
+                <select class="d-enc-select dropEl" name="lvl-7" id="lvl-7" data-lvl="7">
                   <option value="none">{{localize "OSRH.turnTracker.none"}} </option>
                   {{#each tableNames as |name idx|}}
                     <option value="{{name}}">{{name}}</option>
                   {{/each}}
                 </select>
               </div>
-              <div class="row">
+              <div class="row" >
                 <label for="lvl-8">Lvl 8+: </label>
-                <select class="d-enc-select" name="lvl-8" id="lvl-8" data-lvl="8">
+                <select class="d-enc-select dropEl" name="lvl-8" id="lvl-8" data-lvl="8">
                   <option value="none">{{localize "OSRH.turnTracker.none"}} </option>
                   {{#each tableNames as |name idx|}}
                     <option value="{{name}}">{{name}}</option>
@@ -318,7 +318,7 @@
           </div>
             <div class="row">
               <label for="travel-react-table">{{localize "OSRH.turnTracker.reactTable"}} : </label>
-              <select class="react-select" name="travel-react-table" id="travel-react-table" value="{{turnData.travel.rTable}}">
+              <select class="react-select dropEl" name="travel-react-table" id="travel-react-table" value="{{turnData.travel.rTable}}">
                 <option value="none">{{localize "OSRH.turnTracker.none"}} </option>
                 {{#each tableNames as |name idx|}}
                 <option value="{{name}}">{{name}}</option>
@@ -327,7 +327,7 @@
             </div>
             <div class="row">
               <label for="travel-enc-table">{{localize "OSRH.turnTracker.encTable"}} : </label>
-              <select class="react-select" name="travel-enc-table" id="travel-enc-table" value=" {{turnData.travel.encTable}}">
+              <select class="react-select dropEl" name="travel-enc-table" id="travel-enc-table" value=" {{turnData.travel.encTable}}">
                 <option value="none">{{localize "OSRH.turnTracker.none"}} </option>
                 {{#each tableNames as |name idx|}}
                 <option value="{{name}}">{{name}}</option>

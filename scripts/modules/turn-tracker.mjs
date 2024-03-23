@@ -17,6 +17,12 @@ export class OSRHTurnTracker extends FormApplication {
       id: `turn-tracker`,
       title: `Turn Tracker`,
       tabs: [{ navSelector: '.sheet-tabs', contentSelector: '.tab-content', initial: 'dungeon' }],
+      dragDrop: [
+        {
+          dragSelector: '.item',
+          dropSelector: '.dropEl'
+        }
+      ],
       width: 300,
       height: 480
     });
@@ -27,7 +33,6 @@ export class OSRHTurnTracker extends FormApplication {
     const partyObj = OSRH.util.getPartyActors();
 
     const tMod = this.terrainMod[this.turnData.travel.terrain];
-    // console.log(tMod, this.getBaseRate(partyObj), partyObj)
     context.baseRate = Math.floor(this.getBaseRate(partyObj) * tMod);
     context.characters = this.partyData(partyObj.characters, tMod);
     context.retainers = this.partyData(partyObj.retainers, tMod);
@@ -37,7 +42,19 @@ export class OSRHTurnTracker extends FormApplication {
     context.DTData = this.dungeonTurnData;
     return context;
   }
-
+  async _onDrop(event) {
+    const dragData = TextEditor.getDragEventData(event);
+    if (dragData.type === 'RollTable') {
+      if (dragData.uuid.includes('Compendium')) {
+        ui.notifications.warn(game.i18n.localize("OSRH.util.notification.compendiumTableWarn"));
+        return;
+      }
+      const table = await fromUuid(dragData.uuid);
+      const html = event.target.closest('.window-content');
+      event.target.value = table.name;
+      this.showSaveBtn({ 0: html, length: 1 });
+    }
+  }
   // dungeon turn
   activateListeners(html) {
     const advanceDungeonTurn = html.find('#dungeon-turn-advance-btn')[0];
@@ -230,7 +247,7 @@ export class OSRHTurnTracker extends FormApplication {
     return a?.dataset.tab;
   }
   showSaveBtn(html) {
-    const btnArr = html.find('.save-settings');
+    const btnArr = html[0].querySelectorAll('.save-settings');
     this.settingsChanged = true;
     for (let btn of btnArr) {
       if (btn.classList.contains('hidden')) btn.classList.remove('hidden');
@@ -475,9 +492,8 @@ export function registerTravelConstants() {
   };
   OSRH.CONST.timeInc = {
     minute: 60,
-    turn: 600,      
+    turn: 600,
     hour: 3600,
-    day: 86400,
-  }
-  
+    day: 86400
+  };
 }

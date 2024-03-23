@@ -9,11 +9,11 @@
       "flags": {}
     }
   ],
-  "version": "0.6.11",
+  "version": "0.6.12",
   "compatibility": {
     "minimum": "10",
     "verified": "11.315",
-    "maximum": "11"
+    "maximum": "12"
   },
   "styles": [
     "styles/main.css"

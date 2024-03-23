@@ -533,6 +533,7 @@ export function registerOsrActiveEffectModule() {
   };
   OSRH.effect.gmCreateEffect = async function (target, effectData, creatorId) {
     let actor = await fromUuid(target);
+    console.log(effectData)
     // if (actor.collectionName == 'tokens') actor = actor.actor;
     let e = await ActiveEffect.create(effectData, { parent: actor });
     let activeEffectData = deepClone(await game.settings.get(`${OSRH.moduleName}`, 'effectData'));
