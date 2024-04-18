@@ -581,6 +581,12 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  height: 30px;
+}
+.osrh.party-sheet .party-row .name {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 .osrh.party-sheet .party-actor:nth-of-type(even) {
   background-color: rgba(0, 0, 0, 0.1019607843);
@@ -674,8 +680,8 @@
   width: 40px;
 }
 .osrh.party-sheet .marker-lg {
-  height: 55px;
-  width: 55px;
+  height: 98%;
+  width: 98%;
   margin: auto;
 }
 .osrh.party-sheet .marker-list {
@@ -725,8 +731,8 @@
 .osrh.party-sheet .marker-del {
   opacity: 0%;
   position: absolute;
-  top: 3px;
-  left: 40px;
+  top: 0;
+  left: 0;
   color: rgb(102, 10, 10);
 }
 .osrh.party-sheet .marker-del:hover {
@@ -761,6 +767,12 @@
 }
 .osrh.party-sheet .leader {
   background-color: rgba(158, 31, 31, 0.2666666667);
+}
+.osrh.party-sheet #config-tab {
+  width: 2.5em;
+}
+.osrh.party-sheet .config-cont {
+  padding: 0.3em;
 }
 
 /* custom effect form */

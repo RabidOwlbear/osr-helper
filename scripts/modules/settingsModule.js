@@ -102,7 +102,7 @@ export const registerSettings = async function () {
     name: 'currentFormation',
     scope: 'world',
     type: Object,
-    default: { active: false, data: null },
+    default: { active: false, data: null, gridSize: 7},
     config: false
   });
 

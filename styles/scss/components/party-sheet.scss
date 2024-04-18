@@ -18,7 +18,13 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+    height: 30px;
     
+    .name{
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
   }
   .party-actor:nth-of-type(even){
     background-color: #0000001a;
@@ -117,8 +123,8 @@
     width: 40px;
   }
   .marker-lg{
-    height: 55px;
-    width: 55px;
+    height: 98%;
+    width: 98%;
     margin: auto;
   }
   .marker-list{
@@ -176,8 +182,8 @@
   .marker-del{
     opacity: 0%;
     position: absolute;
-    top: 3px;
-    left: 40px;
+    top: 0;//3px;
+    left: 0;//40px;
     color: rgb(102, 10, 10);
   }
   .marker-del:hover{
@@ -217,6 +223,12 @@
   }
   .leader{
     background-color: #9e1f1f44;
+  }
+  #config-tab{
+    width: 2.5em;
+  }
+  .config-cont{
+    padding: .3em
   }
 }
 

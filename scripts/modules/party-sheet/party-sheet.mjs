@@ -1,24 +1,31 @@
 // import { XpAwardSheet } from "./xp-award.mjs";
 // import { CoinAwardSheet } from "./coin-award.mjs";
 const OSRHParty = {
-  gridSize: 5,
+  gridSize: 9, //must be odd
   sheet: null,
   formation: null, //formation?.active ? formation.data : null,
   dragBuffer: null
 };
 export class OSRHPartySheet extends FormApplication {
-  constructor(party, formation) {
+  constructor(party, formation, size) {
     super();
-    this.gridSize = OSRHParty.gridSize;
+    this.gridSize = size;
     this.party = party;
-    this.formation = formation; //? formation :this._defaultFormationData(OSRHParty.gridSize);
+    this.formation = formation; 
     this.start;
     this.tempForm = null;
   }
-  static async init() {
+  static async init(size = null) {
+    const settingData = await game.settings.get('osr-helper', 'currentFormation');
+    // shim for existing setting data 
+    if(!settingData.gridSize && settingData.data.grid.length){
+      settingData.gridSize = settingData.data.grid.length
+    }
+    const gridSize = size ? size: settingData?.gridSize;
     const party = OSRH.util.getPartyActors().party;
-    const formation = await OSRHPartySheet.defaultFormationData(OSRHParty.gridSize);
-    OSRHParty.sheet = new OSRHPartySheet(party, formation);
+    const formation = await OSRHPartySheet.defaultFormationData(gridSize);
+
+    OSRH.party.sheet = new OSRHPartySheet(party, formation, gridSize);
   }
   static get defaultOptions() {
     return mergeObject(super.defaultOptions, {
@@ -53,7 +60,7 @@ export class OSRHPartySheet extends FormApplication {
     });
   }
   static renderPartySheet(options) {
-    OSRHParty.sheet.render(true, { focus: true, ...options });
+    OSRH.party.sheet.render(true, { focus: true, ...options });
   }
   getData() {
     const context = super.getData();
@@ -72,7 +79,7 @@ export class OSRHPartySheet extends FormApplication {
       });
     });
     context.pool = this.formation.pool;
-    context.formationGrid = this._generateGrid(OSRHParty.gridSize);
+    context.formationGrid = this._generateGrid(this.gridSize);
 
     return context;
   }
@@ -81,6 +88,7 @@ export class OSRHPartySheet extends FormApplication {
     const markerDeletBtns = html.find('.marker-del');
     const portraits = html.find('.portrait');
     const dragPartyBtn = html.find('.drag-party-btn')[0];
+    const gridSize = html.find('#grid-size')[0];
     // delete event listener
     deleteBtns.map((b) => {
       deleteBtns[b].addEventListener('click', async (e) => {
@@ -115,8 +123,13 @@ export class OSRHPartySheet extends FormApplication {
         this._markerDelete(row, cell, coord);
       });
     });
+    gridSize.value = this.gridSize;
+    gridSize.addEventListener('change', function(){this._changeGridSize(parseInt(gridSize.value))}.bind(this));
   }
   async _onDrop(event) {
+    if (!game.user.isGM) {
+      return;
+    }
     const dragData = TextEditor.getDragEventData(event);
     if (dragData.type != 'Actor' || !dragData.uuid) {
       return;
@@ -125,14 +138,13 @@ export class OSRHPartySheet extends FormApplication {
     const party = OSRH.util.getPartyActors();
     // party list drop
     if (!OSRH.systemData.partyTypes.includes(actor.type)) {
-      console.log('no');
       return;
     }
     if (OSRH.systemData.partySheet) {
       if (!actor.flags[game.system.id] || !actor.flags[game.system.id]?.party) {
         await actor.setFlag(game.system.id, 'party', true);
-        await game.settings.set('osr-helper', 'currentFormation', { active: false, data: null });
-        const formation = await OSRHPartySheet.defaultFormationData(OSRHParty.gridSize);
+        await game.settings.set('osr-helper', 'currentFormation', { active: false, data: null, gridSize: this.gridSize});
+        const formation = await OSRHPartySheet.defaultFormationData(this.gridSize);
         this.formation = formation;
         if (game.system.id === 'ose') {
           if (!actor.flags[game.system.id]) actor.flags[game.system.id] = {};
@@ -146,8 +158,8 @@ export class OSRHPartySheet extends FormApplication {
       if (!actor.flags?.['osr-helper']?.party?.active) {
         // actor.flags['osr-helper'] = { party: { active: true } };
         await actor.setFlag('osr-helper', 'party', { active: true });
-        await game.settings.set('osr-helper', 'currentFormation', { active: false, data: null });
-        this.formation = await OSRHPartySheet.defaultFormationData(OSRHParty.gridSize);
+        await game.settings.set('osr-helper', 'currentFormation', { active: false, data: null, gridSize: this.gridSize});
+        this.formation = await OSRHPartySheet.defaultFormationData(this.gridSize);
       }
     }
 
@@ -168,12 +180,15 @@ export class OSRHPartySheet extends FormApplication {
           img: null
         };
       }
-      await game.settings.set('osr-helper', 'currentFormation', { active: true, data: this.formation });
+      await game.settings.set('osr-helper', 'currentFormation', { active: true, data: this.formation, gridSize: this.gridSize});
     }
     Hooks.call('renderOSRHPartySheet');
     return true;
   }
   _onDragStart(event) {
+    if (!game.user.isGM) {
+      return;
+    }
     if (event.target.classList.contains('party-drag')) {
       try {
         const data = this.formation;
@@ -252,6 +267,9 @@ export class OSRHPartySheet extends FormApplication {
     return true;
   }
   async _unsetPartyFlag(uuid) {
+    if (!game.user.isGM) {
+      return;
+    }
     let newParty = this.party.filter((i) => i.uuid != uuid);
     this.party = newParty;
     //this._defaultFormationData(this.gridSize);
@@ -261,8 +279,8 @@ export class OSRHPartySheet extends FormApplication {
     const actor = await fromUuid(uuid);
     delete actor.flags[scope].party;
     await actor.unsetFlag(scope, 'party');
-    await game.settings.set('osr-helper', 'currentFormation', { active: false, data: null });
-    this.formation = await OSRHPartySheet.defaultFormationData(OSRHParty.gridSize);
+    await game.settings.set('osr-helper', 'currentFormation', { active: false, data: null, gridSize: this.gridSize });
+    this.formation = await OSRHPartySheet.defaultFormationData(this.gridSize);
     this.render();
     return true;
   }
@@ -287,9 +305,9 @@ export class OSRHPartySheet extends FormApplication {
     for (let r = 0; r < size; r++) {
       let rowHtml = ``;
       for (let c = 0; c < size; c++) {
-        let cellData = this.formation.grid[r][c];
+        let cellData = this.formation.grid?.[r]?.[c];
         let leadCell = lead[0] == r && lead[1] == c ? 'leader' : '';
-        let marker = cellData.uuid
+        let marker = cellData?.uuid
           ? `
         <div class="marker">
         <img src="${cellData.img}" class="marker marker-lg round-shadow" data-uuid="${cellData.uuid}" title="${cellData.name}">
@@ -312,7 +330,6 @@ export class OSRHPartySheet extends FormApplication {
     this.party.map((p) => {
       data.pool.push({ uuid: p.uuid, img: p.img, name: p.name });
     });
-    const centerIdx = Math.round(size / 2) - 1;
     for (let r = 0; r < size; r++) {
       let row = [];
       for (let c = 0; c < size; c++) {
@@ -323,10 +340,13 @@ export class OSRHPartySheet extends FormApplication {
     return data;
   }
   _markerDelete(r, c) {
+    if (!game.user.isGM) {
+      return;
+    }
     let cellData = this.formation.grid[r][c];
     this.formation.pool.push({ uuid: cellData.uuid, img: cellData.img, name: cellData.name });
     this.formation.grid[r][c] = { uuid: null, img: null, start: cellData.start };
-    game.settings.set('osr-helper', 'currentFormation', { active: true, data: this.formation });
+    game.settings.set('osr-helper', 'currentFormation', { active: true, data: this.formation, gridSize: this.gridSize});
     this.render();
   }
   _testPersist() {
@@ -365,8 +385,10 @@ export class OSRHPartySheet extends FormApplication {
   }
 
   static async defaultFormationData(size) {
+    
+    const center = (size -1) / 2;
     const data = {
-      lead: [2, 2],
+      lead: [center, center],
       pool: [],
       grid: []
     };
@@ -393,9 +415,9 @@ export class OSRHPartySheet extends FormApplication {
   _blankGrid() {
     const grid = [];
     const blankObj = { uuid: null, img: null, name: null };
-    for (let i = 0; i < OSRHParty.gridSize; i++) {
+    for (let i = 0; i < this.gridSize; i++) {
       let row = [];
-      for (let r = 0; r < OSRHParty.gridSize; r++) {
+      for (let r = 0; r < this.gridSize; r++) {
         row.push(blankObj);
       }
       grid.push(row);
@@ -403,7 +425,10 @@ export class OSRHPartySheet extends FormApplication {
     return grid;
   }
   async _rotateFormation() {
-    let gridL = OSRHParty.gridSize;
+    if (!game.user.isGM) {
+      return;
+    }
+    let gridL = this.gridSize;
     const curGrid = this.formation.grid;
     const newGrid = [];
     for (let i = 0; i < gridL; i++) {
@@ -417,7 +442,28 @@ export class OSRHPartySheet extends FormApplication {
       }
     }
     this.formation.grid = newGrid;
-    await game.settings.set('osr-helper', 'currentFormation', { active: true, data: this.formation });
+    await game.settings.set('osr-helper', 'currentFormation', { active: true, data: this.formation, gridSize: this.gridSize });
     this.render();
+  }
+  async _changeGridSize(size){
+    const sleep = (ms) => new Promise((res) => setTimeout(res, ms));
+    const formation = await OSRHPartySheet.defaultFormationData(size);
+    const top = this.position.top;
+    const left = this.position.left;
+    this.gridSize = size;
+    this.formation = formation;
+    const  flagData ={ 
+      active: false,
+      gridSize: size,
+      data: formation
+    }
+    this.close();
+    await game.settings.set('osr-helper', 'currentFormation', flagData);
+
+    
+    await OSRHPartySheet.init(size);
+    await sleep(300)
+    OSRHPartySheet.renderPartySheet({top, left})
+
   }
 }

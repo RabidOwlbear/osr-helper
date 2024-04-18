@@ -524,5 +524,6 @@
   "OSRH.util.notification.invalidAttribName":"Digite um nome de atributo válido.",
   "OSRH.util.notification.hasNoCharges":"não tem cobranças.",
 
-  "OSRH.util.notification.compendiumTableWarn":"A tabela deve existir no mundo do jogo, exportar a tabela do compêndio para usar com o rastreador."
+  "OSRH.util.notification.compendiumTableWarn":"A tabela deve existir no mundo do jogo, exportar a tabela do compêndio para usar com o rastreador.",
+  "OSRH.config.gridSize": "Tamanho da grade"
 }

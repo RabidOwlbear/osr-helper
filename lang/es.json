@@ -524,6 +524,6 @@
   "OSRH.util.notification.invalidAttribName":"Introduzca un nombre de atributo válido.",
   "OSRH.util.notification.hasNoCharges":"no tiene cargos.",
 
-  "OSRH.util.notification.compendiumTableWarn":"La tabla debe existir en el mundo del juego, exporta la tabla del compendio para usarla con el rastreador."
-
+  "OSRH.util.notification.compendiumTableWarn":"La tabla debe existir en el mundo del juego, exporta la tabla del compendio para usarla con el rastreador.",
+  "OSRH.config.gridSize": "Tamaño de la cuadrícula"
 }

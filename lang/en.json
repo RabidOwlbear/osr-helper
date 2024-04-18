@@ -524,5 +524,6 @@
   "OSRH.util.notification.invalidAttribName":"Please enter a valid attribute name.",
   "OSRH.util.notification.hasNoCharges":"has no charges.",
 
-  "OSRH.util.notification.compendiumTableWarn":"Table must exist in the game world, export table from compendium to use with tracker."
+  "OSRH.util.notification.compendiumTableWarn":"Table must exist in the game world, export table from compendium to use with tracker.",
+  "OSRH.config.gridSize": "Grid Size"
 } 
