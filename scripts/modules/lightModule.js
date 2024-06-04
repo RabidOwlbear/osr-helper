@@ -391,10 +391,24 @@ export const registerLightModule = async function () {
     let lightData = await game.settings.get(`${OSRH.moduleName}`, 'lightData')?.[actorId]?.lights.filter((i) => i.isOn)?.[0];
     if (lightData) {
       let elapsed = game.time.worldTime - lightData.start;
-      let remaining = lightData.duration - elapsed;
-      let tRem = Math.floor(remaining / 600);
-      let color = tRem <= lightData.data.alert ? 'red' : tRem <= lightData.data.warn ? 'orangeRed' : 'green';
-      let turn = tRem == 1 ? game.i18n.localize("OSRH.light.chat.turn") : game.i18n.localize("OSRH.light.chat.turns");
+      let tRem;
+      let color;
+      let turn;
+      console.log(lightData.duration)
+      if(lightData.duration == 'inf'){
+        tRem = game.i18n.localize("OSRH.effect.infinite");
+        color= 'green';
+        turn = game.i18n.localize("OSRH.light.chat.turns");
+      }else{
+       let remaining = lightData.duration - elapsed;
+       tRem = Math.floor(remaining / 600);
+       color = tRem <= lightData.data.alert ? 'red' : tRem <= lightData.data.warn ? 'orangeRed' : 'green';
+       turn = tRem == 1 ? game.i18n.localize("OSRH.light.chat.turn") : game.i18n.localize("OSRH.light.chat.turns");
+      }
+      // let remaining = lightData.duration - elapsed;
+      // let tRem = Math.floor(remaining / 600);
+      // let color = tRem <= lightData.data.alert ? 'red' : tRem <= lightData.data.warn ? 'orangeRed' : 'green';
+      // let turn = tRem == 1 ? game.i18n.localize("OSRH.light.chat.turn") : game.i18n.localize("OSRH.light.chat.turns");
       let chatData = {
         content: '',
         whisper: [game.user.id]

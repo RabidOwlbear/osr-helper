@@ -18,7 +18,7 @@ export class OSRHPartySheet extends FormApplication {
   static async init(size = null) {
     const settingData = await game.settings.get('osr-helper', 'currentFormation');
     // shim for existing setting data 
-    if(!settingData.gridSize && settingData.data.grid.length){
+    if(!settingData.gridSize && settingData?.data?.grid?.length){
       settingData.gridSize = settingData.data.grid.length
     }
     const gridSize = size ? size: settingData?.gridSize;

@@ -9,7 +9,7 @@
       "flags": {}
     }
   ],
-  "version": "0.6.13",
+  "version": "0.6.14",
   "compatibility": {
     "minimum": "10",
     "verified": "11.315",
@@ -156,6 +156,15 @@
       "system": "dcc",
       "private": false,
       "flags": {}
+    },
+    {
+      "name": "osr-helper-items-basicfantasyrpg-en",
+      "label": "OSR-helper Items (en)",
+      "type": "Item",
+      "path": "packs/items-basicfantasyrpg.db",
+      "system": "basicfantasyrpg",
+      "private": false,
+      "flags": {}
     }
   ],
   "relationships": {
@@ -187,6 +196,11 @@
       },
       {
         "id": "bfs",
+        "type": "system",
+        "compatibility": {}
+      },
+      {
+        "id": "basicfantasyrpg",
         "type": "system",
         "compatibility": {}
       }

@@ -953,7 +953,8 @@ export const intializePackFolders = async () => {
       'osr-helper-items-hyperborea-pt-br',
       'osr-helper-items-dcc-en',
       'osr-helper-items-dcc-es',
-      'osr-helper-items-dcc-pt-br'
+      'osr-helper-items-dcc-pt-br',
+      'osr-helper-items-basicfantasyrpg-en'
     ];
     let folder = game.folders.getName(folderName);
     if (!folder && movePacks) {

@@ -366,4 +366,3 @@ Hooks.on('updateCombat', async (combat, details) => {
 
 Hooks.on('renderOSRHPartySheet', OSRHPartySheet.renderPartySheet);
 
-

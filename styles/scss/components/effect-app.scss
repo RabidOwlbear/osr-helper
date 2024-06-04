@@ -8,6 +8,17 @@
   --warn-color: rgb(119, 0, 0);
   --success-color: darkgreen;
   --dark-text: #222228;
+  input[type="text"],
+  select{
+    border-radius: 0;
+    background: var(--light-color);
+    color: var(--dark-text);
+    height: 1.9em;
+    border: 1px solid var(--dark-bg);
+  }
+  input::placeholder{
+    color: var(--dark-bg);
+  }
   h2{
     text-align: center;
     font-weight: 700;
@@ -40,7 +51,7 @@
     margin: 0;
     height: 100%;
   }
-//  tabs
+ //  tabs
 .tab{
   width: 100%;
 }
@@ -259,9 +270,19 @@
     }
     .detail-header {
       display: flex;
+      justify-content: space-between;
       border-top: 3px solid var(--t1-dark);
       border-bottom: 3px solid var(--t1-dark);
       grid-area: header;
+      #duration-type{
+        width: 7em;
+      }
+      #effect-name{
+        width: 12em;
+      }
+      #icon-select{
+        width: 5em;
+      }
       
     }
     #add-effect-btn {

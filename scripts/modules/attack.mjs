@@ -46,10 +46,11 @@ export class OSRHAttack extends FormApplication {
     }
     let atkOptions = '';
     for (let item of actorWeapons) {
-      atkOptions += `<option value=${item.id}>${item.name} | ATK: ${item.system.damage}</option>`;
+      const formula = OSRH.util.getNestedValue(item, OSRH.systemData.paths.weaponDamage);
+      atkOptions += `<option value=${item.id}>${item.name} | ATK: ${formula}</option>`;
     }
     for (let item of actorSpells) {
-      if (item.system.roll != '') {
+      if (item.system?.roll != '') {
         atkOptions += `<option value=${item.id}>${item.name} | ATK: ${item.system.roll}</option>`;
       }
     }
@@ -74,6 +75,9 @@ export class OSRHAttack extends FormApplication {
                   case 'dcc':
                     await weapon.parent.rollWeaponAttack(weapon.id, {showModifierDialog: skipCheck ? false: true})
                     break;
+                  case 'basicfantasyrpg':
+                    await bfrpgroll(weapon, this.actor, weapon.system.range.value)
+                    break;
                   default:
                     await weapon.roll({ skipDialog: skipCheck });
                 }
@@ -96,9 +100,34 @@ export class OSRHAttack extends FormApplication {
                 case 'wwn':
                   await weapon.rollWeapon({ skipDialog: skipCheck })
                   break;
+                case 'basicfantasyrpg':
+                  await bfrpgroll(weapon, this.actor, weapon.system.range.value)
+                  break;
                 default:
                   await weapon.roll({ skipDialog: skipCheck });
               }
             }
   }
+}
+
+const bfrpgroll = (item, actor, type)=>{
+    // Handle weapon rolls.
+      let label = `<span class="chat-item-name">${game.i18n.localize('BASICFANTASYRPG.Roll')}: ${type} attack with ${item.name}</span>`;
+      let rollFormula = 'd20+@ab';
+        if (type === 'melee') {
+          rollFormula += '+@str.bonus';
+        } else if (type === 'ranged') {
+          rollFormula += '+@dex.bonus';
+        }
+      rollFormula += '+' + item.system.bonusAb.value;
+      let roll = new Roll(rollFormula, actor.getRollData());
+      roll.toMessage({
+        speaker: ChatMessage.getSpeaker({
+          actor: actor
+        }),
+        flavor: label,
+        rollMode: game.settings.get('core', 'rollMode'),
+      });
+      return roll;
+
 }

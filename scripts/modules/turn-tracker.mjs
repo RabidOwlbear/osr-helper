@@ -355,7 +355,7 @@ export class OSRHTurnTracker extends FormApplication {
       let mov = parseInt(OSRH.util.getNestedValue(actor, this.systemData.paths.encMov)) * this.systemData.baseMovMod;
       data.push({
         name: actor.name.length >= 35 ? actor.name.slice(0, 30) + `...` : actor.name,
-        distance: Math.floor((mov / 5) * mod),
+        distance: Math.round((mov / 5) * mod),
         img: actor.img
         // controlled: actor.ownership[game.user.id] >= 3,
       });
@@ -434,7 +434,7 @@ export class OSRHTurnTracker extends FormApplication {
     const charEl = html.find('#character-list')[0];
     const retEl = html.find('#retainer-list')[0];
     const upData = await this.getTravelData(mod);
-
+    console.log('data', upData)
     rateEl.innerText = `${upData.baseRate} mi`;
     charEl.innerHTML = upData.html.characters;
     retEl.innerHTML = upData.html.retainers;
@@ -443,7 +443,7 @@ export class OSRHTurnTracker extends FormApplication {
     const partyObj = OSRH.util.getPartyActors();
     let slowest = this.getBaseRate(partyObj);
     //convert to miles
-    const convertedRate = Math.floor(slowest * mod);
+    const convertedRate = Math.round(slowest * mod);
     let retData = {
       baseRate: convertedRate,
       data: {
@@ -464,7 +464,26 @@ export class OSRHTurnTracker extends FormApplication {
   }
 }
 export function registerTravelConstants() {
-  OSRH.CONST.terrainMod = {
+  const hasSystem = terrainData.systems.includes(game.system.id);
+  OSRH.CONST.terrainMod = terrainData[hasSystem ? game.system.id: 'ose'];
+  OSRH.CONST.lostMod = {
+    grassland: 1,
+    clear: 1,
+    swamp: 3,
+    jungle: 3,
+    desert: 3,
+    allElse: 2
+  };
+  OSRH.CONST.timeInc = {
+    minute: 60,
+    turn: 600,
+    hour: 3600,
+    day: 86400
+  };
+}
+const terrainData = {
+  systems:['ose','basicfantasyrpg'],
+  ose: {
     trail: 1.5,
     road: 1.5,
     clear: 1,
@@ -481,19 +500,23 @@ export function registerTravelConstants() {
     jungle: 0.5,
     ice: 0.5,
     glacier: 0.5
-  };
-  OSRH.CONST.lostMod = {
-    grassland: 1,
+  },
+  'basicfantasyrpg': {
+    trail: 1,
+    road: 1.33,
     clear: 1,
-    swamp: 3,
-    jungle: 3,
-    desert: 3,
-    allElse: 2
-  };
-  OSRH.CONST.timeInc = {
-    minute: 60,
-    turn: 600,
-    hour: 3600,
-    day: 86400
-  };
+    city: 1,
+    grassland: 1,
+    forest: 0.66,
+    mud: 0.66,
+    snow: 0.66,
+    hill: 0.66,
+    desert: 0.66,
+    brokenLand: 0.66,
+    mountain: 0.33,
+    swamp: 0.33,
+    jungle: 0.33,
+    ice: 0.33,
+    glacier: 0.33
+  }
 }

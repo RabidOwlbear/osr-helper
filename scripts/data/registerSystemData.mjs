@@ -12,7 +12,9 @@ export async function registerSystemData() {
         partyTypes: ['Player', 'NPC'],
         baseMovMod: 4,
         effects: true,
+        spellDamage: true,
         paths: {
+          weaponDamage: 'system.damage',
           itemQty: 'system.quantity',
           encMov: 'system.attributes.speed.base',
           hp: {
@@ -33,10 +35,12 @@ export async function registerSystemData() {
         rationItemTypes: ['item'],
         itemSheetHook: 'renderItemSheet',
         characterSheetHook: 'renderActorSheet',
-        partyTypes: [ 'character'],
+        partyTypes: ['character'],
         baseMovMod: 3,
         effects: true,
+        spellDamage: true,
         paths: {
+          weaponDamage: 'system.damage',
           itemQty: 'system.quantity.value',
           encMov: 'system.movement.encounter',
           hp: {
@@ -57,10 +61,12 @@ export async function registerSystemData() {
         rationItemTypes: ['item'],
         itemSheetHook: 'renderItemSheet',
         characterSheetHook: 'renderActorSheet',
-        partyTypes: [ 'character'],
+        partyTypes: ['character'],
         baseMovMod: 3,
         effects: true,
+        spellDamage: true,
         paths: {
+          weaponDamage: 'system.damage',
           itemQty: 'system.quantity.value',
           encMov: 'system.movement.encounter',
           hp: {
@@ -81,10 +87,12 @@ export async function registerSystemData() {
         rationItemTypes: ['item'],
         itemSheetHook: 'renderItemSheet',
         characterSheetHook: 'renderActorSheet',
-        partyTypes: [ 'character'],
+        partyTypes: ['character'],
         baseMovMod: 4,
         effects: true,
+        spellDamage: true,
         paths: {
+          weaponDamage: 'system.damage',
           itemQty: 'system.quantity',
           encMov: 'system.movement.base',
           hp: {
@@ -105,17 +113,18 @@ export async function registerSystemData() {
         rationItemTypes: ['item'],
         itemSheetHook: 'renderItemSheet',
         characterSheetHook: 'renderActorSheet',
-        partyTypes: [ 'character'],
+        partyTypes: ['character'],
         baseMovMod: 3,
         effects: false,
         paths: {
+          weaponDamage: 'system.damage',
           itemQty: 'system.quantity.value',
           encMov: 'system.movement.encounter',
           hp: {
             val: 'system.hp.value',
             max: 'system.hp.max'
           },
-          ac:'system.ac.value'
+          ac: 'system.ac.value'
         }
       };
       break;
@@ -129,10 +138,12 @@ export async function registerSystemData() {
         rationItemTypes: ['item'],
         itemSheetHook: 'renderItemSheet',
         characterSheetHook: 'renderActorSheet',
-        partyTypes: [ 'character'],
+        partyTypes: ['character'],
         baseMovMod: 3,
         effects: true,
+        spellDamage: false,
         paths: {
+          weaponDamage: 'system.damage',
           itemQty: 'system.quantity.value',
           encMov: 'system.movement.base',
           hp: {
@@ -143,7 +154,32 @@ export async function registerSystemData() {
         }
       };
       break;
-    default: 
-    OSRH.systemData = null
+    case 'basicfantasyrpg':
+      OSRH.systemData = {
+        id: 'basicfantasyrpg',
+        tags: false,
+        partySheet: true,
+        lightItemTypes: ['weapon', 'item', 'armor'],
+        rationItemTypes: ['item'],
+        itemSheetHook: 'renderItemSheet',
+        characterSheetHook: 'renderActorSheet',
+        partyTypes: ['character'],
+        baseMovMod: 3,
+        effects: false,
+        spellDamage: true,
+        paths: {
+          weaponDamage: 'system.damage.value',
+          itemQty: 'system.quantity.value',
+          encMov: 'system.move.value',
+          hp: {
+            val: 'system.hitPoints.value',
+            max: 'system.hitPoints.max'
+          },
+          ac: 'system.armorClass.value'
+        }
+      };
+      break;
+    default:
+      OSRH.systemData = null;
   }
 }
