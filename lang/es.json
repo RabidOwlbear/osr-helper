@@ -525,5 +525,8 @@
   "OSRH.util.notification.hasNoCharges":"no tiene cargos.",
 
   "OSRH.util.notification.compendiumTableWarn":"La tabla debe existir en el mundo del juego, exporta la tabla del compendio para usarla con el rastreador.",
-  "OSRH.config.gridSize": "Tamaño de la cuadrícula"
+  "OSRH.config.gridSize": "Tamaño de la cuadrícula",
+
+  "OSRH.notification.gridSizeWarn": "El tamaño de la cuadrícula debe ser uno de los siguientes números: 5, 7, 9 u 11.",
+  "OSRH.notification.gmWarn": "Debes ser un GM para utilizar esta función."
 }

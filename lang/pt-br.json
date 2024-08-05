@@ -525,5 +525,8 @@
   "OSRH.util.notification.hasNoCharges":"não tem cobranças.",
 
   "OSRH.util.notification.compendiumTableWarn":"A tabela deve existir no mundo do jogo, exportar a tabela do compêndio para usar com o rastreador.",
-  "OSRH.config.gridSize": "Tamanho da grade"
+  "OSRH.config.gridSize": "Tamanho da grade",
+
+  "OSRH.notification.gridSizeWarn": "O tamanho da grade deve ser um dos números a seguir: 5, 7, 9 ou 11.",
+  "OSRH.notification.gmWarn": "Você deve ser um GM para usar esse recurso."
 }

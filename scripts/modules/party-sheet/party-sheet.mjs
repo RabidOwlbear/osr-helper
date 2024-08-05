@@ -27,6 +27,22 @@ export class OSRHPartySheet extends FormApplication {
 
     OSRH.party.sheet = new OSRHPartySheet(party, formation, gridSize);
   }
+  static async reset(size=5){
+    const options = [5,7,9,11]
+    //size must be odd number
+    if(!game.user.isGM){
+      ui.notifications.warn(game.i18n.localize("OSRH.notification.gmWarn"));
+    }else{if (Number.isInteger(size) && options.includes(size)){
+      const party = OSRH.util.getPartyActors().party;
+    const formation = await OSRHPartySheet.defaultFormationData(size, true);
+    console.log(formation)
+    await game.settings.set('osr-helper', 'currentFormation', {active: false, data: formation, gridSize: size});
+    OSRH.party.sheet = new OSRHPartySheet(party, formation, size);
+    }else{
+      ui.notifications.warn(game.i18n.localize("OSRH.notification.gridSizeWarn"))
+    }}
+    
+  }
   static get defaultOptions() {
     return mergeObject(super.defaultOptions, {
       id: 'OSRH-party-sheet',
@@ -384,7 +400,7 @@ export class OSRHPartySheet extends FormApplication {
     return party;
   }
 
-  static async defaultFormationData(size) {
+  static async defaultFormationData(size, reset=false) {
     
     const center = (size -1) / 2;
     const data = {
@@ -393,7 +409,7 @@ export class OSRHPartySheet extends FormApplication {
       grid: []
     };
     const currentFormation = await game.settings.get('osr-helper', 'currentFormation');
-    if (currentFormation.active) {
+    if (!reset && currentFormation.active) {
       return currentFormation.data;
     } else {
       const party = OSRH.util.getPartyActors().party;

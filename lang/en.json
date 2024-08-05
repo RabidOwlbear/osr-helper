@@ -525,5 +525,8 @@
   "OSRH.util.notification.hasNoCharges":"has no charges.",
 
   "OSRH.util.notification.compendiumTableWarn":"Table must exist in the game world, export table from compendium to use with tracker.",
-  "OSRH.config.gridSize": "Grid Size"
+  "OSRH.config.gridSize": "Grid Size",
+  
+  "OSRH.notification.gridSizeWarn": "Grid size must be one of the following numbers: 5, 7, 9 or 11.",
+  "OSRH.notification.gmWarn": "You must be a GM to use this feature."
 } 

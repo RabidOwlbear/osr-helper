@@ -125,8 +125,8 @@
   background-color: rgba(32, 32, 32, 0.623);
   min-height: 30px;
   // max-height: 300px;
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  // flex-direction: column;
   align-items: center;
   justify-content: center;
   border-radius: .3rem 0 0 .3rem ;

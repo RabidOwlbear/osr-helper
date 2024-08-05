@@ -39,7 +39,7 @@ export class lightConfig extends FormApplication {
       alpha: flag?.alpha ? flag.alpha : flag?.alpha === 0 ? 0 :0.5,
       alert: flag?.alert ? flag.alert : 1,
       angle: flag?.angle ? flag.angle : 360,
-      warn: flag?.warn ? flag.warn : 3,
+      warn: flag?.warn ? flag.warn : flag?.warn === 0 ? 0 : 3,
       animation: flag?.animation ? flag.animation : 'flame',
       speed: flag?.speed ? flag.speed : 3,
       intensity: flag?.intensity ? flag.intensity : 5,
@@ -104,6 +104,7 @@ export class lightConfig extends FormApplication {
     input.addEventListener('blur', (ev) => {
       if (!ev.target.value) ev.target.value = 0;
       ev.target.value = ev.target.value < 0 ? 0 : ev.target.value;
+      if(input.dataset.alert && ev.target.value <= 0)ev.target.value = 1;
     });
   }
   for (let input of inputsB) {

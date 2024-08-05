@@ -176,8 +176,8 @@ export const registerLightModule = async function () {
         }
         start = curTime < start ? curTime : start;
         let elapsed = curTime - start;
-        let lastTurn = duration - elapsed == 600 ? true : false;
-        if (lastTurn) {
+        let dimLight = duration - elapsed == 600 * data.warn ? true : false;
+        if (dimLight) {
           let lData = {
             dim: data.dim * 0.7,
             bright: data.bright,
@@ -394,15 +394,15 @@ export const registerLightModule = async function () {
       let tRem;
       let color;
       let turn;
-      console.log(lightData.duration)
       if(lightData.duration == 'inf'){
         tRem = game.i18n.localize("OSRH.effect.infinite");
         color= 'green';
         turn = game.i18n.localize("OSRH.light.chat.turns");
       }else{
+        let warnVal  = lightData.data.warn <=0 ? lightData.data.alert + 2 : lightData.data;
        let remaining = lightData.duration - elapsed;
        tRem = Math.floor(remaining / 600);
-       color = tRem <= lightData.data.alert ? 'red' : tRem <= lightData.data.warn ? 'orangeRed' : 'green';
+       color = tRem <= lightData.data.alert ? 'red' : tRem <= warnVal? 'orangeRed' : 'green';
        turn = tRem == 1 ? game.i18n.localize("OSRH.light.chat.turn") : game.i18n.localize("OSRH.light.chat.turns");
       }
       // let remaining = lightData.duration - elapsed;
@@ -434,7 +434,7 @@ export const registerLightModule = async function () {
     //loop through active game scenes
     OSRH.util.updateTokens(actorId, data);
   };
-  OSRH.light.getLightItems = async function (actorId) {
+  OSRH.light.getLightItems = async function (actorId) { 
     let actor = await game.actors.get(actorId);
     if(!actor.prototypeToken.actorLink){
       actor = await canvas.tokens.controlled[0].document.actor
