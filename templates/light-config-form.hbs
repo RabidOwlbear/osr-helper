@@ -183,6 +183,19 @@
           />
         </div>
         <div class='list-item'>
+          <label for='luminosity'>{{localize 'OSRH.light.config.attenuation'}}:</label>
+          <input
+            class='light-config-input type-b'
+            type='number'
+            id='attenuation'
+            placeholder='{{attenuation}}'
+            min='0'
+            max='1'
+            value='{{attenuation}}'
+            name='attenuation'
+          />
+        </div>
+        <div class='list-item'>
           <label for='bgSat'>{{localize 'OSRH.light.config.bgSaturation'}}:</label>
           <input
             class='light-config-input type-b'

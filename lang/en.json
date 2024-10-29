@@ -263,6 +263,7 @@
   "OSRH.light.config.bgShadows":"Background Shadows",
   "OSRH.light.config.update": "Update",
   "OSRH.light.config.dropItem":"Drop Item Here",
+  "OSRH.light.config.attenuation":"Attenuation",
 
   "OSRH.ration.pickType":"Pick a Ration Type",
   "OSRH.ration.eatRation":"Eat Ration",

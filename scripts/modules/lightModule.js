@@ -368,6 +368,7 @@ export const registerLightModule = async function () {
                 coloration: lightData.coloration,
                 contrast: lightData.bgCont,
                 luminosity: lightData.luminosity,
+                attenuation: lightData.attenuation || 0.5,
                 saturation: lightData.saturation,
                 shadows: lightData.bgShadow
               }

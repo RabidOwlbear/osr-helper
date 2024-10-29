@@ -13,7 +13,7 @@ export class lightConfig extends FormApplication {
       top: 120,
       left: 60,
       width: 300,
-      height: 600,
+      height: 625,
       dragDrop: [
         {
           dragSelector: '.item',
@@ -47,7 +47,8 @@ export class lightConfig extends FormApplication {
       luminosity: flag?.luminosity ? flag.luminosity : 0.4,
       bgSat: flag?.bgSat ? flag.bgSat : 0,
       bgCont: flag?.bgCont ? flag.bgCont : 0,
-      bgShadow: flag?.bgShadow ? flag.bgShadow : 0
+      bgShadow: flag?.bgShadow ? flag.bgShadow : 0,
+      attenuation: flag?.attenuation ? flag.attenuation : 0.5,
     });
     return context
   }
@@ -84,6 +85,8 @@ export class lightConfig extends FormApplication {
           : i.id == 'alpha'
           ? parseFloat(i.value)
           : i.id == 'luminosity'
+          ? parseFloat(i.value)
+          : i.id == 'attenuation'
           ? parseFloat(i.value)
           : i.id == 'animation'
           ? i.value
