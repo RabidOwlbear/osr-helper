@@ -165,7 +165,7 @@ export async function registerSystemData() {
         characterSheetHook: 'renderActorSheet',
         partyTypes: ['character'],
         baseMovMod: 3,
-        effects: false,
+        effects: true,
         spellDamage: true,
         paths: {
           weaponDamage: 'system.damage.value',

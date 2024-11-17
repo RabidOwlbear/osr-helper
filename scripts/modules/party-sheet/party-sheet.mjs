@@ -35,7 +35,6 @@ export class OSRHPartySheet extends FormApplication {
     }else{if (Number.isInteger(size) && options.includes(size)){
       const party = OSRH.util.getPartyActors().party;
     const formation = await OSRHPartySheet.defaultFormationData(size, true);
-    console.log(formation)
     await game.settings.set('osr-helper', 'currentFormation', {active: false, data: formation, gridSize: size});
     OSRH.party.sheet = new OSRHPartySheet(party, formation, size);
     }else{

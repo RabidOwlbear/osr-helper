@@ -401,7 +401,6 @@ export const registerEffectModule = async function () {
         // OSRH.socket.executeAsGM('renderNewEffectForm', this.actor, this)
         let pos = { x: this.position.left + 400, y: this.position.top };
         if (Object.values(ui.windows).filter((i) => i.id == `new-active-effect.${this.actor.id}`).length == 0) {
-          // console.log('uuid', this.actorUUID)
           new OSRH.effect.NewActiveEffectForm(this.actor, this.actor.id, pos, this).render(true);
         }
       });
@@ -466,9 +465,7 @@ export const registerEffectModule = async function () {
     console.log('create effect data',target, effectData, creatorId)
     let actor = await fromUuid(target);
     // if (actor.collectionName == 'tokens') actor = actor.actor;
-    console.log('targeted actor', actor)
     let e = await ActiveEffect.create(effectData, { parent: actor });
-    console.log('after')
     let activeEffectData = deepClone(await game.settings.get(`${OSRH.moduleName}`, 'effectData'));
     activeEffectData.push({
       isInf: effectData.flags['data'].isInf,

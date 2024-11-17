@@ -509,5 +509,89 @@ export const registerEffectData = () => {
         ]
       }
     ],
+    basicfantasyrpg: [
+      {
+        label: game.i18n.localize('OSRH.effect.hp'),
+        contents: [
+         
+          {
+            label: game.i18n.localize('OSRH.effect.hpVal'),
+            path: 'system.hitPoints.value'
+          },
+          {
+            label: game.i18n.localize('OSRH.effect.hpMax'),
+            path: 'system.hitPoints.max'
+          }
+        ]
+      },
+
+      {
+        label: game.i18n.localize('OSRH.effect.attackBonus'),
+        contents: [
+          {
+            label: game.i18n.localize('BASICFANTASYRPG.AttackBonus'),
+            path: 'system.attackBonus.value'
+          }
+        ]
+      },
+      {
+        label: game.i18n.localize('OSRH.effect.saves'),
+        contents: [
+          {
+            label: game.i18n.localize('OSRH.effect.save.death'),
+            path: 'system.saves.death.value'
+          },
+          {
+            label: game.i18n.localize('OSRH.effect.save.wand'),
+            path: 'system.saves.wand.value'
+          },
+          {
+            label: game.i18n.localize('OSRH.effect.save.paralysis'),
+            path: 'system.saves.paralysis.value'
+          },
+          {
+            label: game.i18n.localize('OSRH.effect.save.breath'),
+            path: 'system.saves.breath.value'
+          },
+          {
+            label: game.i18n.localize('OSRH.effect.save.spell'),
+            path: 'system.saves.spell.value'
+          },
+          {
+            label: game.i18n.localize('OSRH.effect.initMod'),
+            path: 'system.initBonus.value'
+          }
+        ]
+      },
+      {
+        label: game.i18n.localize('OSRH.effect.abilScore'),
+        contents: [
+          {
+            label: game.i18n.localize('OSRH.effect.strVal'),
+            path: 'system.abilities.str.value'
+          },
+          {
+            label: game.i18n.localize('OSRH.effect.intVal'),
+            path: 'system.abilities.int.value'
+          },
+          {
+            label: game.i18n.localize('OSRH.effect.wisVal'),
+            path: 'system.abilities.wis.value'
+          },
+          {
+            label: game.i18n.localize('OSRH.effect.dexVal'),
+            path: 'system.abilities.dex.value'
+          },
+          {
+            label: game.i18n.localize('OSRH.effect.conVal'),
+            path: 'system.abilities.con.value'
+          },
+          {
+            label: game.i18n.localize('OSRH.effect.chaVal'),
+            path: 'system.abilities.cha.value'
+          }
+        ]
+      }
+    ],
   };
 };
