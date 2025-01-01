@@ -22,7 +22,7 @@ export const registerEffectModule = async function () {
       this.pos = pos;
     }
     static get defaultOptions() {
-      return mergeObject(super.defaultOptions, {
+      return foundry.utils.mergeObject(super.defaultOptions, {
         classes: ['form', 'osrh-new-active-effect-form'],
         popOut: true,
         height: 600,
@@ -285,7 +285,7 @@ export const registerEffectModule = async function () {
   };
 
   // OSRH.effect.clearExpired = async function () {
-  //   let activeEffects = deepClone(await game.settings.get(`${OSRH.moduleName}`, 'effectData'));
+  //   let activeEffects = foundry.utils.deepClone(await game.settings.get(`${OSRH.moduleName}`, 'effectData'));
   //   for (let e of activeEffects) {
   //     let actor = await e.targetActorId.contains('.') ? fromUuid(e.target) : game.actors.get(e.targetActorId);
   //     let type = await game.actors.get(e.targetActorId).type;
@@ -332,7 +332,7 @@ export const registerEffectModule = async function () {
         title: game.i18n.localize('OSRH.effect.activeEffectListTitle')
       };
 
-      return mergeObject(super.defaultOptions, options);
+      return foundry.utils.mergeObject(super.defaultOptions, options);
     }
     async getData() {
       let selfEffectData = [];
@@ -419,7 +419,7 @@ export const registerEffectModule = async function () {
     }
   };
   OSRH.effect.delete = async function (effectId) {
-    let effectData = deepClone(await game.settings.get(`${OSRH.moduleName}`, 'effectData')).filter(
+    let effectData = foundry.utils.deepClone(await game.settings.get(`${OSRH.moduleName}`, 'effectData')).filter(
       (e) => e.effectId == effectId
     )[0];
 
@@ -427,7 +427,7 @@ export const registerEffectModule = async function () {
     if (actor.collectionName == 'tokens') actor = actor.actor;
     let effect = await actor.effects.get(effectId);
     effect.delete();
-    let activeEffectData = deepClone(await game.settings.get(`${OSRH.moduleName}`, 'effectData')).filter(
+    let activeEffectData = foundry.utils.deepClone(await game.settings.get(`${OSRH.moduleName}`, 'effectData')).filter(
       (e) => e.effectId != effectId
     );
     await game.settings.set(`${OSRH.moduleName}`, 'effectData', activeEffectData);
@@ -435,7 +435,7 @@ export const registerEffectModule = async function () {
   };
 
   OSRH.effect.housekeeping = async function () {
-    let effectData = deepClone(await game.settings.get(`${OSRH.moduleName}`, 'effectData'));
+    let effectData = foundry.utils.deepClone(await game.settings.get(`${OSRH.moduleName}`, 'effectData'));
 
     for (let effect of effectData) {
       if (!effect?.isInf) {
@@ -466,7 +466,7 @@ export const registerEffectModule = async function () {
     let actor = await fromUuid(target);
     // if (actor.collectionName == 'tokens') actor = actor.actor;
     let e = await ActiveEffect.create(effectData, { parent: actor });
-    let activeEffectData = deepClone(await game.settings.get(`${OSRH.moduleName}`, 'effectData'));
+    let activeEffectData = foundry.utils.deepClone(await game.settings.get(`${OSRH.moduleName}`, 'effectData'));
     activeEffectData.push({
       isInf: effectData.flags['data'].isInf,
       effectId: e.id,
@@ -545,7 +545,7 @@ export const registerEffectModule = async function () {
     effectObj.target = target.id;
     effectObj.durInt = durInt.id;
     effectObj.icon = icon;
-    let savedFx = deepClone(await game.settings.get(OSRH.moduleName, 'savedEffects'));
+    let savedFx = foundry.utils.deepClone(await game.settings.get(OSRH.moduleName, 'savedEffects'));
     savedFx[effectObj.id] = effectObj;
     await game.settings.set(OSRH.moduleName, 'savedEffects', savedFx);
     presetSel.innerHTML += `
@@ -555,7 +555,7 @@ export const registerEffectModule = async function () {
     this.render();
   };
   OSRH.effect.applyEffectPreset = async function (ev) {
-    const savedFx = deepClone(await game.settings.get(OSRH.moduleName, 'savedEffects'));
+    const savedFx = foundry.utils.deepClone(await game.settings.get(OSRH.moduleName, 'savedEffects'));
     let fxData = savedFx[ev.srcElement.value];
     // console.log(ev, fxData)
     let iconObj = OSRH.data.effectIcons.find((i) => i.name == fxData.name);
@@ -585,7 +585,7 @@ export const registerEffectModule = async function () {
       super();
     }
     static get defaultOptions() {
-      return mergeObject(super.defaultOptions, {
+      return foundry.utils.mergeObject(super.defaultOptions, {
         classes: ['form, del-preset'],
         baseApplication: `ManageCustomEffects`,
         popOut: true,
@@ -654,8 +654,8 @@ export const registerEffectModule = async function () {
                 merge: {
                   label: 'Merge',
                   callback: async () => {
-                    const orig = deepClone(await game.settings.get(OSRH.moduleName, `savedEffects`));
-                    let merged = mergeObject(orig, parsed);
+                    const orig = foundry.utils.deepClone(await game.settings.get(OSRH.moduleName, `savedEffects`));
+                    let merged = foundry.utils.mergeObject(orig, parsed);
                     await game.settings.set(OSRH.moduleName, 'savedEffects', merged);
                     new OSRH.effect.manageCustomPresets().render(true);
                   }
@@ -672,7 +672,7 @@ export const registerEffectModule = async function () {
       for (let btn of effectDelBtns) {
         btn.addEventListener(`click`, async (ev) => {
           ev.preventDefault();
-          const savedFx = deepClone(await game.settings.get(OSRH.moduleName, 'savedEffects'));
+          const savedFx = foundry.utils.deepClone(await game.settings.get(OSRH.moduleName, 'savedEffects'));
           delete savedFx[btn.id];
           await game.settings.set(OSRH.moduleName, 'savedEffects', savedFx);
           this.render();

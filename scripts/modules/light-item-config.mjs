@@ -7,7 +7,7 @@ export class lightConfig extends FormApplication {
     this.lightFlag = flag ? flag : null
   }
   static get defaultOptions() {
-    return mergeObject(super.defaultOptions, {
+    return foundry.utils.mergeObject(super.defaultOptions, {
       title: 'Light Item Config',
       classes: ['osrh', 'light-item-config'],
       top: 120,
@@ -28,7 +28,7 @@ export class lightConfig extends FormApplication {
     let flag = this.item?.getFlag(`${OSRH.moduleName}`, 'lightItemData');
     let context = super.getData();
     // Send data to the template
-    context = mergeObject(context, {
+    context = foundry.utils.mergeObject(context, {
       startItem: this.item ? true : false,
       img: this.item?.img || null,
       name: this.item?.name ? this.item.name : '',

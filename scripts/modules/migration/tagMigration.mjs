@@ -45,7 +45,7 @@ async function ratTagOp(item) {
     }
     if (!item.flags?.['osr-helper']?.rationData) {
       console.log(item.name, 'noData', item);
-      let data = mergeObject(OSRH.data.defaultRationSettings, { name: item.name });
+      let data =foundry.utils.mergeObject(OSRH.data.defaultRationSettings, { name: item.name });
       await item.setFlag('osr-helper', 'rationData', data);
     }
   }

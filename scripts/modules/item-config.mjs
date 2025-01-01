@@ -7,7 +7,7 @@ export class OSRHItemConfig extends FormApplication {
     this.dispRation = ration
   }
   static get defaultOptions() {
-    return mergeObject(super.defaultOptions, {
+    return foundry.utils.mergeObject(super.defaultOptions, {
       title: 'OSRH Item Config',
       classes: ['osrh', 'item-config'],
       top: 120,
@@ -82,7 +82,7 @@ export class OSRHItemConfig extends FormApplication {
       let itemType = 'none'
       if(select.value == 'light' && !this.item.flags?.['osr-helper']?.lightItemData){
         itemType = select.value;
-        let lightData = deepClone(OSRH.data.defaultLightSettings);
+        let lightData = foundry.utils.deepClone(OSRH.data.defaultLightSettings);
         lightData.name = item.name
         await item.setFlag('osr-helper', 'lightItemData', lightData)
       }

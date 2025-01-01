@@ -4,7 +4,7 @@ export class AmmoItemConfig extends FormApplication {
     this.item = item;
   }
   static get defaultOptions() {
-    return mergeObject(super.defaultOptions, {
+    return foundry.utils.mergeObject(super.defaultOptions, {
       title: 'OSRH Ammunition Config',
       classes: ['osrh', 'ammo-config'],
       top: 120,

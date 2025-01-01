@@ -36,7 +36,7 @@ export async function addcustomAttribElement(sheetEl, actor) {
           inp.addEventListener('change', async (e) => {
             e.preventDefault();
             const id = e.target.closest('.attrib-cont').id;
-            const attributes = await deepClone(actor.flags[OSRH.moduleName]?.customAttributes);
+            const attributes = await foundry.utils.deepClone(actor.flags[OSRH.moduleName]?.customAttributes);
             const attrib = attributes.find((i) => i.id == id);
             if (attrib) attrib.value = parseInt(inp.value);
             const actorObj = await game.actors.get(actor._id);
@@ -77,7 +77,7 @@ export async function addAttribListeners(html, actorObj) {
 }
 export async function decrementAttribute(actorId, attribId) {
   const actor = game.actors.get(actorId);
-  const flag = await deepClone(actor.flags?.[OSRH.moduleName]?.customAttributes);
+  const flag = await foundry.utils.deepClone(actor.flags?.[OSRH.moduleName]?.customAttributes);
   const attribute = flag.find((i) => i.id == attribId);
   if (!attribute.value >= 1) {
     ui.notifications.warn(`${attribute.name} ${game.i18n.localize('OSRH.util.notification.hasNoCharges')}`);

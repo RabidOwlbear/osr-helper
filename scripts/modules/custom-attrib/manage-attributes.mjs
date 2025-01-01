@@ -5,7 +5,7 @@ export class ManageCustomAttributes extends FormApplication {
     this.attributes = actor.flags?.[OSRH.moduleName]?.customAttributes;
   }
   static get defaultOptions() {
-    return mergeObject(super.defaultOptions, {
+    returnfoundry.utils.mergeObject(super.defaultOptions, {
       title: game.i18n.localize('OSRH.manageAttributes.title'), //'OSRH Custom Attribute Config',
       classes: ['osrh', 'manage-attributes'],
       id: 'OSRHManageAttributes',
@@ -62,7 +62,7 @@ export class ManageCustomAttributes extends FormApplication {
         const position = { top: this.options.top, left: this.options.left };
         const actor = await game.actors.get(this.actor._id);
         const itemId = e.target.closest('.attrib-cont')?.dataset?.id;
-        const newList = await deepClone(this.attributes).filter((i) => i.id !== itemId);
+        const newList = await foundry.utils.deepClone(this.attributes).filter((i) => i.id !== itemId);
         if (newList.length === 1 && newList[0].id === itemId) newList = [];
         await actor.setFlag(OSRH.moduleName, 'customAttributes', newList);
         const actorObj = Object.values(ui.windows).find((i) => i.id.includes(actor.id));

@@ -1,5 +1,5 @@
 export async function migrateTurnData() {
-  let turnData = deepClone(await game.settings.get('osr-helper', 'turnData'));
+  let turnData = foundry.utils.deepClone(await game.settings.get('osr-helper', 'turnData'));
   const dungeonTurnData = await game.settings.get('osr-helper', 'dungeonTurnData');
   let hasDungeon = turnData.hasOwnProperty('dungeon');
   let hasTravel = turnData.hasOwnProperty('travel');
@@ -12,7 +12,7 @@ export async function migrateTurnData() {
     return;
   }
   if (!hasEncTable && dungeonTurnData) {
-    turnData = mergeObject(turnData, dungeonTurnData);
+    turnData = foundry.utils.mergeObject(turnData, dungeonTurnData);
     turnData.eTables = [dungeonTurnData.eTable, 'none', 'none', 'none', 'none', 'none', 'none', 'none'];
     turnData.lvl = 1;
     turnData.walkCount = 1;

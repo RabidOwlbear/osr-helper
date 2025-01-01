@@ -11,7 +11,7 @@ export class OSRHTurnTracker extends FormApplication {
     // if(!this.dungeonTurnData.lvl)this.dungeonTurnData.lvl = 1;
   }
   static get defaultOptions() {
-    return mergeObject(super.defaultOptions, {
+    return foundry.utils.mergeObject(super.defaultOptions, {
       classes: ['osrh', 'turn-tracker'],
       template: `modules/${OSRH.moduleName}/templates/turn-tracker.hbs`,
       id: `turn-tracker`,
@@ -28,7 +28,7 @@ export class OSRHTurnTracker extends FormApplication {
     });
   }
   async getData() {
-    this.turnData = deepClone(await game.settings.get('osr-helper', 'turnData'));
+    this.turnData = foundry.utils.deepClone(await game.settings.get('osr-helper', 'turnData'));
     const context = super.getData();
     const partyObj = OSRH.util.getPartyActors();
 
@@ -260,7 +260,7 @@ export class OSRHTurnTracker extends FormApplication {
     }
   }
   async refreshCounts(refresh = false) {
-    this.turnData = deepClone(await game.settings.get('osr-helper', 'turnData'));
+    this.turnData = foundry.utils.deepClone(await game.settings.get('osr-helper', 'turnData'));
     // this.dungeonTurnData = await game.settings.get('osr-helper', 'dungeonTurnData');
     if (refresh) this.render(true);
   }
@@ -285,7 +285,7 @@ export class OSRHTurnTracker extends FormApplication {
     const encTables = this.getEncounterTables(html);
     const saveSettings = html.find('.save-settings');
     const terrainSelect = html.find('#terrain')[0];
-    this.turnData = deepClone(await game.settings.get('osr-helper', 'turnData'));
+    this.turnData = foundry.utils.deepClone(await game.settings.get('osr-helper', 'turnData'));
     this.turnData.travel.terrain = terrainSelect.value;
     this.turnData.travel.eTable = tEncTable.value;
     this.turnData.travel.rollEnc = tEncRoll.checked;

@@ -76,7 +76,7 @@ data: {
 
     }
     static get defaultOptions() {
-      return mergeObject(super.defaultOptions, {
+      return foundry.utils.mergeObject(super.defaultOptions, {
         title: 'OSRH Ration Config',
         classes: ['osrh', 'ration-config'],
         top: 120,

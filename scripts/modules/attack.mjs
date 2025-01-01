@@ -6,7 +6,7 @@ export class OSRHAttack extends FormApplication {
     this.actor = actor;
   }
   static get defaultOptions() {
-    return mergeObject(super.defaultOptions, {
+    return foundry.utils.mergeObject(super.defaultOptions, {
       title: 'Attack',
       classes: ['osrh', 'light-item-config'],
       top: 120,

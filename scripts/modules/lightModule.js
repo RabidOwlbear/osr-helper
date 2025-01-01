@@ -17,7 +17,7 @@ export const registerLightModule = async function () {
     //   let tags = i.system.manualTags;
     //   if (tags && tags.find((t) => t.value == 'Light')) return i;
     // });
-    const lightData = deepClone(await game.settings.get(`${OSRH.moduleName}`, 'lightData'));
+    const lightData = foundry.utils.deepClone(await game.settings.get(`${OSRH.moduleName}`, 'lightData'));
     let actorLightData = lightData[actor.id];
 
     // check for light already lit
@@ -162,7 +162,7 @@ export const registerLightModule = async function () {
   };
 
   OSRH.light.lightCheck =  async function () {
-    let lightData = deepClone( await game.settings.get(`${OSRH.moduleName}`, 'lightData'));
+    let lightData = foundry.utils.deepClone( await game.settings.get(`${OSRH.moduleName}`, 'lightData'));
     let curTime = game.time.worldTime;
     let expired = [];
     for (let actorId in lightData) {
@@ -244,7 +244,7 @@ export const registerLightModule = async function () {
     }
 
     static get defaultOptions() {
-      return mergeObject(super.defaultOptions, {
+      return foundry.utils.mergeObject(super.defaultOptions, {
         classes: ['form', `light-item-config`, 'themed'],
         popOut: true,
         height: 540,

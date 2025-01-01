@@ -191,7 +191,7 @@ export const registerReports = () => {
       this.systemData = OSRH.systemData;
     }
     static get defaultOptions() {
-      return mergeObject(super.defaultOptions, {
+      return foundry.utils.mergeObject(super.defaultOptions, {
         classes: ['application', 'testApp'],
         popOut: true,
         template: `modules/${OSRH.moduleName}/templates/travel-report.hbs`,

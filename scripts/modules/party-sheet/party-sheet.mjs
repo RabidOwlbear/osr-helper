@@ -43,7 +43,7 @@ export class OSRHPartySheet extends FormApplication {
     
   }
   static get defaultOptions() {
-    return mergeObject(super.defaultOptions, {
+    return foundry.utils.mergeObject(super.defaultOptions, {
       id: 'OSRH-party-sheet',
       title: 'Party Sheet',
       classes: ['osrh', 'application', 'party-sheet'],
@@ -218,7 +218,7 @@ export class OSRHPartySheet extends FormApplication {
           type: 'Actor'
         };
         event.dataTransfer.setData('text/plain', JSON.stringify(dragData));
-        this.tempForm = deepClone(this.formation);
+        this.tempForm = foundry.utils.deepClone(this.formation);
         let offsets = this._getPartyoffsets(this.tempForm);
         let hook = Hooks.once('createToken', async (a, b, c) => {
           const leadToken = a;

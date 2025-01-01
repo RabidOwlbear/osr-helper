@@ -6,7 +6,7 @@ export class CustomAttributeEdit extends FormApplication {
     this.managerCoord = managerCoord;
   }
   static get defaultOptions() {
-    return mergeObject(super.defaultOptions, {
+    return foundry.utils.mergeObject(super.defaultOptions, {
       title: game.i18n.localize('OSRH.attribConfig.title'), //'OSRH Custom Attribute Config',
       classes: ['osrh', 'attribute-config'],
       id: 'OSRHAttributeConfig',
@@ -94,7 +94,7 @@ export class CustomAttributeEdit extends FormApplication {
   }
   async _saveAttribute() {
     const actor = await game.actors.get(this.actorId);
-    let flagData = await deepClone(actor.flags?.[OSRH.moduleName]?.customAttributes);
+    let flagData = await foundry.utils.deepClone(actor.flags?.[OSRH.moduleName]?.customAttributes);
     if(!flagData)flagData = [];
     const existing = flagData.find((i) => i.id === this.attrib.id);
     if (!this.attrib.name.length) {

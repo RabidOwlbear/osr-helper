@@ -1,6 +1,6 @@
 export async function migrateSavedEffects(){
-  const effectList = deepClone(await game.settings.get(OSRH.moduleName, 'savedEffects'));
-  const savedEffectList = deepClone(await game.settings.get(OSRH.moduleName, 'effectPresets'));
+  const effectList = foundry.utils.deepClone(await game.settings.get(OSRH.moduleName, 'savedEffects'));
+  const savedEffectList = foundry.utils.deepClone(await game.settings.get(OSRH.moduleName, 'effectPresets'));
   const keys = Object.keys(effectList);
   if(keys.length){
     keys.map(k=>{

@@ -6,7 +6,7 @@ export function registerOsrActiveEffectModule() {
       this.displayAll = displayAll;
     }
     static get defaultOptions() {
-      return mergeObject(super.defaultOptions, {
+      return foundry.utils.mergeObject(super.defaultOptions, {
         title: 'Active Effects',
         id: 'OSRH-active-effect-app',
         classes: ['osrh', 'application', 'osr-active-effects'],
@@ -168,7 +168,7 @@ export function registerOsrActiveEffectModule() {
       }
     }
     async getEffectPresets(){
-      return await deepClone(game.settings.get('osr-helper', 'effectPresets'));
+      return await foundry.utils.deepClone(game.settings.get('osr-helper', 'effectPresets'));
     }
     numInputListener(el, gto = false){
       el.addEventListener('change', e=>{
@@ -431,7 +431,7 @@ export function registerOsrActiveEffectModule() {
       }else{
 
         await OSRH.socket.executeAsGM('handleEffectPreset', 'add', effectObj);
-        // const effectPresets = await deepClone(game.settings.get('osr-helper', 'effectPresets'));
+        // const effectPresets = await foundry.utils.deepClone(game.settings.get('osr-helper', 'effectPresets'));
         // effectPresets.push(effectObj)
         // await game.settings.set('osr-helper', 'effectPresets', effectPresets);
         this.render()
@@ -441,7 +441,7 @@ export function registerOsrActiveEffectModule() {
       await OSRH.socket.executeAsGM('handleEffectPreset', 'delete', id);
       this.render()
 
-      // const presets = deepClone(await this.getEffectPresets()).filter(i=>i.id !== id);
+      // const presets = foundry.utils.deepClone(await this.getEffectPresets()).filter(i=>i.id !== id);
 
       // await game.settings.set('osr-helper', 'effectPresets', presets);
     }
@@ -479,7 +479,7 @@ export function registerOsrActiveEffectModule() {
   };
   
   OSRH.effect.handleEffectPreset = async (type, data)=>{
-    const presets = deepClone(await game.settings.get('osr-helper', 'effectPresets'))
+    const presets = foundry.utils.deepClone(await game.settings.get('osr-helper', 'effectPresets'))
     if(type == 'add'){
       presets.push(data);
       await game.settings.set('osr-helper', 'effectPresets', presets);
@@ -496,7 +496,7 @@ export function registerOsrActiveEffectModule() {
     }
   }
   OSRH.effect.delete = async function (effectId) {
-    let effectData = deepClone(await game.settings.get(`${OSRH.moduleName}`, 'effectData')).filter(
+    let effectData = foundry.utils.deepClone(await game.settings.get(`${OSRH.moduleName}`, 'effectData')).filter(
       (e) => e.effectId == effectId
     )[0];
 
@@ -504,7 +504,7 @@ export function registerOsrActiveEffectModule() {
     if (actor.collectionName == 'tokens') actor = actor.actor;
     let effect = await actor.effects.get(effectId);
     effect.delete();
-    let activeEffectData = deepClone(await game.settings.get(`${OSRH.moduleName}`, 'effectData')).filter(
+    let activeEffectData = foundry.utils.deepClone(await game.settings.get(`${OSRH.moduleName}`, 'effectData')).filter(
       (e) => e.effectId != effectId
     );
     await game.settings.set(`${OSRH.moduleName}`, 'effectData', activeEffectData);
@@ -512,7 +512,7 @@ export function registerOsrActiveEffectModule() {
   };
 
   OSRH.effect.housekeeping = async function () {
-    let effectData = deepClone(await game.settings.get(`${OSRH.moduleName}`, 'effectData'));
+    let effectData = foundry.utils.deepClone(await game.settings.get(`${OSRH.moduleName}`, 'effectData'));
 
     for (let effect of effectData) {
       if (!effect?.isInf) {
@@ -535,7 +535,7 @@ export function registerOsrActiveEffectModule() {
     let actor = await fromUuid(target);
     // if (actor.collectionName == 'tokens') actor = actor.actor;
     let e = await ActiveEffect.create(effectData, { parent: actor });
-    let activeEffectData = deepClone(await game.settings.get(`${OSRH.moduleName}`, 'effectData'));
+    let activeEffectData = foundry.utils.deepClone(await game.settings.get(`${OSRH.moduleName}`, 'effectData'));
     activeEffectData.push({
       isInf: effectData.flags['data'].isInf,
       effectId: e.id,
@@ -575,7 +575,7 @@ function fxOpen(){
 }
 
 // export const handleEffectPreset = async (type, data)=>{
-//   const presets = deepClone(await game.settings.get('osr-helper', 'effectPresets'))
+//   const presets = foundry.utils.deepClone(await game.settings.get('osr-helper', 'effectPresets'))
 //   if(type == 'add'){
 //     presets.push(data);
 //     await game.settings.set('osr-helper', 'effectPresets', presets);

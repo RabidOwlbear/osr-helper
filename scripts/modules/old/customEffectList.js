@@ -15,7 +15,7 @@ export const registerCustomEffectList = () => {
       }
     }
     static get defaultOptions() {
-      return mergeObject(super.defaultOptions, {
+      return foundry.utils.mergeObject(super.defaultOptions, {
         baseApplication: 'customEffectList',
         classes: ['form', 'custom-effect-list'],
         popOut: true,
