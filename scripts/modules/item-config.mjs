@@ -79,15 +79,13 @@ export class OSRHItemConfig extends FormApplication {
       //   configBtn.classList.add('hidden');
       // }
       let item = this.item//await OSRH.util.getItem(this.item);
-      let itemType = 'none'
-      if(select.value == 'light' && !this.item.flags?.['osr-helper']?.lightItemData){
-        itemType = select.value;
+      let itemType = select.value
+      if(itemType == 'light' && !this.item.flags?.['osr-helper']?.lightItemData){        
         let lightData = foundry.utils.deepClone(OSRH.data.defaultLightSettings);
         lightData.name = item.name
         await item.setFlag('osr-helper', 'lightItemData', lightData)
       }
-      if(select.value == 'ration' && !this.item.flags?.['osr-helper']?.rationData){
-        itemType = select.value;
+      if(itemType == 'ration' && !this.item.flags?.['osr-helper']?.rationData){        
         let rationData = OSRH.data.defaultRationSettings;
         rationData.name = item.name;
         await item.setFlag('osr-helper', 'rationData', rationData);
