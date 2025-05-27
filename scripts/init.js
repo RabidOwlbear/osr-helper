@@ -51,8 +51,7 @@ Hooks.once('init', async function () {
   //add settings
   registerData();
   registerUtil();
-  await registerSettings();
-
+  
   // import modules
   // registerLight();
 
@@ -112,12 +111,12 @@ Hooks.on('updateSetting', async (a, b, c) => {
   if (a.key === 'osr-helper.turnData') {
     const turnData = await game.settings.get(`${OSRH.moduleName}`, 'turnData');
 
-    console.log('Update Setting hook');
     await OSRH.socket.executeAsGM('setting', 'turnData', turnData, 'set');
   }
 });
 Hooks.once(`${OSRH.moduleName}.registered`, () => {});
 Hooks.once('ready', async () => {
+  await registerSettings();
   // no gm warning
   if (!OSRH.util.singleGM()) ui.notifications.warn(game.i18n.localize('OSRH.notification.noGmUser'));
   registerSystemData();
@@ -282,7 +281,6 @@ Hooks.on('renderActorSheet', async (sheetEl, html, actorObj) => {
           });
           // custom attrib btn
           btnCont.appendChild(ccBtn);
-          console.log(actorObj.prototypeToken.actorLink);
           if ((await game.settings.get(OSRH.moduleName, `displaycustomAttrib`)) && actorObj.prototypeToken.actorLink) {
             addcustomAttribElement(html[0].closest('.app'), actorObj);
             if (await game.settings.get(OSRH.moduleName, 'trackCustomAttrib')) {

@@ -188,14 +188,8 @@
 
 /* center hotbar */
 #hotbar.center-hotbar {
-  position: absolute;
   left: var(--hotbar-center);
   top: calc(100% - 62px);
-}
-
-#fps {
-  position: relative;
-  left: calc(100% - 110px);
 }
 
 /* icon */
@@ -204,10 +198,14 @@
 }
 
 /* control bar */
+aside#hotbar {
+  position: relative;
+}
+
 #osrh-ui-control {
   position: absolute;
   /* top: calc(100vh - 100px); */
-  top: -40px;
+  top: -45px;
   height: 40px;
   width: 600px;
   display: flex;
@@ -230,7 +228,7 @@
 }
 
 .osrh-controls-open {
-  background-color: var(--osrh-ui-btn-open) !important;
+  background-color: var(--osrh-ui-btn-open);
 }
 
 .osrh-control-btn {
@@ -2165,6 +2163,12 @@
 .btn-spcr {
   height: 20px;
   margin-bottom: 10px;
+}
+
+.osrh-report-msg h3 {
+  font-size: 1rem;
+  font-weight: bold;
+  margin: 0.5rem 0;
 }
 
 /*# sourceMappingURL=main.css.map */

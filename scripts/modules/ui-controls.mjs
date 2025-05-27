@@ -14,7 +14,7 @@ export const uiControls = {
     };
     // get bottom ui element
     const element = document.querySelector('#hotbar');  
-    element.style.position = 'relative';
+    // element.style.position = 'relative';
     // create control container
     const uiEl = document.createElement('div');
     uiEl.id = 'osrh-ui-control';

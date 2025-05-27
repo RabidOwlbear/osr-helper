@@ -6,7 +6,6 @@ export async function migrateSavedEffects(){
     keys.map(k=>{
       savedEffectList.push(migrateEffect(effectList[k]));
     })
-    console.log('migrated list',savedEffectList)
     game.settings.set(OSRH.moduleName, 'effectPresets', savedEffectList);
     game.settings.set(OSRH.moduleName, 'savedEffects', {});  
   }

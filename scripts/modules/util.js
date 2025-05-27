@@ -210,7 +210,7 @@ export const registerUtil = () => {
   // used
   OSRH.util.centerHotbar = async function () {
     let hotbar = document.getElementById('hotbar');
-    if (await game.settings.get(`${OSRH.moduleName}`, 'centerHotbar')) {
+    if (!game.version > 12 && await game.settings.get(`${OSRH.moduleName}`, 'centerHotbar')) {
       document.documentElement.style.setProperty('--hotbar-center', `${window.innerWidth / 2 - 578}px`);
       hotbar.classList.add('center-hotbar');
     } else {

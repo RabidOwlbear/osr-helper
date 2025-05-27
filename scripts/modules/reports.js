@@ -70,6 +70,7 @@ export const registerReports = () => {
     const rationText = totalRations <= 0 ? `<ul><li><span style="color: red;">${game.i18n.localize("OSRH.report.none")}</span></li></ul>` : msgData.food;
     const lightText = msgData.light == '' ? `<ul><li><span style="color: red;">${game.i18n.localize("OSRH.report.none")}</span></li></ul>` : msgData.light;
     let contents = `
+    <div class="osrh-report-msg">
       <details >
       <summary><strong>${game.i18n.localize("OSRH.report.suppliesReport")}</strong></summary>
       <br>
@@ -86,8 +87,9 @@ export const registerReports = () => {
           ${lightText}
         </div>
       </div>
-      </details>`;
-
+      </details>
+    </div>
+    `;
     ChatMessage.create({ content: contents, whisper: [game.user.id] });
   };
 
@@ -139,6 +141,7 @@ export const registerReports = () => {
     }
     const daysLeft = Math.floor(totalRations / actorObj.party.length);
     let contents = `
+    <div class="osrh-report-msg">
   <details >
     <summary><strong>${game.i18n.localize("OSRH.report.rationReport")}</strong></summary>
     <br>
@@ -155,7 +158,9 @@ export const registerReports = () => {
       ${msgData.retainers}
     </div>
     </div>
-  </details>`;
+  </details>
+    </div>
+    `;
     ChatMessage.create({ content: contents, whisper: [game.user.id] });
   };
 

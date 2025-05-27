@@ -434,7 +434,6 @@ export class OSRHTurnTracker extends FormApplication {
     const charEl = html.find('#character-list')[0];
     const retEl = html.find('#retainer-list')[0];
     const upData = await this.getTravelData(mod);
-    console.log('data', upData)
     rateEl.innerText = `${upData.baseRate} mi`;
     charEl.innerHTML = upData.html.characters;
     retEl.innerHTML = upData.html.retainers;

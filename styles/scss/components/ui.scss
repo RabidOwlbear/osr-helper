@@ -1,24 +1,28 @@
 /* center hotbar */
 #hotbar.center-hotbar{
-  position: absolute;
+  // position: absolute;
   left: var(--hotbar-center);
   top: calc(100% - 62px);
 }
-#fps {
-  position: relative;
-  left: calc(100% - 110px);
-}
+// #fps {
+//   position: relative;
+//   left: calc(100% - 110px);
+// }
 /* icon */
 .ose-helper-icon {
   padding: 0 3px;
 }
 
 /* control bar */
+aside#hotbar{
+  position: relative;
+}
 
 #osrh-ui-control{
   position: absolute;
   /* top: calc(100vh - 100px); */
-  top: -40px;
+  top: -45px;
+  
   height:40px;
   width: 600px;
   display: flex;
@@ -41,7 +45,7 @@
   position: relative;
 }
 .osrh-controls-open{
-  background-color: var(--osrh-ui-btn-open) !important;
+  background-color: var(--osrh-ui-btn-open) ;
 }
 .osrh-control-btn{
   cursor:pointer;

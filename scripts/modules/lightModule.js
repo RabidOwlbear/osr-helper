@@ -414,8 +414,8 @@ export const registerLightModule = async function () {
         content: '',
         whisper: [game.user.id]
       };
-      chatData.content = `<h3>${lightData.name} ${game.i18n.localize("OSRH.light.chat.turnsLeft")}</h3>
-      <p style="color: ${color}">${game.i18n.localize("OSRH.light.chat.the")} ${lightData.name} ${game.i18n.localize("OSRH.light.chat.has")} ${tRem} ${turn} ${game.i18n.localize("OSRH.light.chat.remaining")}</p>`;
+      chatData.content = `<div class="osrh-report-msg"><h3>${lightData.name} ${game.i18n.localize("OSRH.light.chat.turnsLeft")}</h3>
+      <p style="color: ${color}">${game.i18n.localize("OSRH.light.chat.the")} ${lightData.name} ${game.i18n.localize("OSRH.light.chat.has")} ${tRem} ${turn} ${game.i18n.localize("OSRH.light.chat.remaining")}</p></div>`;
 
       ChatMessage.create(chatData);
 

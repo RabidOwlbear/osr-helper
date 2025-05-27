@@ -1,5 +1,4 @@
 export const registerNameData = ()=>{
-console.log('namedata    ,-----------------------------------')
   OSRH.data.nameData = {
     human: {
       first: [

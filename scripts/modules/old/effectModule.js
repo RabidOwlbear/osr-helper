@@ -275,7 +275,6 @@ export const registerEffectModule = async function () {
       // multi target
       
       for(let i = 0; i<targets.length;i++){
-        console.log(targets[i], effectData, this.actor.uuid)
         await OSRH.socket.executeAsGM('gmCreateEffect', targets[i], effectData, this.actor.uuid)
       }
 
@@ -444,7 +443,6 @@ export const registerEffectModule = async function () {
         //if token get token actor
         // if (actor.collectionName == 'tokens') actor = actor.actor;
         // let activeEffect = await actor.getEmbeddedDocument('ActiveEffect', effect.effectId);
-        // console.log('housekeeping', activeEffect)
         if (activeEffect.duration.remaining <= 0) {
           effectData = effectData.filter((e) => e.effectId != activeEffect.id);
           await actor.deleteEmbeddedDocuments('ActiveEffect', [effect.effectId]);
@@ -557,7 +555,6 @@ export const registerEffectModule = async function () {
   OSRH.effect.applyEffectPreset = async function (ev) {
     const savedFx = foundry.utils.deepClone(await game.settings.get(OSRH.moduleName, 'savedEffects'));
     let fxData = savedFx[ev.srcElement.value];
-    // console.log(ev, fxData)
     let iconObj = OSRH.data.effectIcons.find((i) => i.name == fxData.name);
     if (fxData) {
       let inputKeys = Object.keys(fxData).filter((k) => {

@@ -238,7 +238,6 @@ export const registerTurn = () => {
           for (let res of roll.results) {
             content += `<br/>${res.text}<br/>`;
             // what does this do?
-            // console.log(res.documentCollection, !res?.documentCollection?.length)
             // if (!res?.documentCollection?.length) {
             //   content += `<br/>${res.text}<br/>`;
             // } else {
@@ -510,15 +509,16 @@ export const registerTurn = () => {
     };
     dStyle = data.dungeon.rest > 5 ? 'style = "color: red"' : data.dungeon.rest > 3 ? 'style = "color: orangered"' : '';
     tStyle = data.travel.rest > 5 ? 'style = "color: red"' : data.travel.rest > 3 ? 'style = "color: orangered"' : '';
-
-    chatData.content = ``;
+    let content = '';
+    
     if (type == 'dungeon' || type === null) {
-      chatData.content += `<h2>${game.i18n.localize("OSRH.turn.count.dungeon")}</h2><br><p>${game.i18n.localize("OSRH.turn.count.session")}: ${data.dungeon.session}</p><p> ${game.i18n.localize("OSRH.turn.count.total")}: ${data.dungeon.total}</p><p>${game.i18n.localize("OSRH.turn.count.sinceRest")}: <span ${dStyle}>${data.dungeon.rest}</span></p>
+      content += `<h3>${game.i18n.localize("OSRH.turn.count.dungeon")}</h3><br><p>${game.i18n.localize("OSRH.turn.count.session")}: ${data.dungeon.session}</p><p> ${game.i18n.localize("OSRH.turn.count.total")}: ${data.dungeon.total}</p><p>${game.i18n.localize("OSRH.turn.count.sinceRest")}: <span ${dStyle}>${data.dungeon.rest}</span></p>
     <br>`;
     }
     if (type == 'travel' || type === null) {
-      chatData.content += `<h2>${game.i18n.localize("OSRH.turn.count.travel")}</h2><br><p>${game.i18n.localize("OSRH.turn.count.session")}: ${data.travel.session}</p><p> ${game.i18n.localize("OSRH.turn.count.total")}: ${data.travel.total}</p><p>${game.i18n.localize("OSRH.turn.count.sinceRest")}: <span ${tStyle}>${data.travel.rest}</span></p>`;
+      content += `<h3>${game.i18n.localize("OSRH.turn.count.travel")}</h3><br><p>${game.i18n.localize("OSRH.turn.count.session")}: ${data.travel.session}</p><p> ${game.i18n.localize("OSRH.turn.count.total")}: ${data.travel.total}</p><p>${game.i18n.localize("OSRH.turn.count.sinceRest")}: <span ${tStyle}>${data.travel.rest}</span></p>`;
     }
+    chatData.content = `<div class="osrh-report-msg">${content}</div>`;
     ChatMessage.create(chatData);
   };
 
