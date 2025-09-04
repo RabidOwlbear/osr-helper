@@ -198,6 +198,33 @@ lightType: {
       type: 'day'
     } 
   };
+  OSRH.data.sheetUI = {
+    actor: [
+      {
+        title: 'Active Effects',
+        icon: 'fa-sparkles',
+        app: 'active-effects'
+      },
+      {
+        title: 'Item Report',
+        icon: 'fa-file-alt',
+        app: 'item-report'
+      },
+      ,
+      {
+        title: 'Currency Converter',
+        icon: 'fa-coins',
+        app: 'currency-converter'
+      }
+    ],
+    item: [
+      {
+        title: 'Item Management',
+        icon: 'fa-list-check',
+        app: 'item-management'
+      }
+    ]
+  }
 }; 
 export const registerLocalizedData = () =>{
   OSRH.ui.controlOptions= [

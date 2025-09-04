@@ -13,275 +13,7 @@ export const registerEffectModule = async function () {
       }
     }
   };
-  OSRH.effect.NewActiveEffectForm = class NewActiveEffectForm extends FormApplication {
-    constructor(actor, actorId, pos, effectList = false) {
-      super(pos, { id: `new-active-effect.${actorId}`, top: pos.y, left: pos.x });
-      this.actor = actor;
-      this.actorId = actorId;
-      this.effectList = effectList;
-      this.pos = pos;
-    }
-    static get defaultOptions() {
-      return foundry.utils.mergeObject(super.defaultOptions, {
-        classes: ['form', 'osrh-new-active-effect-form'],
-        popOut: true,
-        height: 600,
-        top: 0,
-        left: 0,
-        width: 310,
-        template: `modules/${OSRH.moduleName}/templates/new-active-effect-form.hbs`,
-        id: 'new-active-effect',
-        title: game.i18n.localize('OSRH.effect.newEffectTitle') //'OSRH New Active Effect'
-      });
-    }
-    async getData() {
-      let isGM = game.user.isGM;
-      let savedEffects = await game.settings.get(OSRH.moduleName, 'savedEffects');
-      let retObj = {
-        effectPresets: [],
-        iconList: OSRH.data.effectIcons,
-        isGM
-      };
-      if (Object.keys(savedEffects).length) {
-        for (let key in savedEffects) {
-          let effectData = savedEffects[key];
-          retObj.effectPresets.push({
-            name: effectData.name,
-            duration: effectData.duration,
-            id: effectData.id
-          });
-        }
-      }
-      return retObj;
-    }
-    activateListeners(html) {
-      const createBtn = html.find('#create-btn')[0];
-      const resetBtn = html.find('#reset-btn')[0];
-      const saveBtn = html.find('#save-btn')[0];
-      let nameField = html.find('input#name')[0];
-      let descrip = html.find('textarea#descrip')[0];
-      let durationField = html.find('input#duration')[0];
-      let numInputs = html.find('input[type="number"]');
-      const presetSel = html.find('#preset-select')[0];
-      for (let i of numInputs) {
-        i.addEventListener('focus', (ev) => {
-          i.value = '';
-        });
-        i.addEventListener('blur', (ev) => {
-          if (!parseInt(i.value)) {
-            i.value = 0;
-          }
-        });
-      }
-      presetSel.addEventListener('change', async (ev) => {
-        ev.preventDefault();
-        OSRH.effect.applyEffectPreset.call(this, ev);
-      });
-      if (saveBtn)
-        saveBtn.addEventListener('click', async (ev, data) => {
-          ev.preventDefault();
-          if (nameField.value == '') {
-            ui.notifications.warn(game.i18n.localize('OSRH.util.notification.enterEffectName'));
-            return;
-          }
-          let savedFx = await game.settings.get(OSRH.moduleName, 'savedEffects');
-          for (let key in savedFx) {
-            if (savedFx[key].name == nameField.value) {
-              ui.notifications.warn(game.i18n.localize('OSRH.util.notification.nameInUse'));
-              return;
-            }
-          }
-          OSRH.effect.saveEffect.call(this, ev, data);
-        });
-
-      createBtn.addEventListener('click', (ev) => {
-        let userTargets = game.user.targets;
-        let targetInp = html.find('[name="target"]:checked')[0].id;
-        let interval = html.find('[name="interval"]:checked')[0].id;
-        if (targetInp == 'targeted' && userTargets.size <= 0 /*!= 1*/) {
-          ev.preventDefault();
-
-          ui.notifications.warn(game.i18n.localize("OSRH.util.notification.targetOneActor"));
-        }
-        if (nameField.value == '') {
-          ev.preventDefault();
-          ui.notifications.warn(game.i18n.localize('OSRH.util.notification.enterEffectName'));
-        }
-
-        if (parseInt(durationField.value) == 0 && interval != 'infinite') {
-          ev.preventDefault();
-          ui.notifications.warn(game.i18n.localize('OSRH.util.notification.enterEffectDuration'));
-        }
-      });
-      resetBtn.addEventListener('click', (ev) => {
-        ev.preventDefault();
-        nameField.value = '';
-        descrip.value = '';
-        durationField = '';
-        for (let input of numInputs) {
-          input.value = 0;
-        }
-      });
-    }
-    async _updateObject(ev, formData) {
-      let userTargets = game.user.targets;
-      let targetInp = ev.target.querySelector('[name="target"]:checked').id;
-      let targets = [];
-      if (targetInp == 'self') {
-        targets.push(this.actor.uuid);
-      } else {
-        userTargets.every((i) => {
-          const uuid = i.document.actor.uuid
-          //filter duplicate uuid's
-          if(!targets.includes(uuid)){
-          targets.push(uuid);
-          }
-          return true;
-        });
-      }
-      // let target = targetInp == 'self' ? actor.uuid : game.user.targets.first()?.actor?.uuid;
-      let interval = ev.target.querySelector('[name="interval"]:checked').id;
-      const iconName = formData.icon;
-      const iconObj = OSRH.data.effectIcons.find((i) => i.name == iconName);
-      let effectData = {
-        name: '',
-        icon: iconObj.path,
-        iconName: iconObj.name,
-        tint: iconObj.color,
-        mode: 2,
-        priority: 0,
-        flags: {
-          data: {
-            isInf: false,
-            name: '',
-            details: '',
-            effects: []
-          }
-        },
-        changes: [],
-        duration: {
-          startTime: 0,
-          seconds: 0
-        }
-      };
-
-      for (let input in formData) {
-        const pairs = input.split('.');
-
-        let type = pairs[0];
-        let attrib = pairs.length > 1 ? pairs[1] : null;
-        let value = formData[input];
-
-        effectData.duration.startTime = game.time.worldTime;
-
-        if (type == 'name') {
-          effectData.flags['data'].name = value;
-          effectData.name = value;
-        }
-        if (type == 'descrip') {
-          effectData.flags['data'].details = value;
-        }
-        if (type == 'thac0' && value != 0) {
-          // effectData.icon = `icons/svg/sword.svg`;
-          // effectData.tint = '#a03300';
-          let aac = await game.settings.get('ose', 'ascendingAC');
-          effectData.changes.push({
-            key: aac ? `system.thac0.bba` : `system.thac0.value`,
-            value: aac ? parseInt(value) : parseInt(value * -1),
-            priority: 1
-          });
-          effectData.flags['data'].effects.push({
-            name: aac ? 'attack bonus' : 'thacO',
-            value: aac ? parseInt(value) : parseInt(value * -1)
-          });
-        }
-        if (type == 'atkmod' && value != 0) {
-          // effectData.icon = `icons/svg/combat.svg`;
-          // effectData.tint = '#aa5000';
-          effectData.changes.push({
-            key: `system.thac0.mod.${attrib}`,
-            value: parseInt(value),
-            priority: 1
-          });
-          effectData.flags['data'].effects.push({
-            name: `attack mod ${attrib}`,
-            value: parseInt(value)
-          });
-        }
-        if (type == 'ac' && value != 0) {
-          let aac = await game.settings.get('ose', 'ascendingAC');
-          // effectData.icon = `icons/svg/combat.svg`;
-          // effectData.tint = '#aa5000';
-          effectData.changes.push({
-            key: aac ? `system.aac.mod` : `system.ac.mod`,
-            value: parseInt(value),
-            priority: 1
-          });
-        }
-        if (type == 'hp' && value != 0) {
-          // effectData.icon = `icons/svg/heal.svg`;
-          // effectData.tint = '#aa0000';
-          effectData.changes.push({
-            key: `system.hp.${attrib}`,
-            value: parseInt(value),
-            priority: 1
-          });
-          effectData.flags['data'].effects.push({
-            name: `hp ${attrib}`,
-            value: parseInt(value)
-          });
-        }
-        if (type === 'init') {
-          effectData.changes.push({
-            key: `system.initiative.mod`,
-            value: parseInt(value),
-            priority: 1
-          });
-        }
-        if (type == 'attribute' && value != 0) {
-          // effectData.icon = `icons/svg/book.svg`;
-          // effectData.tint = '#005bbf';
-          effectData.changes.push({
-            key: `system.scores.${attrib}.value`,
-            value: parseInt(value),
-            priority: 1
-          });
-          effectData.flags['data'].effects.push({
-            name: `attribute ${attrib}`,
-            value: parseInt(value)
-          });
-        }
-        if (type == 'saves' && value != 0) {
-          // effectData.icon = `icons/svg/dice-target.svg`;
-          // effectData.tint = '#ccaa4a';
-          effectData.changes.push({
-            key: `system.saves.${attrib}.value`,
-            value: parseInt(value) * -1,
-            priority: 1
-          });
-          effectData.flags['data'].effects.push({
-            name: `saves ${attrib}`,
-            value: parseInt(value)
-          });
-        }
-        if ((type == 'duration' && value > 0) || (type == 'duration' && interval == 'infinite')) {
-          // effectData.icon = `icons/svg/sun.svg`;
-          // effectData.tint = '#b3eaf8';
-          effectData.flags['data'].interval = interval;
-          effectData.flags['data'].isInf = interval == 'infinite' ? true : false;
-          effectData.duration.seconds = interval == 'minutes' ? Math.floor(value * 60) : Math.floor(value);
-        }
-      }
-      // multi target
-      
-      for(let i = 0; i<targets.length;i++){
-        await OSRH.socket.executeAsGM('gmCreateEffect', targets[i], effectData, this.actor.uuid)
-      }
-
-      // if (this.effectList) this.effectList.render();
-      OSRH.socket.executeAsGM('effectHousekeeping');
-    }
-  };
+  OSRH.effect.NewActiveEffectForm = NewActiveEffectForm
 
   // OSRH.effect.clearExpired = async function () {
   //   let activeEffects = foundry.utils.deepClone(await game.settings.get(`${OSRH.moduleName}`, 'effectData'));
@@ -679,3 +411,273 @@ export const registerEffectModule = async function () {
     async _updateObject(ev, formData) {}
   };
 };
+
+export class NewActiveEffectForm extends FormApplication {
+    constructor(actor, actorId, pos, effectList = false) {
+      super(pos, { id: `new-active-effect.${actorId}`, top: pos.y, left: pos.x });
+      this.actor = actor;
+      this.actorId = actorId;
+      this.effectList = effectList;
+      this.pos = pos;
+    }
+    static get defaultOptions() {
+      return foundry.utils.mergeObject(super.defaultOptions, {
+        classes: ['form', 'osrh-new-active-effect-form'],
+        popOut: true,
+        height: 600,
+        top: 0,
+        left: 0,
+        width: 310,
+        template: `modules/${OSRH.moduleName}/templates/new-active-effect-form.hbs`,
+        id: 'new-active-effect',
+        title: game.i18n.localize('OSRH.effect.newEffectTitle') //'OSRH New Active Effect'
+      });
+    }
+    async getData() {
+      let isGM = game.user.isGM;
+      let savedEffects = await game.settings.get(OSRH.moduleName, 'savedEffects');
+      let retObj = {
+        effectPresets: [],
+        iconList: OSRH.data.effectIcons,
+        isGM
+      };
+      if (Object.keys(savedEffects).length) {
+        for (let key in savedEffects) {
+          let effectData = savedEffects[key];
+          retObj.effectPresets.push({
+            name: effectData.name,
+            duration: effectData.duration,
+            id: effectData.id
+          });
+        }
+      }
+      return retObj;
+    }
+    activateListeners(html) {
+      const createBtn = html.find('#create-btn')[0];
+      const resetBtn = html.find('#reset-btn')[0];
+      const saveBtn = html.find('#save-btn')[0];
+      let nameField = html.find('input#name')[0];
+      let descrip = html.find('textarea#descrip')[0];
+      let durationField = html.find('input#duration')[0];
+      let numInputs = html.find('input[type="number"]');
+      const presetSel = html.find('#preset-select')[0];
+      for (let i of numInputs) {
+        i.addEventListener('focus', (ev) => {
+          i.value = '';
+        });
+        i.addEventListener('blur', (ev) => {
+          if (!parseInt(i.value)) {
+            i.value = 0;
+          }
+        });
+      }
+      presetSel.addEventListener('change', async (ev) => {
+        ev.preventDefault();
+        OSRH.effect.applyEffectPreset.call(this, ev);
+      });
+      if (saveBtn)
+        saveBtn.addEventListener('click', async (ev, data) => {
+          ev.preventDefault();
+          if (nameField.value == '') {
+            ui.notifications.warn(game.i18n.localize('OSRH.util.notification.enterEffectName'));
+            return;
+          }
+          let savedFx = await game.settings.get(OSRH.moduleName, 'savedEffects');
+          for (let key in savedFx) {
+            if (savedFx[key].name == nameField.value) {
+              ui.notifications.warn(game.i18n.localize('OSRH.util.notification.nameInUse'));
+              return;
+            }
+          }
+          OSRH.effect.saveEffect.call(this, ev, data);
+        });
+
+      createBtn.addEventListener('click', (ev) => {
+        let userTargets = game.user.targets;
+        let targetInp = html.find('[name="target"]:checked')[0].id;
+        let interval = html.find('[name="interval"]:checked')[0].id;
+        if (targetInp == 'targeted' && userTargets.size <= 0 /*!= 1*/) {
+          ev.preventDefault();
+
+          ui.notifications.warn(game.i18n.localize("OSRH.util.notification.targetOneActor"));
+        }
+        if (nameField.value == '') {
+          ev.preventDefault();
+          ui.notifications.warn(game.i18n.localize('OSRH.util.notification.enterEffectName'));
+        }
+
+        if (parseInt(durationField.value) == 0 && interval != 'infinite') {
+          ev.preventDefault();
+          ui.notifications.warn(game.i18n.localize('OSRH.util.notification.enterEffectDuration'));
+        }
+      });
+      resetBtn.addEventListener('click', (ev) => {
+        ev.preventDefault();
+        nameField.value = '';
+        descrip.value = '';
+        durationField = '';
+        for (let input of numInputs) {
+          input.value = 0;
+        }
+      });
+    }
+    async _updateObject(ev, formData) {
+      let userTargets = game.user.targets;
+      let targetInp = ev.target.querySelector('[name="target"]:checked').id;
+      let targets = [];
+      if (targetInp == 'self') {
+        targets.push(this.actor.uuid);
+      } else {
+        userTargets.every((i) => {
+          const uuid = i.document.actor.uuid
+          //filter duplicate uuid's
+          if(!targets.includes(uuid)){
+          targets.push(uuid);
+          }
+          return true;
+        });
+      }
+      // let target = targetInp == 'self' ? actor.uuid : game.user.targets.first()?.actor?.uuid;
+      let interval = ev.target.querySelector('[name="interval"]:checked').id;
+      const iconName = formData.icon;
+      const iconObj = OSRH.data.effectIcons.find((i) => i.name == iconName);
+      let effectData = {
+        name: '',
+        icon: iconObj.path,
+        iconName: iconObj.name,
+        tint: iconObj.color,
+        mode: 2,
+        priority: 0,
+        flags: {
+          data: {
+            isInf: false,
+            name: '',
+            details: '',
+            effects: []
+          }
+        },
+        changes: [],
+        duration: {
+          startTime: 0,
+          seconds: 0
+        }
+      };
+
+      for (let input in formData) {
+        const pairs = input.split('.');
+
+        let type = pairs[0];
+        let attrib = pairs.length > 1 ? pairs[1] : null;
+        let value = formData[input];
+
+        effectData.duration.startTime = game.time.worldTime;
+
+        if (type == 'name') {
+          effectData.flags['data'].name = value;
+          effectData.name = value;
+        }
+        if (type == 'descrip') {
+          effectData.flags['data'].details = value;
+        }
+        if (type == 'thac0' && value != 0) {
+          // effectData.icon = `icons/svg/sword.svg`;
+          // effectData.tint = '#a03300';
+          let aac = await game.settings.get('ose', 'ascendingAC');
+          effectData.changes.push({
+            key: aac ? `system.thac0.bba` : `system.thac0.value`,
+            value: aac ? parseInt(value) : parseInt(value * -1),
+            priority: 1
+          });
+          effectData.flags['data'].effects.push({
+            name: aac ? 'attack bonus' : 'thacO',
+            value: aac ? parseInt(value) : parseInt(value * -1)
+          });
+        }
+        if (type == 'atkmod' && value != 0) {
+          // effectData.icon = `icons/svg/combat.svg`;
+          // effectData.tint = '#aa5000';
+          effectData.changes.push({
+            key: `system.thac0.mod.${attrib}`,
+            value: parseInt(value),
+            priority: 1
+          });
+          effectData.flags['data'].effects.push({
+            name: `attack mod ${attrib}`,
+            value: parseInt(value)
+          });
+        }
+        if (type == 'ac' && value != 0) {
+          let aac = await game.settings.get('ose', 'ascendingAC');
+          // effectData.icon = `icons/svg/combat.svg`;
+          // effectData.tint = '#aa5000';
+          effectData.changes.push({
+            key: aac ? `system.aac.mod` : `system.ac.mod`,
+            value: parseInt(value),
+            priority: 1
+          });
+        }
+        if (type == 'hp' && value != 0) {
+          // effectData.icon = `icons/svg/heal.svg`;
+          // effectData.tint = '#aa0000';
+          effectData.changes.push({
+            key: `system.hp.${attrib}`,
+            value: parseInt(value),
+            priority: 1
+          });
+          effectData.flags['data'].effects.push({
+            name: `hp ${attrib}`,
+            value: parseInt(value)
+          });
+        }
+        if (type === 'init') {
+          effectData.changes.push({
+            key: `system.initiative.mod`,
+            value: parseInt(value),
+            priority: 1
+          });
+        }
+        if (type == 'attribute' && value != 0) {
+          // effectData.icon = `icons/svg/book.svg`;
+          // effectData.tint = '#005bbf';
+          effectData.changes.push({
+            key: `system.scores.${attrib}.value`,
+            value: parseInt(value),
+            priority: 1
+          });
+          effectData.flags['data'].effects.push({
+            name: `attribute ${attrib}`,
+            value: parseInt(value)
+          });
+        }
+        if (type == 'saves' && value != 0) {
+          // effectData.icon = `icons/svg/dice-target.svg`;
+          // effectData.tint = '#ccaa4a';
+          effectData.changes.push({
+            key: `system.saves.${attrib}.value`,
+            value: parseInt(value) * -1,
+            priority: 1
+          });
+          effectData.flags['data'].effects.push({
+            name: `saves ${attrib}`,
+            value: parseInt(value)
+          });
+        }
+        if ((type == 'duration' && value > 0) || (type == 'duration' && interval == 'infinite')) {
+          // effectData.icon = `icons/svg/sun.svg`;
+          // effectData.tint = '#b3eaf8';
+          effectData.flags['data'].interval = interval;
+          effectData.flags['data'].isInf = interval == 'infinite' ? true : false;
+          effectData.duration.seconds = interval == 'minutes' ? Math.floor(value * 60) : Math.floor(value);
+        }
+      }
+      // multi target
+      
+      for(let i = 0; i<targets.length;i++){
+        await OSRH.socket.executeAsGM('gmCreateEffect', targets[i], effectData, this.actor.uuid)
+      }
+
+      // if (this.effectList) this.effectList.render();
+      OSRH.socket.executeAsGM('effectHousekeeping');
+    }
+  };

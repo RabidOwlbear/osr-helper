@@ -1,10 +1,12 @@
 import { OSRHItemConfig } from '../item-config.mjs';
+import { injectOSRHSheetUI } from  '../ui-controls.mjs'
 
 export async function registerSystemHooks() {
   const systemData = OSRH.systemData;
   console.log('register system hooks');
   switch (game.system.id) {
     case 'dcc':
+      console.log('DCC system Hooks')
       Hooks.on('renderItemSheet', async (app, html, itemObj) => {
 
         const item = await fromUuid(app.object.uuid);
@@ -12,7 +14,11 @@ export async function registerSystemHooks() {
           addItemConfigControl(html, item);
         }
       });
-
+      Hooks.on('renderItemSheetV2', async (app, html, itemObj, d) => {
+          if (systemData.lightItemTypes.includes(app.document.type)) {
+            injectOSRHSheetUI(html , app, 'item')
+          }
+        });
       break;
       case 'ose':
         Hooks.on('renderItemSheet', async (app, html, itemObj) => {
@@ -22,7 +28,12 @@ export async function registerSystemHooks() {
             addItemConfigControl(html, item);
           }
         });
-
+        Hooks.on('renderItemSheetV2', async (app, html, itemObj) => {
+          if (systemData.lightItemTypes.includes(app.object.type)) {
+            injectOSRHSheetUI(html,app, 'item')
+          }
+        });
+        
         break;
     default:
       Hooks.on('renderItemSheet', async (app, html, itemObj) => {
@@ -32,6 +43,11 @@ export async function registerSystemHooks() {
           addItemConfigControl(html, item);
         }
       });
+      Hooks.on('renderItemSheetV2', async (app, html, itemObj, d) => {
+          if (systemData.lightItemTypes.includes(app.document.type)) {
+            injectOSRHSheetUI(html , app, 'item')
+          }
+        });
   }
   // universal hooksaddItemConfigControl
   Hooks.on('renderOSRHItemConfig', async (obj, html, app) => {
@@ -42,12 +58,13 @@ export async function registerSystemHooks() {
   });
 }
 
-async function addItemConfigControl(html, item) {
+async function addItemConfigControl(html, item, v2 =false) {
   const addControl = await game.settings.get('osr-helper', 'enableItemConfig');
   if (addControl) {
-    const headerEl = html[0].querySelector('.window-header');
+    const headerEl = v2 ? html.querySelector('.window-header') :html[0].querySelector('.window-header');
     const configIcon = '<i class="fa-regular fa-book-skull"></i>';
     const titleEl = headerEl?.querySelector('.window-title');
+    console.log('title el', titleEl);
     if (titleEl) {
       const configBtn = document.createElement('a');
       configBtn.classList.add('control', 'osrh-item-config');

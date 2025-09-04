@@ -26,6 +26,7 @@ import { migrateAmmoFlag } from './modules/migration/ammoFlag.mjs';
 import { migrateSavedEffects } from './modules/migration/savedEffecst.mjs';
 import { CustomAttributeEdit } from './modules/custom-attrib/custom-attrib-edit.mjs';
 import { ManageCustomAttributes } from './modules/custom-attrib/manage-attributes.mjs';
+import { injectOSRHSheetUI } from  './modules/ui-controls.mjs';
 import {
   addSheetUi,
   addcustomAttribElement,
@@ -309,6 +310,9 @@ Hooks.on('renderActorSheet', async (sheetEl, html, actorObj) => {
     }
   }
 });
+Hooks.on('renderActorSheetV2', async (obj,html, sheet,options) => {
+    injectOSRHSheetUI(html , obj, 'actor')
+  })
 
 Hooks.on('osrItemShopActive', async () => {
   const randTime = 100 + Math.floor(Math.random() * 2000);

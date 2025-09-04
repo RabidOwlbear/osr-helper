@@ -1,3 +1,6 @@
+import { renderTemplateHandler } from "./util.js"
+import { OSRHItemConfig } from "./item-config.mjs";
+import { NewActiveEffectForm } from "./old/effectModule.js";
 export const uiControls = {
   async addUiControls() {
     const setting = await game.settings.get(OSRH.moduleName, 'displayControlUi')
@@ -128,3 +131,47 @@ export const uiControls = {
   },
 
 };
+
+export async function injectOSRHSheetUI(html, object, type) {
+  const sheetUI = await game.settings.get(OSRH.moduleName, 'displayControlUi');
+  const existing = html.querySelector('.osrh-control');
+  if (existing || !sheetUI) return;
+  const controls = html.querySelector('.controls-dropdown')
+  const data = {
+    handle: true,
+    buttons: OSRH.data.sheetUI[type],
+    roundBottom: false
+  };
+  data.roundBottom = data.buttons.length > 1 ? true : false;
+  const template = await renderTemplateHandler(
+    'modules/osr-helper/templates/ui/control-element.hbs',
+    data
+  );
+  const tempDiv = document.createElement('div');
+  tempDiv.innerHTML = template;
+  const elements = tempDiv.querySelectorAll('.header-control');
+  elements.forEach((el) => {
+    const button = el.querySelector(".ui-button")
+    console.log(button)
+    button.addEventListener('click', (ev) => {
+      const app = ev.target.closest('.ui-button').dataset.app;
+      console.log('app', app)
+      switch (app) {
+        case 'active-effects':
+          OSRH.effect.renderEffectApp(object.document);
+          break;
+        case 'item-management':
+          let ration =  OSRH.systemData.rationItemTypes.includes(object.document.type)
+          new OSRHItemConfig(object.document, ration).render(true, { top: ev.y, left: ev.x - 125 });          
+          break;
+        case 'item-report':
+           OSRH.report.actorItem(object.document)          
+          break;
+        case 'currency-converter':
+           OSRH.util.curConDiag(object.document)
+          break;
+      }
+    });
+    controls.appendChild(el)
+  });
+}

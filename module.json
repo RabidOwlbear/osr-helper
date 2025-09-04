@@ -9,9 +9,9 @@
       "flags": {}
     }
   ],
-  "version": "0.7.0",
+  "version": "0.7.1",
   "compatibility": {
-    "minimum": "13",
+    "minimum": "11",
     "verified": "13",
     "maximum": "13"
   },
@@ -26,17 +26,20 @@
     {
       "lang": "en",
       "name": "English",
-      "path": "./lang/en.json"
+      "path": "lang/en.json",
+      "flags": {}
     },
     {
       "lang": "es",
       "name": "Spanish",
-      "path": "./lang/es.json"
+      "path": "lang/es.json",
+      "flags": {}
     },
     {
       "lang": "pt-BR",
       "name": "Português (Brasil)",
-      "path": "./lang/pt-br.json"
+      "path": "lang/pt-br.json",
+      "flags": {}
     }
   ],
   "packs": [
@@ -44,127 +47,168 @@
       "name": "osr-helper-items-en",
       "label": "OSR-helper Items (en)",
       "type": "Item",
-      "path": "packs/items.db",
+      "path": "packs/items",
       "system": "ose",
-      "private": false,
-      "flags": {}
+      "flags": {},
+      "ownership": {
+        "PLAYER": "OBSERVER",
+        "ASSISTANT": "OWNER"
+      }
     },
     {
       "name": "osr-helper-items-es",
       "label": "OSR-helper Items (es)",
       "type": "Item",
-      "path": "packs/items-es.db",
+      "path": "packs/items-es",
       "system": "ose",
-      "private": false,
-      "flags": {}
+      "flags": {},
+      "ownership": {
+        "PLAYER": "OBSERVER",
+        "ASSISTANT": "OWNER"
+      }
     },
     {
       "name": "osr-helper-items-pt-br",
       "label": "OSR-helper Items (pt-BR)",
       "type": "Item",
-      "path": "packs/items-pt-br.db",
+      "path": "packs/items-pt-br",
       "system": "ose",
-      "private": false,
-      "flags": {}
+      "flags": {},
+      "ownership": {
+        "PLAYER": "OBSERVER",
+        "ASSISTANT": "OWNER"
+      }
     },
     {
       "name": "osr-helper-macros-all",
       "label": "OSR-helper Macros",
-      "path": "packs/macros.db",
+      "path": "packs/macros",
       "type": "Macro",
-      
-      "private": false,
-      "flags": {}
+      "flags": {},
+      "ownership": {
+        "PLAYER": "OBSERVER",
+        "ASSISTANT": "OWNER"
+      }
     },
     {
       "name": "osr-helper-items-hyperborea-en",
       "label": "OSR-helper Items (en)",
       "type": "Item",
-      "path": "packs/items-hyperborea-en.db",
+      "path": "packs/items-hyperborea-en",
       "system": "hyperborea",
-      "private": false,
-      "flags": {}
+      "flags": {},
+      "ownership": {
+        "PLAYER": "OBSERVER",
+        "ASSISTANT": "OWNER"
+      }
     },
     {
       "name": "osr-helper-items-hyperborea-es",
       "label": "OSR-helper Items (es)",
       "type": "Item",
-      "path": "packs/items-hyperborea-es.db",
+      "path": "packs/items-hyperborea-es",
       "system": "hyperborea",
-      "private": false,
-      "flags": {}
+      "flags": {},
+      "ownership": {
+        "PLAYER": "OBSERVER",
+        "ASSISTANT": "OWNER"
+      }
     },
     {
       "name": "osr-helper-items-hyperborea-pt-br",
       "label": "OSR-helper Items (pt-BR)",
       "type": "Item",
-      "path": "packs/items-hyperborea-pt-br.db",
+      "path": "packs/items-hyperborea-pt-br",
       "system": "hyperborea",
-      "private": false,
-      "flags": {}
+      "flags": {},
+      "ownership": {
+        "PLAYER": "OBSERVER",
+        "ASSISTANT": "OWNER"
+      }
     },
     {
       "name": "osr-helper-items-wwn-en",
       "label": "OSR-helper Items (en)",
       "type": "Item",
-      "path": "packs/items-wwn.db",
+      "path": "packs/items-wwn",
       "system": "wwn",
-      "private": false,
-      "flags": {}
+      "flags": {},
+      "ownership": {
+        "PLAYER": "OBSERVER",
+        "ASSISTANT": "OWNER"
+      }
     },
     {
       "name": "osr-helper-items-wwn-es",
       "label": "OSR-helper Items (es)",
       "type": "Item",
-      "path": "packs/items-wwn-es.db",
+      "path": "packs/items-wwn-es",
       "system": "wwn",
-      "private": false,
-      "flags": {}
+      "flags": {},
+      "ownership": {
+        "PLAYER": "OBSERVER",
+        "ASSISTANT": "OWNER"
+      }
     },
     {
       "name": "osr-helper-items-wwn-pt-br",
       "label": "OSR-helper Items (pt-BR)",
       "type": "Item",
-      "path": "packs/items-wwn-pt-br.db",
+      "path": "packs/items-wwn-pt-br",
       "system": "wwn",
-      "private": false,
-      "flags": {}
+      "flags": {},
+      "ownership": {
+        "PLAYER": "OBSERVER",
+        "ASSISTANT": "OWNER"
+      }
     },
     {
       "name": "osr-helper-items-dcc-en",
       "label": "OSR-helper Items (en)",
       "type": "Item",
-      "path": "packs/items-dcc.db",
+      "path": "packs/items-dcc",
       "system": "dcc",
-      "private": false,
-      "flags": {}
+      "flags": {},
+      "ownership": {
+        "PLAYER": "OBSERVER",
+        "ASSISTANT": "OWNER"
+      }
     },
     {
       "name": "osr-helper-items-dcc-es",
       "label": "OSR-helper Items (es)",
       "type": "Item",
-      "path": "packs/items-dcc-es.db",
+      "path": "packs/items-dcc-es",
       "system": "dcc",
-      "private": false,
-      "flags": {}
+      "flags": {},
+      "ownership": {
+        "PLAYER": "OBSERVER",
+        "ASSISTANT": "OWNER"
+      }
     },
     {
       "name": "osr-helper-items-dcc-pt-br",
       "label": "OSR-helper Items (pt-BR)",
       "type": "Item",
-      "path": "packs/items-dcc-pt-br.db",
+      "path": "packs/items-dcc-pt-br",
       "system": "dcc",
-      "private": false,
-      "flags": {}
+      "flags": {},
+      "ownership": {
+        "PLAYER": "OBSERVER",
+        "ASSISTANT": "OWNER"
+      }
     },
     {
       "name": "osr-helper-items-basicfantasyrpg-en",
       "label": "OSR-helper Items (en)",
       "type": "Item",
-      "path": "packs/items-basicfantasyrpg.db",
+      "path": "packs/items-basicfantasyrpg",
       "system": "basicfantasyrpg",
-      "private": false,
-      "flags": {}
+      "flags": {},
+      "ownership": {
+        "PLAYER": "OBSERVER",
+        "ASSISTANT": "OWNER"
+      }
     }
   ],
   "relationships": {
@@ -206,7 +250,6 @@
       }
     ],
     "requires": [
-      
       {
         "id": "socketlib",
         "manifest": "https://raw.githubusercontent.com/manuelVo/foundryvtt-socketlib/master/module.json",

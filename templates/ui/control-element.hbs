@@ -1,0 +1,8 @@
+{{#each buttons as |button|}}
+  <li class="header-control">
+    <button type="button" class="control ui-button osrh-control" data-app="{{button.app}}">
+      <i class="control-icon fa-fw fas {{button.icon}}"></i>
+      <span class="control-label">{{button.title}}</span>
+    </button>
+  </li>
+{{/each}}

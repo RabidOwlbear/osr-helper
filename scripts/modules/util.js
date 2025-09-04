@@ -968,3 +968,10 @@ export const intializePackFolders = async () => {
     }
   }
 };
+export const renderTemplateHandler = async (template, data) =>{
+    if(game.version >= 13){
+      return await foundry.applications.handlebars.renderTemplate(template, data);
+    }else{
+      return await renderTemplate(template, data);
+    }
+  }
