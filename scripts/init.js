@@ -146,8 +146,8 @@ Hooks.once('ready', async () => {
   registerLocalizedData();
   registerSystemHooks();
   OSRH.ui.addUiControls();
-  await intializePackFolders();
-  hideForeignPacks();
+  // await intializePackFolders();
+  // hideForeignPacks();
 
   OSRH.util.setTheme();
   const turnData = await game.settings.get(`${OSRH.moduleName}`, 'turnData');

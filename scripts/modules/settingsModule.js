@@ -185,31 +185,31 @@ export const registerSettings = async function () {
   });
 
   // hide foreign language packs
-  game.settings.register(`${OSRH.moduleName}`, 'hideForeignPacks', {
-    name: 'OSRH.settings.hideForeignPack.name',
-    hint: 'OSRH.settings.hideForeignPack.hint',
-    scope: 'client',
-    type: Boolean,
-    default: true,
-    config: true
-  });
+  // game.settings.register(`${OSRH.moduleName}`, 'hideForeignPacks', {
+  //   name: 'OSRH.settings.hideForeignPack.name',
+  //   hint: 'OSRH.settings.hideForeignPack.hint',
+  //   scope: 'client',
+  //   type: Boolean,
+  //   default: true,
+  //   config: true
+  // });
 
-  game.settings.register(`${OSRH.moduleName}`, 'makePackFolder', {
-    name: 'OSRH.settings.makePackFolder',
-    hint: 'OSRH.settings.makePackFolderHint',
-    scope: 'client',
-    type: Boolean,
-    default: true,
-    config: true
-  });
-  game.settings.register(`${OSRH.moduleName}`, 'packFolderName', {
-    name: 'OSRH.settings.packFolderName',
-    hint: 'OSRH.settings.packFolderNameHint',
-    scope: 'world',
-    type: String,
-    default: 'OSRH Compendiums',
-    config: true
-  });
+  // game.settings.register(`${OSRH.moduleName}`, 'makePackFolder', {
+  //   name: 'OSRH.settings.makePackFolder',
+  //   hint: 'OSRH.settings.makePackFolderHint',
+  //   scope: 'client',
+  //   type: Boolean,
+  //   default: true,
+  //   config: true
+  // });
+  // game.settings.register(`${OSRH.moduleName}`, 'packFolderName', {
+  //   name: 'OSRH.settings.packFolderName',
+  //   hint: 'OSRH.settings.packFolderNameHint',
+  //   scope: 'world',
+  //   type: String,
+  //   default: 'OSRH Compendiums',
+  //   config: true
+  // });
   // investigate for removal
   game.settings.register(`${OSRH.moduleName}`, 'rationData', {
     name: 'rationData',

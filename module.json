@@ -9,9 +9,9 @@
       "flags": {}
     }
   ],
-  "version": "0.7.2",
+  "version": "0.7.4",
   "compatibility": {
-    "minimum": "11",
+    "minimum": "13",
     "verified": "13",
     "maximum": "13"
   },
@@ -40,6 +40,12 @@
       "name": "Português (Brasil)",
       "path": "lang/pt-br.json",
       "flags": {}
+    },
+    {
+      "lang": "cn",
+      "name": "中文",
+      "path": "lang/cn.json",
+      "flags": {}
     }
   ],
   "packs": [
@@ -48,6 +54,18 @@
       "label": "OSR-helper Items (en)",
       "type": "Item",
       "path": "packs/items",
+      "system": "ose",
+      "flags": {},
+      "ownership": {
+        "PLAYER": "OBSERVER",
+        "ASSISTANT": "OWNER"
+      }
+    },
+    {
+      "name": "osr-helper-items-cn",
+      "label": "OSR-helper Items (中文)",
+      "type": "Item",
+      "path": "packs/items-cn",
       "system": "ose",
       "flags": {},
       "ownership": {
@@ -210,6 +228,40 @@
         "ASSISTANT": "OWNER"
       }
     }
+  ],
+  "packFolders": [
+  {
+    "name": "OSRH Compendiums",
+    "color": "#30741d",
+    "sorting": "m",
+    "packs": ["osr-helper-macros-all"],
+    "folders": [
+      {
+        "name": "en",
+        "color": "#214e14",
+        "sorting": "a",
+        "packs": ["osr-helper-items-en","osr-helper-items-hyperborea-en","osr-helper-items-wwn-en","osr-helper-items-dcc-en","osr-helper-items-basicfantasyrpg-en"]
+      },
+      {
+        "name": "es",
+        "color": "#214e14",
+        "sorting": "a",
+        "packs": ["osr-helper-items-es","osr-helper-items-hyperborea-es","osr-helper-items-wwn-es","osr-helper-items-dcc-es"]
+      },
+      {
+        "name": "pt-BR",
+        "color": "#214e14",
+        "sorting": "a",
+        "packs": ["osr-helper-items-pt-br","osr-helper-items-hyperborea-pt-br","osr-helper-items-wwn-pt-br","osr-helper-items-dcc-pt-br"]
+      },
+      {
+        "name": "cn",
+        "color": "#214e14",
+        "sorting": "a",
+        "packs": ["osr-helper-items-cn","osr-helper-items-hyperborea-cn","osr-helper-items-wwn-cn","osr-helper-items-dcc-cn"]
+      }
+    ]
+  }
   ],
   "relationships": {
     "systems": [
