@@ -152,10 +152,8 @@ export async function injectOSRHSheetUI(html, object, type) {
   const elements = tempDiv.querySelectorAll('.header-control');
   elements.forEach((el) => {
     const button = el.querySelector(".ui-button")
-    console.log(button)
     button.addEventListener('click', (ev) => {
       const app = ev.target.closest('.ui-button').dataset.app;
-      console.log('app', app)
       switch (app) {
         case 'active-effects':
           OSRH.effect.renderEffectApp(object.document);

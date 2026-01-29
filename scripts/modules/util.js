@@ -535,7 +535,9 @@ export const registerUtil = () => {
     });
     return currencyList;
   };
-  OSRH.util.curConvert = async function (amt, curCur, newCur, actor) {
+  OSRH.util.curConvert = async function (amt, curCur, newCur, uuid) {
+    const actor = await fromUuid(uuid)
+    
     const curItems = actor.items;
     const curCheck = async (type) => {
       let itemExists = await actor.items.getName(type);
@@ -589,7 +591,7 @@ export const registerUtil = () => {
     });
   };
   // used
-  OSRH.util.curConDiag = async function (actor, amt = 0) {
+  OSRH.util.curConDiag = async function (actor, uuid, amt = 0) {
     let content = `
     <div style="display: flex; height: 75px; align-items: center; justify-content: space-around;">
      
@@ -632,10 +634,10 @@ export const registerUtil = () => {
             let amt = parseInt(html.find('#amt')[0].value);
             if (curCur == 'null' || newCur == 'null') {
               ui.notifications.warn(game.i18n.localize('OSRH.util.notification.selectBothCurrency'));
-              OSRH.util.curConDiag(actor, amt);
+              OSRH.util.curConDiag(actor, uuid, amt);
               return;
             }
-            OSRH.util.curConvert(amt, curCur, newCur, actor);
+            OSRH.util.curConvert(amt, curCur, newCur, uuid);// actor,
           }
         }
       }

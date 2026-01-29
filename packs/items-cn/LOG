@@ -1,5 +1,3 @@
-2025/12/03-15:12:42.891 4aac Recovering log #29
-2025/12/03-15:12:42.892 4aac Level-0 table #31: started
-2025/12/03-15:12:42.894 4aac Level-0 table #31: 10804 bytes OK
-2025/12/03-15:12:42.898 4aac Delete type=0 #29
-2025/12/03-15:12:42.898 4aac Delete type=3 #28
+2026/01/26-14:54:31.710 3af8 Recovering log #115
+2026/01/26-14:54:31.714 3af8 Delete type=0 #115
+2026/01/26-14:54:31.714 3af8 Delete type=3 #114
