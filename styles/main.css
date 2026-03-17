@@ -1642,6 +1642,7 @@ aside#hotbar {
 
 /* turn tracker */
 .app.osrh.turn-tracker {
+  flex-direction: column;
   /* global config */
   /* .osrh.turn-tracker .travel-config-tab::before{
     top: 10px;
@@ -1658,6 +1659,7 @@ aside#hotbar {
   width: 100%;
   display: grid;
   z-index: 5;
+  overflow: hidden;
 }
 .app.osrh.turn-tracker h2 {
   border: none;

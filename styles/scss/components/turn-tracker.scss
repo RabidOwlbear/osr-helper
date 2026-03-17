@@ -1,6 +1,6 @@
 /* turn tracker */
 .app.osrh.turn-tracker {
-  
+  flex-direction: column;
 
   section.window-content {
     padding: 0;
@@ -13,6 +13,7 @@
     width: 100%;
     display: grid;
     z-index: 5;
+    overflow: hidden;
   }
   h2 {
     border: none;

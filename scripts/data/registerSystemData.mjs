@@ -141,11 +141,36 @@ export async function registerSystemData() {
         partyTypes: ['character'],
         baseMovMod: 3,
         effects: true,
-        spellDamage: false,
+        spellDamage: true,
         paths: {
           weaponDamage: 'system.damage',
           itemQty: 'system.quantity.value',
           encMov: 'system.movement.base',
+          hp: {
+            val: 'system.hp.value',
+            max: 'system.hp.max'
+          },
+          ac: 'system.ac.value'
+        }
+      };
+      break;
+    case 'hyp3e':
+      OSRH.systemData = {
+        id: 'hyp3e',
+        tags: false,
+        partySheet: false,
+        lightItemTypes: ['weapon', 'item', 'armor'],
+        rationItemTypes: ['item'],
+        itemSheetHook: 'renderItemSheet',
+        characterSheetHook: 'renderActorSheet',
+        partyTypes: ['character', 'npc'],
+        baseMovMod: 3,
+        effects: true,
+        spellDamage: false,
+        paths: {
+          weaponDamage: 'system.damage',
+          itemQty: 'system.quantity.value',
+          encMov: 'system.movement.base.value',
           hp: {
             val: 'system.hp.value',
             max: 'system.hp.max'

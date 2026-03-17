@@ -9,7 +9,7 @@
       "flags": {}
     }
   ],
-  "version": "0.7.5",
+  "version": "0.7.6",
   "compatibility": {
     "minimum": "13",
     "verified": "13",
@@ -272,6 +272,11 @@
       },
       {
         "id": "hyperborea",
+        "type": "system",
+        "compatibility": {}
+      },
+       {
+        "id": "hyp3e",
         "type": "system",
         "compatibility": {}
       },
