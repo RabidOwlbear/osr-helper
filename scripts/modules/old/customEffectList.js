@@ -1,5 +1,3 @@
-
-
 export const registerCustomEffectList = () => {
   OSRH.ce = OSRH.ce || {};
 
@@ -21,7 +19,7 @@ export const registerCustomEffectList = () => {
         popOut: true,
         template: `modules/${OSRH.moduleName}/templates/customEffectList.hbs`,
         id: 'customEffectList',
-        title: game.i18n.localize("OSRH.customEffect.currentActiveEffects"),
+        title: game.i18n.localize('OSRH.customEffect.currentActiveEffects'),
         width: 600
       });
     }
@@ -41,7 +39,7 @@ export const registerCustomEffectList = () => {
     }
 
     async renderEffectList(html) {
-            const effectListDiv = html.find('#effectList')[0];
+      const effectListDiv = html.find('#effectList')[0];
       const effectObj = this.user.getFlag(`${OSRH.moduleName}`, 'effectData');
       const keys = Object.keys(effectObj);
       if (keys.length) {
@@ -53,13 +51,12 @@ export const registerCustomEffectList = () => {
         for (let key of sortedList) {
           let effect = effectObj[key];
 
-          const colorClass =
-            effect.duration > 10 ? (effect.duration > 20 ? 'effect-green' : 'effect-orange') : 'effect-red';
+          const colorClass = effect.duration > 10 ? (effect.duration > 20 ? 'effect-green' : 'effect-orange') : 'effect-red';
           HTMLcontent += `<div class="fx-sb mb ${colorClass}">
         <div class="effect-list-div pl"><b>${effect.name}</b>:</div>
         <div class="fx sb pr" id="effect-item-dur">
           <div class="effect-time-div fx sb">
-            <div><b>${game.i18n.localize("OSRH.customEffect.timeLeft")}: </b></div>
+            <div><b>${game.i18n.localize('OSRH.customEffect.timeLeft')}: </b></div>
             <div id='effect-duration'>${effect.duration}</div>
           </div>
           <input type="radio" name="effectList" id="${key}" value="${effect.name}" />
@@ -116,7 +113,7 @@ export const registerCustomEffectList = () => {
       const containerDiv = html.find('#effectDetails')[0];
       OSRH.util.oseHook(`${OSRH.moduleName}newEffectBtnToggle`, [newEffectBtn]);
       const formData = {
-        _id: randomID(16),
+        _id: foundry.utils.randomID(16),
         name: html.find('#effectName')[0].value,
         target: html.find('#targetName')[0].value,
         targetCheck: html.find('#targetCheck')[0].checked,
@@ -124,15 +121,15 @@ export const registerCustomEffectList = () => {
         duration: html.find('#effectDuration')[0].value
       };
       if (formData.name == '') {
-        ui.notifications.warn(game.i18n.localize("OSRH.util.notification.enterEffectName"));
+        ui.notifications.warn(game.i18n.localize('OSRH.util.notification.enterEffectName'));
         return;
       }
       if (formData.description == '') {
-        ui.notifications.warn(game.i18n.localize("OSRH.util.notification.enterEffectDescrip"));
+        ui.notifications.warn(game.i18n.localize('OSRH.util.notification.enterEffectDescrip'));
         return;
       }
       if (formData.duration <= 0) {
-        ui.notifications.warn(game.i18n.localize("OSRH.util.notification.enterEffectDuration"));
+        ui.notifications.warn(game.i18n.localize('OSRH.util.notification.enterEffectDuration'));
         return;
       }
       let effectData = await this.user.getFlag(`${OSRH.moduleName}`, 'effectData');
@@ -234,7 +231,7 @@ export const registerCustomEffectList = () => {
     </div>`;
 
     new Dialog({
-      title: game.i18n.localize("OSRH.customEffect.userEffectSelect"),
+      title: game.i18n.localize('OSRH.customEffect.userEffectSelect'),
       content: template,
       buttons: {
         getList: {

@@ -34,7 +34,7 @@ export class ManageCustomAttributes extends FormApplication {
       e.preventDefault();
       const coord = { top: this.options.top, left: this.options.left };
       const blankAttrib = {
-        id: randomID(),
+        id: foundry.utils.randomID(),
         name: '',
         abbr: '',
         value: 0,
@@ -42,7 +42,7 @@ export class ManageCustomAttributes extends FormApplication {
       };
 
       new OSRH.CustomAttributeEdit(blankAttrib, this.actor._id, coord).render(true, { top: this.options.top, left: this.options.left });
-      this.close()
+      this.close();
     });
 
     nameEls.map((name) => {
@@ -51,7 +51,7 @@ export class ManageCustomAttributes extends FormApplication {
         const contEl = e.target.closest('.attrib-cont');
         const coord = { top: this.options.top, left: this.options.left };
         const attrib = this.attributes.find((i) => i.id == e.target.dataset.id);
-        new OSRH.CustomAttributeEdit(attrib, this.actor._id, coord).render(true, coord);//{ top: e.y + 30, left: e.x });
+        new OSRH.CustomAttributeEdit(attrib, this.actor._id, coord).render(true, coord); //{ top: e.y + 30, left: e.x });
         this.close();
       });
     });
@@ -78,7 +78,7 @@ export class ManageCustomAttributes extends FormApplication {
   }
   _addAttribute(event) {
     const attrib = {
-      id: randomID(),
+      id: foundry.utils.randomID(),
       name: '',
       abbr: '',
       value: 0,

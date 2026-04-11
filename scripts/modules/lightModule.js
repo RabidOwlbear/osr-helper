@@ -84,7 +84,7 @@ export const registerLightModule = async function () {
                 uuid: actor.uuid,
                 lights: [
                   {
-                    id: randomID(16),
+                    id: foundry.utils.randomID(16),
                     name: item.name,
                     actorId: actor.id,
                     itemId: item.id,
@@ -133,7 +133,7 @@ export const registerLightModule = async function () {
               //
               actorLightData.lightLit = true;
               actorLightData.lights.push({
-                id: randomID(16),
+                id: foundry.utils.randomID(16),
                 name: item.name,
                 actorId: actor.id,
                 itemId: item.id,

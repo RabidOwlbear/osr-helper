@@ -407,7 +407,7 @@ export function registerOsrActiveEffectModule() {
       const description = html.find('#effect-description')[0];
       const iconSelect = html.find('#icon-select')[0];
       const effectObj = {
-        id: randomID(16),
+        id: foundry.utils.randomID(16),
         name: effectName.value,
         icon: iconSelect.value,
         duration: parseInt(durationInp.value),
