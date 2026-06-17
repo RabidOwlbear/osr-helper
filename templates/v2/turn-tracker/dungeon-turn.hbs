@@ -1,0 +1,51 @@
+<div class="tab dungeon" data-group="primary" data-tab="dungeon">
+  <div class="dungeon-tab">
+    <section class="bg-img-cont">
+      <img id="bg-0"src="modules/osr-helper/images/tts-0.webp" class="sprite hidden">
+      <img id="bg-1"src="modules/osr-helper/images/tts-1.webp" class="sprite hidden">
+      <img id="bg-2"src="modules/osr-helper/images/tts-2.webp" class="sprite hidden">
+      <img id="bg-3"src="modules/osr-helper/images/tts-3.webp" class="sprite hidden">
+      <img id="bg-4"src="modules/osr-helper/images/tts-4.webp" class="sprite hidden">
+      <img id="bg-5"src="modules/osr-helper/images/tts-5.webp" class="sprite hidden">
+    </section>
+    <div class="count-cont">
+      <h2>{{localize "OSRH.turnTracker.dungeonTurncounts"}} </h2>
+      <div class="row">
+        <div class="count-label session">{{localize "OSRH.turnTracker.session"}} :</div> 
+        <div class="count-value" id="sesion-count">{{turnData.dungeon.session}}</div>
+      </div>
+      <div class="row">
+        <div class="count-label total">{{localize "OSRH.turnTracker.total"}}  :</div> 
+        <div class="count-value" id="total-count">{{turnData.dungeon.total}}</div>
+      </div>
+      <div class="row">
+        <div class="count-label current">{{localize "OSRH.turnTracker.sinceRest"}} :</div> 
+        <div class="count-value" id="current-count">{{turnData.dungeon.rest}}</div>
+      </div>
+      <div class="d-level-row">
+        <label class="count-label"for="d-level">{{localize "OSRH.turnTracker.dungeonLevel"}} </label>
+        <div class="row dungeon-lvl">
+          {{#if isGM}}
+          <a id="d-lvl-dn">
+            <i class="fa-solid fa-up"></i>
+          </a>
+          {{/if}}
+          <input class="num-inp"type="text" name="d-level" id="d-level" data-dtype="number" min="1" max="8" value="{{turnData.dungeon.lvl}}" {{#if isGM}}{{else}}disabled{{/if}}>
+          {{#if isGM}}
+          <a id="d-lvl-up">
+            <i class="fa-solid fa-down"></i>
+          </a>
+          {{/if}}
+        </div>
+      </div>
+    </div>
+  <footer class="dungeon">
+  {{#if isGM}}
+    <a id="d-rest-btn" class="light-icon" title="{{localize "OSRH.turnTracker.title.rest"}} "><i class="fa-solid fa-campground"></i></a>
+    <a id="save-settings"class="hidden save-settings light-icon"><i class="fa-solid fa-floppy-disk"></i></a>
+    <a id="dungeon-turn-advance-btn" class="light-icon" title="{{localize "OSRH.turnTracker.title.advDunTurn"}} "><i class="fa-solid fa-forward"></i></a>
+  {{/if}}
+  </footer>
+  </div>
+</div>
+      

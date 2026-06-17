@@ -1,0 +1,52 @@
+<div class="tab travel-config"data-group="primary" data-tab="travelConfig">
+  <div class="travel-config-tab">
+    <h2>{{localize "OSRH.turnTracker.travelTurnOpt"}} </h2>
+    <div class="travel-options">
+      <div class="row">
+      <div class="row">
+        <input type="checkbox" name="t-encounter-roll" id="t-encounter-roll" title="{{localize "OSRH.turnTracker.title.rolEnc"}} "{{#if turnData.travel.rollEnc}}checked{{/if}}>
+        <label for="encounter-roll" >{{localize "OSRH.turnTracker.rollEnc"}} </label>
+      </div>
+      <div class="row">
+        <input type="checkbox" name="t-react-roll" id="t-react-roll" title="{{localize "OSRH.turnTracker.title.rollReact"}} "{{#if turnData.travel.rollReact}}checked{{/if}}>
+        <label for="encounter-roll" >{{localize "OSRH.turnTracker.rollReact"}} </label>
+      </div>
+    </div>
+    <div class="row">
+      <div class="row">
+        <input type="text" class="num-inp" data-dtype="number" name="t-encounter-freq" id="t-encounter-freq" title="{{localize "OSRH.turnTracker.title.encPerTurn"}} " value="{{turnData.travel.proc}}">
+        <label for="t-encounter-freq" >{{localize "OSRH.turnTracker.enc"}} </label>
+      </div>
+      <div class="row">
+        <input type="text" class="num-inp" data-dtype="number" name="t-encounter-target" id="t-encounter-target" title="{{localize "OSRH.turnTracker.title.encTarget"}} " value="{{turnData.travel.rollTarget}}">
+        <label for="t-encounter-target" >{{localize "OSRH.turnTracker.rollTarget"}} </label>
+      </div>
+    </div>
+      <div class="row">
+        <label for="travel-react-table">{{localize "OSRH.turnTracker.reactTable"}} : </label>
+        <select class="react-select dropEl" name="travel-react-table" id="travel-react-table" value="{{turnData.travel.rTable}}">
+          <option value="none">{{localize "OSRH.turnTracker.none"}} </option>
+          {{#each tableNames as |name idx|}}
+          <option value="{{name}}">{{name}}</option>
+          {{/each}}
+        </select>
+      </div>
+      <div class="row">
+        <label for="travel-enc-table">{{localize "OSRH.turnTracker.encTable"}} : </label>
+        <select class="react-select dropEl" name="travel-enc-table" id="travel-enc-table" value=" {{turnData.travel.encTable}}">
+          <option value="none">{{localize "OSRH.turnTracker.none"}} </option>
+          {{#each tableNames as |name idx|}}
+          <option value="{{name}}">{{name}}</option>
+          {{/each}}
+        </select>
+      </div>
+    </di
+    <footer class="config">
+      {{#if isGM}}
+      <p class="blank-button"></p>
+      <a id="save-settings"class="hidden save-settings light-icon"><i class="fa-solid fa-floppy-disk"></i></a>
+      <p class="blank-button"></p>
+    {{/if}}
+    </footer>
+  </div>
+</div>

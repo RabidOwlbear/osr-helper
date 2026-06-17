@@ -1,5 +1,9 @@
 /* party sheet */
 .osrh.party-sheet {
+  
+  i{
+    pointer-events: none;
+  }
   a:hover{
     text-shadow: 0 0 8px var(--el-button-glow);
   }
@@ -19,6 +23,7 @@
     align-items: center;
     justify-content: space-between;
     height: 30px;
+    
     
     .name{
       overflow: hidden;
@@ -232,3 +237,30 @@
   }
 }
 
+.osrh.party-sheet.v2 {
+  background: transparent;
+  .window-header{
+    background-color: var(--grad-1-a);
+    i, button{
+      color: white;
+    }
+  }
+  .party-row i{
+    color: white;
+  }
+  .party-row .delete-btn{
+    pointer-events: initial;
+    color: rgb(238, 77, 77)
+  }
+  .nav-tab{
+    background-color: var(--grad-1-a);
+    color: white;
+  }
+  .nav-tab.active{
+    background-color: var(--osrh-ui-btn-open);
+  }
+  .window-content {
+    
+    background: linear-gradient(var(--grad-1-a), var(--grad-1-b));
+  }
+}

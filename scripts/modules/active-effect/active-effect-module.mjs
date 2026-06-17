@@ -24,15 +24,15 @@ export function registerOsrActiveEffectModule() {
       let isGM = game.user.isGM;
       let effectData = await game.settings.get(`${OSRH.moduleName}`, 'effectData');
       const effectPresets = await this.getEffectPresets();
-      let context
+      let context;
       // get effect icon data
-      effectPresets.map(e=>{
-        if(e.icon === 'none')e.icon = '-Icon-'
-        const icon = OSRH.data.effectIcons.find(i=>i.name === e?.icon);
+      effectPresets.map((e) => {
+        if (e.icon === 'none') e.icon = '-Icon-';
+        const icon = OSRH.data.effectIcons.find((i) => i.name === e?.icon);
         e.iconColor = icon.color;
         e.iconText = icon.textColor;
         e.iconPath = icon.path;
-      })
+      });
       if (this.displayAll) {
         const list = await this.listAllEffects(effectData);
         context = {
@@ -43,9 +43,8 @@ export function registerOsrActiveEffectModule() {
           otherEffects: [],
           iconList: OSRH.data.effectIcons,
           effectPresets
-        };        
+        };
       } else {
-        
         selfEffectData = effectData.filter((e) => {
           // shim for uuid change
           let id = e.createdBy?.includes('.') ? this.actor.uuid : this.actor.id;
@@ -67,14 +66,13 @@ export function registerOsrActiveEffectModule() {
           iconList: OSRH.data.effectIcons,
           effectPresets
         };
-        
       }
-      if(this.displayAll){
+      if (this.displayAll) {
         context.noFX = !context.list?.length;
-      }else{
-        context.noFX = false
-        if(selfEffectData.length === 0 && otherEffectData.length === 0){
-          context.noFX = true
+      } else {
+        context.noFX = false;
+        if (selfEffectData.length === 0 && otherEffectData.length === 0) {
+          context.noFX = true;
         }
       }
       return context;
@@ -82,12 +80,12 @@ export function registerOsrActiveEffectModule() {
     activateListeners(html) {
       let deleteBtnArr = html.find('.delete-btn');
       const addEffectBtn = html.find('#add-effect-btn')[0];
-      const savePresetBtn = html.find('#save-preset')[0]
+      const savePresetBtn = html.find('#save-preset')[0];
       const effectCont = html.find('.effect-cont')[0];
       const applyEffectBtn = html.find('#apply-effect')[0];
       const effectName = html.find('#effect-name')[0];
       const durationInp = html.find('#duration-value')[0];
-      const numInputs = [...html.find('.num-inp')]
+      const numInputs = [...html.find('.num-inp')];
       const effectPresetEls = [...html.find('.effect-preset')];
       const deletePresetBtns = [...html.find('.delete-preset')];
       const applyPresetEls = [...html.find('.select-preset')];
@@ -99,15 +97,15 @@ export function registerOsrActiveEffectModule() {
         e.preventDefault();
         this.applyEffect(html);
       });
-      managePresets?.addEventListener('click', e=>{
+      managePresets?.addEventListener('click', (e) => {
         e.preventDefault();
-        presetDelBtns.map(b=>{
-          this.toggleHidden(b)
-        })
-        selectPresetBtns.map(bt=>{
-          this.toggleHidden(bt)
-        })
-      })
+        presetDelBtns.map((b) => {
+          this.toggleHidden(b);
+        });
+        selectPresetBtns.map((bt) => {
+          this.toggleHidden(bt);
+        });
+      });
       // delete buttons
       for (let b of deleteBtnArr) {
         b.addEventListener('click', async (ev) => {
@@ -121,74 +119,73 @@ export function registerOsrActiveEffectModule() {
         e.preventDefault();
         this.addEffectRow(effectCont);
       });
-      savePresetBtn.addEventListener('click', e=>{
+      savePresetBtn.addEventListener('click', (e) => {
         e.preventDefault();
-        this.saveEffectPreset(html)
-        
-      })
-      numInputs.forEach(i=>{
-        this.numInputListener(i, true)
-      })
-      effectPresetEls.forEach(ep=>{
+        this.saveEffectPreset(html);
+      });
+      numInputs.forEach((i) => {
+        this.numInputListener(i, true);
+      });
+      effectPresetEls.forEach((ep) => {
         const hiddenEl = ep.querySelector('.detail-cont');
         const nameEl = ep.querySelector('.name');
-        nameEl.addEventListener('click', (e)=>{
+        nameEl.addEventListener('click', (e) => {
           e.preventDefault();
-          if(hiddenEl.classList.contains('hidden')){
+          if (hiddenEl.classList.contains('hidden')) {
             hiddenEl.classList.remove('hidden');
           } else {
             hiddenEl.classList.add('hidden');
           }
-        })
-      })
-      applyPresetEls.map(el=>{
-        el.addEventListener('click', async e=>{
+        });
+      });
+      applyPresetEls.map((el) => {
+        el.addEventListener('click', async (e) => {
           e.preventDefault();
           const id = e.target.closest('.effect-preset').dataset.id;
           const presets = await this.getEffectPresets();
-          const preset = presets.find(p=>p.id===id);
-          this.applyPreset(html, preset)
-        })
-      })
-      deletePresetBtns.map(bt=>{
-        bt.addEventListener('click', e=>{
+          const preset = presets.find((p) => p.id === id);
+          this.applyPreset(html, preset);
+        });
+      });
+      deletePresetBtns.map((bt) => {
+        bt.addEventListener('click', (e) => {
           e.preventDefault();
           const id = e.target.closest('.effect-preset').dataset.id;
-          this.deleteEffectPreset(id)
-        })
-      })
+          this.deleteEffectPreset(id);
+        });
+      });
     }
-    
+
     // functions
-    toggleHidden(el){
-      if(el.classList.contains('hidden')){
-        el.classList.remove('hidden')
-      }else{
-        el.classList.add('hidden')
+    toggleHidden(el) {
+      if (el.classList.contains('hidden')) {
+        el.classList.remove('hidden');
+      } else {
+        el.classList.add('hidden');
       }
     }
-    async getEffectPresets(){
+    async getEffectPresets() {
       return await foundry.utils.deepClone(game.settings.get('osr-helper', 'effectPresets'));
     }
-    numInputListener(el, gto = false){
-      el.addEventListener('change', e=>{
+    numInputListener(el, gto = false) {
+      el.addEventListener('change', (e) => {
         e.preventDefault();
-        if(isNaN(el.value) || el.value % 1){
-          ui.notifications.warn(game.i18n.localize("OSRH.notification.addValidWholeNumber"));
-          el.value = '0'
+        if (isNaN(el.value) || el.value % 1) {
+          ui.notifications.warn(game.i18n.localize('OSRH.notification.addValidWholeNumber'));
+          el.value = '0';
           return;
         }
         //greather than one
-        if(gto){
+        if (gto) {
           const intParent = el.closest('.label-group');
-          const intEl = intParent.querySelector('#duration-type')
-          if(parseInt(el.value) <= 0 && intEl.value != 'infinite'){
-            ui.notifications.warn(game.i18n.localize("OSRH.notification.greaterThanZero"));
-            el.value = '0'
+          const intEl = intParent.querySelector('#duration-type');
+          if (parseInt(el.value) <= 0 && intEl.value != 'infinite') {
+            ui.notifications.warn(game.i18n.localize('OSRH.notification.greaterThanZero'));
+            el.value = '0';
             return;
           }
         }
-      })
+      });
     }
     async effectListGetData(data, type) {
       let retArr = [];
@@ -201,13 +198,7 @@ export function registerOsrActiveEffectModule() {
             let isInf = e.isInf;
             let effect = await tActor.getEmbeddedDocument('ActiveEffect', e.effectId);
             let interval = effect.flags['data'].interval;
-            let duration = isInf
-              ? 'inf'
-              : interval == 'hours'
-              ? Math.round(effect.duration.remaining / 3600)
-              : interval == 'minutes'
-              ? Math.round(effect.duration.remaining / 60)
-              : effect.duration.remaining;
+            let duration = isInf ? 'inf' : interval == 'hours' ? Math.round(effect.duration.remaining / 3600) : interval == 'minutes' ? Math.round(effect.duration.remaining / 60) : effect.duration.remaining;
             // let durObj = effect.duration;
             let entryData = {
               name: effect.name,
@@ -238,7 +229,7 @@ export function registerOsrActiveEffectModule() {
       // const effectData = await game.settings.get('osr-helper', 'effectData');
       const actorList = [];
       const retData = [];
-      if(!effectData.length){
+      if (!effectData.length) {
         return [];
       }
       effectData.map((i) => {
@@ -269,16 +260,16 @@ export function registerOsrActiveEffectModule() {
       const targetEl = html.find('#effect-target')[0];
       const userTargets = [...game.user.targets];
       const target = [];
-      if(targetEl.value === 'target' && !userTargets.length){
-        ui.notifications.warn(game.i18n.localize("OSRH.util.notification.noTarget"));
-        return
+      if (targetEl.value === 'target' && !userTargets.length) {
+        ui.notifications.warn(game.i18n.localize('OSRH.util.notification.noTarget'));
+        return;
       }
       if (userTargets.length && targetEl.value === 'target') {
         userTargets.map((t) => target.push(t.document.actor.uuid));
       } else {
         target.push(this.actor.uuid);
       }
-      
+
       const durVal = {
         hours: 3600,
         minutes: 60,
@@ -332,11 +323,11 @@ export function registerOsrActiveEffectModule() {
       if (this.validateEffectObject(effectData)) {
         for (let i = 0; i < target.length; i++) {
           await OSRH.socket.executeAsGM('gmCreateEffect', target[i], effectData, creatorId);
-          this.render()
+          this.render();
         } //i.document.actor.uuid
       }
     }
-    applyPreset(html, data){
+    applyPreset(html, data) {
       const targetEl = html.find('#effect-target')[0];
       const descripEl = html.find('#effect-description')[0];
       const nameEl = html.find('#effect-name')[0];
@@ -351,11 +342,11 @@ export function registerOsrActiveEffectModule() {
       durationEl.value = data.duration;
       intervalEl.value = data.interval;
       iconSelect.value = data.icon;
-      for(let change of data.changes){
-        this.addEffectRow(effectCont, change)
+      for (let change of data.changes) {
+        this.addEffectRow(effectCont, change);
       }
     }
-    addEffectRow(el, data=null) {
+    addEffectRow(el, data = null) {
       const systemData = OSRH.data.effectData[game.system.id];
       const newRow = document.createElement('div');
       newRow.classList.add('effect-row');
@@ -387,7 +378,7 @@ export function registerOsrActiveEffectModule() {
         e.preventDefault;
         newRow.remove();
       });
-      if(data){
+      if (data) {
         select.value = data.path;
         numInp.value = data.value;
       }
@@ -416,7 +407,7 @@ export function registerOsrActiveEffectModule() {
         interval: durationType.value,
         changes: []
       };
-      effectEls.map(el=>{
+      effectEls.map((el) => {
         const selecteEl = el.querySelector('.effect-select');
         const selectedEl = selecteEl.querySelector(`[value="${selecteEl.value}"]`);
         const valueInp = el.querySelector('.mod-input');
@@ -424,30 +415,29 @@ export function registerOsrActiveEffectModule() {
           path: selecteEl.value,
           label: selectedEl.dataset.display,
           value: parseInt(valueInp.value)
-        });   
+        });
       });
-      if(!this.validateEffectObject(effectObj)){
-        return
-      }else{
-
+      if (!this.validateEffectObject(effectObj)) {
+        return;
+      } else {
         await OSRH.socket.executeAsGM('handleEffectPreset', 'add', effectObj);
         // const effectPresets = await foundry.utils.deepClone(game.settings.get('osr-helper', 'effectPresets'));
         // effectPresets.push(effectObj)
         // await game.settings.set('osr-helper', 'effectPresets', effectPresets);
-        this.render()
+        this.render();
       }
     }
-    async deleteEffectPreset(id){
+    async deleteEffectPreset(id) {
       await OSRH.socket.executeAsGM('handleEffectPreset', 'delete', id);
-      this.render()
+      this.render();
 
       // const presets = foundry.utils.deepClone(await this.getEffectPresets()).filter(i=>i.id !== id);
 
       // await game.settings.set('osr-helper', 'effectPresets', presets);
     }
     validateEffectObject(obj) {
-      if(obj.icon === 'none'){
-        ui.notifications.warn(game.i18n.localize("OSRH.notification.chooseIcon"));
+      if (obj.icon === 'none') {
+        ui.notifications.warn(game.i18n.localize('OSRH.notification.chooseIcon'));
         return false;
       }
       if (obj.name === '') {
@@ -458,9 +448,9 @@ export function registerOsrActiveEffectModule() {
         ui.notifications.warn(game.i18n.localize('OSRH.util.notification.enterEffectDuration'));
         return false;
       }
-      if(!obj.changes.length){
-        ui.notifications.warn(game.i18n.localize("OSRH.notification.pleaseAddEffect"));
-        return false
+      if (!obj.changes.length) {
+        ui.notifications.warn(game.i18n.localize('OSRH.notification.pleaseAddEffect'));
+        return false;
       }
       return true;
     }
@@ -468,45 +458,40 @@ export function registerOsrActiveEffectModule() {
 
   OSRH.effect.renderEffectApp = (actor, displayAll = false) => {
     let open = fxOpen();
-    if(open){
-      ui.notifications.warn('already open, re-rendering')
-      open.render()
-    }else{
-      new OSRH.effect.app(actor, displayAll).render(true);
+    if (open) {
+      ui.notifications.warn('already open, re-rendering');
+      open.render();
+    } else {
+      // new OSRH.effect.app(actor, displayAll).render(true);
+      new OSRH.V2.effectsApp({actor, displayAll}).render(true)
     }
-
-    
   };
-  
-  OSRH.effect.handleEffectPreset = async (type, data)=>{
-    const presets = foundry.utils.deepClone(await game.settings.get('osr-helper', 'effectPresets'))
-    if(type == 'add'){
+
+  OSRH.effect.handleEffectPreset = async (type, data) => {
+    const presets = foundry.utils.deepClone(await game.settings.get('osr-helper', 'effectPresets'));
+    if (type == 'add') {
       presets.push(data);
       await game.settings.set('osr-helper', 'effectPresets', presets);
     }
-    if(type == 'delete'){
+    if (type == 'delete') {
       let id = data;
-      const newPresets = presets.filter(i=>i.id !== id);
+      const newPresets = presets.filter((i) => i.id !== id);
       await game.settings.set('osr-helper', 'effectPresets', newPresets);
     }
-  }
-  OSRH.effect.renderGlobalEffectApp = function (){
-    if(game.user.isGM){
+  };
+  OSRH.effect.renderGlobalEffectApp = function () {
+    if (game.user.isGM) {
       OSRH.effect.renderEffectApp(null, true);
     }
-  }
+  };
   OSRH.effect.delete = async function (effectId) {
-    let effectData = foundry.utils.deepClone(await game.settings.get(`${OSRH.moduleName}`, 'effectData')).filter(
-      (e) => e.effectId == effectId
-    )[0];
+    let effectData = foundry.utils.deepClone(await game.settings.get(`${OSRH.moduleName}`, 'effectData')).filter((e) => e.effectId == effectId)[0];
 
     let actor = await fromUuid(effectData.target);
     if (actor.collectionName == 'tokens') actor = actor.actor;
     let effect = await actor.effects.get(effectId);
     effect.delete();
-    let activeEffectData = foundry.utils.deepClone(await game.settings.get(`${OSRH.moduleName}`, 'effectData')).filter(
-      (e) => e.effectId != effectId
-    );
+    let activeEffectData = foundry.utils.deepClone(await game.settings.get(`${OSRH.moduleName}`, 'effectData')).filter((e) => e.effectId != effectId);
     await game.settings.set(`${OSRH.moduleName}`, 'effectData', activeEffectData);
     OSRH.socket.executeForEveryone('refreshEffectLists');
   };
@@ -545,7 +530,7 @@ export function registerOsrActiveEffectModule() {
     });
     await game.settings.set(`${OSRH.moduleName}`, 'effectData', activeEffectData);
     OSRH.socket.executeForEveryone('refreshEffectLists');
-    return true
+    return true;
   };
   OSRH.effect.refreshEffectLists = async function () {
     let openEffectLists = Object.values(ui.windows).filter((i) => i.id.includes(`OSRH-active-effect-app`));
@@ -553,25 +538,24 @@ export function registerOsrActiveEffectModule() {
       openEffectLists.forEach((e) => e.render());
     }
   };
-  OSRH.effect.deleteAll = async function (type){
-    if(type === 'effects'){
+  OSRH.effect.deleteAll = async function (type) {
+    if (type === 'effects') {
       await game.settings.set('osr-helper', 'effectData', []);
     }
-    if(type === 'presets'){
+    if (type === 'presets') {
       await game.settings.set('osr-helper', 'effectPresets', []);
     }
-  }
-  
+  };
 }
-function fxOpen(){
-  let isOpen = false
-  let app
+function fxOpen() {
+  let isOpen = false;
+  let app;
   const keys = Object.keys(ui.windows);
-  keys.map(k=>{
-    isOpen = ui.windows[k].options.classes.includes('osr-active-effects')
-    if(isOpen)app = ui.windows[k]
-  })
-  return isOpen ? app : isOpen
+  keys.map((k) => {
+    isOpen = ui.windows[k].options.classes.includes('osr-active-effects');
+    if (isOpen) app = ui.windows[k];
+  });
+  return isOpen ? app : isOpen;
 }
 
 // export const handleEffectPreset = async (type, data)=>{

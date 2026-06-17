@@ -66,14 +66,15 @@ export const registerLightModule = async function () {
       <div  style="flex:1"><select id="lightType">${lightOptions}</select></div>
       </div>`;
 
-    new Dialog({
-      title: 'Light on',
+    new foundry.applications.api.DialogV2({
+      window:{title: 'Light on'},
+      classes: ['light-dialog'],
       content: dialogTemplate,
-      buttons: {
-        lightOn: {
+      buttons: [
+        {
           label: 'Light On',
-          callback: async (html) => {
-            const itemID = html.find('#lightType')[0].value;
+          callback: async (ev, btn, obj) => {
+            const itemID = obj.element.querySelector('#lightType').value;
             const item = await actor.items.get(itemID);
             const lightItemData = item.getFlag(`${OSRH.moduleName}`, 'lightItemData');
             //if no actorId found, creat actor id and light type
@@ -152,12 +153,9 @@ export const registerLightModule = async function () {
               await OSRH.light.updateTokens(actor.uuid, lightItemData);
               return;
             }
-          }
+          },
         },
-        close: {
-          label: 'Close'
-        }
-      }
+    ]
     }).render(true);
   };
 

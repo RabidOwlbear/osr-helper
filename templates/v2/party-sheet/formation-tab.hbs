@@ -1,0 +1,21 @@
+<div class='tab formation' data-group='primary' data-tab='formation'>
+  <div class='formation-cont'>
+    <div class='formation-header'>
+      <div class='party-picker formation-drop'>
+        <div class="marker-list">
+          {{#each pool as |marker idx|}}
+            <div class='marker  marker-portrait marker-sm' data-uuid='{{marker.uuid}}'>
+              <img src='{{marker.img}}' class='marker-sm' data-uuid='{{marker.uuid}}' title="{{marker.name}}" />
+            </div>
+          {{/each}}
+        </div>
+      </div>
+      <div class='drag-party-btn party-drag' title="Drag Party To Table">
+        <i class='fa-solid fa-people-group'></i>
+      </div>
+    </div>
+    <div class='formation-grid'>
+      {{{formationGrid}}}
+    </div>
+  </div>
+</div>

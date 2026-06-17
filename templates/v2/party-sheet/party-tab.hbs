@@ -1,0 +1,27 @@
+<div class='tab party ' data-group='primary' data-tab='party'>
+  <ol class='items' id='party-list'>
+    {{#each party as |actor idx|}}
+      <li class='fx party-actor item' data-type='Actor' data-uuid='{{actor.uuid}}'>
+        <img src='{{actor.img}}' class='portrait round-shadow item' data-uuid='{{actor.uuid}}' />
+        <div class='party-row' data-uuid='{{actor.uuid}}'>
+          <div class='name' title="{{actor.name}}">
+            {{actor.name}}
+          </div>
+          <div class='hp fx'>
+            <i class='fa-solid fa-heart icon'></i>
+            <p class='wide-val'>{{actor.hp}}</p>
+            <p>/</p>
+            <p class='wide-val'>{{actor.hpMax}}</p>
+          </div>
+          <div class='ac fx'>
+            <i class='fa-solid fa-shield icon'></i>
+            <p>{{actor.ac}}</p>
+          </div>
+          <div class='delete'>
+            <i class='fa-solid fa-delete-left delete-btn'></i>
+          </div>
+        </div>
+      </li>
+    {{/each}}
+  </ol>
+</div>

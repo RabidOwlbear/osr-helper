@@ -1,0 +1,103 @@
+ <div class="tab travel" data-group="primary" data-tab="travel">
+  <div class="travel-tab">
+    <div class="travel-session">
+      <label for="travel-session">{{localize "OSRH.turnTracker.session"}} </label>
+      <div id="travel-session" title="{{localize "OSRH.turnTracker.title.travSessCount"}} ">{{turnData.travel.session}}</div>
+    </div>
+    <div class="travel-total">
+      <label for="travel-current">{{localize "OSRH.turnTracker.total"}} </label>
+      <div id="travel-total" title="{{localize "OSRH.turnTracker.title.travTotCOunt"}} t">{{turnData.travel.total}}</div>
+    </div>
+    <h2>{{localize "OSRH.turnTracker.travelTurn"}} </h2>
+     {{#if isGM}}
+      <select name="terrain" id="terrain" title="{{localize "OSRH.turnTracker.title.terrain"}} ">
+      <option class="terrainOpt"data-target="1" value="clear">{{localize "OSRH.report.clear"}} </option>
+      <option class="terrainOpt"data-target="1" value="trail">{{localize "OSRH.report.trail"}} </option>
+      <option class="terrainOpt"data-target="1" value="road">{{localize "OSRH.report.road"}} </option>
+      <option class="terrainOpt"data-target="1" value="city">{{localize "OSRH.report.city"}} </option>
+      <option class="terrainOpt"data-target="1" value="grassland">{{localize "OSRH.report.grassland"}} </option>
+      <option class="terrainOpt"data-target="2" value="forest">{{localize "OSRH.report.forest"}} </option>
+      <option class="terrainOpt"data-target="2" value="mud">{{localize "OSRH.report.mud"}} </option>
+      <option class="terrainOpt"data-target="2" value="snow">{{localize "OSRH.report.snow"}} </option>
+      <option class="terrainOpt"data-target="2" value="hill">{{localize "OSRH.report.hill"}} </option>
+      <option class="terrainOpt"data-target="2" value="desert">{{localize "OSRH.report.desert"}} </option>
+      <option class="terrainOpt"data-target="2" value="brokenLand">{{localize "OSRH.report.brokenLand"}} </option>
+      <option class="terrainOpt"data-target="3" value="mountain">{{localize "OSRH.report.mountain"}} </option>
+      <option class="terrainOpt"data-target="3" value="swamp">{{localize "OSRH.report.swamp"}} </option>
+      <option class="terrainOpt"data-target="3" value="jungle">{{localize "OSRH.report.jungle"}} </option>
+      <option class="terrainOpt"data-target="2" value="ice">{{localize "OSRH.report.ice"}} </option>
+      <option class="terrainOpt"data-target="2" value="glacier">{{localize "OSRH.report.glacier"}} </option>
+      </select>
+    {{else}}
+    <div class="terrain-type">
+      {{localize "OSRH.turnTracker.terrain"}} : {{turnData.travel.terrain}}
+    </div>{{/if}}
+    <div class="base-rate">
+      <label for="base-travel-rate">{{localize "OSRH.report.baseTravelRate"}} :</label>
+      <div id="base-travel-rate">{{baseRate}} mi</div>
+    </div>
+    <section id="party-list" class="party-list {{#if isGM}}{{else}}{{/if}}">
+      {{!-- {{{characters}}} --}}
+      <div class="actor-list" id="character-list">
+        <div class="char-list-header">{{localize "OSRH.report.characters"}} </div>
+        {{#each characters as |character idx|}}
+        <div class="actor-div">
+          <div class="actor-name">{{character.name}}</div>
+          <div class="actor-controls">
+            <div>{{character.distance}} mi</div>
+          </div>
+        </div>
+        {{/each}}  
+      </div>
+      {{!-- {{{retainers}}} --}}
+      <div class="actor-list" id="retainer-list">
+        <div class="char-list-header">{{localize "OSRH.report.retainers"}} </div>
+        {{#each retainers as |retainer idx|}}
+        <div class="actor-div">
+          <div class="actor-name">{{retainer.name}}</div>
+          <div class="actor-controls">
+            {{#if retainer.controlled}} AAA
+            {{/if}}
+            <div>{{retainer.distance}} mi.</div>
+          </div>
+        </div>
+        {{/each}}
+        
+      </div>
+    </section>
+     
+    <section class="travel-checks">
+      {{#if isGM}}
+      <div class="input-block">
+        <div class="check-label">{{localize "OSRH.turnTracker.navigation"}} </div>
+        <div class="flex-row">
+          <a id="navigation-check" title="{{localize "OSRH.turnTracker.title.navCheck"}} "><i class="fa-solid fa-compass"></i></a>
+          <input type="text" id="nav-bonus"data-dtype="Number" title="{{localize "OSRH.turnTracker.title.navBonus"}} " value="0">
+        </div>
+      </div>
+      {{/if}}
+      <div class="input-block travel-rest-count">
+        <div class="check-label">{{localize "OSRH.turnTracker.sinceRest"}} </div>
+        <div class="check-label rest-turns">{{turnData.travel.rest}}</div>
+      </div>
+      {{#if isGM}}
+      <div class="input-block">
+        <div class="check-label">{{localize "OSRH.turnTracker.forage"}}</div>  
+        <div class="flex-row">
+          <input type="text" id="forage-bonus" data-dtype="Number" title="{{localize "OSRH.turnTracker.title.forBonus"}} " value="0">
+          <a id="forage-check" title="{{localize "OSRH.turnTracker.title.forCHeck"}} "><i class="fa-solid fa-utensils"></i></a>
+          
+        </div>
+      </div>
+      {{/if}}
+    </section>
+     
+    <footer class="travel">
+    {{#if isGM}}
+      <a id="t-rest-btn" class="light-icon" title="{{localize "OSRH.turnTracker.title.rest"}} "><i class="fa-solid fa-campground"></i></a>
+      <a id="save-settings"class="hidden save-settings light-icon"><i class="fa-solid fa-floppy-disk"></i></a>
+      <a id="travel-turn-advance-btn" class="light-icon" title="{{localize "OSRH.turnTracker.title.advTravTurn"}} "><i class="fa-solid fa-forward"></i></a>
+    {{/if}}
+    </footer>
+  </div>
+</div>

@@ -71,9 +71,13 @@ export const registerTurn = () => {
     const data = foundry.utils.deepClone(await game.settings.get(`${OSRH.moduleName}`, 'turnData'));
     if (type) {
       data[type].session = 0;
+    }else{
+      data.dungeon.session = 0;
+      data.travel.session = 0
     }
     await game.settings.set(`${OSRH.moduleName}`, 'turnData', data);
     OSRH.turn.updateJournal();
+    OSRH.turn.refreshTurnTracker()
   };
 
   OSRH.turn.resetAllCounts = async function (type = null) {
@@ -133,7 +137,7 @@ export const registerTurn = () => {
         rollMod = canvas.tokens.controlled[0].actor.system.scores.cha.mod || 0;
       }
     }
-    let roll = new Roll('2d6+@mod', { mod: rollMod }).evaluate({ async: false });
+    let roll = new Roll('2d6+@mod', { mod: rollMod }).evaluateSync();
     //  game.dice3d.showForRoll(roll)
 
     let tRoll = roll.total; //Math.floor(Math.random() * 6 + 1) +  Math.floor(Math.random() * 6 + 1) + rollMod;
@@ -221,7 +225,7 @@ export const registerTurn = () => {
         turnData.dungeon.procCount = 0; //resest number of turns since last random check
 
         // await game.settings.set(`${OSRH.moduleName}`, 'turnData', turnData); //update settings data <--------
-        const theRoll = await new Roll('1d6').evaluate({ async: true });
+        const theRoll = await new Roll('1d6').evaluate();
         const gm = game.users.contents.filter((u) => u.role == 4).map((u) => u.id);
 
         if (theRoll.result > turnData.dungeon.rollTarget) {
@@ -233,7 +237,7 @@ export const registerTurn = () => {
           await game?.dice3d?.showForRoll(theRoll, game.user, false, gm, false);
           ChatMessage.create(content);
         } else {
-          const roll = await encTable.roll({ async: true });
+          const roll = await encTable.roll();
           let content = ``;
           for (let res of roll.results) {
             content += `<br/>${res.text}<br/>`;
@@ -258,7 +262,7 @@ export const registerTurn = () => {
             await game?.dice3d?.showForRoll(theRoll, game.user, false, gm, false);
             if (turnData.dungeon.rollReact) {
               reactTable = game.tables.getName(turnData.dungeon.rTable);
-              let reactRoll = await reactTable.roll({ async: true });
+              let reactRoll = await reactTable.roll();
               let rollResult = `They look ${reactRoll.results[0].text}.`;
               message.content += rollResult;
               await game?.dice3d?.showForRoll(reactRoll.roll, game.user, false, gm, false);
@@ -308,7 +312,7 @@ export const registerTurn = () => {
       if (travelData.proc && travelData.proc > 0) {
         const gm = game.users.contents.filter((u) => u.role == 4).map((u) => u.id);
         for (let i = 0; i < travelData.proc; i++) {
-          const theRoll = await new Roll('1d6').evaluate({ async: true });
+          const theRoll = await new Roll('1d6').evaluate();
 
           if (theRoll.result > travelData.rollTarget) {
             const content = {
@@ -319,7 +323,7 @@ export const registerTurn = () => {
             await game?.dice3d?.showForRoll(theRoll, game.user, false, gm, false);
             ChatMessage.create(content);
           } else {
-            const roll = await encTable.roll({ async: true });
+            const roll = await encTable.roll();
             if (roll.roll._evaluated) {
               let content = ``;
               for (let res of roll.results) {
@@ -342,7 +346,7 @@ export const registerTurn = () => {
               await game?.dice3d?.showForRoll(theRoll, game.user, false, gm, false);
               if (travelData.rollReact) {
                 reactTable = await game.tables.getName(travelData.rTable); //game.tables.find((t) => t.name === data.rTable);
-                let reactRoll = await reactTable.roll({ async: true });
+                let reactRoll = await reactTable.roll();
                 let rollResult = `They look ${reactRoll.results[0].text}.`;
                 message.content += rollResult;
                 await game?.dice3d?.showForRoll(reactRoll.roll, game.user, false, gm, false);
@@ -363,6 +367,9 @@ export const registerTurn = () => {
   };
 
   OSRH.turn.refreshTurnTracker = function () {
+
+    const app = OSRH.util.getApp('turn-tracker')
+    if(app)app.refreshCounts(true)
     Object.keys(ui.windows).map((i) => {
       let app = ui.windows[i];
       if (app.options.id === 'turn-tracker') {

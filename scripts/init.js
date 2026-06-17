@@ -10,6 +10,17 @@ import { registerReports } from './modules/reports.js';
 import { registerNameData } from './data/nameData.js';
 import { registerSettings } from './modules/settingsModule.js';
 // import { registerEffectModule } from './modules/effectModule.js';
+// v2 imports
+import { OSRHTurnTrackerV2 } from './modules/v2/turn-tracker.mjs';
+import { OSRHPartySheetV2 } from './modules/v2/party-sheet.mjs';
+import { ItemSettingsFormV2 } from './modules/v2/light/item-settings-app.mjs';
+import { LightConfigV2 } from './modules/v2/light/light-item-config.mjs';
+import { OSRHItemConfigV2 } from './modules/v2/item-config.mjs';
+import { RationConfigV2 } from './modules/v2/ration-config.mjs';
+import { TravelCalculatorV2 } from './modules/v2/travel-calc.mjs';
+import { OSRHAttackV2 } from './modules/v2/attack.mjs';
+import { OSRActiveEffectsAppV2 } from './modules/v2/active-effects.mjs';
+
 import { registerEffectData } from './data/effectData.mjs';
 import { registerPartials } from './data/registerPartials.mjs';
 import { registerOsrActiveEffectModule } from './modules/active-effect/active-effect-module.mjs';
@@ -72,6 +83,17 @@ Hooks.once('init', async function () {
   OSRH.partySheet = OSRHPartySheet;
   OSRH.CustomAttributeEdit = CustomAttributeEdit;
   OSRH.ManageCustomAttributes = ManageCustomAttributes;
+  OSRH.V2 = {
+    turnTracker: OSRHTurnTrackerV2,
+    partySheet: OSRHPartySheetV2,
+    itemSettings: ItemSettingsFormV2,
+    lightConfig: LightConfigV2,
+    itemConfig: OSRHItemConfigV2,
+    rationConfig: RationConfigV2,
+    travelCalc: TravelCalculatorV2,
+    attack: OSRHAttackV2,
+    effectsApp: OSRActiveEffectsAppV2,
+  }
   // OSRH.customAttributeConfig = CustomAttributeConfig;
 
   // OSRH.advPartySheet = PartySheetAdvanced;
@@ -121,7 +143,8 @@ Hooks.once('ready', async () => {
   // no gm warning
   if (!OSRH.util.singleGM()) ui.notifications.warn(game.i18n.localize('OSRH.notification.noGmUser'));
   registerSystemData();
-  OSRHPartySheet.init();
+  //initialize party sheet
+  OSRHPartySheetV2.init();
   // handlebars partials
   registerPartials();
 
@@ -180,6 +203,11 @@ Hooks.once('ready', async () => {
     tagMigration();
     migrateAmmoFlag();
     migrateSavedEffects();
+    Hooks.once('pauseGame', async e=>{
+      await OSRH.util.sleep(1000)
+      game.togglePause()
+    })
+    
   }
 
   Hooks.on('createActor', async (actor) => {
@@ -366,5 +394,5 @@ Hooks.on('updateCombat', async (combat, details) => {
   }
 });
 
-Hooks.on('renderOSRHPartySheet', OSRHPartySheet.renderPartySheet);
+Hooks.on('renderOSRHPartySheet', OSRHPartySheetV2.renderPartySheet);
 

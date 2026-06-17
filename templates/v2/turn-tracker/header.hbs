@@ -1,0 +1,31 @@
+<header class="tracker-header">
+  <div class="btn-div">
+    {{#if isGM}}<a id="reset-session-btn" class="light-icon" title="{{localize "OSRH.ui.resetSession"}}  "><i class="fa-solid fa-clock-rotate-left"></i></a>{{/if}}
+    <p class="title">{{localize "OSRH.turnTracker.appTitle"}} </p>
+    {{#if isGM}}<a id="reset-total-btn" class="light-icon" title="{{localize "OSRH.ui.resetTotal"}} "><i class="fa-regular fa-calendar-xmark"></i></a></div>{{/if}}
+  </div>
+  
+  <div class="sheet-tabs tabs" data-group="primary">
+    {{!-- {{#each tabs as |tab|}}
+    <a class="{{tab.cssClass}}" data-action="tab" data-group="{{tab.group}}" data-tab="{{tab.id}}">
+        <i class="{{tab.icon}}"></i>
+        <label>{{localize tab.label}}</label>
+    </a>
+    {{/each}} --}}
+
+
+
+    <a class="nav-tab {{tabs.dungeon.cssClass}}" 
+    data-action='tab' data-group="primary" 
+    data-tab="dungeon">{{localize "OSRH.turnTracker.dungeon"}} </a>
+    <a class="nav-tab {{tabs.travel.cssClass}}" data-action='tab' data-group="primary" data-tab="travel">{{localize "OSRH.turnTracker.travel"}} </a>
+    {{#if isGM}}
+    <a class="nav-tab narrow-tab {{tabs.dungeonConfig.cssClass}}" data-action="tab" data-group="primary" data-tab="dungeonConfig" title="{{localize "OSRH.turnTracker.title.dunTurnConfig"}} "><i class="fa-solid fa-dungeon"></i></a> 
+    
+    <a class="nav-tab narrow-tab {{tabs.travelConfig.cssClass}}" data-action="tab" data-group="primary" data-tab="travelConfig" title="{{localize "OSRH.turnTracker.title.travTurnConfig"}} "><i class="fa-regular fa-compass"></i></a> 
+    
+    <a class="nav-tab narrow-tab {{tabs.globalConfig.cssClass}}" data-action="tab" data-group="primary" data-tab="globalConfig" title="{{localize "OSRH.turnTracker.title.globalConfig"}} "><i class="fa-solid fa-gear"></i></a> 
+    {{/if}}
+  </div>
+ 
+</header>

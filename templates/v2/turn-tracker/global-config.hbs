@@ -1,0 +1,21 @@
+<div class="tab global-config" data-group="primary" data-tab="globalConfig">
+        
+  <div class="global-options">
+    <div class="main">
+      <h2>{{localize "OSRH.turnTracker.globalOpt"}} </h2>
+      <div class="row">
+        <div class="row">
+          <label for="track-ration-expiration">{{localize "OSRH.turnTracker.rationExpiration"}}:</label>
+          <input type="checkbox" name="ration-expiration" id="track-ration-expiration" title="" {{#if turnData.global.trackRationExp}}checked{{/if}}>
+        </div>
+      </div>
+    </div>
+    <footer class="config">
+      {{#if isGM}}
+      <p class="blank-button"></p>
+      <a id="save-settings"class="hidden save-settings light-icon"><i class="fa-solid fa-floppy-disk"></i></a>
+      <p class="blank-button"></p>
+    {{/if}}
+    </footer>
+  </div>
+</div>

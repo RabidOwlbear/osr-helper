@@ -281,7 +281,7 @@ export const registerReports = () => {
         ui.notifications.warn(game.i18n.localize("OSRH.report.cantGetLost"));
         return;
       }
-      let roll = await new Roll(`1d6 + ${bonus.value}`).evaluate({ async: true });
+      let roll = await new Roll(`1d6 + ${bonus.value}`).evaluate();
       let target = this.lostMod[radio] || 2;
 
       if (roll.total <= target) {
@@ -315,7 +315,7 @@ export const registerReports = () => {
       const mod = parseInt(modEl.value);
       const terrain = document.querySelector(`[name=terrain]:checked`).value;
       const gm = game.users.contents.filter((u) => u.role == 4).map((u) => u.id);
-      let roll = await new Roll(`1d6 + ${mod}`).roll({ async: true });
+      let roll = await new Roll(`1d6 + ${mod}`).evaluate();
       if (roll.total <= 3) {
         let cData = {
           user: game.user.id,
@@ -383,6 +383,7 @@ export const registerReports = () => {
     }
   };
   OSRH.report.travelCalc = function(){
-    new OSRH.report.TravelReport().render(true)
+    // new OSRH.report.TravelReport().render(true)
+    new OSRH.V2.travelCalc().render(true)
   }
 };

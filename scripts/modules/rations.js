@@ -43,15 +43,16 @@ data: {
     <div style="display:flex">
     <div  style="flex:1"><select id="ration">${rationOptions}</select></div>
     </div>`;
-    new Dialog({
-      title: game.i18n.localize("OSRH.ration.eatRation"),
+    new foundry.applications.api.DialogV2({
+      window:{title: game.i18n.localize("OSRH.ration.eatRation")},
+      classes: ['ration-dialog'],
       content: dialogTemplate,
-      buttons: {
-        rollAtk: {
+      buttons: [
+      {
           label: game.i18n.localize("OSRH.ration.eatRation"),
-          callback: async function(html){
+          callback: async function(ev, btn, obj){
             
-            let item = actor.items.getName(html.find('#ration')[0].value);
+            let item = actor.items.getName(obj.element.querySelector('#ration').value);
             let itemQty = OSRH.util.getNestedValue(item, qPath) - 1;
             if (itemQty <= 0) {
               await item.delete();
@@ -59,11 +60,8 @@ data: {
               await item.update({[qPath ]: itemQty})
             }
           }
-        },
-        close: {
-          label: game.i18n.localize("OSRH.customEffect.close"),
         }
-      }
+      ]
     }).render(true);
   };
   OSRH.RationConfig = class RationConfig extends FormApplication {
@@ -153,7 +151,6 @@ data: {
           let newDur = data.duration.value - sec
           if(newDur <= 0){
             const itemName = r.name
-            console.log('Item', itemName,'in actor', r.parent.name, 'has expired')
             data.duration.value = 0;
             data.trackExpiration = false;
             

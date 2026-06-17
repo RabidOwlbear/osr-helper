@@ -1,0 +1,122 @@
+.item-config.v2 {
+  label,
+  select,
+  button {
+    color: var(--text-light);
+  }
+  option {
+    color: var(--text-light);
+    background-color: var(--select-bg);
+  }
+  background: transparent;
+  .window-header {
+    background-color: var(--grad-1-a);
+    i,
+    button {
+      color: white;
+    }
+  }
+  .row {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+  }
+  .window-content {
+    background: linear-gradient(var(--grad-1-a), var(--grad-1-b));
+  }
+  .main-cont {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+  }
+  .content {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+  }
+  .close-btn {
+    width: 100%;
+  }
+}
+
+.attack.v2 {
+  .window-content {
+    padding: 0.3rem;
+  }
+  .main-cont {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    .select {
+      width: 80%;
+      align-self: center;
+    }
+    .row {
+      display: flex;
+      align-items: center;
+    }
+
+    .jcc {
+      justify-content: center;
+    }
+    .se {
+      justify-content: space-evenly;
+    }
+    .controls {
+      display: flex;
+      width: 100%;
+      button {
+        flex: 1;
+      }
+    }
+    label {
+      margin-right: 1rem;
+    }
+    h1 {
+      text-align: center;
+      font-size: 2.5rem;
+      margin-bottom: 0.2rem;
+    }
+    h1,
+    i,
+    label,
+    button,
+    select {
+      color: var(--text-light);
+    }
+    option {
+      color: var(--text-light);
+      background-color: #6b6b6b;
+    }
+  }
+}
+.light-dialog,
+.ration-dialog {
+  h1,
+  button,
+  select {
+    color: var(--text-light);
+  }
+  option{
+    color: var(--text-light);
+    background-color: var(--select-bg);
+  }
+  .window-header {
+    background-color: var(--grad-1-a);
+    i,
+    button {
+      color: white;
+    }
+  }
+  background: transparent;
+  .window-content {
+    background: linear-gradient(var(--grad-1-a), var(--grad-1-b));
+  }
+}
+.ration-dialog{
+   option{
+    color: var(--text-light);
+    background-color: var(--select-bg);
+  }
+}

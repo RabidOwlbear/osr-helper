@@ -370,7 +370,7 @@ export class OSRHTurnTracker extends FormApplication {
       ui.notifications.warn(game.i18n.localize('OSRH.report.cantGetLost'));
       return;
     }
-    let roll = await new Roll(`1d6 + ${bonus.value}`).evaluate({ async: true });
+    let roll = await new Roll(`1d6 + ${bonus.value}`).evaluate();
     let target = this.lostMod[terrain] || 2;
 
     if (roll.total <= target) {
@@ -401,7 +401,7 @@ export class OSRHTurnTracker extends FormApplication {
     const mod = parseInt(modEl.value);
     const terrain = html.find(`#terrain`)[0].value;
     const gm = game.users.contents.filter((u) => u.role == 4).map((u) => u.id);
-    let roll = await new Roll(`1d6 + ${mod}`).roll({ async: true });
+    let roll = await new Roll(`1d6 + ${mod}`).evaluate();
     if (roll.total <= 3) {
       let cData = {
         user: game.user.id,

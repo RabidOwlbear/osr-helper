@@ -1,5 +1,6 @@
 import { OSRHAttack } from './attack.mjs';
 export const registerUtil = () => {
+  OSRH.util.sleep = (ms) => new Promise((res) => setTimeout(res, ms));
   OSRH.util.singleGM = function () {
     return game.users.filter((u) => u.active && u.isGM)[0];
   };
@@ -343,7 +344,8 @@ export const registerUtil = () => {
     let x = window.innerWidth / 2 - 300;
     let y = window.innerHeight / 2;
 
-    new OSRHAttack(actor).render(true, { top: y, left: x });
+    // new OSRHAttack(actor).render(true, { top: y, left: x });
+    new OSRH.V2.attack({actor}).render(true, { top: y, left: x });
   };
 
   // used
@@ -839,7 +841,8 @@ export const registerUtil = () => {
     btnEl.disabled = false;
   };
   OSRH.util.renderTurnTracker = function () {
-    new OSRH.TurnTracker().render(true);
+    // new OSRH.TurnTracker().render(true);
+    new OSRH.V2.turnTracker().render(true)
   };
   OSRH.util.langCheck = function () {
     const curLang = game.i18n.lang;
@@ -934,6 +937,21 @@ export const registerUtil = () => {
   OSRH.util.hasPermission = function (actor, uId, pLvl) {
     return actor.ownership?.[uId] >= pLvl ? true : false;
   };
+  OSRH.util.dragDropHandler= function(d){
+    if(game.version >= 13){
+      return new foundry.applications.ux.DragDrop.implementation(d);
+    }else{
+      return new DragDrop(d);
+    }
+  }
+  OSRH.util.getApp = (id) => {
+    const app = foundry.applications.instances.get(id);
+    if(app){
+      return app;
+    }else{
+      return null;
+    }
+  }
 };
 
 export const intializePackFolders = async () => {

@@ -170,6 +170,6 @@ export async function injectOSRHSheetUI(html, object, type) {
           break;
       }
     });
-    controls.appendChild(el)
+    controls?.appendChild(el)
   });
 }

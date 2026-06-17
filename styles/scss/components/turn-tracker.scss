@@ -1,7 +1,20 @@
 /* turn tracker */
-.app.osrh.turn-tracker {
-  flex-direction: column;
 
+.app.osrh.turn-tracker {
+  color: var(--text-dark);
+  flex-direction: column;
+  h1.window-title {
+    border: none;
+    font-size: 1rem;
+  }
+  .window-header {
+    button {
+      background: transparent;
+      border: none;
+      line-height: inherit;
+      margin: 0;
+    }
+  }
   section.window-content {
     padding: 0;
     background-color: #e9e6d9;
@@ -53,6 +66,10 @@
   }
   .nav-tab.active {
     background-color: #3e345a;
+  }
+  .nav-tab {
+    margin: 0;
+    padding: 0;
   }
   .travel-tab,
   .dungeon-tab,
@@ -169,6 +186,8 @@
     background-color: #221e2e;
   }
   .count-cont {
+    color: var(--text-dark);
+
     position: relative;
     top: -20px;
     padding: 0.5rem;
@@ -202,6 +221,7 @@
     justify-content: space-evenly;
     align-items: center;
   }
+
   .btn-div i {
     font-size: 1rem;
   }
@@ -408,5 +428,20 @@
   .travel-config-tab select,
   .dungeon-config-tab select {
     width: 150px;
+  }
+}
+.app.osrh.turn-tracker.v2 {
+  .window-header {
+    i,
+    button,
+    h1 {
+      color: var(--text-light);
+    }
+  }
+  .btn-div {
+    height: 1.8rem;
+  }
+  i {
+    pointer-events: none;
   }
 }
