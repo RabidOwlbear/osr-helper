@@ -1,7 +1,7 @@
-<div class="tab travel-config"data-group="primary" data-tab="travelConfig">
+<div class="tab travelConfig travel-config"data-group="primary" data-tab="travelConfig">
   <div class="travel-config-tab">
     <h2>{{localize "OSRH.turnTracker.travelTurnOpt"}} </h2>
-    <div class="travel-options">
+    <div? class="travel-options">
       <div class="row">
       <div class="row">
         <input type="checkbox" name="t-encounter-roll" id="t-encounter-roll" title="{{localize "OSRH.turnTracker.title.rolEnc"}} "{{#if turnData.travel.rollEnc}}checked{{/if}}>
@@ -40,7 +40,7 @@
           {{/each}}
         </select>
       </div>
-    </di
+    </div>
     <footer class="config">
       {{#if isGM}}
       <p class="blank-button"></p>

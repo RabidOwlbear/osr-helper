@@ -9,7 +9,7 @@
       "flags": {}
     }
   ],
-  "version": "0.8.0",
+  "version": "0.8.1",
   "compatibility": {
     "minimum": "13",
     "verified": "14"
@@ -316,7 +316,7 @@
     ]
   },
   "url": "https://github.com/RabidOwlbear/osr-helper",
-  "manifest": "https://raw.githubusercontent.com/RabidOwlbear/osr-helper/refs/heads/v0.8.0/module.json",
-  "download": "https://github.com/RabidOwlbear/osr-helper/archive/refs/heads/v0.8.0.zip",
+  "manifest": "https://raw.githubusercontent.com/RabidOwlbear/osr-helper/refs/heads/v0.8.1/module.json",
+  "download": "https://github.com/RabidOwlbear/osr-helper/archive/refs/heads/v0.8.1.zip",
   "readme": "REAMDE.md"
 }

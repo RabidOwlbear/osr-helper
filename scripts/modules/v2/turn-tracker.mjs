@@ -91,6 +91,8 @@ export class OSRHTurnTrackerV2 extends OSRHApp {
     const dLvlUp = html.querySelector('#d-lvl-up');
     const dLvlDn = html.querySelector('#d-lvl-dn');
     const trackRationExp = html.querySelector(`#track-ration-expiration`);
+    const tEncCheck = html.querySelector("#t-encounter-roll");
+    const tReactCheck = html.querySelector("#t-react-roll");
 
     if (this.isGM) {
       terrainSelect.value = this.turnData.travel.terrain;
@@ -122,6 +124,12 @@ export class OSRHTurnTrackerV2 extends OSRHApp {
       dReactTable.value = this.turnData.dungeon.rTable;
       tReactTable.value = this.turnData.travel.rTable;
       tEncTable.value = this.turnData.travel.eTable;
+      tEncCheck.addEventListener('change', e=>{
+        this.showSaveBtn(html);
+      });
+      tReactCheck.addEventListener('change', e=>{
+        this.showSaveBtn(html);
+      });
       dReactTable.addEventListener('change', (e) => {
         this.showSaveBtn(html);
       });
@@ -197,8 +205,10 @@ export class OSRHTurnTrackerV2 extends OSRHApp {
           await this.updateTurnData(html);
           OSRH.socket.executeForEveryone('refreshTurnTracker');
           ui.notifications.notify(game.i18n.localize('OSRH.util.notification.dungeonTurnSettingsUpdated'));
+          this.render(true)
         });
       }
+      
       resetTotal.addEventListener('click', (e) => {
         let tab = this.getActiveTab(html);
         let app = new Dialog({
@@ -293,7 +303,21 @@ export class OSRHTurnTrackerV2 extends OSRHApp {
     }
     return tabData;
   }
-
+_forceTabInit(tabData) {
+    const tabEls = [...this.element.querySelectorAll('.tab')];
+    const tabInitialized = tabEls.filter((i) => i.classList.contains('active')).length > 0;
+    if (!tabInitialized) {
+      for (let property in tabData) {
+        if (tabData[property]?.cssClass === 'active') {
+          const tabId = tabData[property].id;
+          const tabEl = tabEls.find((i) => i.classList.contains(tabId));
+          if (tabEl && !tabEl.classList.contains('active')) {
+            tabEl.classList.add('active');
+          }
+        }
+      }
+    }
+  }
   getTerrainChance(html) {
     const terrain = html.querySelector('#terrain').value;
     const terrainEls = [...html.querySelectorAll('option.terrainOpt')];
@@ -323,7 +347,7 @@ export class OSRHTurnTrackerV2 extends OSRHApp {
     if (refresh) this.render(true);
   }
   getEncounterTables(html) {
-    let selectEls = [...html.querySelector('.d-enc-select')];
+    let selectEls = [...html.querySelectorAll('.d-enc-select')];
     return selectEls.map((el) => el.value).map((i) => (i == '' ? null : i));
   }
   async updateTurnData(html) {
