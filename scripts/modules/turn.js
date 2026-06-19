@@ -163,8 +163,7 @@ export const registerTurn = () => {
         let results = table.filter((i) => i.val <= res);
         result = results[results.length - 1];
       }
-
-      return result.text;
+      return `${result.name}<br>${result.description}`
     };
     let result = getResultText(tRoll, tables[type]);
     const typeText = type.toLowerCase() == 'npc' ? 'NPC' : 'Monster';
@@ -240,13 +239,8 @@ export const registerTurn = () => {
           const roll = await encTable.roll();
           let content = ``;
           for (let res of roll.results) {
-            content += `<br/>${res.text}<br/>`;
-            // what does this do?
-            // if (!res?.documentCollection?.length) {
-            //   content += `<br/>${res.text}<br/>`;
-            // } else {
-            //   content += `<br/>@${res.documentCollection}[${res.text}]<br/>`;
-            // }
+            content += `<br/>${res.name}<br/>`
+            content += `<br/>${res.description}<br/>`;
             content += `<br>`;
           }
           if (roll.roll._evaluated) {
@@ -263,7 +257,7 @@ export const registerTurn = () => {
             if (turnData.dungeon.rollReact) {
               reactTable = game.tables.getName(turnData.dungeon.rTable);
               let reactRoll = await reactTable.roll();
-              let rollResult = `They look ${reactRoll.results[0].text}.`;
+              let rollResult = `${reactRoll.results[0].name}<br>They look ${reactRoll.results[0].description}.`;
               message.content += rollResult;
               await game?.dice3d?.showForRoll(reactRoll.roll, game.user, false, gm, false);
             }
@@ -328,9 +322,9 @@ export const registerTurn = () => {
               let content = ``;
               for (let res of roll.results) {
                 if (!res.documentCollection.length) {
-                  content += `<br/>${res.text}<br/>`;
+                  content += `<br>${res.name}<br/>${res.description}<br/>`;
                 } else {
-                  content += `<br/>@${res.documentCollection}[${res.text}]<br/>`;
+                  content += `<br/>@${res.documentCollection}[${res.description}]<br/>`;
                 }
                 content += `<br>`;
               }
@@ -347,7 +341,7 @@ export const registerTurn = () => {
               if (travelData.rollReact) {
                 reactTable = await game.tables.getName(travelData.rTable); //game.tables.find((t) => t.name === data.rTable);
                 let reactRoll = await reactTable.roll();
-                let rollResult = `They look ${reactRoll.results[0].text}.`;
+                let rollResult = `${reactRoll.results[0].name}<br>They look ${reactRoll.results[0].description}.`;
                 message.content += rollResult;
                 await game?.dice3d?.showForRoll(reactRoll.roll, game.user, false, gm, false);
               }
