@@ -1,11 +1,12 @@
-import { renderTemplateHandler } from "./util.js"
-import { OSRHItemConfig } from "./item-config.mjs";
-import { NewActiveEffectForm } from "./old/effectModule.js";
+import { renderTemplateHandler } from './util.js';
+import { OSRHItemConfig } from './item-config.mjs';
+import { OSRHItemConfigV2 } from './v2/item-config.mjs';
+import { NewActiveEffectForm } from './old/effectModule.js';
 export const uiControls = {
   async addUiControls() {
-    const setting = await game.settings.get(OSRH.moduleName, 'displayControlUi')
-    if( !setting ){
-      return
+    const setting = await game.settings.get(OSRH.moduleName, 'displayControlUi');
+    if (!setting) {
+      return;
     }
     // animations
     const animationOut = [{ transform: 'translateX(0)' }, { transform: 'translateX(435px)' }];
@@ -16,7 +17,7 @@ export const uiControls = {
       easing: 'ease-out'
     };
     // get bottom ui element
-    const element = document.querySelector('#hotbar');  
+    const element = document.querySelector('#hotbar');
     // element.style.position = 'relative';
     // create control container
     const uiEl = document.createElement('div');
@@ -68,20 +69,20 @@ export const uiControls = {
     controlBtn.addEventListener('click', async (e) => {
       if (btnCont.classList.contains('osrh-control-closed')) {
         let finished = await btnCont.animate(animationOut, animOptions).finished;
-        
+
         if (finished.playState === 'finished') {
-          game.user.setFlag('osr-helper', 'uiControlOpen', true)
+          game.user.setFlag('osr-helper', 'uiControlOpen', true);
           btnCont.classList.remove('osrh-control-closed');
           controlBtn.classList.add('osrh-controls-open');
-          btnMask.style.display = 'inherit'
+          btnMask.style.display = 'inherit';
         }
       } else {
         let finished = await btnCont.animate(animationIn, animOptions).finished;
         if (finished.playState === 'finished') {
-          game.user.setFlag('osr-helper', 'uiControlOpen', false)
+          game.user.setFlag('osr-helper', 'uiControlOpen', false);
           btnCont.classList.add('osrh-control-closed');
-          controlBtn.classList.remove('osrh-controls-open')
-          btnMask.style.display = 'none'
+          controlBtn.classList.remove('osrh-controls-open');
+          btnMask.style.display = 'none';
         }
       }
     });
@@ -90,29 +91,26 @@ export const uiControls = {
       let amt = rowCount * 50 + 20;
       const pageNum = document.querySelector('#hotbar-page-controls span.page-number');
       const hotbarPage = document.querySelector('#hotbar-page');
-      if(!hotbarPage.classList.contains('collapsed')){
+      if (!hotbarPage.classList.contains('collapsed')) {
         controlBtn.style.top = `-${amt}px`;
         btnMask.style.top = `-${amt}px`;
       }
-      
+
       pageNum.addEventListener('click', async (e) => {
-        
         const animationUp = [{ transform: 'translateY(0)' }, { transform: `translateY(-${amt}px)` }];
         const animationDown = [{ transform: 'translateY(0)' }, { transform: `translateY(${amt}px)` }];
         let options = {
           duration: 200,
           iterations: 1,
           easing: 'ease-out'
-        }
+        };
         if (!hotbarPage.classList.contains('collapsed')) {
-
           let finished = await uiEl.animate(animationDown, options).finished;
           if (finished.playState === 'finished') {
             controlBtn.style.top = `0px`;
             btnMask.style.top = `0px`;
           }
         } else {
-
           let finished = await uiEl.animate(animationUp, options).finished;
           if (finished.playState === 'finished') {
             controlBtn.style.top = `-${amt}px`;
@@ -123,35 +121,31 @@ export const uiControls = {
     }
 
     // if already open
-    if(game.user.getFlag('osr-helper', 'uiControlOpen')){
-      
+    if (game.user.getFlag('osr-helper', 'uiControlOpen')) {
       btnCont.classList.remove('osrh-control-closed');
-      controlBtn.classList.add('osrh-controls-open')
+      controlBtn.classList.add('osrh-controls-open');
     }
-  },
-
+  }
 };
 
 export async function injectOSRHSheetUI(html, object, type) {
   const sheetUI = await game.settings.get(OSRH.moduleName, 'displayControlUi');
   const existing = html.querySelector('.osrh-control');
+
   if (existing || !sheetUI) return;
-  const controls = html.querySelector('.controls-dropdown')
+  const controls = html.querySelector('.controls-dropdown');
   const data = {
     handle: true,
     buttons: OSRH.data.sheetUI[type],
     roundBottom: false
   };
   data.roundBottom = data.buttons.length > 1 ? true : false;
-  const template = await renderTemplateHandler(
-    'modules/osr-helper/templates/ui/control-element.hbs',
-    data
-  );
+  const template = await renderTemplateHandler('modules/osr-helper/templates/ui/control-element.hbs', data);
   const tempDiv = document.createElement('div');
   tempDiv.innerHTML = template;
   const elements = tempDiv.querySelectorAll('.header-control');
   elements.forEach((el) => {
-    const button = el.querySelector(".ui-button")
+    const button = el.querySelector('.ui-button');
     button.addEventListener('click', (ev) => {
       const app = ev.target.closest('.ui-button').dataset.app;
       switch (app) {
@@ -159,17 +153,60 @@ export async function injectOSRHSheetUI(html, object, type) {
           OSRH.effect.renderEffectApp(object.document);
           break;
         case 'item-management':
-          let ration =  OSRH.systemData.rationItemTypes.includes(object.document.type)
-          new OSRHItemConfig(object.document, ration).render(true, { top: ev.y, left: ev.x - 125 });          
+          let ration = OSRH.systemData.rationItemTypes.includes(object.document.type);
+          new OSRHItemConfig(object.document, ration).render(true, { top: ev.y, left: ev.x - 125 });
           break;
         case 'item-report':
-           OSRH.report.actorItem(object.document)          
+          OSRH.report.actorItem(object.document);
           break;
         case 'currency-converter':
-           OSRH.util.curConDiag(object.document)
+          OSRH.util.curConDiag(object.document);
           break;
       }
     });
-    controls?.appendChild(el)
+    controls?.appendChild(el);
   });
 }
+
+export function injectV2Controls(app, controls) {
+  const type = app.document?.type
+  if(!type)return
+  if ((app.document instanceof Actor)) {
+    // if (OSRH.ETC.patchedActorV2.has(app)) return;
+    // OSRH.ETC.patchedActorV2.add(app);
+    controls.push(
+      {
+        icon: 'fas fa-book-skull',
+        label: 'OSRH Fx',
+        onClick: () => {
+          OSRH.effect.renderEffectApp(app.document);
+        }
+      }
+    );
+    if(game.system.id == 'ose'){
+      controls.push({
+        icon: 'fas fa-coins',
+        label: 'Currency Converter',
+        onClick: () => {
+          OSRH.util.curConDiag(app.document);
+        }
+      })
+    }
+  }
+  if ((app.document instanceof Item)) {
+    const light = OSRH.systemData.lightItemTypes.includes(type);
+    const ration = OSRH.systemData.rationItemTypes.includes(type);
+    if(!light && !ration) return;
+    controls.push(
+      {
+        icon: 'fas fa-book-skull',
+        label: 'OSRH Config',
+        onClick: () => {
+          new OSRHItemConfigV2({item :app.document, ration}).render(true, { top: app.position.top, left: app.position.left - 125 });
+        }
+      }
+    )
+  }
+}
+// OSRH.effect.renderEffectApp(object.document)
+// OSRH.util.curConDiag(object.document)

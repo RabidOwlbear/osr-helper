@@ -50,9 +50,9 @@ export class OSRHAttackV2 extends OSRHApp {
   }
 
   _getAttackOptions(selectedActor) {
-    let actorWeapons = selectedActor?.items.filter((item) => item.type == 'weapon');
+    let actorWeapons = selectedActor?.items.filter((item) => item.type.toLowerCase() == 'weapon');
     let actorSpells = selectedActor?.items.filter((item) => {
-      if (item.type == 'spell') return true;
+      if (item.type.toLowerCase() == 'spell') return true;
     });
     if (actorWeapons.length == 0 && actorSpells.length == 0) {
       ui.notifications.error(game.i18n.localize('OSRH.util.notification.noWeapon'));
@@ -92,6 +92,25 @@ export class OSRHAttackV2 extends OSRHApp {
           case 'basicfantasyrpg':
             await bfrpgroll(weapon, this.actor, weapon.system.range.value);
             break;
+          case 'dolmenwood':
+          const attackType = weapon.system.qualities?.includes('missile') ? 'missile' : 'melee';
+          await game.dolmenwood.executeMacroAttack({
+            flags: {
+              dolmenwood: {
+                attackConfig: {
+                  weaponName: weapon.name,
+                  weaponId: weapon.id,
+                  actorId: this.actor.id,
+                  attackType,
+                  attackMode: 'normal',
+                  modifierIds: [],
+                  numericMod: 0,
+                  rollType: null
+                }
+              }
+            }
+          });
+          break;
           default:
             await weapon.roll({ skipDialog: skipCheck });
         }
@@ -115,6 +134,25 @@ export class OSRHAttackV2 extends OSRHApp {
           break;
         case 'basicfantasyrpg':
           await bfrpgroll(weapon, this.actor, weapon.system.range.value);
+          break;
+        case 'dolmenwood':
+          const attackType = weapon.system.qualities?.includes('missile') ? 'missile' : 'melee';
+          await game.dolmenwood.executeMacroAttack({
+            flags: {
+              dolmenwood: {
+                attackConfig: {
+                  weaponName: weapon.name,
+                  weaponId: weapon.id,
+                  actorId: this.actor.id,
+                  attackType,
+                  attackMode: 'normal',
+                  modifierIds: [],
+                  numericMod: 0,
+                  rollType: null
+                }
+              }
+            }
+          });
           break;
         default:
           await weapon.roll({ skipDialog: skipCheck });

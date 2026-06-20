@@ -593,5 +593,112 @@ export const registerEffectData = () => {
         ]
       }
     ],
+    dolmenwood: [
+      {
+        label: game.i18n.localize('OSRH.effect.hp'),
+        contents: [
+          // {
+          //   label: game.i18n.localize('OSRH.effect.hitDie'),
+          //   path: 'system.hp.hd'
+          // },
+          {
+            label: game.i18n.localize('OSRH.effect.hpVal'),
+            path: 'system.hp.value'
+          },
+          {
+            label: game.i18n.localize('OSRH.effect.hpMax'),
+            path: 'system.hp.max'
+          }
+        ]
+      },
+      {
+        label: game.i18n.localize('OSRH.effect.ac'),
+        contents: [
+          {
+            label: game.i18n.localize('OSRH.effect.acMod'),
+            path: 'system.ac'
+          },
+          
+          
+        ]
+      },
+
+      {
+        label: game.i18n.localize('OSRH.effect.attackBonus'),
+        contents: [
+          {
+            label: game.i18n.localize('OSRH.effect.rangedMod'),
+            path: 'system.thac0.mod.missile'
+          },
+          {
+            label: game.i18n.localize('OSRH.effect.meleeMod'),
+            path: 'system.thac0.mod.melee'
+          }
+        ]
+      },
+      {
+        label: game.i18n.localize('OSRH.effect.saves'),
+        contents: [
+          {
+            label: game.i18n.localize('OSRH.effect.save.blast'),
+            path: 'system.saves.blast'
+          },
+          {
+            label: game.i18n.localize('OSRH.effect.save.doom'),
+            path: 'system.saves.doom'
+          },
+          {
+            label: game.i18n.localize('OSRH.effect.save.hold'),
+            path: 'system.saves.hold'
+          },
+          {
+            label: game.i18n.localize('OSRH.effect.save.ray'),
+            path: 'system.saves.ray'
+          },
+          {
+            label: game.i18n.localize('OSRH.effect.save.spell'),
+            path: 'system.saves.spell'
+          }
+        ]
+      },
+      {
+        label: game.i18n.localize('OSRH.effect.abilScore'),
+        contents: [
+          {
+            label: game.i18n.localize('OSRH.effect.strVal'),
+            path: 'system.abilities.strength.score'
+          },
+          {
+            label: game.i18n.localize('OSRH.effect.intVal'),
+            path: 'system.abilities.intelligence.score'
+          },
+          {
+            label: game.i18n.localize('OSRH.effect.wisVal'),
+            path: 'system.abilities.wisdom.score'
+          },
+          {
+            label: game.i18n.localize('OSRH.effect.dexVal'),
+            path: 'system.abilities.dexterity.score'
+          },
+          {
+            label: game.i18n.localize('OSRH.effect.conVal'),
+            path: 'system.abilities.constitution.score'
+          },
+          {
+            label: game.i18n.localize('OSRH.effect.chaVal'),
+            path: 'system.abilities.charisma.score'
+          }
+        ]
+      },
+      {
+        label: game.i18n.localize('OSRH.effect.encumbrance'),
+        contents: [
+          {
+            label: game.i18n.localize('OSRH.effect.encumbranceMax'),
+            path: 'system.encumbrance.max'
+          }
+        ]
+      }
+    ],
   };
 };

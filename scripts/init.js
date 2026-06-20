@@ -20,6 +20,7 @@ import { RationConfigV2 } from './modules/v2/ration-config.mjs';
 import { TravelCalculatorV2 } from './modules/v2/travel-calc.mjs';
 import { OSRHAttackV2 } from './modules/v2/attack.mjs';
 import { OSRActiveEffectsAppV2 } from './modules/v2/active-effects.mjs';
+import { AmmoConfigV2 } from './modules/v2/ammo-config.mjs';
 
 import { registerEffectData } from './data/effectData.mjs';
 import { registerPartials } from './data/registerPartials.mjs';
@@ -93,6 +94,11 @@ Hooks.once('init', async function () {
     travelCalc: TravelCalculatorV2,
     attack: OSRHAttackV2,
     effectsApp: OSRActiveEffectsAppV2,
+    ammoConfig: AmmoConfigV2,
+  }
+  OSRH.ETC ={
+    patchedActorV2: new WeakSet(),
+    patchedItemV2: new WeakSet()
   }
   // OSRH.customAttributeConfig = CustomAttributeConfig;
 
@@ -203,10 +209,10 @@ Hooks.once('ready', async () => {
     tagMigration();
     migrateAmmoFlag();
     migrateSavedEffects();
-    Hooks.once('pauseGame', async e=>{
-      await OSRH.util.sleep(1000)
-      game.togglePause()
-    })
+    // Hooks.once('pauseGame', async e=>{
+    //   await OSRH.util.sleep(1000)
+    //   game.togglePause()
+    // })
     
   }
 

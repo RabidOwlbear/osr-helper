@@ -9,7 +9,7 @@
       "flags": {}
     }
   ],
-  "version": "0.8.2",
+  "version": "0.8.3",
   "compatibility": {
     "minimum": "13",
     "verified": "14"
@@ -302,6 +302,11 @@
       },
       {
         "id": "basicfantasyrpg",
+        "type": "system",
+        "compatibility": {}
+      },
+      {
+        "id": "dolmenwood",
         "type": "system",
         "compatibility": {}
       }

@@ -37,8 +37,7 @@ export class OSRHItemConfigV2 extends OSRHApp{
     context.isLight = this.itemType === 'light';
     context.isRation = this.itemType === 'ration';
     context.dispRation = this.dispRation;
-    context.dispAmmo = this.item.type === 'weapon';
-
+    context.dispAmmo = this.item.type.toLowerCase() === 'weapon';
     return context;
   }
   _onRender(context, options) {
@@ -71,7 +70,7 @@ export class OSRHItemConfigV2 extends OSRHApp{
           left:this.position.left
         }
         let item = await OSRH.util.getItem(this.item);
-        new OSRH.V2.AmmoConfig({item}).render(true, appOptions);
+        new OSRH.V2.ammoConfig({item}).render(true, appOptions);
         this.close()
       })
     }

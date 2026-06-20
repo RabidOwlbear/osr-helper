@@ -252,7 +252,7 @@ export class OSRActiveEffectsAppV2 extends OSRHApp {
   async effectListGetData(data, type) {
     let retArr = [];
     if (data.length) {
-      data.forEach(async (e) => {
+      await data.forEach(async (e) => {
         let tActor = await fromUuid(e.target);
         // tActor = tActor.collectionName == 'tokens' ? (tActor = tActor.actor) : tActor;
         let eCreator = e.createdBy?.includes('.') ? await fromUuid(e.createdBy) : await game.actors.get(e.createdBy);
@@ -280,7 +280,7 @@ export class OSRActiveEffectsAppV2 extends OSRHApp {
             let listItem = `<li title="${displayStr}">${displayStr}</li>`;
             entryData.list += listItem;
           }
-
+          
           retArr.push(entryData);
         }
       });

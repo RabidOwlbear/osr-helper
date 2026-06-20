@@ -204,6 +204,31 @@ export async function registerSystemData() {
         }
       };
       break;
+      case 'dolmenwood':
+      OSRH.systemData = {
+        id: 'dolmenwood',
+        tags: false,
+        partySheet: false,
+        lightItemTypes: ['Item', 'Treasure', 'Weapon', 'Armor'],
+        rationItemTypes: ['Item', 'Treasure', 'Foraged'],
+        itemSheetHook: 'renderItemSheetV2',
+        characterSheetHook: 'renderActorSheetV2',
+        partyTypes: ['Adventurer'],
+        baseMovMod: 3,
+        effects: true,
+        spellDamage: true,
+        paths: {
+          weaponDamage: 'system.damage',
+          itemQty: 'system.quantity',
+          encMov: 'system.movement.exploring',
+          hp: {
+            val: 'system.hp.value',
+            max: 'system.hp.max'
+          },
+          ac: 'system.ac'
+        }
+      };
+      break;
     default:
       OSRH.systemData = null;
   }

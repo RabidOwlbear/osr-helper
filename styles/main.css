@@ -2364,10 +2364,14 @@ aside#hotbar {
   background-color: #6b6b6b;
 }
 
+.ammo-config.v2,
 .light-dialog,
 .ration-dialog {
   background: transparent;
 }
+.ammo-config.v2 h1,
+.ammo-config.v2 button,
+.ammo-config.v2 select,
 .light-dialog h1,
 .light-dialog button,
 .light-dialog select,
@@ -2376,21 +2380,26 @@ aside#hotbar {
 .ration-dialog select {
   color: var(--text-light);
 }
+.ammo-config.v2 option,
 .light-dialog option,
 .ration-dialog option {
   color: var(--text-light);
   background-color: var(--select-bg);
 }
+.ammo-config.v2 .window-header,
 .light-dialog .window-header,
 .ration-dialog .window-header {
   background-color: var(--grad-1-a);
 }
+.ammo-config.v2 .window-header i,
+.ammo-config.v2 .window-header button,
 .light-dialog .window-header i,
 .light-dialog .window-header button,
 .ration-dialog .window-header i,
 .ration-dialog .window-header button {
   color: white;
 }
+.ammo-config.v2 .window-content,
 .light-dialog .window-content,
 .ration-dialog .window-content {
   background: linear-gradient(var(--grad-1-a), var(--grad-1-b));
