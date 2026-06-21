@@ -4,4 +4,3 @@ dev/
 modules/old
 templates/old
 css-compile.sh
-.gitignore
