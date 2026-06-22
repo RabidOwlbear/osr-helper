@@ -1531,6 +1531,10 @@ aside#hotbar {
 .osr-active-effects.v2 .nav-tab {
   background-color: var(--dark-header-a);
 }
+.osr-active-effects.v2 .list-header {
+  color: var(--text-light);
+  padding: 0 0.3rem;
+}
 .osr-active-effects.v2 .window-header {
   background-color: var(--grad-1-a);
 }
@@ -2364,11 +2368,15 @@ aside#hotbar {
   background-color: #6b6b6b;
 }
 
+.ration-config.v2,
 .ammo-config.v2,
 .light-dialog,
 .ration-dialog {
   background: transparent;
 }
+.ration-config.v2 h1,
+.ration-config.v2 button,
+.ration-config.v2 select,
 .ammo-config.v2 h1,
 .ammo-config.v2 button,
 .ammo-config.v2 select,
@@ -2380,17 +2388,21 @@ aside#hotbar {
 .ration-dialog select {
   color: var(--text-light);
 }
+.ration-config.v2 option,
 .ammo-config.v2 option,
 .light-dialog option,
 .ration-dialog option {
   color: var(--text-light);
   background-color: var(--select-bg);
 }
+.ration-config.v2 .window-header,
 .ammo-config.v2 .window-header,
 .light-dialog .window-header,
 .ration-dialog .window-header {
   background-color: var(--grad-1-a);
 }
+.ration-config.v2 .window-header i,
+.ration-config.v2 .window-header button,
 .ammo-config.v2 .window-header i,
 .ammo-config.v2 .window-header button,
 .light-dialog .window-header i,
@@ -2399,6 +2411,7 @@ aside#hotbar {
 .ration-dialog .window-header button {
   color: white;
 }
+.ration-config.v2 .window-content,
 .ammo-config.v2 .window-content,
 .light-dialog .window-content,
 .ration-dialog .window-content {

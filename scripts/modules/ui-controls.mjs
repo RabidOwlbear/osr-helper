@@ -196,7 +196,9 @@ export function injectV2Controls(app, controls) {
   if ((app.document instanceof Item)) {
     const light = OSRH.systemData.lightItemTypes.includes(type);
     const ration = OSRH.systemData.rationItemTypes.includes(type);
+    const inject = game.settings.get('osr-helper', 'enableItemConfig');
     if(!light && !ration) return;
+    if(!inject)return;
     controls.push(
       {
         icon: 'fas fa-book-skull',

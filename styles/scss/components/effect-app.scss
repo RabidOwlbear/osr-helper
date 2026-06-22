@@ -84,6 +84,7 @@
     color: rgb(255, 255, 255);
     background-color: var(--theme-btn-color);
   }
+  
   // current fx tab
 
   .fx-list {
@@ -405,6 +406,10 @@
   .img-cont,
   .nav-tab{
     background-color: var(--dark-header-a);
+  }
+  .list-header{
+    color: var(--text-light);
+    padding: 0 .3rem
   }
   background: transparent;
   .window-header {

@@ -96,10 +96,6 @@ Hooks.once('init', async function () {
     effectsApp: OSRActiveEffectsAppV2,
     ammoConfig: AmmoConfigV2,
   }
-  OSRH.ETC ={
-    patchedActorV2: new WeakSet(),
-    patchedItemV2: new WeakSet()
-  }
   // OSRH.customAttributeConfig = CustomAttributeConfig;
 
   // OSRH.advPartySheet = PartySheetAdvanced;

@@ -74,17 +74,17 @@ export class OSRActiveEffectsAppV2 extends OSRHApp {
         let id = e.createdBy?.includes('.') ? this.actor.uuid : this.actor.id;
         return e.target == this.actor.uuid && id != e.createdBy;
       });
-      let selfEffectsTemplate = await this.effectListGetData(selfEffectData, 'self');
-      let otherEffectsTemplate = await this.effectListGetData(otherEffectData, 'other');
       context = foundry.utils.mergeObject(context,{
         isGM,
         displayAll: false,
         list: null,
-        selfEffects: selfEffectsTemplate,
-        otherEffects: otherEffectsTemplate,
         iconList: OSRH.data.effectIcons,
         effectPresets
       });
+      let selfEffectsTemplate = await this.effectListGetData(selfEffectData, 'self');
+      let otherEffectsTemplate = await this.effectListGetData(otherEffectData, 'other');
+      context.otherEffects = otherEffectsTemplate;
+      context.selfEffects = selfEffectsTemplate;
       context.tabs = this._getTabs(options.parts);
     }
     if (this.displayAll) {
@@ -280,7 +280,6 @@ export class OSRActiveEffectsAppV2 extends OSRHApp {
             let listItem = `<li title="${displayStr}">${displayStr}</li>`;
             entryData.list += listItem;
           }
-          
           retArr.push(entryData);
         }
       });

@@ -14,11 +14,11 @@ export async function registerSystemHooks() {
           addItemConfigControl(html, item);
         }
       });
-      Hooks.on('renderItemSheetV2', async (app, html, itemObj, d) => {
-          if (systemData.lightItemTypes.includes(app.document.type)) {
-            injectOSRHSheetUI(html , app, 'item')
-          }
-        });
+      // Hooks.on('renderItemSheetV2', async (app, html, itemObj, d) => {
+      //     if (systemData.lightItemTypes.includes(app.document.type)) {
+      //       injectOSRHSheetUI(html , app, 'item')
+      //     }
+      //   });
 
       Hooks.on("getHeaderControlsApplicationV2", (app, controls) => {
         injectV2Controls(app, controls)
@@ -32,11 +32,11 @@ export async function registerSystemHooks() {
             addItemConfigControl(html, item);
           }
         });
-        Hooks.on('renderItemSheetV2', async (app, html, itemObj) => {
-          if (systemData.lightItemTypes.includes(app.object.type)) {
-            injectOSRHSheetUI(html,app, 'item')
-          }
-        });
+        // Hooks.on('renderItemSheetV2', async (app, html, itemObj) => {
+        //   if (systemData.lightItemTypes.includes(app.object.type)) {
+        //     injectOSRHSheetUI(html,app, 'item')
+        //   }
+        // });
         
         break;
     default:
