@@ -1,14 +1,13 @@
 import { OSRHItemConfig } from '../item-config.mjs';
-import { injectOSRHSheetUI } from  '../ui-controls.mjs'
+import { injectOSRHSheetUI } from '../ui-controls.mjs';
 import { injectV2Controls } from '../ui-controls.mjs';
 export async function registerSystemHooks() {
   const systemData = OSRH.systemData;
   console.log('register system hooks');
   switch (game.system.id) {
     case 'dcc':
-      console.log('DCC system Hooks')
+      console.log('DCC system Hooks');
       Hooks.on('renderItemSheet', async (app, html, itemObj) => {
-
         const item = await fromUuid(app.object.uuid);
         if (systemData.lightItemTypes.includes(item.type)) {
           addItemConfigControl(html, item);
@@ -20,28 +19,29 @@ export async function registerSystemHooks() {
       //     }
       //   });
 
-      Hooks.on("getHeaderControlsApplicationV2", (app, controls) => {
-        injectV2Controls(app, controls)
+      Hooks.on('getHeaderControlsApplicationV2', (app, controls) => {
+        injectV2Controls(app, controls);
       });
       break;
-      case 'ose':
-        Hooks.on('renderItemSheet', async (app, html, itemObj) => {
-          if (systemData.lightItemTypes.includes(app.object.type)) {
-            
-            const item = await fromUuid(app.object.uuid)
-            addItemConfigControl(html, item);
-          }
-        });
-        // Hooks.on('renderItemSheetV2', async (app, html, itemObj) => {
-        //   if (systemData.lightItemTypes.includes(app.object.type)) {
-        //     injectOSRHSheetUI(html,app, 'item')
-        //   }
-        // });
-        
-        break;
+    case 'ose':
+      Hooks.on('renderItemSheet', async (app, html, itemObj) => {
+        if (systemData.lightItemTypes.includes(app.object.type)) {
+          const item = await fromUuid(app.object.uuid);
+          addItemConfigControl(html, item);
+        }
+      });
+      // Hooks.on('renderItemSheetV2', async (app, html, itemObj) => {
+      //   if (systemData.lightItemTypes.includes(app.object.type)) {
+      //     injectOSRHSheetUI(html,app, 'item')
+      //   }
+      // });
+      Hooks.on('getHeaderControlsApplicationV2', (app, controls) => {
+        injectV2Controls(app, controls);
+      });
+      break;
     default:
       Hooks.on('renderItemSheet', async (app, html, itemObj) => {
-        const item = await fromUuid(app.object.uuid)
+        const item = await fromUuid(app.object.uuid);
         if (systemData.lightItemTypes.includes(item?.type)) {
           // let parent = app.object.parent ? app.object.parent : null
           addItemConfigControl(html, item);
@@ -52,8 +52,8 @@ export async function registerSystemHooks() {
       //       injectOSRHSheetUI(html , app, 'item')
       //     }
       //   });
-      Hooks.on("getHeaderControlsApplicationV2", (app, controls) => {
-        injectV2Controls(app, controls)
+      Hooks.on('getHeaderControlsApplicationV2', (app, controls) => {
+        injectV2Controls(app, controls);
       });
   }
   // universal hooksaddItemConfigControl
@@ -65,16 +65,17 @@ export async function registerSystemHooks() {
   });
 }
 
-async function addItemConfigControl(html, item, v2 =false) {
+async function addItemConfigControl(html, item, v2 = false) {
+  console.log('c contorl')
   const addControl = await game.settings.get('osr-helper', 'enableItemConfig');
   if (addControl) {
-    const headerEl = v2 ? html.querySelector('.window-header') :html[0].querySelector('.window-header');
+    const headerEl = v2 ? html.querySelector('.window-header') : html[0].querySelector('.window-header');
     const configIcon = '<i class="fa-regular fa-book-skull"></i>';
     const titleEl = headerEl?.querySelector('.window-title');
     if (titleEl) {
       const configBtn = document.createElement('a');
       configBtn.classList.add('control', 'osrh-item-config');
-      configBtn.title = game.i18n.localize("OSRH.item.config.itemConfig")
+      configBtn.title = game.i18n.localize('OSRH.item.config.itemConfig');
       configBtn.innerHTML = configIcon;
       titleEl.after(configBtn);
       configBtn.addEventListener('click', async (ev) => {
@@ -86,7 +87,7 @@ async function addItemConfigControl(html, item, v2 =false) {
         }
         let ration = OSRH.systemData.rationItemTypes.includes(item.type);
         // new OSRHItemConfig(item, ration).render(true, { top: ev.y, left: ev.x - 125 });
-        new OSRH.V2.itemConfig({item, ration}).render(true, { top: ev.y, left: ev.x - 125 });
+        new OSRH.V2.itemConfig({ item, ration }).render(true, { top: ev.y, left: ev.x - 125 });
       });
     }
   }

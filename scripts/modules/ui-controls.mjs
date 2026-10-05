@@ -176,17 +176,18 @@ export function injectV2Controls(app, controls) {
     // OSRH.ETC.patchedActorV2.add(app);
     controls.push(
       {
-        icon: 'fas fa-book-skull',
-        label: 'OSRH Fx',
+        icon: 'fas fa-book-skull OSRH-menu',
+        label: 'OSRH Active FX',
         onClick: () => {
           OSRH.effect.renderEffectApp(app.document);
         }
       }
     );
-    if(game.system.id == 'ose'){
+    if(game.system.id == 'ose' && app.document.type == 'character'){
+
       controls.push({
-        icon: 'fas fa-coins',
-        label: 'Currency Converter',
+        icon: 'fas fa-coins OSRH-menu',
+        label: 'OSRH Currency Converter',
         onClick: () => {
           OSRH.util.curConDiag(app.document);
         }
@@ -201,7 +202,7 @@ export function injectV2Controls(app, controls) {
     if(!inject)return;
     controls.push(
       {
-        icon: 'fas fa-book-skull',
+        icon: 'fas fa-book-skull OSRH-menu',
         label: 'OSRH Config',
         onClick: () => {
           new OSRHItemConfigV2({item :app.document, ration}).render(true, { top: app.position.top, left: app.position.left - 125 });

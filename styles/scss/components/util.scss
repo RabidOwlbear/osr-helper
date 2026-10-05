@@ -1,3 +1,9 @@
+// color module added context menu items
+#context-menu .context-item:has(.OSRH-menu){
+  background-color: rgb(34, 69, 92);
+  color: antiquewhite;
+}
+
 .app.osrh{
   font-family: 'Signika', sans-serif;
 }
