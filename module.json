@@ -321,7 +321,7 @@
     ]
   },
   "url": "https://github.com/RabidOwlbear/osr-helper",
-  "manifest": "https://raw.githubusercontent.com/RabidOwlbear/osr-helper/refs/heads/v0.8.4/module.json",
-  "download": "https://github.com/RabidOwlbear/osr-helper/archive/refs/heads/v0.8.4.zip",
+  "manifest": "https://raw.githubusercontent.com/RabidOwlbear/osr-helper/refs/heads/v0.9.0/module.json",
+  "download": "https://github.com/RabidOwlbear/osr-helper/archive/refs/heads/v0.9.0.zip",
   "readme": "REAMDE.md"
 }
